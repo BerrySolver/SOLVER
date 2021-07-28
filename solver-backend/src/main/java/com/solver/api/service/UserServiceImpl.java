@@ -34,12 +34,6 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void createUser(UserRegistPostReq userRegistPostReq) {
 		
-//		User user = User.builder()
-//				.loginId(userRegistPostReq.getLoginId())
-//				.nickname(userRegistPostReq.getNickname())
-//				.possibleTime(userRegistPostReq.getPossibleTime())
-//				.build();
-		
 		User user = new User();
 		String userId = "";
 		
@@ -49,7 +43,6 @@ public class UserServiceImpl implements UserService{
 			if(authRepository.findById(userId) != null)
 				break;
 		}
-		
 		user.setId(userId);
 		
 		
@@ -57,10 +50,10 @@ public class UserServiceImpl implements UserService{
 		code.setCode(userRegistPostReq.getType());
 		
 		user.setNickname(userRegistPostReq.getNickname());
-		user.setCode(code);
+		user.setLoginId(userRegistPostReq.getLoginId());
 		
 		Auth auth = new Auth();
-		auth.setLoginId(userRegistPostReq.getLoginId());
+		auth.setUser(user);
 		auth.setPassword(passwordEncoder.encode(userRegistPostReq.getPassword()));
 		
 		String authId = "";
@@ -88,11 +81,10 @@ public class UserServiceImpl implements UserService{
 		
 		userCalender.setId(userCalenderId);
 		userCalender.setUser(user);
-//		
-//		
-//		userRepository.save(user);
-//		authRepository.save(auth);
-//		userCalendarRepository.save(userCalender);
+		
+		userRepository.save(user);
+		authRepository.save(auth);
+		userCalendarRepository.save(userCalender);
 		
 	}
 	
