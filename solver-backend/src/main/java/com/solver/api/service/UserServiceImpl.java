@@ -1,10 +1,13 @@
 package com.solver.api.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.UserRegistPostReq;
+import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.Auth;
 import com.solver.db.entity.Code;
 import com.solver.db.entity.User;
@@ -12,8 +15,6 @@ import com.solver.db.entity.UserCalendar;
 import com.solver.db.repository.AuthRepository;
 import com.solver.db.repository.UserCalendarRepository;
 import com.solver.db.repository.UserRepository;
-
-import com.solver.common.util.RandomIdUtil;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -40,11 +41,10 @@ public class UserServiceImpl implements UserService{
 		while(true) {
 			userId = RandomIdUtil.makeRandomId(13);
 			
-			if(authRepository.findById(userId) != null)
+			if(authRepository.findById(userId).orElse(null) == null)
 				break;
 		}
 		user.setId(userId);
-		
 		
 		Code code = new Code();
 		code.setCode(userRegistPostReq.getType());
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService{
 		while(true) {
 			authId = RandomIdUtil.makeRandomId(13);
 			
-			if(authRepository.findById(authId) != null)
+			if(authRepository.findById(authId).orElse(null) == null)
 				break;
 		}
 		
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService{
 		while(true) {
 			userCalenderId = RandomIdUtil.makeRandomId(13);
 			
-			if(authRepository.findById(userCalenderId) != null)
+			if(authRepository.findById(userCalenderId).orElse(null) == null)
 				break;
 		}
 		
@@ -86,6 +86,20 @@ public class UserServiceImpl implements UserService{
 		authRepository.save(auth);
 		userCalendarRepository.save(userCalender);
 		
+	}
+	
+	@Override
+	public Optional<User> checkNickname(String nickname) {
+		Optional<User> user = userRepository.findByNickname(nickname);
+		
+		return user;
+	}
+
+	@Override
+	public Optional<User> checkLoginId(String loginID) {
+		Optional<User> user = userRepository.findByLoginId(loginID);
+		
+		return user;
 	}
 	
 }

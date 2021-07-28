@@ -1,5 +1,5 @@
-Servers/
 .metadata/
 solver-backend/ssafy-web.log
+.properties
+Servers/
 solver-backend/src/main/resources/application.properties
-solver-backend/ssafy-web.log.2021-07-27.0.gz
