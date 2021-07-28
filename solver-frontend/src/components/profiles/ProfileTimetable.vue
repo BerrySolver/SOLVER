@@ -1,5 +1,7 @@
 <template>
-  
+    <div>
+        <h1>ProfileTimetable</h1>
+    </div>
 </template>
 
 <script>

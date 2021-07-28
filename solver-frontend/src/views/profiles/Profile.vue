@@ -1,10 +1,10 @@
 <template>
-  <div>
-      <ProfileTimetable/>
-      <ProfileStatistics/>
-      <ProfileHistory/>
-      <ProfileMyQuestions/>
-  </div>
+    <div>
+        <ProfileTimetable/>
+        <ProfileStatistics/>
+        <ProfileHistory/>
+        <ProfileMyQuestions/>
+    </div>
 </template>
 
 <script>

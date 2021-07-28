@@ -1,5 +1,7 @@
 <template>
-  
+    <div>
+        <h1>GroupApplicants</h1>
+    </div>
 </template>
 
 <script>

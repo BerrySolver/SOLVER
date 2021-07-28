@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <h1>그룹</h1>
-    <h1>그룹</h1>
-  </div>  
+    <div>
+      <h1>모임</h1>
+      <GroupVideo/>
+      <GroupQuestion/>
+    </div>
 </template>
 
 <script>

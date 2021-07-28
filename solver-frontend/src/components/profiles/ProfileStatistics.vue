@@ -1,5 +1,7 @@
 <template>
-  
+    <div>
+        <h1>ProfileStatistics</h1>
+    </div>
 </template>
 
 <script>
