@@ -1,4 +1,4 @@
-package com.solver.api;
+package com.solver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -8,6 +8,9 @@ class SolverBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+		String version = org.springframework.core.SpringVersion.getVersion();
+		
+		System.out.println(version);
 	}
 
 }
