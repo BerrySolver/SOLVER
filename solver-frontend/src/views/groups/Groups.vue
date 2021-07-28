@@ -1,5 +1,8 @@
 <template>
-  
+  <div>
+    <h1>그룹</h1>
+    <h1>그룹</h1>
+  </div>  
 </template>
 
 <script>
@@ -13,9 +16,6 @@ export default {
         GroupVideo,
         GroupQuestion,
     },
-    data() {
-        
-    }
 }
 </script>
 

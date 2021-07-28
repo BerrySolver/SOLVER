@@ -41,14 +41,13 @@ const routes = [
   { path: '/auth/signup2',  name: 'Signup2', component: Signup2 }, // signup 경로 2개
 
   // groups
-  { path: '/groups',  name: 'Group', component: Groups },
+  { path: '/groups',  name: 'Groups', component: Groups },
   { path: '/groups/create',  name: 'GroupCreate', component: GroupCreate },
   { path: '/groups/detail',  name: 'GroupDetail', component: GroupDetail },
 
   // questions
-  { path: '/questions',  name: 'Question', component: Questions }, // 질문 목록
+  { path: '/questions',  name: 'Questions', component: Questions }, // 질문 목록
   { path: '/questions/create',  name: 'QuestionsCreate', component: QuestionsCreate }, // 질문 작성
-  // question 목록이랑 create랑 같은 경로일 수가 있나?
   { path: '/:question_id',  name: 'QuestionsDetail', component: QuestionsDetail },
 
   // notifications
@@ -56,7 +55,6 @@ const routes = [
   { path: '/video-notifications',  name: 'NotificationsVideo', component: NotificationsVideo },
   { path: '/notifications/forwardings',  name: 'MessageForwarding', component: MessageForwarding },
   { path: '/notifications/receptions',  name: 'MessageReceptions', component: MessageReceptions },
-  // api에 이 경로 없음
   { path: '/notifications/detail',  name: 'NotificationsDetail', component: NotificationsDetail },
 
 

@@ -1,8 +1,26 @@
 <template>
   <div id="app">
-    <router-view/>
+    <NavBar/>
+    <!-- 라우터 보여지는 부분 -->
+    <RouterView/>
+    <Footer/>
   </div>
 </template>
+
+<script>
+import NavBar from "@/components/main/NavBar"
+import Footer from "@/components/main/Footer"
+
+export default {
+    name: 'App',
+    components: {
+        NavBar,
+
+        Footer,
+    },
+}
+</script>
+
 
 <style>
 #app {

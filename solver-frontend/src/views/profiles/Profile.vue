@@ -1,5 +1,10 @@
 <template>
-  
+  <div>
+      <ProfileTimetable/>
+      <ProfileStatistics/>
+      <ProfileHistory/>
+      <ProfileMyQuestions/>
+  </div>
 </template>
 
 <script>
@@ -17,9 +22,6 @@ export default {
         ProfileHistory,
         ProfileMyQuestions,
     },
-    data() {
-        
-    }
 }
 </script>
 

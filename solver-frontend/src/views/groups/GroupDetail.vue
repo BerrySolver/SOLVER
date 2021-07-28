@@ -1,5 +1,5 @@
 <template>
-  
+  <GroupApplicants/>
 </template>
 
 <script>
@@ -10,9 +10,6 @@ export default {
     components: {
         GroupApplicants,
     },
-    data() {
-        
-    }
 }
 </script>
 
