@@ -1,5 +1,8 @@
 package com.solver.db.entity;
 
+import java.util.Date;
+
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -7,8 +10,7 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
+@Entity
 @Getter
 @Setter
 public class PaidSolver {

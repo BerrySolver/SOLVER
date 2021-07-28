@@ -1,5 +1,6 @@
 package com.solver.db.entity;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -7,6 +8,7 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 public class Category {
@@ -14,7 +16,7 @@ public class Category {
 	private String subCategoryCode;
 	
 	private String subCategoryName;
-	private boolean useYN;
+	private boolean useYn;
 	
 	@ManyToOne
 	@JoinColumn(name="code")

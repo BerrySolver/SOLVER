@@ -3,18 +3,19 @@ package com.solver.db.entity;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.springframework.data.annotation.LastModifiedBy;
-
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 public class User extends BaseEntity{
+	private String loginId;
 	private String nickname;
 	private String introduction;
 	private String linkText;
@@ -95,4 +96,7 @@ public class User extends BaseEntity{
 	
 	@OneToMany(mappedBy="answerUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Conference> answerConference;
+	
+	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<ConferenceReservation> conferenceReservation;
 }
