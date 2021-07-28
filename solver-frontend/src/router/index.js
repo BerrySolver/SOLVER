@@ -13,8 +13,8 @@ import GroupCreate from '@/views/groups/GroupCreate.vue'
 import GroupDetail from '@/views/groups/GroupDetail.vue'
 
 import Questions from '@/views/questions/Questions.vue'
-import QuestionDetail from '@/views/questions/QuestionDetail.vue'
-import QuestionCreate from '@/views/questions/QuestionCreate.vue'
+import QuestionsDetail from '@/views/questions/QuestionsDetail.vue'
+import QuestionsCreate from '@/views/questions/QuestionsCreate.vue'
 
 import Solvers from '@/views/solvers/Solvers.vue'
 
@@ -41,15 +41,15 @@ const routes = [
   { path: '/auth/signup2',  name: 'Signup2', component: Signup2 }, // signup 경로 2개
 
   // groups
-  { path: '/',  name: 'Group', component: Groups },
-  { path: '/',  name: 'GroupCreate', component: GroupCreate },
-  { path: '/',  name: 'GroupDetail', component: GroupDetail },
+  { path: '/groups',  name: 'Group', component: Groups },
+  { path: '/groups/create',  name: 'GroupCreate', component: GroupCreate },
+  { path: '/groups/detail',  name: 'GroupDetail', component: GroupDetail },
 
   // questions
   { path: '/questions',  name: 'Question', component: Questions }, // 질문 목록
-  { path: '/questions/create',  name: 'QuestionCreate', component: QuestionCreate }, // 질문 작성
+  { path: '/questions/create',  name: 'QuestionsCreate', component: QuestionsCreate }, // 질문 작성
   // question 목록이랑 create랑 같은 경로일 수가 있나?
-  { path: '/:question_id',  name: 'QuestionDetail', component: QuestionDetail },
+  { path: '/:question_id',  name: 'QuestionsDetail', component: QuestionsDetail },
 
   // notifications
   { path: '/notifications',  name: 'Notifications', component: Notifications },

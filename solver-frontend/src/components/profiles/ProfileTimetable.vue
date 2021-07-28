@@ -4,7 +4,7 @@
 
 <script>
 export default {
-    name: 'GroupQuestion',
+    name: 'ProfileTimetable',
     data() {
         
     }
