@@ -11,5 +11,5 @@ import lombok.Setter;
 @MappedSuperclass
 public class BaseEntity {
 	@Id
-	private Long id = null;
+	private String id = null;
 }

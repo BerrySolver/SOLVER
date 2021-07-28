@@ -3,7 +3,11 @@ package com.solver.db.entity;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.springframework.data.annotation.LastModifiedBy;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +19,10 @@ public class User extends BaseEntity{
 	private String introduction;
 	private String linkText;
 	private String profileUrl;
+	
+	@ManyToOne
+	@JoinColumn(name="type")
+	private Code code;
 	
 	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<FavoriteField> favoriteField;

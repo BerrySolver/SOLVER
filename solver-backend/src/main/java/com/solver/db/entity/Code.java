@@ -25,6 +25,9 @@ public class Code {
 	private CommonCode commonCode;
 	
 	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<User> user;
+	
+	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Category> category;
 	
 	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
