@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Answer extends BaseEntity{
-	private String text;
+	private String content;
 	private Date regDt;
 	
 	@ManyToOne
