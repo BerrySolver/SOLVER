@@ -1,3 +1,4 @@
 Servers/
 .metadata/
 solver-backend/ssafy-web.log
+solver-backend/src/main/resources/application.properties

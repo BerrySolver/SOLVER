@@ -2,7 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript{
     ext {
-        springBootVer = '2.4.5'
+        springBootVer = '2.5.3'
         querydslVer = '4.4.0'
         querydslPluginVer = '1.0.10'
         springDependencyMgmtVer = '1.0.11'
