@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,9 +24,6 @@ public class User extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="type")
 	private Code code;
-	
-	@OneToOne(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private Auth auth;
 	
 	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<FavoriteField> favoriteField;
@@ -103,25 +99,4 @@ public class User extends BaseEntity{
 	
 	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<ConferenceReservation> conferenceReservation;
-	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<ConferenceParticipant> conferenceParticipant;
-	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<ConferenceLog> conferenceLog;
-	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<Group> group;
-	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<GroupApplicant> groupApplicant;
-	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<GroupMember> groupMember;
-	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<GroupArticle> groupArticle;
-	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<GroupComment> groupComment;
 }
