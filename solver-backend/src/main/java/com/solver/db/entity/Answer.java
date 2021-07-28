@@ -17,20 +17,29 @@ import lombok.Setter;
 @Setter
 public class Answer extends BaseEntity{
 	private String text;
-	private String type;
 	private Date regDt;
 	
 	@ManyToOne
 	@JoinColumn(name="userId")
-	User user;
+	private User user;
 	
 	@ManyToOne
 	@JoinColumn(name="questionId")
-	Question question;
+	private Question question;
 	
-	@OneToMany(mappedBy="answerId", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@ManyToOne
+	@JoinColumn(name="type")
+	private Code code;
+	
+	@OneToMany(mappedBy="answer", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<FavoriteAnswer> favoriteAnswer;
+	
+	@OneToMany(mappedBy="answer", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<ReportAnswer> reportAnswer;
 	
-	@OneToMany(mappedBy="answerId", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="answer", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<Evaluation> evaluation;
+	
+	@OneToMany(mappedBy="answer", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Comment> comment;
 }

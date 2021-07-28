@@ -10,12 +10,16 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class FavoriteAnswer extends BaseEntity{
+public class ConferenceParticipant extends BaseEntity{
+	@ManyToOne
+	@JoinColumn(name="conferenceId")
+	private Conference conference;
+	
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name="answerId")
-	private Answer answer;
+	@JoinColumn(name="type")
+	private Code code;
 }

@@ -21,7 +21,6 @@ public class Question extends BaseEntity{
 	private String mainCategroy;
 	private String subCategory;
 	private int difficulty;
-	private String type;
 	private Date regDt;
 	private Date expirationTime;
 	private boolean conferenceOpened;
@@ -30,6 +29,10 @@ public class Question extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
+	
+	@ManyToOne
+	@JoinColumn(name="type")
+	private Code code;
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<FavoriteUser> favoriteUser;
@@ -48,9 +51,6 @@ public class Question extends BaseEntity{
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Answer> answer;
-	
-	@OneToMany(mappedBy="question", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<FavoriteAnswer> favoriteAnswer;
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Conference> conference;
