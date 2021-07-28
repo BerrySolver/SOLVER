@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class ConferenceReservation {
+public class ConferenceReservation extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;

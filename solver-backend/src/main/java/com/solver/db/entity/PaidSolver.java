@@ -1,5 +1,6 @@
 package com.solver.db.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class PaidSolver {
+public class PaidSolver implements Serializable{
 	@Id
 	@ManyToOne
 	@JoinColumn(name="userId")

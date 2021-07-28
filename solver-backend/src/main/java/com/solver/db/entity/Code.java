@@ -45,5 +45,20 @@ public class Code {
 	private List<PointLog> pointLog;
 	
 	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<Question> question;
+	
+	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<Answer> answer;
+	
+	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Conference> conference;
+	
+	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<ConferenceParticipant> conferenceParticipant;
+	
+	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<ConferenceLog> conferenceLog;
+	
+	@OneToMany(mappedBy="code", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<GroupComment> groupComment;
 }

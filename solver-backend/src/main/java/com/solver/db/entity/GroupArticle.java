@@ -15,18 +15,19 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Comment extends BaseEntity{
-	private String content;
+public class GroupArticle extends BaseEntity{
+	private String text;
 	private Date regDt;
+	private String title;
+	
+	@ManyToOne
+	@JoinColumn(name="groupId")
+	private Group group;
 	
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
 	
-	@ManyToOne
-	@JoinColumn(name="answerId")
-	private Answer answer;
-	
-	@OneToMany(mappedBy="comment", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private List<ReportComment> reportComment;
+	@OneToMany(mappedBy="groupArticle", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<GroupArticleFile> groupArticleFile;
 }
