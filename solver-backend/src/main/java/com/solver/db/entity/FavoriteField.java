@@ -8,12 +8,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FavoriteAnswer extends BaseEntity{
+public class FavoriteField extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="userId")
-	User user;
+	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name="questionId")
-	Question question;
+	@JoinColumn(name="type")
+	private Code code;
 }

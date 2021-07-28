@@ -8,12 +8,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FavoriteAnswer extends BaseEntity{
-	@ManyToOne
-	@JoinColumn(name="userId")
-	User user;
+public class UserCalendar extends BaseEntity{
+	String possibleTime;
 	
 	@ManyToOne
-	@JoinColumn(name="questionId")
-	Question question;
+	@JoinColumn(name="userId")
+	private User user;
 }

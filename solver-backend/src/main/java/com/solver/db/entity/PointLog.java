@@ -1,5 +1,7 @@
 package com.solver.db.entity;
 
+import java.util.Date;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -8,12 +10,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FavoriteAnswer extends BaseEntity{
-	@ManyToOne
-	@JoinColumn(name="userId")
-	User user;
+public class PointLog extends BaseEntity{
+	private int usePoint;
+	private String detail;
+	private Date regDt;
 	
 	@ManyToOne
-	@JoinColumn(name="questionId")
-	Question question;
+	@JoinColumn(name="userId")
+	private User user;
+	
+	@ManyToOne
+	@JoinColumn(name="type")
+	private Code code;
 }

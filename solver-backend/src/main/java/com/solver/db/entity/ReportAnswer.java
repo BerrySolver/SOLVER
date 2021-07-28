@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ReportQuestion extends BaseEntity{
+public class ReportAnswer extends BaseEntity{
 	private String reason;
 	
 	@ManyToOne
@@ -16,8 +16,8 @@ public class ReportQuestion extends BaseEntity{
 	private User reporterUser;
 	
 	@ManyToOne
-	@JoinColumn(name="questionId")
-	private Question question;
+	@JoinColumn(name="answerId")
+	private Answer answer;
 	
 	@ManyToOne
 	@JoinColumn(name="reportedUserId")
