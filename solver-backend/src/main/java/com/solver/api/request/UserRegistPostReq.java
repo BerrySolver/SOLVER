@@ -18,7 +18,7 @@ public class UserRegistPostReq {
 	@ApiModelProperty(name="비밀번호", example="1q2w3e4r!@")
 	private String password;
 	
-	@ApiModelProperty(name="화상이용 가능 시간", example="{ \"00:00\": true, \"00:30\": true}")
+	@ApiModelProperty(name="화상이용 가능 시간", example="\"t0000\": true, \"t0030\": true")
 	private String possibleTime;
 	
 	@ApiModelProperty(name="가입 유형", example="001")
