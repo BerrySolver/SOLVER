@@ -143,5 +143,12 @@ public class UserServiceImpl implements UserService{
 		
 		return accessToken;
 	}
+
+	@Override
+	public Optional<User> getUserInfoByNickname(String nickname) {
+		Optional<User> user = userRepository.findByNickname(nickname);
+		
+		return user;
+	}
 	
 }

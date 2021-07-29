@@ -22,6 +22,7 @@ import com.solver.db.entity.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -65,7 +66,7 @@ public class JwtTokenUtil implements InitializingBean{
 		Date validity = new Date(now + this.accessTokenValidity);
 
 		// 토큰을 생성해서 리턴
-		return Jwts.builder().setSubject(user.getId()).claim("loginId", user.getLoginId()).signWith(key, SignatureAlgorithm.HS512)
+		return Jwts.builder().setSubject(user.getId()).claim("loginId", user.getLoginId()).claim("nickname", user.getNickname()).signWith(key, SignatureAlgorithm.HS512)
 				.setExpiration(validity).compact();
 	}
 	
@@ -73,9 +74,9 @@ public class JwtTokenUtil implements InitializingBean{
 		// 토큰의 만료시간 설정
 		long now = (new Date()).getTime();
 		Date validity = new Date(now + this.refreshTokenValidity);
-
+		
 		// 토큰을 생성해서 리턴
-		return Jwts.builder().setSubject(user.getId()).claim("loginId", user.getLoginId()).signWith(key, SignatureAlgorithm.HS512)
+		return Jwts.builder().setSubject(user.getId()).claim("loginId", user.getLoginId()).claim("nickname", user.getNickname()).signWith(key, SignatureAlgorithm.HS512)
 				.setExpiration(validity).compact();
 	}
 
@@ -96,5 +97,12 @@ public class JwtTokenUtil implements InitializingBean{
 		}
 		// 문제가 있는 경우
 		return false;
+	}
+	
+	public String getNicknameFromToken(String token) {
+		Jws<Claims> jwtClaims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+		String nickname = (String) jwtClaims.getBody().get("nickname");
+		
+		return nickname;
 	}
 }
