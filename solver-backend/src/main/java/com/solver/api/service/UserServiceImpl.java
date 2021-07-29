@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.solver.api.request.UserLoginPostReq;
 import com.solver.api.request.UserRegistPostReq;
+import com.solver.api.request.UserUpdatePatchReq;
 import com.solver.common.util.JwtTokenUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.Auth;
@@ -162,6 +163,19 @@ public class UserServiceImpl implements UserService{
 		userRepository.deleteById(user.get().getId());
 		
 		return;
+	}
+
+
+	@Override
+	public void updateUser(UserUpdatePatchReq userUpdatePatchReq, String tokenNickname) {
+		User user = userRepository.findByNickname(tokenNickname).get();
+		
+		user.setIntroduction(userUpdatePatchReq.getIntroduction());
+		user.setLinkText(userUpdatePatchReq.getLinkText());
+		user.setNickname(userUpdatePatchReq.getNickname());
+		user.setProfileUrl(userUpdatePatchReq.getProfileUrl());
+		
+		userRepository.save(user);
 	}
 	
 }
