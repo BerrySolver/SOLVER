@@ -19,5 +19,7 @@ public interface UserService {
 
 	String makeToken(User user);
 
-	Optional<User> getUserInfoByNickname(String tokenNickname);
+	Optional<User> getUserInfoByNickname(String nickname);
+
+	void deleteUser(String tokenNickname);
 }

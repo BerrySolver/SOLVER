@@ -23,6 +23,8 @@ import com.solver.db.repository.UserRepository;
 @Service
 public class UserServiceImpl implements UserService{
 	
+	private static final String String = null;
+
 	@Autowired
 	UserRepository userRepository;
 	
@@ -149,6 +151,17 @@ public class UserServiceImpl implements UserService{
 		Optional<User> user = userRepository.findByNickname(nickname);
 		
 		return user;
+	}
+
+	@Override
+	public void deleteUser(String nickname) {
+		Optional<User> user = userRepository.findByNickname(nickname);
+		
+		authRepository.deleteByLoginId(user.get().getLoginId());
+		userCalendarRepository.deleteByUserId(user.get().getId());
+		userRepository.deleteById(user.get().getId());
+		
+		return;
 	}
 	
 }
