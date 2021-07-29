@@ -1,5 +1,6 @@
 package com.solver.api.service;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ public class QuestionServiceImpl implements QuestionService{
 //		question.setMainCategory(questionReq.getMainCategory());
 //		question.setSubCategory(questionReq.getSubCategory());
 		question.setDifficulty(questionReq.getDifficulty());
-		question.setRegDt(questionReq.getRegDt());
+		question.setRegDt(new Date(System.currentTimeMillis()));
 		question.setExpirationTime(questionReq.getExpirationTime());
 		question.setConferenceOpened(questionReq.isConferenceOpened());
 		question.setReadCount(questionReq.getReadCount());
