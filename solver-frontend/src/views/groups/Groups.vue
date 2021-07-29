@@ -1,19 +1,18 @@
 <template>
-    <div>
-      <h1>모임</h1>
+  <div>
+    <h1>모임</h1>
       <GroupVideo/>
       <GroupQuestion/>
-    </div>
+  </div>
 </template>
 
 <script>
 import GroupVideo from "@/components/groups/GroupVideo"
 import GroupQuestion from "@/components/groups/GroupQuestion"
 
-
 export default {
     name: 'Groups',
-    component: {
+    components: {
         GroupVideo,
         GroupQuestion,
     },

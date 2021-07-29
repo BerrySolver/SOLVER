@@ -7,9 +7,6 @@
 <script>
 export default {
     name: 'GroupApplicants',
-    data() {
-        
-    }
 }
 </script>
 

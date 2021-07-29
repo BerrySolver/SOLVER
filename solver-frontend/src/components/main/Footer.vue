@@ -1,13 +1,10 @@
 <template>
-    <div></div>
+    <h5>footer</h5>
 </template>
 
 <script>
 export default {
     name: 'Footer',
-    data() {
-        
-    }
 }
 </script>
 
