@@ -32,9 +32,6 @@ public class QuestionReq {
 	@ApiModelProperty(name="난이도", example="1")
 	private int difficulty;
 	
-	@ApiModelProperty(name="생성 시간", example="2021-07-29")
-	private Date regDt;
-	
 	@ApiModelProperty(name="만료 시간", example="2021-08-01")
 	private Date expirationTime;
 	
