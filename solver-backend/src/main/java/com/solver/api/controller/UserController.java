@@ -1,10 +1,14 @@
 package com.solver.api.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
+import com.solver.common.util.JwtTokenUtil;
+import com.solver.db.entity.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +31,9 @@ import io.swagger.annotations.ApiResponses;
 public class UserController {
 	@Autowired
 	UserService	userService;
+	
+	@Autowired
+	JwtTokenUtil jwtTokenUtil;
 	
 	@PostMapping("/signup")
 	@ApiOperation(value = "회원 가입", notes = "아이디, 패스워드, 닉네임과 화상 가능 시간을 입력해 회원가입 한다.") 
@@ -71,5 +80,27 @@ public class UserController {
 		
 		return ResponseEntity.status(409).body(BaseResponse.of(409, "이미 사용중인 ID입니다"));
 		
+	}
+	
+	@GetMapping("/{nickname}")
+	@ApiOperation(value = "유저 정보 가져오기", notes = "사용자의 기본 정보 조회") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "사용 가능한 ID입니다"),
+        @ApiResponse(code = 409, message = "이미 사용중인 ID입니다")
+    })
+	public ResponseEntity<User> getUserInfo(
+			@RequestHeader("Authorization") String jwt, 
+			@PathVariable @ApiParam(value="nickname", required = true) String nickname)
+	{
+		String token = jwt.split(" ")[1];
+		
+		String tokenNickname = jwtTokenUtil.getNicknameFromToken(token);
+		
+		Optional<User> user = userService.getUserInfoByNickname(tokenNickname);
+		
+		if(user.orElse(null) == null)
+			return ResponseEntity.status(409).body(null);
+		
+		return ResponseEntity.status(200).body(user.get());
 	}
 }

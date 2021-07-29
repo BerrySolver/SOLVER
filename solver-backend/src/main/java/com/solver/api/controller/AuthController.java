@@ -66,8 +66,12 @@ public class AuthController {
 		//인증 정보를 기준으로 jwt 토큰을 생성
 //		String accessJwt = jwtTokenUtil.createAccessToken(user.get());
 //		String refreshJwt = jwtTokenUtil.createRefreshToken(user.get());
+		
+		UserLoginRes userLoginRes = UserLoginRes.builder().accessToken(accessToken).build();
+		userLoginRes.setMessage("로그인에 성공했습니다");
+		userLoginRes.setStatusCode(200);
 
 		//jwt 토큰을 response body에 넣는 경우
-		return ResponseEntity.status(200).body(UserLoginRes.builder().accessToken(accessToken).build());
+		return ResponseEntity.status(200).body(userLoginRes);
 	}
 }

@@ -18,4 +18,6 @@ public interface UserService {
 	Optional<Auth> loginUser(UserLoginPostReq userLoginPostReq);
 
 	String makeToken(User user);
+
+	Optional<User> getUserInfoByNickname(String tokenNickname);
 }

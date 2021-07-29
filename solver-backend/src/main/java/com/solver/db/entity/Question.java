@@ -18,7 +18,7 @@ import lombok.Setter;
 public class Question extends BaseEntity{
 	private String title;
 	private String content;
-	private String mainCategroy;
+	private String mainCategory;
 	private String subCategory;
 	private int difficulty;
 	private Date regDt;
