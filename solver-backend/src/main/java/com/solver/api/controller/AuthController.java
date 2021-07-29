@@ -5,9 +5,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.UserLoginPostReq;
@@ -24,6 +26,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+@CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
+methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
 
 @Api(value="인증 API", tags = {"Auth"})
 @RestController
@@ -59,8 +64,8 @@ public class AuthController {
 		if(user.orElse(null) == null)
 			return ResponseEntity.status(409).body(null);
 		
-		if(auth.orElse(null) == null)
-			return ResponseEntity.status(409).body(null);
+//		if(auth.orElse(null) == null)
+//			return ResponseEntity.status(409).body(null);
 		
 		String accessToken = userService.makeToken(user.get());
 		//인증 정보를 기준으로 jwt 토큰을 생성

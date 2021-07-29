@@ -17,11 +17,11 @@
       <div class='content'>
         <div class='welcome'>SOLVER</div>
         <div class='input-fields'>
-          <input type='text' placeholder='아이디' class='input-line full-width'>
-          <input type='password' placeholder='비밀번호' class='input-line full-width'>
+          <input type='text' v-model="credentials.loginId" placeholder='아이디' class='input-line full-width'>
+          <input type='password' v-model="credentials.password" placeholder='비밀번호' class='input-line full-width'>
         </div>
         <div class="for-margin"></div>
-        <div><button class='ghost-round full-width'>LOGIN</button></div>
+        <div><button class='ghost-round full-width' @click="login(credentials)">LOGIN</button></div>
       </div>
     </div>
     
@@ -30,8 +30,23 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 export default {
     name: 'Login',
+    data() {
+      return {
+        credentials: {
+          loginId: '',
+          password: '',
+        },
+      }
+    },
+    methods: {
+      ...mapActions([
+        'login',
+      ]),
+    }
 }
 </script>
 

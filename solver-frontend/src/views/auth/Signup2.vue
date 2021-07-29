@@ -44,7 +44,9 @@
         <div class="col" style="color:#fff">2. 가능하신 요일과 시간을 골라주세요.</div>
       </div>
       <div>
-        <button class='ghost-round'><RouterLink :to="{ name: 'Home' }" style="text-decoration:none; color:#fff">SOLVER 이용하기</RouterLink></button>
+        <button class='ghost-round' @click="signup({loginId: $route.params.loginId, nickname: $route.params.nickname, password: $route.params.password})">
+          SOLVER 이용하기
+        </button>
       </div>
       
     </div>
@@ -53,7 +55,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 
 export default {
     name: 'Signup2',
@@ -65,6 +67,11 @@ export default {
           time: [],
         },
       }
+    },
+    methods: {
+      ...mapActions([
+        'signup',
+      ]),
     },
     computed: {
       ...mapState({
