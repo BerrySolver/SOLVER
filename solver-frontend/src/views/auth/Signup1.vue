@@ -63,7 +63,7 @@ export default {
 }
 
 input {
-  border: none;
+  border: none;   
 }
 
 .ghost-button {
@@ -193,6 +193,13 @@ button:focus {
   letter-spacing: 0.05rem;
   color: #fff;
 }
+
+.window {
+  width: 30%;
+  text-align: center;
+  margin-left: 35%;
+  margin-right: 35%;
+}  
 
 .for-margin{
   height: 5vh;

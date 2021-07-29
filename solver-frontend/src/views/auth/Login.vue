@@ -36,19 +36,39 @@ export default {
 </script>
 
 <style>
+  
 .background {
   background: linear-gradient(135deg, #658DC6, #b5c7d3);
   height: 100vh;
   width: 100vw;
 }
 
-.nav-for-login {
-  height: 20vh;
-  color: #fff;
+button:focus {
+  outline: none;
 }
 
-input {
-  border: none;
+.content {
+  margin-left: 10%;
+  margin-right: 10%;
+  text-align: center;
+  padding-left: 30%;
+  padding-right: 30%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-flow: column;
+  -ms-flex-flow: column;
+  flex-flow: column;
+  z-index: 5;
+}
+
+.for-margin {
+  height: 5vh;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .ghost-button {
@@ -69,38 +89,6 @@ input {
 .ghost-button:hover {
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
-}
-
-button:focus {
-  outline: none;
-}
-
-::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.65);
-}
-
-::-webkit-input-placeholder .input-line:focus +::input-placeholder {
-  color: #fff;
-}
-
-.highlight {
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 400;
-  cursor: pointer;
-  transition: color .2s ease;
-}
-
-.highlight:hover {
-  color: #fff;
-  transition: color .2s ease;
-}
-
-
-.input-line:focus {
-  outline: none;
-  border-color: #fff;
   -webkit-transition: all .2s ease;
   transition: all .2s ease;
 }
@@ -131,6 +119,26 @@ button:focus {
   transition: all .2s ease;
 }
 
+.highlight {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  cursor: pointer;
+  transition: color .2s ease;
+}
+
+.highlight:hover {
+  color: #fff;
+  transition: color .2s ease;
+}
+
+input {
+  border: none;
+}
+
+.input-fields {
+  margin-top: 25px;
+}
+
 .input-line {
   background: none;
   margin-bottom: 10px;
@@ -147,28 +155,24 @@ button:focus {
   transition: all .2s ease;
 }
 
-.full-width {
-  width: 100%;
+.input-line:focus {
+  outline: none;
+  border-color: #fff;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
 }
 
-.input-fields {
-  margin-top: 25px;
+.nav-for-login {
+  height: 20vh;
+  color: #fff;
 }
 
-.content {
-  margin-left: 10%;
-  margin-right: 10%;
-  text-align: center;
-  padding-left: 30%;
-  padding-right: 30%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-flow: column;
-  -ms-flex-flow: column;
-  flex-flow: column;
-  z-index: 5;
+::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+::-webkit-input-placeholder .input-line:focus +::input-placeholder {
+  color: #fff;
 }
 
 .welcome {
@@ -181,8 +185,11 @@ button:focus {
   color: #fff;
 }
 
-.for-margin {
-  height: 5vh;
+.window {
+  width: 30%;
+  text-align: center;
+  margin-left: 35%;
+  margin-right: 35%;
 }
 
 </style>
