@@ -42,6 +42,8 @@
 - Communication : Mattermost
 - Design/UI/UX : Adobe Photoshop, Figma
 
+<br>
+
 - OS : Windows 10
 - DB : MySQL 8.0.22
 - Cloude : AWS EC2, Ubuntu 20.04.2 LTS, Docker 20.10.7
@@ -81,6 +83,8 @@
 
 - [프로젝트 메모 및 공유 : Notion](https://danghyeona.notion.site/Solver-1b2691348e2d4334a4deb5699167ef59)
 - [프로젝트 진행 회의록](./산출물/회의록.md)
+
+<br>
 
 - [서비스기획서](./산출물/기획서.md)
 - [와이어프레임](./산출물/와이어프레임.md)
