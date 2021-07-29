@@ -32,12 +32,12 @@ public class UserController {
         @ApiResponse(code = 201, message = "화원가입에 성공했습니다"),
         @ApiResponse(code = 409, message = "회원가입에 실패했습니다")
     })
-	public ResponseEntity<Integer> registUser(
+	public ResponseEntity<? extends BaseResponse> registUser(
 			@RequestBody @ApiParam(value="회원가입 정보", required=true) UserRegistPostReq userRegistPostReq)
 	{
 		userService.createUser(userRegistPostReq);
 		
-		return null;
+		return ResponseEntity.status(200).body(BaseResponse.of(200, "회원가입이 완료되었습니다"));
 		
 	}
 	

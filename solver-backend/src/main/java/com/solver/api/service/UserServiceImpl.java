@@ -6,13 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.solver.api.request.UserLoginPostReq;
 import com.solver.api.request.UserRegistPostReq;
+import com.solver.common.util.JwtTokenUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.Auth;
 import com.solver.db.entity.Code;
+import com.solver.db.entity.Token;
 import com.solver.db.entity.User;
 import com.solver.db.entity.UserCalendar;
 import com.solver.db.repository.AuthRepository;
+import com.solver.db.repository.TokenRepository;
 import com.solver.db.repository.UserCalendarRepository;
 import com.solver.db.repository.UserRepository;
 
@@ -26,10 +30,16 @@ public class UserServiceImpl implements UserService{
 	AuthRepository authRepository;
 	
 	@Autowired
+	TokenRepository tokenRepository;
+	
+	@Autowired
 	PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	UserCalendarRepository userCalendarRepository;
+	
+	@Autowired
+	JwtTokenUtil jwtTokenUtil;
 
 	
 	@Override
@@ -53,7 +63,7 @@ public class UserServiceImpl implements UserService{
 		user.setLoginId(userRegistPostReq.getLoginId());
 		
 		Auth auth = new Auth();
-		auth.setUser(user);
+		auth.setLoginId(user.getLoginId());
 		auth.setPassword(passwordEncoder.encode(userRegistPostReq.getPassword()));
 		
 		String authId = "";
@@ -100,6 +110,38 @@ public class UserServiceImpl implements UserService{
 		Optional<User> user = userRepository.findByLoginId(loginID);
 		
 		return user;
+	}
+	
+	@Override
+	public Optional<Auth> loginUser(UserLoginPostReq userLoginPostReq) {
+		Optional<Auth> auth = authRepository.findByLoginIdAndPassword(userLoginPostReq.getLoginId(), userLoginPostReq.getPassword());
+		
+		return auth;
+	}
+
+	@Override
+	public String makeToken(User user) {
+		String accessToken = jwtTokenUtil.createAccessToken(user);
+		String refreshToken = jwtTokenUtil.createRefreshToken(user);
+		
+		String tokenId = "";
+		
+		while(true) {
+			tokenId = RandomIdUtil.makeRandomId(13);
+			
+			if(tokenRepository.findById(tokenId).orElse(null) == null)
+				break;
+		}
+		
+		Token token = new Token();
+		
+		token.setAccessToken(accessToken);
+		token.setRefreshToken(refreshToken);
+		token.setId(tokenId);
+		 
+		tokenRepository.save(token);
+		
+		return accessToken;
 	}
 	
 }

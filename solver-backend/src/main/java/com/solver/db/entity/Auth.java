@@ -14,9 +14,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Auth extends BaseEntity{
-	@OneToOne
-	@JoinColumn(name="loginId", referencedColumnName="loginId")
-	private User user;
+	
+	String loginId;
+	
+//	@OneToOne
+//	@JoinColumn(name="loginId", referencedColumnName="loginId")
+//	private User user;
 	
 	@JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

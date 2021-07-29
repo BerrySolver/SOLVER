@@ -2,6 +2,7 @@ package com.solver.db.entity;
 
 import javax.persistence.Entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
