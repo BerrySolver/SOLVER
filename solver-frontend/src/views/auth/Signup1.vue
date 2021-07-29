@@ -3,7 +3,7 @@
 
     <div class="nav-for-signup">
       <div class="row pt-3">
-        <div class="col-2"><RouterLink :to="{ name: 'Home' }" style="text-decoration:none; color:#fff">← 돌아가기</RouterLink></div>
+        <div class="col-2"><RouterLink :to="{ name: 'Main' }" style="text-decoration:none; color:#fff">← 돌아가기</RouterLink></div>
         <div class="col-5"></div>
         <div class="col-5">이미 솔버이신가요?
           <button class='ghost-button'><RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff">LOGIN</RouterLink></button>
