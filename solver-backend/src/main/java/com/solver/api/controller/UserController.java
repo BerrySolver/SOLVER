@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Api(value="유저 API", tags = {"User"})
 @RestController
@@ -89,12 +91,13 @@ public class UserController {
         @ApiResponse(code = 409, message = "이미 사용중인 ID입니다")
     })
 	public ResponseEntity<User> getUserInfo(
-			@RequestHeader("Authorization") String jwt, 
+			@ApiIgnore @RequestHeader("Authorization") String jwt, 
 			@PathVariable @ApiParam(value="nickname", required = true) String nickname)
 	{
 		String token = jwt.split(" ")[1];
 		
 		String tokenNickname = jwtTokenUtil.getNicknameFromToken(token);
+		System.out.println(tokenNickname);
 		
 		Optional<User> user = userService.getUserInfoByNickname(tokenNickname);
 		
@@ -102,5 +105,29 @@ public class UserController {
 			return ResponseEntity.status(409).body(null);
 		
 		return ResponseEntity.status(200).body(user.get());
+	}
+	
+	@DeleteMapping("/{nickname}")
+	@ApiOperation(value = "유저 정보 삭제", notes = "사용자의 기본 정보 조회") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "사용 가능한 ID입니다"),
+        @ApiResponse(code = 409, message = "이미 사용중인 ID입니다")
+    })
+	public ResponseEntity<? extends BaseResponse> deleteUser(
+			@ApiIgnore @RequestHeader("Authorization") String jwt, 
+			@PathVariable @ApiParam(value="nickname", required = true) String nickname)
+	{
+		String token = jwt.split(" ")[1];
+		
+		String tokenNickname = jwtTokenUtil.getNicknameFromToken(token);
+		
+		userService.deleteUser(tokenNickname);
+		
+		return ResponseEntity.status(200).body(BaseResponse.of(200, "삭제가 완료되었습니다"));
+		
+//		if(user.orElse(null) == null)
+//			return ResponseEntity.status(409).body(null);
+//		
+//		return ResponseEntity.status(200).body(user.get());
 	}
 }
