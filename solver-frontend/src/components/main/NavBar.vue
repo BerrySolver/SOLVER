@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav v-if="needHide" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <!-- <a href="/">SOLVER</a> -->
       <RouterLink :to="{ name: 'Main' }" class="m-2">
@@ -45,6 +45,11 @@
 <script>
 export default {
   name: "Navbar",
+  computed: {
+    needHide() {
+      return !(this.$route.name === 'Signup1' || this.$route.name === 'Signup2' || this.$route.name === 'Login');
+    },
+  }
 };
 </script>
 
