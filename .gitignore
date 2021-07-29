@@ -1,5 +1,3 @@
 .metadata/
 solver-backend/ssafy-web.log
-.properties
 Servers/
-solver-backend/src/main/resources/application.properties

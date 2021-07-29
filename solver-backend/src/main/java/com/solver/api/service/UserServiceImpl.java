@@ -64,7 +64,6 @@ public class UserServiceImpl implements UserService{
 		
 		Auth auth = new Auth();
 		auth.setLoginId(user.getLoginId());
-//		auth.setUser(user);
 		auth.setPassword(passwordEncoder.encode(userRegistPostReq.getPassword()));
 		
 		String authId = "";
