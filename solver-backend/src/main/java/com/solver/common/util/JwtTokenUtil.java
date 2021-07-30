@@ -76,7 +76,7 @@ public class JwtTokenUtil implements InitializingBean{
 		Date validity = new Date(now + this.refreshTokenValidity);
 		
 		// 토큰을 생성해서 리턴
-		return Jwts.builder().setSubject(user.getId()).claim("loginId", user.getLoginId()).claim("nickname", user.getNickname()).signWith(key, SignatureAlgorithm.HS512)
+		return Jwts.builder().setSubject(user.getId()).claim("loginId", user.getLoginId()).signWith(key, SignatureAlgorithm.HS512)
 				.setExpiration(validity).compact();
 	}
 
@@ -104,5 +104,12 @@ public class JwtTokenUtil implements InitializingBean{
 		String nickname = (String) jwtClaims.getBody().get("nickname");
 		
 		return nickname;
+	}
+	
+	public String getLoginIdFromToken(String token) {
+		Jws<Claims> jwtClaims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+		String loginId = (String) jwtClaims.getBody().get("loginId");
+		
+		return loginId;
 	}
 }

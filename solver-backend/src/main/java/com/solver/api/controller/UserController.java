@@ -96,10 +96,9 @@ public class UserController {
 	{
 		String token = jwt.split(" ")[1];
 		
-		String tokenNickname = jwtTokenUtil.getNicknameFromToken(token);
-		System.out.println(tokenNickname);
+		String loginId = jwtTokenUtil.getLoginIdFromToken(token);
 		
-		Optional<User> user = userService.getUserInfoByNickname(tokenNickname);
+		Optional<User> user = userService.getUserInfoByLoginId(loginId);
 		
 		if(user.orElse(null) == null)
 			return ResponseEntity.status(409).body(null);
@@ -119,16 +118,11 @@ public class UserController {
 	{
 		String token = jwt.split(" ")[1];
 		
-		String tokenNickname = jwtTokenUtil.getNicknameFromToken(token);
+		String loginId = jwtTokenUtil.getLoginIdFromToken(token);
 		
-		userService.deleteUser(tokenNickname);
+		userService.deleteUser(loginId);
 		
 		return ResponseEntity.status(200).body(BaseResponse.of(200, "삭제가 완료되었습니다"));
-		
-//		if(user.orElse(null) == null)
-//			return ResponseEntity.status(409).body(null);
-//		
-//		return ResponseEntity.status(200).body(user.get());
 	}
 	
 }

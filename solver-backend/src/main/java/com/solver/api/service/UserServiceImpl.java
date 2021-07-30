@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService{
 		User user = new User();
 		String userId = "";
 		
+		//유저 테이블 아이디 생성
 		while(true) {
 			userId = RandomIdUtil.makeRandomId(13);
 			
@@ -59,8 +60,8 @@ public class UserServiceImpl implements UserService{
 		}
 		user.setId(userId);
 		
-		Code code = new Code();
-		code.setCode(userRegistPostReq.getType());
+//		Code code = new Code();
+//		code.setCode(userRegistPostReq.getType());
 		
 		user.setNickname(userRegistPostReq.getNickname());
 		user.setLoginId(userRegistPostReq.getLoginId());
@@ -71,6 +72,7 @@ public class UserServiceImpl implements UserService{
 		
 		String authId = "";
 		
+		//auth 테이블 id 생성
 		while(true) {
 			authId = RandomIdUtil.makeRandomId(13);
 			
@@ -85,6 +87,7 @@ public class UserServiceImpl implements UserService{
 		
 		String userCalenderId = "";
 		
+		//userCalendar id생성
 		while(true) {
 			userCalenderId = RandomIdUtil.makeRandomId(13);
 			
@@ -117,7 +120,19 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public Optional<Auth> loginUser(UserLoginPostReq userLoginPostReq) {
-		Optional<Auth> auth = authRepository.findByLoginIdAndPassword(userLoginPostReq.getLoginId(), userLoginPostReq.getPassword());
+		//로그인 아이디로 해당 유저의 정보를 받아옴
+		Optional<Auth> auth = authRepository.findByLoginId(userLoginPostReq.getLoginId());
+		
+		//없는 유저인 경우
+		if(auth.orElse(null) == null) {
+			auth = Optional.empty();
+			return auth;
+		}
+		
+		//입력받은 비밀번호가 DB에 저장된 비밀번호와 일치하는 경우
+		if(!passwordEncoder.matches(userLoginPostReq.getPassword(), auth.get().getPassword())) {
+			auth = Optional.empty();
+		}
 		
 		return auth;
 	}
@@ -148,18 +163,21 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public Optional<User> getUserInfoByNickname(String nickname) {
-		Optional<User> user = userRepository.findByNickname(nickname);
+	public Optional<User> getUserInfoByLoginId(String loginId) {
+		Optional<User> user = userRepository.findByLoginId(loginId);
 		
 		return user;
 	}
 
 	@Override
-	public void deleteUser(String nickname) {
-		Optional<User> user = userRepository.findByNickname(nickname);
+	public void deleteUser(String loginId) {
+		Optional<User> user = userRepository.findByLoginId(loginId);
 		
+		//로그인 정보 제거
 		authRepository.deleteByLoginId(user.get().getLoginId());
+		//유저 화상 시간표 정보 제거
 		userCalendarRepository.deleteByUserId(user.get().getId());
+		//유저 정보 제거
 		userRepository.deleteById(user.get().getId());
 		
 		return;
@@ -167,14 +185,23 @@ public class UserServiceImpl implements UserService{
 
 
 	@Override
-	public void updateUser(UserUpdatePatchReq userUpdatePatchReq, String tokenNickname) {
-		User user = userRepository.findByNickname(tokenNickname).get();
+	public void updateUser(UserUpdatePatchReq userUpdatePatchReq, String loginId) {
+		//해당 로그인 아이디로 유저 정보 가져옴
+		Optional<User> optionalUser = userRepository.findByLoginId(loginId);
 		
+		//없는 유저인 경우 종료
+		if(optionalUser.orElse(null) == null)
+			return;
+		
+		User user = optionalUser.get();
+		
+		//유저 변경할 유저 정보 저장
 		user.setIntroduction(userUpdatePatchReq.getIntroduction());
 		user.setLinkText(userUpdatePatchReq.getLinkText());
 		user.setNickname(userUpdatePatchReq.getNickname());
 		user.setProfileUrl(userUpdatePatchReq.getProfileUrl());
 		
+		//유저 정보 업데이트
 		userRepository.save(user);
 	}
 	
