@@ -37,15 +37,15 @@ public class ProfileController {
         @ApiResponse(code = 201, message = "유저 정보 수정에 성공했습니다"),
         @ApiResponse(code = 409, message = "유저 정보 수정에 실패했습니다")
     })
-	public ResponseEntity<BaseResponse> registUser(
+	public ResponseEntity<BaseResponse> updateUser(
 			@ApiIgnore @RequestHeader("Authorization") String jwt,
 			@RequestBody @ApiParam(value="유저 수정 정보", required=true) UserUpdatePatchReq userUpdatePatchReq)
 	{
 		String token = jwt.split(" ")[1];
 		
-		String tokenNickname = jwtTokenUtil.getNicknameFromToken(token);
+		String loginId = jwtTokenUtil.getLoginIdFromToken(token);
 		
-		userService.updateUser(userUpdatePatchReq, tokenNickname);
+		userService.updateUser(userUpdatePatchReq, loginId);
 		
 		return ResponseEntity.status(200).body(BaseResponse.of(200, "회원가입이 완료되었습니다"));
 		
