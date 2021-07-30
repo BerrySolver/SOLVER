@@ -1,0 +1,123 @@
+.container {
+  height: 100vh;
+  padding-top: 6%;
+}
+
+.container img{
+  max-width: 100%;
+  max-height: 60vh;
+  /* margin-top: 10%; */
+}
+
+.group {
+  background-color: white;
+  height: 50vh;
+}
+
+.introduction {
+  font-size: 15px;
+  text-align: left;
+  margin-left: 100px;
+  color: black;
+}
+
+.main {
+  font-family: 'NanumSquare', sans-serif;
+}
+
+.month-solver {
+  background-color: #658DC6;
+  height: 50vh;
+}
+
+.popular-question {
+  background-color: white;
+  height: 50vh;
+}
+/* .question-insert {
+  margin-top: 10px;
+} */
+
+.search-input {
+  margin-top: 1%;
+  width: 65%;
+}
+
+.slogan {
+  font-size: 17px;
+  vertical-align: middle;
+}
+
+.slogan-center {
+  font-weight: 700;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: left;
+  margin-left: 100px;
+  color: #658DC6;
+}
+
+
+/* input */
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 50%;
+  margin: auto;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 1.3rem;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+.form__field::placeholder {
+  color: transparent;
+}
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 1.3rem;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #9b9b9b;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image-slice: 1;
+}
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #11998e;
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required, .form__field:invalid {
+  box-shadow: none;
+}

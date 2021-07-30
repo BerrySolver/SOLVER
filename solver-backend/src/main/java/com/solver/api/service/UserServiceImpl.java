@@ -120,11 +120,10 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public Optional<Auth> loginUser(UserLoginPostReq userLoginPostReq) {
-		//로그인 아이디로 해당 유저의 정보를 받아옴
 		Optional<Auth> auth = authRepository.findByLoginId(userLoginPostReq.getLoginId());
 		
-		//없는 유저인 경우
-		if(auth.orElse(null) == null) {
+		// 없는 유저인 경우
+		if (auth.orElse(null) == null) {
 			auth = Optional.empty();
 			return auth;
 		}
