@@ -62,7 +62,7 @@ export default {
 .navbar {
   align-items: center;
   font-family: 'NanumSquare', sans-serif;
-  font-size: 17px;
+  font-size: 15px;
   position: fixed;
   width: 100%;
 }

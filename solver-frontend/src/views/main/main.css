@@ -4,9 +4,11 @@
 }
 
 .container img{
-  max-width: 100%;
+  max-width: 100vh;
   max-height: 60vh;
-  /* margin-top: 10%; */
+  position: relative;
+  z-index: 1;
+
 }
 
 .group {
@@ -17,8 +19,10 @@
 .introduction {
   font-size: 15px;
   text-align: left;
-  margin-left: 100px;
   color: black;
+  /* white-space: pre; */
+  position: relative;
+  z-index: 2;
 }
 
 .main {
@@ -38,6 +42,10 @@
   margin-top: 10px;
 } */
 
+.row-left {
+  margin-left: 5vw;
+}
+
 .search-input {
   margin-top: 1%;
   width: 65%;
@@ -56,7 +64,6 @@
   font-size: 35px;
   font-weight: 600;
   text-align: left;
-  margin-left: 100px;
   color: #658DC6;
 }
 
@@ -64,10 +71,10 @@
 /* input */
 .form__group {
   position: relative;
-  padding: 15px 0 0;
-  margin-top: 10px;
-  width: 50%;
-  margin: auto;
+  padding-top: 15px;
+  margin-top: 10vh;
+  /* margin-left: 2vw; */
+  width: 100%;
 }
 
 .form__field {
@@ -77,8 +84,8 @@
   border-bottom: 2px solid #9b9b9b;
   outline: 0;
   font-size: 1.3rem;
-  color: #fff;
-  padding: 7px 0;
+  color: #84898C;
+  padding: 1px;
   background: transparent;
   transition: border-color 0.2s;
 }
@@ -86,7 +93,7 @@
   color: transparent;
 }
 .form__field:placeholder-shown ~ .form__label {
-  font-size: 1.3rem;
+  font-size: 0.9rem;
   cursor: text;
   top: 20px;
 }
@@ -96,15 +103,14 @@
   top: 0;
   display: block;
   transition: 0.2s;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #9b9b9b;
 }
 
 .form__field:focus {
-  padding-bottom: 6px;
-  font-weight: 700;
+  font-weight: 400;
   border-width: 3px;
-  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image: linear-gradient(to right, #658DC6, #B5C7D3);
   border-image-slice: 1;
 }
 .form__field:focus ~ .form__label {
@@ -112,8 +118,8 @@
   top: 0;
   display: block;
   transition: 0.2s;
-  font-size: 1rem;
-  color: #11998e;
+  font-size: 0.85rem;
+  color: #658DC6;
   font-weight: 700;
 }
 
