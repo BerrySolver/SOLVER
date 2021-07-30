@@ -6,11 +6,11 @@ const state = {
   categoryList: [],
   possibleDay: [],
   possibleTime: [],
-  isLoggedin: true,
+  jwtToken: '',
 }
 
 const getters = {
-
+  isLoggedIn: state => state.jwtToken,
 }
 
 const mutations = {
@@ -25,6 +25,9 @@ const mutations = {
   SET_POSSIBLE_TIME: (state, time) => {
     state.possibleTime = time
   },
+  SET_JWT_TOKEN: (state, jwt) => {
+    state.jwtToken = jwt
+  }
 }
 
 const actions = {
@@ -42,7 +45,7 @@ const actions = {
       console.log(credentials)
     })
   },
-  login(context, credentials) {
+  login({commit}, credentials) {
     axios({
       url: API.URL + API.ROUTES.login,
       method: 'post',
@@ -51,6 +54,7 @@ const actions = {
     .then((res) => {
       console.log(res)
       localStorage.setItem('jwt', res.data.accessToken)
+      commit('SET_JWT_TOKEN', res.data.accessToken)
       router.push({path: '/'})
     })
     .catch(() => {

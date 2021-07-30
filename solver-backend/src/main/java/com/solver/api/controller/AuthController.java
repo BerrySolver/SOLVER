@@ -64,8 +64,8 @@ public class AuthController {
 		if(user.orElse(null) == null)
 			return ResponseEntity.status(409).body(null);
 		
-//		if(auth.orElse(null) == null)
-//			return ResponseEntity.status(409).body(null);
+		if(auth.orElse(null) == null)
+			return ResponseEntity.status(409).body(null);
 		
 		String accessToken = userService.makeToken(user.get());
 		//인증 정보를 기준으로 jwt 토큰을 생성

@@ -30,10 +30,10 @@
           <!-- <li class="nav-item m-2">
             <RouterLink :to="{ name: 'Profile' }">프로필</RouterLink>
           </li> -->
-          <li class="nav-item" v-if="!isLoggedin">
+          <li class="nav-item" v-if="!isLoggedIn">
             <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
           </li>
-          <li class="nav-item" v-if="!isLoggedin">
+          <li class="nav-item" v-if="!isLoggedIn">
             <RouterLink :to="{ name: 'Signup1' }" class="nav-router">회원가입</RouterLink>
           </li>
         </ul>
@@ -43,13 +43,13 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapGetters} from 'vuex'
 
 export default {
   name: "Navbar",
   computed: {
-    ...mapState([
-      'isLoggedin',
+    ...mapGetters([
+      'isLoggedIn',
     ]),
     needHide() {
       return !(this.$route.name === 'Signup1' || this.$route.name === 'Signup2' || this.$route.name === 'Login');
