@@ -16,10 +16,10 @@
   - [1️⃣ 프로젝트 소개](#1️⃣-프로젝트-소개)
     - [📋 기술 스택](#-기술-스택)
     - [🎨 디자인](#-디자인)
-  - [2️⃣ 프로젝트 실행](#2️⃣-프로젝트-실행)
-    - [Backend - Spring Boot](#backend---spring-boot)
-    - [Frontend - Vue](#frontend---vue)
-  - [3️⃣ 프로젝트 산출물](#3️⃣-프로젝트-산출물)
+  - [2️⃣ 프로젝트 파일 구조](#2️⃣-프로젝트-파일-구조)
+    - [Back](#back)
+    - [Front](#front)
+  - [4️⃣ 프로젝트 산출물](#4️⃣-프로젝트-산출물)
 
 <br><br>
 
@@ -32,6 +32,7 @@
 2. 역할
    - Backend : 나승호, 당현아(팀장), 조현민(부팀장)
    - Frontend : 김민기, 박나영
+
 
 <br><br>
 
@@ -71,25 +72,77 @@
 
 <br><br>
 
-## 2️⃣ 프로젝트 실행
+## 2️⃣ 프로젝트 파일 구조
 
-### Backend - Spring Boot
+### Back
 
-### Frontend - Vue
+```
+com
+└── solver
+		├── api
+		│   ├── controller
+		│   ├── service
+		│		├── request
+		│   └── response
+		│
+		├── common
+		│   ├── util
+		│   ├── exception
+		│   ├── model
+		│   └── auth
+		│
+		├── config
+		│
+		└── db
+				├── entity
+				└── repository
+```
+
+### Front
+
+```
+solver-frontend
+	├── node_modules
+	├── public
+	└── src
+		├── assets
+	     	├── router
+		├── components
+			├── groups
+			├── main
+			├── profiles
+			└── questions
+		├── router
+		├── store
+			└── modules
+		└── views
+			├── auth
+			├── groups
+			├── main
+			├── notifications
+			├── profiles
+			├── questions
+			├── reports
+			└── solvers
+```
 
 <br><br>
 
-## 3️⃣ 프로젝트 산출물
+## 4️⃣ 프로젝트 산출물
 
 - [프로젝트 메모 및 공유 : Notion](https://danghyeona.notion.site/Solver-1b2691348e2d4334a4deb5699167ef59)
-- [프로젝트 진행 회의록](./산출물/회의록.md)
+- [프로젝트 회의록](./산출물/회의록.md)
+- [프로젝트 컨벤션 목록](./산출물/컨벤션목록.md)
+- [프로젝트 스토리보드 및 디자인](./산출물/디자인스토리보드.md)
 
 <br>
 
-- [서비스기획서](./산출물/기획서.md)
-- [와이어프레임](./산출물/와이어프레임.md)
-- [요구사항명세서](./산출물/요구사항명세서.md)
+- [기획서](./산출물/기획서.md)
+- [API Docs](https://www.notion.so/danghyeona/API-961534ee05374f65ad6fb75d55167f65)
+- [와이어 프레임](./산출물/와이어프레임.md)
 - [서비스 아키텍처](./산출물/아키텍처.md)
+- [요구사항 명세서](./산출물/요구사항명세서.md)
+- [데이터베이스:ERD](./산출물/데이터베이스.md)
 - [시퀀스 다이어그램](./산출물/시퀀스다이어그램.md)
 
- 
+<br>
