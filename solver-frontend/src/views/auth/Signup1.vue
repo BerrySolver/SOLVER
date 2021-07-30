@@ -17,13 +17,15 @@
       <div class='content'>
         <div class='welcome'>SOLVER</div>
         <div class='input-fields'>
-          <input type="text" v-model="signup1Data.userId" placeholder="아이디" class='input-line full-width'>
+          <input type="text" v-model="signup1Data.loginId" placeholder="아이디" class='input-line full-width'>
           <input type="text" v-model="signup1Data.nickname" placeholder="닉네임" class='input-line full-width'>
           <input type="password" v-model="signup1Data.password1" placeholder="비밀번호" class='input-line full-width'>
           <input type="password" v-model="signup1Data.password2" placeholder="비밀번호 확인" class='input-line full-width'>
         </div>
         <div class="for-margin"></div>
-        <button class='ghost-round full-width'><RouterLink :to="{ name: 'Signup2' }" style="text-decoration:none; color:#fff">NEXT</RouterLink></button>
+        <button class='ghost-round full-width'>
+          <RouterLink :to="{ name: 'Signup2', params: {loginId: signup1Data.loginId, nickname: signup1Data.nickname, password: signup1Data.password1} }" style="text-decoration:none; color:#fff">NEXT</RouterLink>
+        </button>
         <!-- <div><button @click="onClick($event)" class='ghost-round full-width'>NEXT</button></div>  //원래 기능--> 
       </div>
     </div>
@@ -38,7 +40,7 @@ export default {
     data() {
       return {
         signup1Data: {
-          userId: '',
+          loginId: '',
           nickname: '',
           password1: '',
           password2: '',

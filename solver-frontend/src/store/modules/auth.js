@@ -1,15 +1,16 @@
 import axios from 'axios'
-// import router from '@/router'
+import router from '@/router'
 import API from '@/API.js'
 
 const state = {
   categoryList: [],
   possibleDay: [],
   possibleTime: [],
+  jwtToken: '',
 }
 
 const getters = {
-
+  isLoggedIn: state => state.jwtToken,
 }
 
 const mutations = {
@@ -24,10 +25,42 @@ const mutations = {
   SET_POSSIBLE_TIME: (state, time) => {
     state.possibleTime = time
   },
+  SET_JWT_TOKEN: (state, jwt) => {
+    state.jwtToken = jwt
+  }
 }
 
 const actions = {
-
+  signup(context, credentials) {
+    axios({
+      url: API.URL + API.ROUTES.signup,
+      method: 'post',
+      data: credentials,
+    })
+    .then((res) => {
+      console.log(res)
+      router.push({path: '/'})
+    })
+    .catch(() => {
+      console.log(credentials)
+    })
+  },
+  login({commit}, credentials) {
+    axios({
+      url: API.URL + API.ROUTES.login,
+      method: 'post',
+      data: credentials,
+    })
+    .then((res) => {
+      console.log(res)
+      localStorage.setItem('jwt', res.data.accessToken)
+      commit('SET_JWT_TOKEN', res.data.accessToken)
+      router.push({path: '/'})
+    })
+    .catch(() => {
+      console.log(credentials)
+    })
+  },
   // 카테고리 받기
   fetchSignupData({commit}) {
     // back이랑 api 주소 확인

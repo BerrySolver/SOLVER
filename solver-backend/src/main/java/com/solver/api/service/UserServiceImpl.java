@@ -117,7 +117,18 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public Optional<Auth> loginUser(UserLoginPostReq userLoginPostReq) {
-		Optional<Auth> auth = authRepository.findByLoginIdAndPassword(userLoginPostReq.getLoginId(), userLoginPostReq.getPassword());
+		Optional<Auth> auth = authRepository.findByLoginId(userLoginPostReq.getLoginId());
+		
+		// 없는 유저인 경우
+		if (auth.orElse(null) == null) {
+			auth = Optional.empty();
+			return auth;
+		}
+		
+		// 비밀 번호가 일치하는 경우
+		if (!passwordEncoder.matches(userLoginPostReq.getPassword(), auth.get().getPassword())) {
+			auth = Optional.empty();
+		}
 		
 		return auth;
 	}
