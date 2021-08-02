@@ -2,10 +2,11 @@ package com.solver.db.entity.user;
 
 import java.io.Serializable;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Token implements Serializable{
-	@Id
+	@EmbeddedId
+	TokenId tokenId;
+	
+	@MapsId("tokenId")
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;

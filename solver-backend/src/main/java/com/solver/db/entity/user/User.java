@@ -31,7 +31,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User extends BaseEntity{
-	private String kakaoId;
+	private Long kakaoId;
 	private String nickname;
 	private String introduction;
 	private String linkText;
