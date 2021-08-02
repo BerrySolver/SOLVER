@@ -6,7 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.solver.api.request.QuestionReq;
+import com.solver.api.request.QuestionPatchReq;
+import com.solver.api.request.QuestionPostReq;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
@@ -33,7 +34,7 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	// 질문 생성
 	@Override
-	public Question createQuestion(QuestionReq questionReq) {
+	public Question createQuestion(QuestionPostReq questionPostReq) {
 		// 질문 Id 생성
 		Question question = new Question();
 		String questionId = "";
@@ -56,24 +57,23 @@ public class QuestionServiceImpl implements QuestionService{
 			return null;
 		}
 		type = codeRepository.findByCode("042");
-		mainCategory = codeRepository.findByCode(questionReq.getMainCategory());
-		subCategory = categoryRepository.findBySubCategoryCode(questionReq.getSubCategory());
+		mainCategory = codeRepository.findByCode(questionPostReq.getMainCategory());
+		subCategory = categoryRepository.findBySubCategoryCode(questionPostReq.getSubCategory());
 		
 		question.setId(questionId);
 		question.setUser(user.orElse(null));
-		question.setTitle(questionReq.getTitle());
-		question.setContent(questionReq.getContent());
+		question.setTitle(questionPostReq.getTitle());
+		question.setContent(questionPostReq.getContent());
 		question.setCode(type);
 		question.setMainCategory(mainCategory);
 		question.setSubCategory(subCategory);
-		question.setDifficulty(questionReq.getDifficulty());
+		question.setDifficulty(questionPostReq.getDifficulty());
 		question.setRegDt(new Date(System.currentTimeMillis()));
-		question.setExpirationTime(questionReq.getExpirationTime());
+		question.setExpirationTime(questionPostReq.getExpirationTime());
 		question.setConferenceOpened(false);
 		question.setReadCount(0);
 		
-		questionRepository.save(question);
-		return question;
+		return questionRepository.save(question);
 	}
 	
 	// 질문 상세조회
@@ -85,6 +85,15 @@ public class QuestionServiceImpl implements QuestionService{
 		}
 		
 		return question;
+	}
+
+	@Override
+	public Question updateQuestion(QuestionPatchReq questionPatchReq, Question question) {
+		question.setTitle(questionPatchReq.getTitle());
+		question.setContent(questionPatchReq.getContent());
+		question.setDifficulty(questionPatchReq.getDifficulty());
+		
+		return questionRepository.save(question);
 	}
 
 }

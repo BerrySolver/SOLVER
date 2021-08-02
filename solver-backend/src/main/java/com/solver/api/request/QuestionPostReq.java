@@ -9,8 +9,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel("QuestionReq")
-public class QuestionReq {	
+@ApiModel("QuestionPostReq")
+public class QuestionPostReq {	
 	@ApiModelProperty(name="질문 제목", example="질문1")
 	private String title;
 	
