@@ -28,6 +28,6 @@ public class Category {
 	@JoinColumn(name="code")
 	private Code code;
 	
-	@OneToMany(mappedBy="subCategoryCode", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	@OneToMany(mappedBy="subCategory", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> questionSubCategory;
 }

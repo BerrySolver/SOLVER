@@ -11,19 +11,16 @@ import lombok.Setter;
 @Setter
 @ApiModel("QuestionReq")
 public class QuestionReq {	
-	@ApiModelProperty(name="질문 유형", example="unsolved")
-	private String type;
-	
 	@ApiModelProperty(name="질문 제목", example="질문1")
 	private String title;
 	
 	@ApiModelProperty(name="질문 내용", example="내용1")
 	private String content;
 	
-	@ApiModelProperty(name="대분류", example="009")
+	@ApiModelProperty(name="대분류", example="091")
 	private String mainCategory;
 	
-	@ApiModelProperty(name="소분류", example="091")
+	@ApiModelProperty(name="소분류", example="911")
 	private String subCategory;
 	
 	@ApiModelProperty(name="난이도", example="1")
