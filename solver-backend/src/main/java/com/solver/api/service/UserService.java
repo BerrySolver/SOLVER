@@ -2,6 +2,7 @@ package com.solver.api.service;
 
 import java.util.Optional;
 
+import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.request.UserRegistPostReq;
 import com.solver.common.model.OAuthToken;
 import com.solver.db.entity.user.Token;
@@ -21,4 +22,8 @@ public interface UserService {
 	void singUp(UserRegistPostReq userRegistPostReq, String accessToken);
 
 	void deleteUser(String accessToken);
+
+	void getProfileInfo(String nickname);
+
+	void updateProfile(ProfileUpdatePatchReq profileUpdatePatchReq, String accessToken);
 }
