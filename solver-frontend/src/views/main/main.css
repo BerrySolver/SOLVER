@@ -1,74 +1,44 @@
-.container {
-  height: 100vh;
-  padding-top: 6%;
+/* 이달의 질문 CARD */
+.card {
+  border: none;
+  margin: 0.5vw;
 }
 
-.container img{
-  max-width: 100vh;
-  max-height: 60vh;
-  position: relative;
-  z-index: 1;
-
+.card-body {
+  padding: 0.5rem;
 }
 
-.group {
-  background-color: white;
-  height: 50vh;
+.card-ctg {
+  color: white;
+  font-weight: 300;
 }
 
-.introduction {
-  font-size: 15px;
-  text-align: left;
-  color: black;
-  /* white-space: pre; */
-  position: relative;
-  z-index: 2;
+.card-group :hover {
+  color: #B5C7D3;
+  transition: color 0.2s;
 }
 
-.main {
-  font-family: 'NanumSquare', sans-serif;
-}
-
-.month-solver {
+.card-header {
   background-color: #658DC6;
-  height: 50vh;
+  padding: 0.3rem;
 }
 
-.popular-question {
-  background-color: white;
-  height: 50vh;
-}
-/* .question-insert {
-  margin-top: 10px;
-} */
 
-.row-left {
-  margin-left: 5vw;
-}
-
-.search-input {
-  margin-top: 1%;
-  width: 65%;
-}
-
-.slogan {
-  font-size: 17px;
-  vertical-align: middle;
-}
-
-.slogan-center {
-  font-weight: 700;
-}
-
-.title {
-  font-size: 35px;
+.card-title {
+  font-size: 1rem;
   font-weight: 600;
   text-align: left;
-  color: #658DC6;
 }
 
+.card-text {
+  color: #84898C;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.15rem;
+  text-align: left;
+}
 
-/* input */
+/* MAIN 1번째 페이지 검색창 */
 .form__group {
   position: relative;
   padding-top: 15px;
@@ -127,3 +97,88 @@
 .form__field:required, .form__field:invalid {
   box-shadow: none;
 }
+
+
+.group {
+  background-color: white;
+  height: 100vh;
+}
+
+.introduction {
+  font-size: 15px;
+  text-align: left;
+  color: black;
+  /* white-space: pre; */
+  position: relative;
+  z-index: 2;
+}
+
+.main {
+  font-family: 'NanumSquare', sans-serif;
+}
+
+.main-container {
+  height: 100vh;
+  padding-top: 6%;
+}
+
+.main-logo {
+  max-width: 100vh;
+  max-height: 60vh;
+}
+
+.month-solver {
+  background-color: #658DC6;
+  height: 100vh;
+}
+
+.popular-question {
+  background-color: white;
+  height: 100vh;
+}
+
+.popular-title {
+  margin-left: 5vw;
+  font-weight: 800;
+  font-size: 2.5vh;
+}
+
+.row-left {
+  margin-left: 5vw;
+}
+
+.search-input {
+  margin-top: 1%;
+  width: 65%;
+}
+
+.slogan {
+  font-size: 17px;
+  vertical-align: middle;
+}
+
+.slogan-center {
+  font-weight: 700;
+}
+
+.solver-title {
+  color: white;
+  font-weight: 700;
+  margin-top: 15vh;
+}
+
+.solver-intro {
+  color: white;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: left;
+  color: #658DC6;
+}
+
+
+
+
+

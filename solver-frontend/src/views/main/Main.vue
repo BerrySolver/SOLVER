@@ -1,6 +1,9 @@
 <template>
+<!-- 전체 메인 페이지 div -->
   <div class="main">
-    <div class="container">
+
+    <!-- 1번째 메인 페이지(SOLVER 설명) -->
+    <div class="container main-container">
       <div class="row row-left align-items-center">
         
         <div class="col-1"></div>
@@ -20,43 +23,176 @@
             <label for="name" class="form__label">
               <span>질문을 검색해보세요!</span>
             </label>
+            <!-- <img src="@/assets/main-search.png" alt="main-search-button" width="25px"> -->
           </div>
         </div>
 
         <div class="col-5">
-
-          <img src="@/assets/logo.png" alt="main-logo">
-
-          <!-- <div class="slogan align-items-center">
-            <div class="d-inline-block">당신의</div>
-            <div class="d-inline-block slogan-center">
-              질문은<br>답변은
-            </div>
-            <div class="d-inline-block">특별하다</div>
-          </div> -->
-
+          <img src="@/assets/logo.png" alt="main-logo" class="main-logo">
         </div>
 
 
       </div>
-        <!-- <div class="col-1"></div>
-        <div class="form__group col-5">
-          <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />
-          <label for="name" class="form__label">
-            <span>질문을 검색해보세요!</span>
-          </label>
-        </div> -->
-
 
     </div>
 
+    <!-- 2번째 메인 페이지(현재 인기 질문) -->
     <div class="popular-question">
-      <h5>인기 질문</h5>
-    </div>
-    <div class="month-solver">
-      <h5>이달의 솔버</h5>
+      <div class="container">
+        <div class="row">
+          <!-- 왼쪽 여백용 col -->
+          <div class="col-1"></div>
+          <!-- 소제목 col -->
+          <div class="col-1 popular-title">
+            <div>현재</div>
+            <span>인기 질문</span>
+          </div>
+          <!-- 인기질문 col -->
+          <div class="col-8">
+
+            <div class="card-group">
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다. 긴 질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다. 긴 질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="card-group">
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <small class="card-ctg">카테고리 이름</small>
+                </div>
+                <div class="card-body">
+                  <p class="card-title">질문 제목입니다.</p>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 오른쪽 여백용 col -->
+          <div class="col-1"></div>
+
+        </div>
+      </div>
     </div>
 
+    <!-- 3번째 메인 페이지(이달의 솔버) -->
+    <div class="month-solver">
+      <br>
+        <div>
+          <h2 class="solver-title">이달의 SOLVER</h2>
+          <p class="solver-intro">이달에 활약한 SOLVER들을 소개해드려요!</p>
+        </div>
+
+        <div>
+          <div class="card-group">
+            <div class="card">
+              <img class="card-img-top" src="@/assets/logo.png" alt="Card image cap" width="5vw">
+              <div class="card-body">
+                <p class="card-title">질문 제목입니다.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <small class="card-ctg">카테고리 이름</small>
+              </div>
+              <div class="card-body">
+                <p class="card-title">질문 제목입니다. 긴 질문 제목입니다.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <small class="card-ctg">카테고리 이름</small>
+              </div>
+              <div class="card-body">
+                <p class="card-title">질문 제목입니다.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <small class="card-ctg">카테고리 이름</small>
+              </div>
+              <div class="card-body">
+                <p class="card-title">질문 제목입니다. 긴 질문 제목입니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- 4번째 메인 페이지(모임) -->
     <div class="group">
       <h5>모임</h5>
     </div>  
