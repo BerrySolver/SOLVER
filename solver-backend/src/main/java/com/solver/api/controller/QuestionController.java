@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +61,7 @@ public class QuestionController {
 	{
 		Optional<Question> question = questionService.getById(questionId);
 		if (question == null) {
-			return ResponseEntity.status(404).body(QuestionRes.of(404, "질문 조회에 실패했습니다."));
+			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
 		}
 		
 		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get()));
@@ -79,7 +80,7 @@ public class QuestionController {
 	{
 		Optional<Question> optionalQuestion = questionService.getById(questionId);
 		if (optionalQuestion == null) {
-			return ResponseEntity.status(404).body(QuestionRes.of(404, "질문 조회에 실패했습니다."));
+			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
 		}
 		
 		Question question = optionalQuestion.get();
@@ -92,5 +93,24 @@ public class QuestionController {
 		question = questionService.updateQuestion(questionPatchReq, optionalQuestion.get());
 		
 		return ResponseEntity.status(201).body(QuestionRes.of(200, "질문을 성공적으로 수정했습니다."));
+	}
+	
+	@DeleteMapping("/{questionId}")
+	@ApiOperation(value = "질문 삭제", notes = "질문 삭제 API") 
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "질문을 성공적으로 삭제했습니다."),
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
+    })
+	public ResponseEntity<? extends BaseResponse> deleteQuestion(
+			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId)
+	{
+		Optional<Question> question = questionService.getById(questionId);
+		if (question == null) {
+			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		questionService.deleteQuestion(question.get());
+		
+		return ResponseEntity.status(200).body(QuestionRes.of(204, "질문을 성공적으로 삭제했습니다."));
 	}
 }
