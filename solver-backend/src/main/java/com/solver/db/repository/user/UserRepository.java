@@ -11,7 +11,7 @@ import com.solver.db.entity.user.User;
 public interface UserRepository extends JpaRepository<User, String>{
 	Optional<User> findByNickname(String nickname);
 
-	Optional<User> findByKakaoId(String kakaoID);
+	Optional<User> findByKakaoId(Long kakaoId);
 	
 	void deleteByNickname(String nickname);
 }
