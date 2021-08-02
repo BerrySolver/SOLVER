@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.UserUpdatePatchReq;
 import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
-import com.solver.common.util.JwtTokenUtil;
-import com.solver.db.entity.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,9 +26,6 @@ public class ProfileController {
 	@Autowired
 	UserService	userService;
 	
-	@Autowired
-	JwtTokenUtil jwtTokenUtil;
-	
 	@PatchMapping("/{nickname}")
 	@ApiOperation(value = "회원 정보 수정", notes = "닉네임, 프로필 사진, 소개, 링크 수정 한다.") 
     @ApiResponses({
@@ -43,7 +38,7 @@ public class ProfileController {
 	{
 		String token = jwt.split(" ")[1];
 		
-		String loginId = jwtTokenUtil.getLoginIdFromToken(token);
+		String loginId = "11";
 		
 		userService.updateUser(userUpdatePatchReq, loginId);
 		

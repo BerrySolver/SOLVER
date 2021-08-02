@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
-import com.solver.common.util.JwtTokenUtil;
 import com.solver.db.entity.User;
 
 import io.swagger.annotations.Api;
@@ -38,9 +37,6 @@ methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMe
 public class UserController {
 	@Autowired
 	UserService	userService;
-	
-	@Autowired
-	JwtTokenUtil jwtTokenUtil;
 	
 	@PostMapping("/signup")
 	@ApiOperation(value = "회원 가입", notes = "아이디, 패스워드, 닉네임과 화상 가능 시간을 입력해 회원가입 한다.") 
@@ -101,7 +97,7 @@ public class UserController {
 	{
 		String token = jwt.split(" ")[1];
 		
-		String loginId = jwtTokenUtil.getLoginIdFromToken(token);
+		String loginId = "11";
 		
 		Optional<User> user = userService.getUserInfoByLoginId(loginId);
 		
@@ -123,7 +119,7 @@ public class UserController {
 	{
 		String token = jwt.split(" ")[1];
 		
-		String loginId = jwtTokenUtil.getLoginIdFromToken(token);
+		String loginId = "11";
 		
 		userService.deleteUser(loginId);
 		
