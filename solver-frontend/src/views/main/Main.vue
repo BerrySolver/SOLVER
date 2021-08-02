@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="container">
+    <div class="container main-container">
       <div class="row row-left align-items-center">
         
         <div class="col-1"></div>

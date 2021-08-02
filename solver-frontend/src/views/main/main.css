@@ -1,9 +1,9 @@
-.container {
+.main-container {
   height: 100vh;
   padding-top: 6%;
 }
 
-.container img{
+.main-logo {
   max-width: 100vh;
   max-height: 60vh;
   position: relative;
