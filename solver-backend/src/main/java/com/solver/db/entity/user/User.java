@@ -31,7 +31,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class User extends BaseEntity{
-	private String loginId;
+	private String kakaoId;
 	private String nickname;
 	private String introduction;
 	private String linkText;
@@ -109,4 +109,5 @@ public class User extends BaseEntity{
 	
 	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Token> token;
+	
 }
