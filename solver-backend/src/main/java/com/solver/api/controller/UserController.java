@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
-import com.solver.db.entity.User;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

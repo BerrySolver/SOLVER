@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.QuestionReq;
 import com.solver.api.response.QuestionRes;
 import com.solver.api.service.QuestionService;
-import com.solver.db.entity.Question;
+import com.solver.db.entity.question.Question;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

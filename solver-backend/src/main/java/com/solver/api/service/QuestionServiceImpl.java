@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.solver.api.request.QuestionReq;
 import com.solver.common.util.RandomIdUtil;
-import com.solver.db.entity.Code;
-import com.solver.db.entity.Question;
-import com.solver.db.entity.User;
-import com.solver.db.repository.QuestionRepository;
-import com.solver.db.repository.UserRepository;
+import com.solver.db.entity.code.Code;
+import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.User;
+import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.user.UserRepository;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
