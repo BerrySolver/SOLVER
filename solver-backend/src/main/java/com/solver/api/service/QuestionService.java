@@ -12,4 +12,6 @@ public interface QuestionService {
 	Optional<Question> getById(String questionId);
 
 	Question updateQuestion(QuestionPatchReq questionPatchReq, Question question);
+
+	void deleteQuestion(Question question);
 }	
