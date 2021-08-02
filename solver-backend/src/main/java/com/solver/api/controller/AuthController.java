@@ -81,6 +81,10 @@ public class AuthController {
 	}
 	
 	@GetMapping("logout")
+	@ApiOperation(value = "로그아웃", notes = "아이디, 패스워드를 입력해 로그인") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "로그아웃에 성공했습니다")
+    })
 	public ResponseEntity<BaseResponse> logoutUser(@RequestParam(value = "state") String accessToken){
 		userService.deleteToken(accessToken);
 		

@@ -5,13 +5,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.solver.api.request.UserRegistPostReq;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.OAuthToken;
 import com.solver.common.util.RandomIdUtil;
+import com.solver.db.entity.code.Code;
 import com.solver.db.entity.user.Token;
 import com.solver.db.entity.user.TokenId;
 import com.solver.db.entity.user.User;
+import com.solver.db.entity.user.UserCalendar;
 import com.solver.db.repository.user.TokenRepository;
+import com.solver.db.repository.user.UserCalendarRepository;
 import com.solver.db.repository.user.UserRepository;
 
 @Service
@@ -19,6 +23,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	UserCalendarRepository UserCalendarRepository;
 	
 	@Autowired
 	TokenRepository tokenRepository;
@@ -90,5 +97,47 @@ public class UserServiceImpl implements UserService{
 		
 		//userId로 token테이블에서 데이터 삭제
 		tokenRepository.deleteByUserId(user.get().getId());
+	}
+
+
+	@Override
+	public void singUp(UserRegistPostReq userRegistPostReq, String accessToken) {
+		String token = accessToken.split(" ")[1];
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		//DB에 저장된 더미 데이터 가져옴
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		Code code = new Code();
+		
+		//유저 타입 입력
+		code.setCode(userRegistPostReq.getType());
+		
+		if(user == null) {
+			return;
+		}
+		
+		//유저 정보 입력
+		user.setNickname(userRegistPostReq.getNickname());
+		user.setCode(code);
+		
+		UserCalendar userCalendar = new UserCalendar();
+		String userCalendarId = "";
+		
+		//새로운 user테이블의 id생성
+		while(true) {
+			userCalendarId = RandomIdUtil.makeRandomId(13);
+			
+			if(UserCalendarRepository.findById(userCalendarId).orElse(null) == null)
+				break;
+		}
+		
+		//유저 시간표 정보
+		userCalendar.setId(userCalendarId);
+		userCalendar.setPossibleTime(userRegistPostReq.getPossibleTime());
+		userCalendar.setUser(user);
+		
+		//DB에 저장
+		userRepository.save(user);
+		UserCalendarRepository.save(userCalendar);
 	}
 }

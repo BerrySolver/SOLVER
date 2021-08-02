@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
 
@@ -17,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
 methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
@@ -42,6 +47,21 @@ public class UserController {
 		
 		return ResponseEntity.status(409).body(BaseResponse.of(409, "이미 사용중인 닉네임입니다"));
 		
+	}
+	
+	@PostMapping("/signup")
+	@ApiOperation(value = "회원가입", notes = "유저 회원가입") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "회원가입에 성공했습니다"),
+        @ApiResponse(code = 409, message = "회원가입에 실패했습니다")
+    })
+	public ResponseEntity<? extends BaseResponse> signUp(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@RequestBody @ApiParam(value="회원가입 정보", required=true) UserRegistPostReq userRegistPostReq)
+	{
+		userService.singUp(userRegistPostReq, accessToken);
+
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "회원가입에 성공했습니다"));
 	}
 	
 	
