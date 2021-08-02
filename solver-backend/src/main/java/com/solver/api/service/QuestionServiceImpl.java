@@ -8,9 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.solver.api.request.QuestionReq;
 import com.solver.common.util.RandomIdUtil;
+import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.User;
+import com.solver.db.repository.code.CategoryRepository;
+import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.user.UserRepository;
 
@@ -22,8 +25,15 @@ public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	UserRepository userRepository;
 	
+	@Autowired
+	CodeRepository codeRepository;
+	
+	@Autowired
+	CategoryRepository categoryRepository;
+	
 	@Override
 	public Question createQuestion(QuestionReq questionReq) {
+		// 질문 Id 생성
 		Question question = new Question();
 		String questionId = "";
 		
@@ -33,11 +43,13 @@ public class QuestionServiceImpl implements QuestionService{
 			if(questionRepository.findById(questionId).orElse(null) == null)
 				break;
 		}
-		
+		// 외래키 참조값 생성
 		Optional<User> user = Optional.empty();
-		Code code = new Code();
+		Code type = new Code();
+		Code mainCategoryCode = new Code();
+		Category subCategoryCode = new Category();
 		
-		user = userRepository.findById(questionReq.getUserId());
+		user = userRepository.findById("1q2w3e");
 		if (user.orElse(null) == null) {
 			return null;
 		}
@@ -46,13 +58,15 @@ public class QuestionServiceImpl implements QuestionService{
 		question.setUser(user.orElse(null));
 		question.setTitle(questionReq.getTitle());
 		question.setContent(questionReq.getContent());
-//		question.setMainCategory(questionReq.getMainCategory());
-//		question.setSubCategory(questionReq.getSubCategory());
+		// Code 구현 후 추가 구현 필요
+//		question.setCode(type);
+//		question.setMainCategory(mainCategoryCode);
+//		question.setSubCategory(subCategoryCode);
 		question.setDifficulty(questionReq.getDifficulty());
 		question.setRegDt(new Date(System.currentTimeMillis()));
 		question.setExpirationTime(questionReq.getExpirationTime());
-		question.setConferenceOpened(questionReq.isConferenceOpened());
-		question.setReadCount(questionReq.getReadCount());
+		question.setConferenceOpened(false);
+		question.setReadCount(0);
 		
 		questionRepository.save(question);
 		return question;

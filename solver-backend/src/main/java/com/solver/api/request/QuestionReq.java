@@ -10,10 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("QuestionReq")
-public class QuestionReq {
-	@ApiModelProperty(name="유저 ID", example="textId")
-	private String userId;
-	
+public class QuestionReq {	
 	@ApiModelProperty(name="질문 유형", example="unsolved")
 	private String type;
 	
@@ -34,10 +31,4 @@ public class QuestionReq {
 	
 	@ApiModelProperty(name="만료 시간", example="2021-08-01")
 	private Date expirationTime;
-	
-	@ApiModelProperty(name="화상 열린 여부", example="false")
-	private boolean conferenceOpened;
-	
-	@ApiModelProperty(name="조회수", example="0")
-	private int readCount;
 }
