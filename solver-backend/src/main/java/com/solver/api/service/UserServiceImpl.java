@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService{
 	UserRepository userRepository;
 	
 	@Autowired
-	UserCalendarRepository UserCalendarRepository;
+	UserCalendarRepository userCalendarRepository;
 	
 	@Autowired
 	TokenRepository tokenRepository;
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService{
 		while(true) {
 			userCalendarId = RandomIdUtil.makeRandomId(13);
 			
-			if(UserCalendarRepository.findById(userCalendarId).orElse(null) == null)
+			if(userCalendarRepository.findById(userCalendarId).orElse(null) == null)
 				break;
 		}
 		
@@ -138,6 +138,15 @@ public class UserServiceImpl implements UserService{
 		
 		//DB에 저장
 		userRepository.save(user);
-		UserCalendarRepository.save(userCalendar);
+		userCalendarRepository.save(userCalendar);
+	}
+	
+	@Override
+	public void deleteUser(String accessToken) {
+		//accessToken부분
+		String token = accessToken.split(" ")[1];
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		userRepository.deleteByKakaoId(kakaoId);
 	}
 }
