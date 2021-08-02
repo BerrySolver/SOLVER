@@ -19,4 +19,6 @@ public interface UserService {
 	void deleteToken(String accessToken);
 
 	void singUp(UserRegistPostReq userRegistPostReq, String accessToken);
+
+	void deleteUser(String accessToken);
 }

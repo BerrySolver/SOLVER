@@ -3,6 +3,7 @@ package com.solver.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,19 +51,32 @@ public class UserController {
 	}
 	
 	@PostMapping("/signup")
-	@ApiOperation(value = "회원가입", notes = "유저 회원가입") 
+	@ApiOperation(value = "회원 가입", notes = "유저 회원가입") 
     @ApiResponses({
-        @ApiResponse(code = 201, message = "회원가입에 성공했습니다"),
-        @ApiResponse(code = 409, message = "회원가입에 실패했습니다")
+        @ApiResponse(code = 201, message = "회원 가입에 성공했습니다"),
+        @ApiResponse(code = 409, message = "회원 가입에 실패했습니다")
     })
 	public ResponseEntity<? extends BaseResponse> signUp(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
-			@RequestBody @ApiParam(value="회원가입 정보", required=true) UserRegistPostReq userRegistPostReq)
+			@RequestBody @ApiParam(value="회원 가입 정보", required=true) UserRegistPostReq userRegistPostReq)
 	{
 		userService.singUp(userRegistPostReq, accessToken);
 
-		return ResponseEntity.status(201).body(BaseResponse.of(201, "회원가입에 성공했습니다"));
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "회원 가입에 성공했습니다"));
 	}
 	
 	
+	@DeleteMapping()
+	@ApiOperation(value = "회원 탈퇴", notes = "유저 회원탈퇴") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "회원 탈퇴가 완료되었습니다"),
+        @ApiResponse(code = 409, message = "회원 탈퇴에 실패하였습니다")
+    })
+	public ResponseEntity<? extends BaseResponse> deleteUser(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
+	{
+		userService.deleteUser(accessToken);
+
+		return ResponseEntity.status(201).body(BaseResponse.of(204, "회원 탈퇴가 완료되었습니다"));
+	}
 }
