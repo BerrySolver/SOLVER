@@ -16,8 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PointLog extends BaseEntity{
-	private int usePoint;
-	private String detail;
 	private Date regDt;
 	
 	@ManyToOne
