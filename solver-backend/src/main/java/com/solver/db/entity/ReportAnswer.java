@@ -20,8 +20,4 @@ public class ReportAnswer extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="answerId")
 	private Answer answer;
-	
-	@ManyToOne
-	@JoinColumn(name="reportedUserId")
-	private User reportedUser;
 }
