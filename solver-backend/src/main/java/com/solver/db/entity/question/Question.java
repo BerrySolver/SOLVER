@@ -43,11 +43,11 @@ public class Question extends BaseEntity{
 	
 	@ManyToOne
 	@JoinColumn(name="mainCategory")
-	private Code mainCategoryCode;
+	private Code mainCategory;
 	
 	@ManyToOne
 	@JoinColumn(name="subCategory")
-	private Category subCategoryCode;
+	private Category subCategory;
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteUser> favoriteUser;

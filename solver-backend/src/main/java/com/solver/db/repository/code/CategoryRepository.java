@@ -7,5 +7,7 @@ import com.solver.db.entity.code.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, String>{
-
+	
+	Category findBySubCategoryCode(String subCategoryCode);
+	
 }

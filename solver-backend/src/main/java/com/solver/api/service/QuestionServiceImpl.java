@@ -43,25 +43,28 @@ public class QuestionServiceImpl implements QuestionService{
 			if(questionRepository.findById(questionId).orElse(null) == null)
 				break;
 		}
+		
 		// 외래키 참조값 생성
 		Optional<User> user = Optional.empty();
 		Code type = new Code();
-		Code mainCategoryCode = new Code();
-		Category subCategoryCode = new Category();
+		Code mainCategory = new Code();
+		Category subCategory = new Category();
 		
 		user = userRepository.findById("1q2w3e");
 		if (user.orElse(null) == null) {
 			return null;
 		}
+		type = codeRepository.findByCode("042");
+		mainCategory = codeRepository.findByCode(questionReq.getMainCategory());
+		subCategory = categoryRepository.findBySubCategoryCode(questionReq.getSubCategory());
 		
 		question.setId(questionId);
 		question.setUser(user.orElse(null));
 		question.setTitle(questionReq.getTitle());
 		question.setContent(questionReq.getContent());
-		// Code 구현 후 추가 구현 필요
-//		question.setCode(type);
-//		question.setMainCategory(mainCategoryCode);
-//		question.setSubCategory(subCategoryCode);
+		question.setCode(type);
+		question.setMainCategory(mainCategory);
+		question.setSubCategory(subCategory);
 		question.setDifficulty(questionReq.getDifficulty());
 		question.setRegDt(new Date(System.currentTimeMillis()));
 		question.setExpirationTime(questionReq.getExpirationTime());

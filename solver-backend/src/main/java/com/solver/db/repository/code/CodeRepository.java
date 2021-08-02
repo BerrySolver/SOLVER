@@ -8,4 +8,6 @@ import com.solver.db.entity.code.Code;
 @Repository
 public interface CodeRepository extends JpaRepository<Code, String>{
 
+	Code findByCode(String type);
+
 }
