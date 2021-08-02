@@ -3,9 +3,9 @@ package com.solver.api.response;
 import java.util.Date;
 
 import com.solver.common.model.BaseResponse;
-import com.solver.db.entity.Code;
-import com.solver.db.entity.Question;
-import com.solver.db.entity.User;
+import com.solver.db.entity.code.Code;
+import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

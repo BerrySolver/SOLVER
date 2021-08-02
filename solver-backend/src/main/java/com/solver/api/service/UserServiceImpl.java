@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.request.UserUpdatePatchReq;
 import com.solver.common.util.RandomIdUtil;
-import com.solver.db.entity.Token;
-import com.solver.db.entity.User;
-import com.solver.db.entity.UserCalendar;
-import com.solver.db.repository.TokenRepository;
-import com.solver.db.repository.UserCalendarRepository;
-import com.solver.db.repository.UserRepository;
+import com.solver.db.entity.user.Token;
+import com.solver.db.entity.user.User;
+import com.solver.db.entity.user.UserCalendar;
+import com.solver.db.repository.user.TokenRepository;
+import com.solver.db.repository.user.UserCalendarRepository;
+import com.solver.db.repository.user.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -91,31 +91,6 @@ public class UserServiceImpl implements UserService{
 		return user;
 	}
 	
-	@Override
-	public String makeToken(User user) {
-		String accessToken = "!1";
-		String refreshToken = "11";
-		
-		String tokenId = "";
-		
-		while(true) {
-			tokenId = RandomIdUtil.makeRandomId(13);
-			
-			if(tokenRepository.findById(tokenId).orElse(null) == null)
-				break;
-		}
-		
-		Token token = new Token();
-		
-		token.setAccessToken(accessToken);
-		token.setRefreshToken(refreshToken);
-		token.setId(tokenId);
-		 
-		tokenRepository.save(token);
-		
-		return accessToken;
-	}
-
 	@Override
 	public Optional<User> getUserInfoByLoginId(String loginId) {
 		Optional<User> user = userRepository.findByLoginId(loginId);

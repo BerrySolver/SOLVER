@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.UserLoginPostReq;
 import com.solver.api.response.UserLoginRes;
 import com.solver.api.service.UserService;
-import com.solver.db.entity.User;
-import com.solver.db.repository.UserRepository;
+import com.solver.db.entity.user.User;
+import com.solver.db.repository.user.UserRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,14 +36,6 @@ public class AuthController {
 	@Autowired
 	UserService userService;
 	
-//	private final TokenProvider tokenProvider;
-//	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-//	
-//	public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-//		this.tokenProvider = tokenProvider;
-//		this.authenticationManagerBuilder = authenticationManagerBuilder;
-//	}
-	
 	// 로그인. id와 password를 loginDto로 받음
 	@PostMapping("/login")
 	@ApiOperation(value = "로그인", notes = "아이디, 패스워드를 입력해 로그인") 
@@ -55,15 +47,12 @@ public class AuthController {
 			@ApiParam(value="회원가입 정보", required=true) @RequestBody UserLoginPostReq userLoginPostReq) {
 
 		Optional<User> user = userService.checkLoginId(userLoginPostReq.getLoginId());
-//		Optional<Auth> auth = userService.loginUser(userLoginPostReq);
 		
 		if(user.orElse(null) == null)
 			return ResponseEntity.status(409).body(null);
 		
-//		if(auth.orElse(null) == null)
-//			return ResponseEntity.status(409).body(null);
 		
-		String accessToken = userService.makeToken(user.get());
+		String accessToken = "1111";
 		
 		UserLoginRes userLoginRes = UserLoginRes.builder().accessToken(accessToken).build();
 		userLoginRes.setMessage("로그인에 성공했습니다");
