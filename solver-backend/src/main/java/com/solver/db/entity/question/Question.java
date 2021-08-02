@@ -11,6 +11,7 @@ import javax.persistence.OneToMany;
 
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceReservation;
@@ -26,8 +27,6 @@ import lombok.Setter;
 public class Question extends BaseEntity{
 	private String title;
 	private String content;
-	private String mainCategory;
-	private String subCategory;
 	private int difficulty;
 	private Date regDt;
 	private Date expirationTime;
@@ -41,6 +40,14 @@ public class Question extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="type")
 	private Code code;
+	
+	@ManyToOne
+	@JoinColumn(name="mainCategory")
+	private Code mainCategory;
+	
+	@ManyToOne
+	@JoinColumn(name="subCategory")
+	private Category subCategory;
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteUser> favoriteUser;
