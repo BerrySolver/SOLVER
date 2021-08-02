@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.UserLoginPostReq;
 import com.solver.api.response.UserLoginRes;
 import com.solver.api.service.UserService;
-import com.solver.common.auth.TokenProvider;
-import com.solver.common.util.JwtTokenUtil;
-import com.solver.db.entity.Auth;
 import com.solver.db.entity.User;
 import com.solver.db.repository.UserRepository;
 
@@ -59,13 +55,13 @@ public class AuthController {
 			@ApiParam(value="회원가입 정보", required=true) @RequestBody UserLoginPostReq userLoginPostReq) {
 
 		Optional<User> user = userService.checkLoginId(userLoginPostReq.getLoginId());
-		Optional<Auth> auth = userService.loginUser(userLoginPostReq);
+//		Optional<Auth> auth = userService.loginUser(userLoginPostReq);
 		
 		if(user.orElse(null) == null)
 			return ResponseEntity.status(409).body(null);
 		
-		if(auth.orElse(null) == null)
-			return ResponseEntity.status(409).body(null);
+//		if(auth.orElse(null) == null)
+//			return ResponseEntity.status(409).body(null);
 		
 		String accessToken = userService.makeToken(user.get());
 		

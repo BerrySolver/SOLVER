@@ -10,14 +10,10 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class ReportComment extends BaseEntity{
-	private String reason;
+public class Hashtag extends BaseEntity{
+	private String tagName;
 	
 	@ManyToOne
-	@JoinColumn(name="reporterUserId")
-	private User reporterUser;
-	
-	@ManyToOne
-	@JoinColumn(name="commentId")
-	private Comment comment;
+	@JoinColumn(name="questionId")
+	private Question question;
 }
