@@ -22,7 +22,7 @@ public class Answer extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
-	
+
 	@ManyToOne
 	@JoinColumn(name="questionId")
 	private Question question;

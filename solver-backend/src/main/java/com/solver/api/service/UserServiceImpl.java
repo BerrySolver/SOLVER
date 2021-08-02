@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.request.UserUpdatePatchReq;
-import com.solver.common.util.JwtTokenUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.Token;
 import com.solver.db.entity.User;
@@ -33,10 +32,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	UserCalendarRepository userCalendarRepository;
-	
-	@Autowired
-	JwtTokenUtil jwtTokenUtil;
-
 	
 	@Override
 	public void createUser(UserRegistPostReq userRegistPostReq) {
@@ -98,8 +93,8 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public String makeToken(User user) {
-		String accessToken = jwtTokenUtil.createAccessToken(user);
-		String refreshToken = jwtTokenUtil.createRefreshToken(user);
+		String accessToken = "!1";
+		String refreshToken = "11";
 		
 		String tokenId = "";
 		
