@@ -31,6 +31,7 @@ public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	CategoryRepository categoryRepository;
 	
+	// 질문 생성
 	@Override
 	public Question createQuestion(QuestionReq questionReq) {
 		// 질문 Id 생성
@@ -72,6 +73,17 @@ public class QuestionServiceImpl implements QuestionService{
 		question.setReadCount(0);
 		
 		questionRepository.save(question);
+		return question;
+	}
+	
+	// 질문 상세조회
+	@Override
+	public Optional<Question> getById(String questionId) {
+		Optional<Question> question = questionRepository.findById(questionId);
+		if (question.orElse(null) == null) {
+			return null;
+		}
+		
 		return question;
 	}
 
