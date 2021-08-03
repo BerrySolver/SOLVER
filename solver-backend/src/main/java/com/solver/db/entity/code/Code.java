@@ -20,7 +20,6 @@ import com.solver.db.entity.user.Notification;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,9 +42,6 @@ public class Code {
 	
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Category> category;
-	
-	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<FavoriteField> favoriteField;
 	
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Notification> notification;

@@ -20,5 +20,5 @@ public class FavoriteField extends BaseEntity{
 	
 	@ManyToOne
 	@JoinColumn(name="type")
-	private Code code;
+	private Category category;
 }
