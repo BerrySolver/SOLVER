@@ -1,74 +1,44 @@
-.container {
-  height: 100vh;
-  padding-top: 6%;
+/* 이달의 질문 CARD */
+.card {
+  border: none;
+  margin: 0.5vw;
 }
 
-.container img{
-  max-width: 100vh;
-  max-height: 60vh;
-  position: relative;
-  z-index: 1;
-
+.card-body {
+  padding: 0.5rem;
 }
 
-.group {
-  background-color: white;
-  height: 50vh;
+.card-ctg {
+  color: white;
+  font-weight: 300;
 }
 
-.introduction {
-  font-size: 15px;
-  text-align: left;
-  color: black;
-  /* white-space: pre; */
-  position: relative;
-  z-index: 2;
+.card-group :hover {
+  color: #B5C7D3;
+  transition: color 0.2s;
 }
 
-.main {
-  font-family: 'NanumSquare', sans-serif;
-}
-
-.month-solver {
+.card-header {
   background-color: #658DC6;
-  height: 50vh;
+  padding: 0.3rem;
 }
 
-.popular-question {
-  background-color: white;
-  height: 50vh;
-}
-/* .question-insert {
-  margin-top: 10px;
-} */
 
-.row-left {
-  margin-left: 5vw;
-}
-
-.search-input {
-  margin-top: 1%;
-  width: 65%;
-}
-
-.slogan {
-  font-size: 17px;
-  vertical-align: middle;
-}
-
-.slogan-center {
-  font-weight: 700;
-}
-
-.title {
-  font-size: 35px;
+.card-title {
+  font-size: 1rem;
   font-weight: 600;
   text-align: left;
-  color: #658DC6;
 }
 
+.card-text {
+  color: #84898C;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 0.15rem;
+  text-align: left;
+}
 
-/* input */
+/* MAIN 1번째 페이지 검색창 */
 .form__group {
   position: relative;
   padding-top: 15px;
@@ -126,4 +96,232 @@
 /* reset input */
 .form__field:required, .form__field:invalid {
   box-shadow: none;
+}
+
+
+.group {
+  background-color: white;
+  height: 90vh;
+}
+
+.group-title {
+  margin-top: 20vh;
+  text-align: right;
+  padding: 0;
+}
+
+.introduction {
+  font-size: 15px;
+  text-align: left;
+  color: black;
+  /* white-space: pre; */
+  position: relative;
+  z-index: 2;
+}
+
+.main {
+  font-family: 'NanumSquare', sans-serif;
+}
+
+.main-container {
+  height: 100vh;
+  padding-top: 6%;
+}
+
+.main-logo {
+  max-width: 100vh;
+  max-height: 60vh;
+}
+
+.month-solver {
+  background-color: #658DC6;
+  height: 100vh;
+}
+
+.month-solver-text{
+  margin-top: 10vh;
+}
+
+.popular-question {
+  background-color: white;
+  height: 80vh;
+}
+
+.row-left {
+  margin-left: 5vw;
+}
+
+.search-input {
+  margin-top: 1%;
+  width: 65%;
+}
+
+.semi-title {
+  margin-left: 5vw;
+  font-weight: 800;
+  font-size: 3vh;
+}
+
+.slogan {
+  font-size: 17px;
+  vertical-align: middle;
+}
+
+.slogan-center {
+  font-weight: 700;
+}
+
+.small-logo {
+  width: 50px;
+}
+
+.solver-card-img {
+  border-radius: 100%;
+  height: 6rem;
+  margin-bottom: 1vh;
+  width: 6rem;
+}
+
+.solver-card-content {
+  color: white;
+  margin-top: 5vh;
+  position: relative;
+  z-index: 2;
+}
+
+.solver-card-rank {
+  color: white;
+  font-size: 50px;
+  font-weight: 700;
+  margin-left: 2vw;
+  position: absolute;
+  opacity: 50%;
+  z-index: 1;
+}
+
+.solver-intro {
+  color: white;
+  font-weight: 200;
+}
+
+.solver-title {
+  color: white;
+  font-weight: 700;
+}
+
+.solver-row {
+  margin-top: 5vh;
+}
+
+.title {
+  font-size: 35px;
+  font-weight: 600;
+  text-align: left;
+  color: #658DC6;
+}
+
+
+/* 모임 CSS copy */
+.page-contain {
+  display: flex;
+  justify-content: center;
+}
+
+.data-card {
+  display: block;
+  width: 25vw;
+  height: 38vh;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0.5em;
+  text-decoration: none;
+  margin: 0.5em;
+  padding: 2em 2em;
+  box-shadow: 0 1.5em 2.5em -0.5em rgba(0, 0, 0, 0.1);
+  transition: transform 0.45s ease, background 0.45s ease;
+}
+.data-card h3 {
+  color: #2E3C40;
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid #0F4C81;
+  transition: color 0.45s ease, border 0.45s ease;
+}
+.data-card h4 {
+  color: #B5C7D3;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: color 0.45s ease;
+}
+.data-card p {
+  opacity: 0;
+  color: #FFFFFF;
+  font-size: 0.75em;
+  font-weight: 400;
+  line-height: 1.8;
+  margin: 0 0 1.25em;
+  transform: translateY(-1em);
+  transition: opacity 0.45s ease, transform 0.5s ease;
+}
+.data-card .link-text {
+  bottom: 0;
+  color: #0F4C81;
+  display: block;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin-bottom: 3vh;
+  transition: color 0.45s ease;
+}
+.data-card .link-text svg {
+  margin-left: 0.5em;
+  transition: transform 0.6s ease;
+}
+.data-card .link-text svg path {
+  transition: fill 0.45s ease;
+}
+.data-card:hover {
+  background: #0F4C81;
+  transform: scale(1.02);
+}
+.data-card:hover h3 {
+  color: #FFFFFF;
+  border-bottom-color: #0F4C81;
+}
+.data-card:hover h4 {
+  color: #FFFFFF;
+}
+.data-card:hover p {
+  opacity: 1;
+  transform: none;
+}
+.data-card:hover .link-text {
+  color: #FFFFFF;
+}
+.data-card:hover .link-text svg {
+  -webkit-animation: point 1.25s infinite alternate;
+          animation: point 1.25s infinite alternate;
+}
+.data-card:hover .link-text svg path {
+  fill: #FFFFFF;
+}
+
+@-webkit-keyframes point {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0.125em);
+  }
+}
+
+@keyframes point {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0.125em);
+  }
 }
