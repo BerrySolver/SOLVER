@@ -5,12 +5,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.code.Category;
@@ -70,6 +70,7 @@ public class Question extends BaseEntity{
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ReportQuestion> reportQuestion;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Answer> answer;
 	
