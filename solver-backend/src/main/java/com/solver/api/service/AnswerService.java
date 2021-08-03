@@ -1,6 +1,7 @@
 package com.solver.api.service;
 
 import com.solver.api.request.AnswerCreateGetReq;
+import com.solver.api.request.AnswerUpdatePatchReq;
 
 public interface AnswerService {
 
@@ -8,4 +9,6 @@ public interface AnswerService {
 
 	boolean deleteAnswer(String accessToken, String answerId);
 
+	boolean updateAnswer(String accessToken, String answerId, AnswerUpdatePatchReq answerUpdatePatchReq);
+	
 }
