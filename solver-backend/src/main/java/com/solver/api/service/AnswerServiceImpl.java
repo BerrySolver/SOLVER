@@ -1,9 +1,9 @@
 package com.solver.api.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.AnswerCreateGetReq;
@@ -120,6 +120,22 @@ public class AnswerServiceImpl implements AnswerService{
 			return false;
 		
 		return true;
+	}
+
+	@Override
+	public List<Answer> getAnswerList(String questionId) {
+		Question question = new Question();
+		question.setId(questionId);
+		
+		List<Answer> answerList = answerRepository.findByQuestionIdOrderByRegDtAsc(questionId);
+		
+		
+		if(answerList == null) {
+			return null;
+		}
+		
+		
+		return answerList;
 	}
 
 }
