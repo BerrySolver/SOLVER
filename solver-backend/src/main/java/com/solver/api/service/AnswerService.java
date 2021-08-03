@@ -6,4 +6,6 @@ public interface AnswerService {
 
 	void createAnswer(String accessToken, AnswerCreateGetReq answerCreateGetReq, String questionId);
 
+	boolean deleteAnswer(String accessToken, String answerId);
+
 }

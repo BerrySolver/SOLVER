@@ -3,6 +3,7 @@ package com.solver.api.service;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.AnswerCreateGetReq;
@@ -61,6 +62,32 @@ public class AnswerServiceImpl implements AnswerService{
 		answer.setUser(user);
 		
 		answerRepository.save(answer);
+	}
+
+	@Override
+	public boolean deleteAnswer(String accessToken, String answerId) {
+		//작성자인지 확인
+		String token = accessToken.split(" ")[1];
+		
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		User user = userRepository.findByKakaoId(kakaoId).get();
+		
+		Answer answer = answerRepository.findById(answerId).orElse(null);
+		
+		//잘못된 요청 예외처리
+		if(answer == null) {
+			return false;
+		}
+		
+		//다른 유저의 답변을 삭제하는 경우
+		if(!answer.getUser().getId().equals(user.getId())) {
+			return false;
+		}
+		
+		answerRepository.deleteById(answerId);
+		
+		return true;
 	}
 
 }
