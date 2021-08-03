@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
+import com.solver.api.response.ProfileTabRes;
 import com.solver.api.service.ProfileService;
 import com.solver.common.model.BaseResponse;
 
@@ -84,5 +86,28 @@ public class ProfileController {
 		profileService.updateProfilePossibleTime(profilePossibleTimePatchReq, accessToken);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 테이블 정보 수정에 성공하였습니다"));
+	}
+	
+	/* 유저 탭 정보 조회
+	 * tabNum
+	 * 0: SOLVE 기록
+	 * 1: 답변 목록
+	 * 2: 질문 목록 
+	 * */
+	@PatchMapping("/{nickname}/tab")
+	@ApiOperation(value = "회원 화상 회의 테이블 정보 수정", notes = "회원 화상 회의 테이블 정보 수정") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "성공하였습니다"),
+        @ApiResponse(code = 409, message = "실패하였습니다")
+    })
+	public ResponseEntity<? extends BaseResponse> profileTabInfo(
+			@PathVariable String nickname,
+			@RequestParam int tabNum)
+	{
+		ProfileTabRes profileTabRes = profileService.getProfileTabInfo(nickname, tabNum);
+		profileTabRes.setMessage("성공하였습니다");
+		profileTabRes.setStatusCode(201);
+		
+		return ResponseEntity.status(201).body(profileTabRes);
 	}
 }
