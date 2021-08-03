@@ -50,9 +50,6 @@ public class Code {
 	private List<Message> message;
 	
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<PointLog> pointLog;
-	
-	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> question;
 	
 	@OneToMany(mappedBy="mainCategory", cascade = {CascadeType.REMOVE}, orphanRemoval = true)

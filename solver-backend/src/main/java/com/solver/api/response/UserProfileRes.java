@@ -29,8 +29,17 @@ public class UserProfileRes extends BaseResponse{
 	@ApiModelProperty(name="관심 분야 목록")
 	private List<String> favoriteFieldNameList;
 	
-	@ApiModelProperty(name="사용자 정보")
-	private User user;
+	@ApiModelProperty(name="사용자 닉네임")
+	private String nickname;
+	
+	@ApiModelProperty(name="사용자 소개")
+	private String introduction;
+	
+	@ApiModelProperty(name="사용자 링크 정보")
+	private String linkText;
+	
+	@ApiModelProperty(name="사용자 프로필 url")
+	private String profileUrl;
 	
 	public static UserProfileRes of(int i, String string, UserProfileRes userProfileRes) {
 		UserProfileRes res = userProfileRes;

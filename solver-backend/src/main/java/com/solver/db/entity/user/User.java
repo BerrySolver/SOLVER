@@ -19,6 +19,7 @@ import com.solver.db.entity.comment.Comment;
 import com.solver.db.entity.comment.ReportComment;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceReservation;
+import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.question.BookmarkQuestion;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
@@ -109,5 +110,8 @@ public class User extends BaseEntity{
 	
 	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Token> token;
+	
+	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	private List<GroupMember> GroupMember;
 	
 }
