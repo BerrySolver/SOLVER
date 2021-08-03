@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
 import com.solver.common.auth.KakaoUtil;
@@ -167,17 +168,30 @@ public class ProfileServiceImpl implements ProfileService{
 			}
 			
 			Category category = categoryRepository.findBySubCategoryCode(subCategoryCode);
+			
+			if(category == null)
+				continue;
+			
 			favoriteField.setId(id);
 			favoriteField.setUser(user);
 			favoriteField.setCategory(category);
 			
 			favoriteFieldRepository.save(favoriteField);
 		}
+	}
+
+	@Override
+	public void updateProfilePossibleTime(ProfilePossibleTimePatchReq profilePossibleTimePatchReq, String accessToken) {
+		String token = accessToken.split(" ")[1];
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		User user = userRepository.findByKakaoId(kakaoId).get();
 		
 		UserCalendar userCalendar = userCalendarRepository.findByUserId(user.getId());
 		
-		userCalendar.setPossibleTime(profileUpdatePatchReq.getPossibleTime());
-		userCalendar.setUser(user);
+		userCalendar.setPossibleTime(profilePossibleTimePatchReq.getPossibleTime());
+		
+		userCalendarRepository.save(userCalendar);
 		
 	}
 }

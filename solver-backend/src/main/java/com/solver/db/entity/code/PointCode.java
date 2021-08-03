@@ -9,7 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.PointLog;
 
 import lombok.Getter;
