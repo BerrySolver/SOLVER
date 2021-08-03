@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
+import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
@@ -32,9 +34,12 @@ public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	CategoryRepository categoryRepository;
 	
+	@Autowired
+	KakaoUtil kakaoUtil;
+	
 	// 질문 생성
 	@Override
-	public Question createQuestion(QuestionPostReq questionPostReq) {
+	public Question createQuestion(QuestionPostReq questionPostReq, String token) {
 		// 질문 Id 생성
 		Question question = new Question();
 		String questionId = "";
@@ -45,23 +50,22 @@ public class QuestionServiceImpl implements QuestionService{
 			if(questionRepository.findById(questionId).orElse(null) == null)
 				break;
 		}
-		
 		// 외래키 참조값 생성
-		Optional<User> user = Optional.empty();
+		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		
+		if (user.orElse(null) == null) {
+			return null;
+		}
 		Code type = new Code();
 		Code mainCategory = new Code();
 		Category subCategory = new Category();
 		
-		user = userRepository.findById("1q2w3e");
-		if (user.orElse(null) == null) {
-			return null;
-		}
 		type = codeRepository.findByCode("042");
 		mainCategory = codeRepository.findByCode(questionPostReq.getMainCategory());
 		subCategory = categoryRepository.findBySubCategoryCode(questionPostReq.getSubCategory());
 		
 		question.setId(questionId);
-		question.setUser(user.orElse(null));
+		question.setUser(user.get());
 		question.setTitle(questionPostReq.getTitle());
 		question.setContent(questionPostReq.getContent());
 		question.setCode(type);
@@ -88,16 +92,36 @@ public class QuestionServiceImpl implements QuestionService{
 	}
 
 	@Override
-	public Question updateQuestion(QuestionPatchReq questionPatchReq, Question question) {
+	public Question updateQuestion(QuestionPatchReq questionPatchReq, Question question, String token) {
+		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		
+		if (!user.get().getId().equals(question.getUser().getId())) {
+			return null;
+		}
+		
+		Code mainCategory = new Code();
+		Category subCategory = new Category();
+		
+		mainCategory = codeRepository.findByCode(questionPatchReq.getMainCategory());
+		subCategory = categoryRepository.findBySubCategoryCode(questionPatchReq.getSubCategory());
+		
 		question.setTitle(questionPatchReq.getTitle());
 		question.setContent(questionPatchReq.getContent());
+		question.setMainCategory(mainCategory);
+		question.setSubCategory(subCategory);
 		question.setDifficulty(questionPatchReq.getDifficulty());
 		
 		return questionRepository.save(question);
 	}
 
 	@Override
-	public void deleteQuestion(Question question) {
+	public void deleteQuestion(Question question, String token) {
+		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		
+		if (!user.get().getId().equals(question.getUser().getId())) {
+			throw new AccessDeniedException(null);
+		}
+		
 		questionRepository.deleteById(question.getId());
 		
 		return;
