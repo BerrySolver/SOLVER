@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.PointLog;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,4 +29,7 @@ public class PointCode {
 	private int value;
 	private String pointName;
 	private boolean userYn;
+	
+	@OneToMany(mappedBy="pointCode", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	private List<PointLog> pointLog;
 }

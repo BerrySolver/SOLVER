@@ -200,19 +200,23 @@ public class UserServiceImpl implements UserService{
 		
 		String userId = user.get().getId();
 		
-		List<PointLog> pointList = pointLogRepository.findByUserId(userId);
-		List<Evaluation> evaluationList = evaluationRepository.findByAnswerUserId(userId);
-		List<GroupMember> groupMemberList = groupMemberRepository.findByUserId(userId);
-		List<FavoriteField> favoriteFieldList = favoriteFieldRepository.findByUserId(userId);
+		List<PointLog> pointList = user.get().getPointLog();
+		List<Evaluation> evaluationList = user.get().getEvaluatedAnswer();
+		List<GroupMember> groupMemberList = user.get().getGroupMember();
+		List<FavoriteField> favoriteFieldList = user.get().getFavoriteField();
+//		List<PointLog> pointList = pointLogRepository.findByUserId(userId);
+//		List<Evaluation> evaluationList = evaluationRepository.findByAnswerUserId(userId);
+//		List<GroupMember> groupMemberList = groupMemberRepository.findByUserId(userId);
+//		List<FavoriteField> favoriteFieldList = favoriteFieldRepository.findByUserId(userId);
 		
 		/* 포인트 계산 - entity 변경할 예정이어서 수정 필요 */
 		int point = 0;
 		int remainingPoint = 0;
 		
 		for (PointLog pointLog : pointList) {
-			PointCode pointCode = pointCodeRepository.findByCode(pointLog.getCode().getCode());
+			PointCode pointCode = pointCodeRepository.findByPointCode(pointLog.getPointCode().getPointCode());
 			
-			if(pointCode.getCode().getCode().equals("100") || pointCode.getCode().getCode().equals("101") || pointCode.getCode().getCode().equals("102")) {
+			if(pointCode.getPointCode().equals("100") || pointCode.getPointCode().equals("101") || pointCode.getPointCode().equals("102")) {
 				remainingPoint -= pointCode.getValue();
 				
 			}
@@ -253,6 +257,7 @@ public class UserServiceImpl implements UserService{
 		}
 		/* 관심 분야 이름 리스트 생성 끝 */
 		
+		/* response 데이터 저장 */
 		UserProfileRes userProfileRes = new UserProfileRes();
 		
 		userProfileRes.setEvaluationScore(evaluationScore);
@@ -260,7 +265,11 @@ public class UserServiceImpl implements UserService{
 		userProfileRes.setGroupNameList(groupNameList);
 		userProfileRes.setPoint(point);
 		userProfileRes.setRemainingPoint(remainingPoint);
-		userProfileRes.setUser(user.get());
+		userProfileRes.setNickname(user.get().getNickname());
+		userProfileRes.setIntroduction(user.get().getIntroduction());
+		userProfileRes.setLinkText(user.get().getLinkText());
+		userProfileRes.setProfileUrl(user.get().getProfileUrl());
+		/* response 데이터 저장 끝 */
 		
 		return userProfileRes;
 	}

@@ -7,7 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.solver.db.entity.BaseEntity;
-import com.solver.db.entity.code.Code;
+import com.solver.db.entity.code.PointCode;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,5 +24,5 @@ public class PointLog extends BaseEntity{
 	
 	@ManyToOne
 	@JoinColumn(name="type")
-	private Code code;
+	private PointCode pointCode;
 }
