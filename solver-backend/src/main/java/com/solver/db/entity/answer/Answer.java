@@ -31,7 +31,7 @@ public class Answer extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
-
+	
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="questionId")

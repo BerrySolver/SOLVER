@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.solver.db.entity.code.Category;
@@ -28,6 +29,7 @@ public class QuestionRepositorySupport {
 								eqDifficulty(difficulty),
 								inQuery(query),
 								eqType(type))
+						.orderBy(selectMode(mode))
 						.fetch();
 	}
 
@@ -64,6 +66,16 @@ public class QuestionRepositorySupport {
 			return null;
 		}
 		return question.code.eq(type);
+	}
+	
+	private OrderSpecifier<?> selectMode(String mode) {
+		if (mode.equals("answerDesc")) {
+			return question.answer.size().desc();
+		} else if (mode.equals("likeDesc")) {
+			return question.favoriteQuestion.size().desc();
+		}
+		
+		return question.regDt.desc();
 	}
 	 
 }
