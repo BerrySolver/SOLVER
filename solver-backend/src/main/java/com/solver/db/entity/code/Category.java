@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.question.Question;
 
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class Category {
 	@JoinColumn(name="code")
 	private Code code;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="subCategory", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> questionSubCategory;
 	
