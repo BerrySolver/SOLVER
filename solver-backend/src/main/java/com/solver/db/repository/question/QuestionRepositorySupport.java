@@ -16,6 +16,7 @@ import com.solver.db.entity.question.Question;
 @Repository
 public class QuestionRepositorySupport {
 	
+	// querydsl을 사용해서 동적 쿼리를 구현 (사용자가 대분류, 소분류, 검색어, 난이도, 질문 상태, 정렬 기준 중 무엇만 선택할지 모르기 때문에)
 	@Autowired
 	private JPAQueryFactory queryFactory;
 	QQuestion question = QQuestion.question;
@@ -24,6 +25,7 @@ public class QuestionRepositorySupport {
 			Code mainCategory, Category subCategory, String query, int difficulty, Code type, String mode){
 				return queryFactory
 						.selectFrom(question)
+						// null이 들어오면 그 조건은 건너뛰게 된다.
 						.where(eqMainCategory(mainCategory),
 								eqSubCategory(subCategory),
 								eqDifficulty(difficulty),
@@ -51,6 +53,7 @@ public class QuestionRepositorySupport {
 		if (query == null) {
 			return null;
 		}
+		// 검색어를 제목이 포함하고 있거나, 내용이 포함하고 있거나
 		return question.content.contains(query).or(question.title.contains(query));
 	}
 	
@@ -69,12 +72,15 @@ public class QuestionRepositorySupport {
 	}
 	
 	private OrderSpecifier<?> selectMode(String mode) {
+		// 답변 개수 내림차순
 		if (mode.equals("answerDesc")) {
 			return question.answer.size().desc();
+		// 좋아요 개수 내림차순
 		} else if (mode.equals("likeDesc")) {
 			return question.favoriteQuestion.size().desc();
 		}
 		
+		// 생성 시간 내림차순
 		return question.regDt.desc();
 	}
 	 
