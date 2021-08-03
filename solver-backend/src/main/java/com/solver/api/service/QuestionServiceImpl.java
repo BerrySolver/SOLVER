@@ -20,6 +20,7 @@ import com.solver.db.entity.user.User;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.question.QuestionRepositorySupport;
 import com.solver.db.repository.user.UserRepository;
 
 import io.swagger.models.properties.EmailProperty;
@@ -28,6 +29,9 @@ import io.swagger.models.properties.EmailProperty;
 public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	QuestionRepository questionRepository;
+	
+	@Autowired
+	QuestionRepositorySupport questionRepositorySupport;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -47,8 +51,12 @@ public class QuestionServiceImpl implements QuestionService{
 		// 대분류, 소분류로 조회
 		Code mainCategory = codeRepository.findByCode(questionGetListReq.getMainCategory());
 		Category subCategory = categoryRepository.findBySubCategoryCode(questionGetListReq.getSubCategory());
-		List<Question> questionList = questionRepository.findByMainCategoryAndSubCategory(
-				mainCategory, subCategory);
+		Code type = codeRepository.findByCode(questionGetListReq.getType());
+		
+//		List<Question> questionList = questionRepository.findByMainCategoryAndSubCategory(
+//				mainCategory, subCategory);
+		List<Question> questionList = questionRepositorySupport.findDynamicQueryQuestion(
+				mainCategory, subCategory, questionGetListReq.getQuery(), questionGetListReq.getDifficulty(), type, questionGetListReq.getMode());
 		
 		return questionList;
 	}

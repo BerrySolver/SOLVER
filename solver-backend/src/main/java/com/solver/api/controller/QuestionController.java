@@ -59,7 +59,6 @@ public class QuestionController {
 			@ModelAttribute QuestionGetListReq questionGetListReq)
 	{	
 		List<Question> questionList;
-		System.out.println(questionGetListReq.getMainCategory());
 		try {
 			questionList = questionService.getQuestionList(questionGetListReq);
 		} catch (Exception e) {
