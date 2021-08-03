@@ -1,5 +1,7 @@
 package com.solver.api.controller;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
 import com.solver.api.service.ProfileService;
@@ -36,11 +39,19 @@ public class ProfileController {
         @ApiResponse(code = 200, message = "정보를 가져오는데 성공하였습니다"),
         @ApiResponse(code = 409, message = "정보를 가져오는데 실패하였습니다")
     })
-	public ResponseEntity<? extends BaseResponse> deleteUser(@PathVariable String nickname)
+	public ResponseEntity<? extends BaseResponse> getProfileInfo(@PathVariable String nickname)
 	{
-		ProfileRes userProfileRes = profileService.getProfileInfo(nickname);
+		ProfileRes profileRes = null;
 		
-		return ResponseEntity.status(200).body(ProfileRes.of(200, "정보를 가져오는데 성공하였습니다", userProfileRes));
+		try {
+			profileRes = profileService.getProfileInfo(nickname);
+		}
+		catch(NoSuchElementException e) {
+			return ResponseEntity.status(409).body(ProfileRes.of(409, "정보를 가져오는데 실패하였습니다"));
+		}
+		
+		
+		return ResponseEntity.status(200).body(ProfileRes.of(200, "정보를 가져오는데 성공하였습니다", profileRes));
 	}
 	
 	/* 유저 프로필 정보 수정 */
@@ -57,5 +68,21 @@ public class ProfileController {
 		profileService.updateProfile(profileUpdatePatchReq, accessToken);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "프로필 정보 수정에 성공하였습니다"));
+	}
+	
+	/* 유저 화상 회의 테이블 정보 수정 */
+	@PatchMapping("/time-table")
+	@ApiOperation(value = "회원 화상 회의 테이블 정보 수정", notes = "회원 화상 회의 테이블 정보 수정") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "화상 회의 테이블 정보 수정에 성공하였습니다"),
+        @ApiResponse(code = 409, message = "화상 회의 테이블 정보 수정에 실패하였습니다")
+    })
+	public ResponseEntity<? extends BaseResponse> updateProfilePossibleTime(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@RequestBody ProfilePossibleTimePatchReq profilePossibleTimePatchReq)
+	{
+		profileService.updateProfilePossibleTime(profilePossibleTimePatchReq, accessToken);
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 테이블 정보 수정에 성공하였습니다"));
 	}
 }

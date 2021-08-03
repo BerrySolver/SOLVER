@@ -12,7 +12,7 @@ public class UserRegistPostReq {
 	@ApiModelProperty(name="유저 닉네임", example="nadang")
 	private String nickname;
 	
-	@ApiModelProperty(name="화상이용 가능 시간", example="\"t0000\": true, \"t0030\": true")
+	@ApiModelProperty(name="화상이용 가능 시간", example="00:00|00:30")
 	private String possibleTime;
 	
 	@ApiModelProperty(name="가입 유형", example="001")

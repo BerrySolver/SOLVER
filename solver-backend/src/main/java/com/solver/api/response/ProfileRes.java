@@ -3,7 +3,6 @@ package com.solver.api.response;
 import java.util.List;
 
 import com.solver.common.model.BaseResponse;
-import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

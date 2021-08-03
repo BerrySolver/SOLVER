@@ -23,9 +23,6 @@ public class ProfileUpdatePatchReq {
 	@ApiModelProperty(name="profileUrl", example="updateUrl")
 	private String profileUrl;
 	
-	@ApiModelProperty(name="categoryList", example="10:00|20:00")
-	private String possibleTime;
-	
 	@ApiModelProperty(name="categoryList", example="")
 	private List<String> categoryList;
 }

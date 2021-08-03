@@ -17,7 +17,6 @@ import com.solver.db.entity.group.GroupComment;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.Message;
 import com.solver.db.entity.user.Notification;
-import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 
 import lombok.Getter;
