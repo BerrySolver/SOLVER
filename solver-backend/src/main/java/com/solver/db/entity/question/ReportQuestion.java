@@ -1,6 +1,7 @@
 package com.solver.db.entity.question;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -20,7 +21,7 @@ public class ReportQuestion extends BaseEntity{
 	@JoinColumn(name="reporterUserId")
 	private User reporterUser;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="questionId")
 	private Question question;
 }

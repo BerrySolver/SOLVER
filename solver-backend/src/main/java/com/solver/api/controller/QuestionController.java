@@ -1,5 +1,6 @@
 package com.solver.api.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,23 +8,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
+import com.solver.api.response.QuestionListRes;
 import com.solver.api.response.QuestionRes;
 import com.solver.api.service.QuestionService;
 import com.solver.api.service.UserService;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.question.Question;
-import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,6 +48,27 @@ public class QuestionController {
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
+	
+	@GetMapping()
+	@ApiOperation(value = "질문 목록", notes = "질문 목록을 조회하는 API") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "질문 목록을 성공적으로 조회했습니다."),
+        @ApiResponse(code = 400, message = "질문 목록 조회에 실패했습니다.")
+    })
+	public ResponseEntity<? extends BaseResponse> getQuestionList(
+			@ModelAttribute QuestionGetListReq questionGetListReq)
+	{	
+		List<Question> questionList;
+		System.out.println(questionGetListReq.getMainCategory());
+		try {
+			questionList = questionService.getQuestionList(questionGetListReq);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(400).body(QuestionListRes.of(400, "질문 목록 조회에 실패했습니다."));
+		}
+		
+		return ResponseEntity.status(200).body(QuestionListRes.of(200, "질문 목록을 성공적으로 조회했습니다.", questionList));
+	}
 	
 	@PostMapping()
 	@ApiOperation(value = "질문 생성", notes = "질문을 생성하는 API") 
@@ -78,6 +103,7 @@ public class QuestionController {
 		if (question == null) {
 			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
 		}
+		System.out.println(question.get().getAnswer());
 		
 		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get()));
 	}
@@ -133,6 +159,6 @@ public class QuestionController {
 			return ResponseEntity.status(403).body(QuestionRes.of(403, "권한이 없습니다."));
 		}
 		
-		return ResponseEntity.status(200).body(QuestionRes.of(204, "질문을 성공적으로 삭제했습니다."));
+		return ResponseEntity.status(204).body(QuestionRes.of(204, "질문을 성공적으로 삭제했습니다."));
 	}
 }

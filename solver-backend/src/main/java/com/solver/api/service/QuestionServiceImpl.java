@@ -1,12 +1,14 @@
 package com.solver.api.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
 import com.solver.common.auth.KakaoUtil;
@@ -19,6 +21,8 @@ import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.user.UserRepository;
+
+import io.swagger.models.properties.EmailProperty;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
@@ -36,6 +40,18 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
+
+	// 질문 목록 조회
+	@Override
+	public List<Question> getQuestionList(QuestionGetListReq questionGetListReq) {
+		// 대분류, 소분류로 조회
+		Code mainCategory = codeRepository.findByCode(questionGetListReq.getMainCategory());
+		Category subCategory = categoryRepository.findBySubCategoryCode(questionGetListReq.getSubCategory());
+		List<Question> questionList = questionRepository.findByMainCategoryAndSubCategory(
+				mainCategory, subCategory);
+		
+		return questionList;
+	}
 	
 	// 질문 생성
 	@Override

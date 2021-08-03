@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.code.Category;
@@ -33,18 +35,22 @@ public class Question extends BaseEntity{
 	private boolean conferenceOpened;
 	private int readCount;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="type")
 	private Code code;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="mainCategory")
 	private Code mainCategory;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="subCategory")
 	private Category subCategory;

@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.Evaluation;
@@ -65,6 +66,7 @@ public class User extends BaseEntity{
 	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<PointLog> pointLog;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> question;
 	
@@ -74,40 +76,40 @@ public class User extends BaseEntity{
 	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<BookmarkQuestion> bookmarkQuestion;
 	
-	@OneToMany(mappedBy="reporterUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="reporterUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ReportQuestion> reportQuestion;
 	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Answer> answer;
 	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteAnswer> favoriteAnswer;
 	
-	@OneToMany(mappedBy="reporterUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="reporterUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ReportAnswer> reportAnswer;
 	
-	@OneToMany(mappedBy="answerUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="answerUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Evaluation> evaluateAnswer;
 	
-	@OneToMany(mappedBy="questionUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="questionUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Evaluation> evaluatedAnswer;
 	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Comment> comment;
 	
-	@OneToMany(mappedBy="reporterUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="reporterUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ReportComment> reportComment;
 	
-	@OneToMany(mappedBy="questionUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="questionUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Conference> questionConference;
 	
-	@OneToMany(mappedBy="answerUser", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="answerUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Conference> answerConference;
 	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ConferenceReservation> conferenceReservation;
 	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Token> token;
 	
 }
