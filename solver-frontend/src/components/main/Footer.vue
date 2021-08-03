@@ -1,5 +1,5 @@
 <template>
-    <h5>footer</h5>
+    <h5 class="footer">footer</h5>
 </template>
 
 <script>
@@ -9,5 +9,8 @@ export default {
 </script>
 
 <style>
-
+.footer {
+    background-color: #84898C;
+    height: 30vh;
+}
 </style>
