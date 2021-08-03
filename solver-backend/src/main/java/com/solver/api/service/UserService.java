@@ -1,8 +1,11 @@
 package com.solver.api.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.solver.api.request.SolverGetListReq;
 import com.solver.api.request.UserRegistPostReq;
+import com.solver.api.response.SolverRes;
 import com.solver.common.model.OAuthToken;
 import com.solver.db.entity.user.Token;
 import com.solver.db.entity.user.User;
@@ -21,4 +24,6 @@ public interface UserService {
 	void singUp(UserRegistPostReq userRegistPostReq, String accessToken);
 
 	void deleteUser(String accessToken);
+
+	List<SolverRes> getUserList(SolverGetListReq solverGetListReq);
 }
