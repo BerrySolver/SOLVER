@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ProfileUpdatePatchReq;
-import com.solver.api.response.UserProfileRes;
-import com.solver.api.service.UserService;
+import com.solver.api.response.ProfileRes;
+import com.solver.api.service.ProfileService;
 import com.solver.common.model.BaseResponse;
 
 import io.swagger.annotations.Api;
@@ -25,8 +25,9 @@ import springfox.documentation.annotations.ApiIgnore;
 @RestController
 @RequestMapping("/api/v1/profile")
 public class ProfileController {
+	
 	@Autowired
-	UserService	userService;
+	ProfileService	profileService;
 	
 	/* 유저 프로필 정보 조회 */
 	@GetMapping("/{nickname}")
@@ -37,9 +38,9 @@ public class ProfileController {
     })
 	public ResponseEntity<? extends BaseResponse> deleteUser(@PathVariable String nickname)
 	{
-		UserProfileRes userProfileRes = userService.getProfileInfo(nickname);
+		ProfileRes userProfileRes = profileService.getProfileInfo(nickname);
 		
-		return ResponseEntity.status(200).body(UserProfileRes.of(200, "정보를 가져오는데 성공하였습니다", userProfileRes));
+		return ResponseEntity.status(200).body(ProfileRes.of(200, "정보를 가져오는데 성공하였습니다", userProfileRes));
 	}
 	
 	/* 유저 프로필 정보 수정 */
@@ -53,7 +54,7 @@ public class ProfileController {
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@RequestBody ProfileUpdatePatchReq profileUpdatePatchReq)
 	{
-		userService.updateProfile(profileUpdatePatchReq, accessToken);
+		profileService.updateProfile(profileUpdatePatchReq, accessToken);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "프로필 정보 수정에 성공하였습니다"));
 	}
