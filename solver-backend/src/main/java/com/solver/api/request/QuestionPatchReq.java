@@ -15,6 +15,12 @@ public class QuestionPatchReq {
 	@ApiModelProperty(name="질문 내용", example="내용 수정")
 	private String content;
 	
+	@ApiModelProperty(name="대분류", example="092")
+	private String mainCategory;
+	
+	@ApiModelProperty(name="소분류", example="921")
+	private String subCategory;
+	
 	@ApiModelProperty(name="난이도", example="2")
 	private int difficulty;
 }
