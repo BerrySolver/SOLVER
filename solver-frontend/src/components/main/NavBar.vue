@@ -65,6 +65,7 @@ export default {
   font-size: 15px;
   position: fixed;
   width: 100%;
+  z-index: 100;
 }
 
 .nav-logo {

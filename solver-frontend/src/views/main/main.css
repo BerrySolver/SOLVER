@@ -132,15 +132,13 @@
   height: 100vh;
 }
 
-.popular-question {
-  background-color: white;
-  height: 100vh;
+.month-solver-text{
+  margin-top: 10vh;
 }
 
-.popular-title {
-  margin-left: 5vw;
-  font-weight: 800;
-  font-size: 2.5vh;
+.popular-question {
+  background-color: white;
+  height: 80vh;
 }
 
 .row-left {
@@ -152,6 +150,12 @@
   width: 65%;
 }
 
+.semi-title {
+  margin-left: 5vw;
+  font-weight: 800;
+  font-size: 2.5vh;
+}
+
 .slogan {
   font-size: 17px;
   vertical-align: middle;
@@ -161,14 +165,46 @@
   font-weight: 700;
 }
 
-.solver-title {
+.small-logo {
+  width: 50px;
+}
+
+.solver-card-img {
+  border-radius: 100%;
+  height: 6rem;
+  margin-bottom: 1vh;
+  width: 6rem;
+}
+
+.solver-card-content {
   color: white;
+  margin-top: 5vh;
+  position: relative;
+  z-index: 2;
+}
+
+.solver-card-rank {
+  color: white;
+  font-size: 50px;
   font-weight: 700;
-  margin-top: 15vh;
+  margin-left: 2vw;
+  position: absolute;
+  opacity: 50%;
+  z-index: 1;
 }
 
 .solver-intro {
   color: white;
+  font-weight: 200;
+}
+
+.solver-title {
+  color: white;
+  font-weight: 700;
+}
+
+.solver-row {
+  margin-top: 5vh;
 }
 
 .title {
