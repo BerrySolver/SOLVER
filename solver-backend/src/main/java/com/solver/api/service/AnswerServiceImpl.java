@@ -7,6 +7,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.AnswerCreateGetReq;
+import com.solver.api.request.AnswerUpdatePatchReq;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
@@ -86,6 +87,37 @@ public class AnswerServiceImpl implements AnswerService{
 		}
 		
 		answerRepository.deleteById(answerId);
+		
+		return true;
+	}
+
+	@Override
+	public boolean updateAnswer(String accessToken, String answerId, AnswerUpdatePatchReq answerUpdatePatchReq) {
+		//작성자인지 확인
+		String token = accessToken.split(" ")[1];
+		
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		User user = userRepository.findByKakaoId(kakaoId).get();
+		
+		Answer answer = answerRepository.findById(answerId).orElse(null);
+		
+		//잘못된 요청 예외처리
+		if(answer == null) {
+			return false;
+		}
+		
+		//다른 유저의 답변을 수정하는 경우
+		if(!answer.getUser().getId().equals(user.getId())) {
+			return false;
+		}
+		
+		answer.setContent(answerUpdatePatchReq.getContent());
+		
+		Answer resultAnswer = answerRepository.save(answer);
+		
+		if(resultAnswer == null)
+			return false;
 		
 		return true;
 	}
