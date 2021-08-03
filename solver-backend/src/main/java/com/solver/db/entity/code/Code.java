@@ -76,4 +76,7 @@ public class Code {
 	
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<GroupComment> groupComment;
+	
+	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	private List<PointCode> pointCode;
 }
