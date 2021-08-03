@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ProfileUpdatePatchReq;
+import com.solver.api.response.UserProfileRes;
 import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
 
@@ -27,6 +28,7 @@ public class ProfileController {
 	@Autowired
 	UserService	userService;
 	
+	/* 유저 프로필 정보 조회 */
 	@GetMapping("/{nickname}")
 	@ApiOperation(value = "회원 프로필 정보", notes = "회원 마이페이지 기본 정보 조회") 
     @ApiResponses({
@@ -35,11 +37,12 @@ public class ProfileController {
     })
 	public ResponseEntity<? extends BaseResponse> deleteUser(@PathVariable String nickname)
 	{
-		userService.getProfileInfo(nickname);
+		UserProfileRes userProfileRes = userService.getProfileInfo(nickname);
 		
-		return ResponseEntity.status(201).body(BaseResponse.of(200, "정보를 가져오는데 성공하였습니다"));
+		return ResponseEntity.status(200).body(UserProfileRes.of(200, "정보를 가져오는데 성공하였습니다", userProfileRes));
 	}
 	
+	/* 유저 프로필 정보 수정 */
 	@PatchMapping()
 	@ApiOperation(value = "회원 프로필 정보 수정(시간제외)", notes = "회원 마이페이지 기본 정보 수정") 
     @ApiResponses({

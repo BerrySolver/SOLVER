@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.request.UserRegistPostReq;
+import com.solver.api.response.UserProfileRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.OAuthToken;
 import com.solver.common.util.RandomIdUtil;
@@ -16,6 +17,7 @@ import com.solver.db.entity.answer.Evaluation;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.FavoriteField;
+import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.Token;
@@ -25,6 +27,7 @@ import com.solver.db.entity.user.UserCalendar;
 import com.solver.db.repository.answer.EvaluationRepository;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
+import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.group.GroupInfoRepository;
 import com.solver.db.repository.group.GroupMemberRepository;
 import com.solver.db.repository.user.PointLogRepository;
@@ -54,6 +57,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	EvaluationRepository evaluationRepository;
+	
+	@Autowired
+	PointCodeRepository pointCodeRepository;
 	
 	@Autowired
 	CategoryRepository categoryRepository;
@@ -189,7 +195,7 @@ public class UserServiceImpl implements UserService{
 	 * 관심분야는 sub category 기준인가 - o
 	 * */
 	@Override
-	public void getProfileInfo(String nickname) {
+	public UserProfileRes getProfileInfo(String nickname) {
 		Optional<User> user = userRepository.findByNickname(nickname);
 		
 		String userId = user.get().getId();
@@ -204,11 +210,14 @@ public class UserServiceImpl implements UserService{
 		int remainingPoint = 0;
 		
 		for (PointLog pointLog : pointList) {
-			if(pointLog.getCode().getCode().equals("081")) {
-				point += pointLog.getUsePoint();
+			PointCode pointCode = pointCodeRepository.findByCode(pointLog.getCode().getCode());
+			
+			if(pointCode.getCode().getCode().equals("100") || pointCode.getCode().getCode().equals("101") || pointCode.getCode().getCode().equals("102")) {
+				remainingPoint -= pointCode.getValue();
+				
 			}
-			else if(pointLog.getCode().getCode().equals("082")) {
-				remainingPoint -= pointLog.getUsePoint();
+			else {
+				point += pointCode.getValue();
 			}
 		}
 		
@@ -237,13 +246,23 @@ public class UserServiceImpl implements UserService{
 		/* 가입한 그룹 이름 리스트 생성 끝 */
 		
 		/* 관심 분야 이름 리스트 생성 */
-		List<String> fieldNameList = new ArrayList<>();
+		List<String> favoriteFieldNameList = new ArrayList<>();
 		
 		for (FavoriteField favoriteField : favoriteFieldList) {
-			fieldNameList.add(favoriteField.getCategory().getSubCategoryName());
+			favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
 		}
 		/* 관심 분야 이름 리스트 생성 끝 */
 		
+		UserProfileRes userProfileRes = new UserProfileRes();
+		
+		userProfileRes.setEvaluationScore(evaluationScore);
+		userProfileRes.setFavoriteFieldNameList(favoriteFieldNameList);
+		userProfileRes.setGroupNameList(groupNameList);
+		userProfileRes.setPoint(point);
+		userProfileRes.setRemainingPoint(remainingPoint);
+		userProfileRes.setUser(user.get());
+		
+		return userProfileRes;
 	}
 
 	//프로필 이미지 저장 부분 추가 필요
