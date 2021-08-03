@@ -8,3 +8,5 @@ solver-backend/.settings/
 solver-backend/bin/
 solver-backend/.classpath
 solver-backend/.project
+solver-backend/build/
+solver-backend/src/main/generated/
