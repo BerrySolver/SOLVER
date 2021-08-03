@@ -1,7 +1,10 @@
 package com.solver.api.service;
 
+import java.util.List;
+
 import com.solver.api.request.AnswerCreateGetReq;
 import com.solver.api.request.AnswerUpdatePatchReq;
+import com.solver.db.entity.answer.Answer;
 
 public interface AnswerService {
 
@@ -10,5 +13,7 @@ public interface AnswerService {
 	boolean deleteAnswer(String accessToken, String answerId);
 
 	boolean updateAnswer(String accessToken, String answerId, AnswerUpdatePatchReq answerUpdatePatchReq);
+
+	List<Answer> getAnswerList(String questionId);
 	
 }

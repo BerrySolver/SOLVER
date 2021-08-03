@@ -18,4 +18,6 @@ public interface AnswerRepository extends JpaRepository<Answer, String>{
 	@Query(value = "select * from answer as a where a.user_id= :userId and a.type in (052 , 053)", nativeQuery = true)
 	List<Answer> findVideoAnswerByUserId(@Param("userId") String userId);
 
+	List<Answer> findByQuestionIdOrderByRegDtAsc(String questionId);
+
 }
