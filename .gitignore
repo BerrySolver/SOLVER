@@ -2,7 +2,6 @@
 solver-backend/ssafy-web.log
 Servers/
 solver-backend/.gradle/
-solver-backend/HELP.md
 solver-backend/.springBeans
 *.gz
 solver-backend/.settings/

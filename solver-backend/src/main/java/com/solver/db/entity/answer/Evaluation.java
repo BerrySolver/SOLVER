@@ -1,0 +1,32 @@
+package com.solver.db.entity.answer;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.solver.db.entity.BaseEntity;
+import com.solver.db.entity.user.User;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Entity
+@Getter
+@Setter
+public class Evaluation extends BaseEntity{
+	private int score;
+	private String reason;
+	
+	@ManyToOne
+	@JoinColumn(name="answerUserId")
+	private User answerUser;
+	
+	@ManyToOne
+	@JoinColumn(name="answerId")
+	private Answer answer;
+	
+	@ManyToOne
+	@JoinColumn(name="questionUserId")
+	private User questionUser;
+	
+}
