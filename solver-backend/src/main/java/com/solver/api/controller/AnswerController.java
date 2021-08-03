@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.solver.api.request.AnswerCreateGetReq;
+import com.solver.api.request.AnswerCreatePostReq;
 import com.solver.api.request.AnswerUpdatePatchReq;
 import com.solver.api.response.AnswerListRes;
 import com.solver.api.service.AnswerService;
@@ -52,11 +52,10 @@ public class AnswerController {
 	public ResponseEntity<? extends BaseResponse> createAnswer(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId,
-			AnswerCreateGetReq answerCreateGetReq
+			AnswerCreatePostReq answerCreatePostReq
 			) throws ParseException 
 	{
-		System.out.println(questionId+"!!");
-		answerService.createAnswer(accessToken, answerCreateGetReq, questionId);
+		answerService.createAnswer(accessToken, answerCreatePostReq, questionId);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "답변 작성에 성공했습니다"));
 	}
