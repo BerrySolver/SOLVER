@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.solver.api.request.AnswerCreateGetReq;
+import com.solver.api.request.AnswerCreatePostReq;
 import com.solver.api.request.AnswerUpdatePatchReq;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
@@ -30,7 +30,7 @@ public class AnswerServiceImpl implements AnswerService{
 	KakaoUtil kakaoUtil;
 
 	@Override
-	public void createAnswer(String accessToken, AnswerCreateGetReq answerCreateGetReq, String questionId) {
+	public void createAnswer(String accessToken, AnswerCreatePostReq answerCreatePostReq, String questionId) {
 		String token = accessToken.split(" ")[1];
 		
 		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
@@ -58,7 +58,7 @@ public class AnswerServiceImpl implements AnswerService{
 		answer.setQuestion(question);
 		answer.setId(id);
 		answer.setCode(code);
-		answer.setContent(answerCreateGetReq.getContent());
+		answer.setContent(answerCreatePostReq.getContent());
 		answer.setRegDt(new Date(System.currentTimeMillis()));
 		answer.setUser(user);
 		

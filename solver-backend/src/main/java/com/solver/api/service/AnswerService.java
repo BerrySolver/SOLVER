@@ -2,13 +2,13 @@ package com.solver.api.service;
 
 import java.util.List;
 
-import com.solver.api.request.AnswerCreateGetReq;
+import com.solver.api.request.AnswerCreatePostReq;
 import com.solver.api.request.AnswerUpdatePatchReq;
 import com.solver.db.entity.answer.Answer;
 
 public interface AnswerService {
 
-	void createAnswer(String accessToken, AnswerCreateGetReq answerCreateGetReq, String questionId);
+	void createAnswer(String accessToken, AnswerCreatePostReq answerCreateGetReq, String questionId);
 
 	boolean deleteAnswer(String accessToken, String answerId);
 
