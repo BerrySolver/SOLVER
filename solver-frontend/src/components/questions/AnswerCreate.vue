@@ -1,6 +1,7 @@
 <template>
   <div class="answer-create">
-		<div id="">
+	<div id="">
+        <!-- editor 수정 -->
       <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
     </div>
 	</div>

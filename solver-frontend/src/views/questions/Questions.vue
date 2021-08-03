@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- detail에서 확인 불가능해서 여기에 일단 작성 -->
     <div class="question">
       <div class="category">
         카테고리 > 대분류 > 소분류

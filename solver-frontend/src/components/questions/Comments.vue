@@ -1,4 +1,5 @@
 <template>
+  <!-- 마진 해결 -->
   <div class="comment row">
     <div class="col-2">
     댓글러
