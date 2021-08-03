@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
@@ -48,8 +49,8 @@ public class User extends BaseEntity{
 	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteUser> favoriteUser;
 	
-	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<UserCalendar> userCalendar;
+	@OneToOne(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	private UserCalendar userCalendar;
 	
 	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Notification> notification;

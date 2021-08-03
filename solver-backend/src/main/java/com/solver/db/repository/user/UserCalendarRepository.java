@@ -11,4 +11,6 @@ public interface UserCalendarRepository extends JpaRepository<UserCalendar, Stri
 	@Transactional
 	void deleteByUserId(String userId);
 
+	UserCalendar findByUserId(String id);
+
 }

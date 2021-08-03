@@ -13,12 +13,19 @@ import lombok.Setter;
 public class ProfileUpdatePatchReq {
 	@ApiModelProperty(name="nickname", example="dangna")
 	private String nickname;
+	
 	@ApiModelProperty(name="introduction", example="updateIntroduction")
 	private String introduction;
+	
 	@ApiModelProperty(name="linkText", example="www.ssafy.com")
 	private String linkText;
+	
 	@ApiModelProperty(name="profileUrl", example="updateUrl")
 	private String profileUrl;
+	
+	@ApiModelProperty(name="categoryList", example="10:00|20:00")
+	private String possibleTime;
+	
 	@ApiModelProperty(name="categoryList", example="")
 	private List<String> categoryList;
 }

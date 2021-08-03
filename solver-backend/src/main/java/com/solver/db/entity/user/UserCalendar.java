@@ -2,7 +2,7 @@ package com.solver.db.entity.user;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.solver.db.entity.BaseEntity;
 
@@ -15,7 +15,7 @@ import lombok.Setter;
 public class UserCalendar extends BaseEntity{
 	String possibleTime;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="userId")
 	private User user;
 }

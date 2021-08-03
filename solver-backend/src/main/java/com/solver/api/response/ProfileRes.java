@@ -12,8 +12,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@ApiModel("UserProfileRes")
-public class UserProfileRes extends BaseResponse{
+@ApiModel("ProfileRes")
+public class ProfileRes extends BaseResponse{
 	@ApiModelProperty(name="전체 포인트")
 	private int point; 
 	
@@ -41,8 +41,11 @@ public class UserProfileRes extends BaseResponse{
 	@ApiModelProperty(name="사용자 프로필 url")
 	private String profileUrl;
 	
-	public static UserProfileRes of(int i, String string, UserProfileRes userProfileRes) {
-		UserProfileRes res = userProfileRes;
+	@ApiModelProperty(name="화상 회의 시간")
+	private String possibleTime;
+	
+	public static ProfileRes of(int i, String string, ProfileRes userProfileRes) {
+		ProfileRes res = userProfileRes;
 		res.setStatusCode(i);
 		res.setMessage(string);
 		
