@@ -53,8 +53,6 @@ public class QuestionServiceImpl implements QuestionService{
 		Category subCategory = categoryRepository.findBySubCategoryCode(questionGetListReq.getSubCategory());
 		Code type = codeRepository.findByCode(questionGetListReq.getType());
 		
-//		List<Question> questionList = questionRepository.findByMainCategoryAndSubCategory(
-//				mainCategory, subCategory);
 		List<Question> questionList = questionRepositorySupport.findDynamicQueryQuestion(
 				mainCategory, subCategory, questionGetListReq.getQuery(), questionGetListReq.getDifficulty(), type, questionGetListReq.getMode());
 		
