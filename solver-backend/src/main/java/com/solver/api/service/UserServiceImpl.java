@@ -13,9 +13,9 @@ import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.OAuthToken;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Evaluation;
+import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.FavoriteField;
-import com.solver.db.entity.group.GroupInfo;
 import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.Token;
@@ -23,6 +23,7 @@ import com.solver.db.entity.user.TokenId;
 import com.solver.db.entity.user.User;
 import com.solver.db.entity.user.UserCalendar;
 import com.solver.db.repository.answer.EvaluationRepository;
+import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.group.GroupInfoRepository;
 import com.solver.db.repository.group.GroupMemberRepository;
@@ -53,6 +54,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	EvaluationRepository evaluationRepository;
+	
+	@Autowired
+	CategoryRepository categoryRepository;
 	
 	@Autowired
 	GroupMemberRepository groupMemberRepository;
@@ -181,8 +185,8 @@ public class UserServiceImpl implements UserService{
 	}
 
 
-	/* 마이페이지 정보를 불러 올 때 그룹이나 관심분야는 그냥 이름만 불러오나?
-	 * 관심분야는 sub category 기준인가?
+	/* 마이페이지 정보를 불러 올 때 그룹이나 관심분야는 그냥 이름만 불러오나 - o
+	 * 관심분야는 sub category 기준인가 - o
 	 * */
 	@Override
 	public void getProfileInfo(String nickname) {
@@ -236,7 +240,7 @@ public class UserServiceImpl implements UserService{
 		List<String> fieldNameList = new ArrayList<>();
 		
 		for (FavoriteField favoriteField : favoriteFieldList) {
-			fieldNameList.add(favoriteField.getCode().getCodeName());
+			fieldNameList.add(favoriteField.getCategory().getSubCategoryName());
 		}
 		/* 관심 분야 이름 리스트 생성 끝 */
 		
@@ -249,6 +253,7 @@ public class UserServiceImpl implements UserService{
 		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
+		//여기서 기존 이미지 삭제 필요
 		user.setNickname(profileUpdatePatchReq.getNickname());
 		user.setProfileUrl(profileUpdatePatchReq.getProfileUrl());
 		user.setIntroduction(profileUpdatePatchReq.getIntroduction());
@@ -256,8 +261,28 @@ public class UserServiceImpl implements UserService{
 		
 		userRepository.save(user);
 		
-//		List<String> categoryList = profileUpdatePatchReq.getCategoryList();
-//		List<FavoriteField> favoriteFieldList = favoriteFieldRepository.findByUserId("temp");
+		List<String> categoryList = profileUpdatePatchReq.getCategoryList();
+		favoriteFieldRepository.deleteByUserId(user.getId());
+		
+		for (String subCategoryCode : categoryList) {
+			FavoriteField favoriteField = new FavoriteField();
+			String id = "";
+			
+			while(true) {
+				id = RandomIdUtil.makeRandomId(13);
+				
+				if(favoriteFieldRepository.findById(id).orElse(null) == null)
+					break;
+						
+			}
+			
+			Category category = categoryRepository.findBySubCategoryCode(subCategoryCode);
+			favoriteField.setId(id);
+			favoriteField.setUser(user);
+			favoriteField.setCategory(category);
+			
+			favoriteFieldRepository.save(favoriteField);
+		}
 		
 	}
 }

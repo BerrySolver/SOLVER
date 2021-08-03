@@ -30,4 +30,7 @@ public class Category {
 	
 	@OneToMany(mappedBy="subCategory", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> questionSubCategory;
+	
+	@OneToMany(mappedBy="category", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	private List<FavoriteField> favoriteField;
 }
