@@ -20,6 +20,7 @@ import com.solver.api.request.AnswerCreatePostReq;
 import com.solver.api.request.AnswerUpdatePatchReq;
 import com.solver.api.response.AnswerListRes;
 import com.solver.api.service.AnswerService;
+import com.solver.api.service.FavoriteAnswerService;
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
 
@@ -41,6 +42,9 @@ public class AnswerController {
 	
 	@Autowired
 	AnswerService answerService;
+	
+	@Autowired
+	FavoriteAnswerService favoriteAnswerService;
 
 	/* 답변 등록 */
 	@PostMapping(value="/{questionId}")
@@ -122,4 +126,45 @@ public class AnswerController {
 		
 		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList));
 	}
+	
+	/* 답변 좋아요 추가 */
+	@PostMapping("/{answerId}/recommend")
+	@ApiOperation(value = "답변 좋아요 추가", notes = "사용자가 답변에 대해 좋아요 추가") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "답변 좋아요 추가 성공"),
+        @ApiResponse(code = 409, message = "답변 좋아요 추가 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> createFavoriteAnswer(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable @ApiParam(value="답변을 조회할 질문 ID", required=true) String answerId
+			) 
+	{
+		int flag = favoriteAnswerService.createFavoriteAnswer(accessToken, answerId);
+		
+		if(flag != 3) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 좋아요 추가 실패"));
+		}
+		
+		return ResponseEntity.status(200).body(BaseResponse.of(200, "답변 좋아요 추가 성공"));
+	}
+	
+//	/* 답변 좋아요 삭제 */
+//	@DeleteMapping("/{answerId}/recommend")
+//	@ApiOperation(value = "답변 목록 조회", notes = "질문에 대한 답변 목록 조회") 
+//    @ApiResponses({
+//        @ApiResponse(code = 200, message = "답변 목록 조회 성공"),
+//        @ApiResponse(code = 409, message = "답변 목록 조회 실패")
+//    })
+//	public ResponseEntity<? extends BaseResponse> deleteFavoriteAnswer(
+//			@PathVariable @ApiParam(value="답변을 조회할 질문 ID", required=true) String answerId
+//			) 
+//	{
+//		List<Answer> answerList = answerService.getAnswerList(questionId);
+//		
+//		if(answerList == null) {
+//			return ResponseEntity.status(409).body(AnswerListRes.of(409, "답변 목록 조회 실패"));
+//		}
+//		
+//		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList));
+//	}
 }
