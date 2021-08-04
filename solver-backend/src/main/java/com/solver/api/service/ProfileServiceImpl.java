@@ -22,6 +22,7 @@ import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.conference.ConferenceLog;
 import com.solver.db.entity.group.GroupMember;
+import com.solver.db.entity.question.BookmarkQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
@@ -33,6 +34,7 @@ import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.conference.ConferenceLogRepository;
 import com.solver.db.repository.group.GroupMemberRepository;
+import com.solver.db.repository.question.BookmarkQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserCalendarRepository;
@@ -48,6 +50,9 @@ public class ProfileServiceImpl implements ProfileService{
 	
 	@Autowired
 	ConferenceLogRepository conferenceLogRepository;
+	
+	@Autowired
+	BookmarkQuestionRepository bookmarkQuestionRepository;
 	
 	@Autowired
 	AnswerRepository answerRepository;
@@ -270,42 +275,31 @@ public class ProfileServiceImpl implements ProfileService{
 			
 			if(questionIdList.size() != 0) {
 				List<Question> answerQuestionList = questionRepository.findAllById(questionIdList);
-				
-				List<Question> tempList = new ArrayList<>();
-				
-				for (Question question : answerQuestionList) {
-					Question tempQuestion = new Question();
-					tempQuestion.setId(question.getId());
-					tempQuestion.setCode(question.getCode());
-					tempQuestion.setContent(question.getContent());
-					tempQuestion.setDifficulty(question.getDifficulty());
-					tempQuestion.setExpirationTime(question.getExpirationTime());
-					tempQuestion.setMainCategory(question.getMainCategory());
-					tempQuestion.setSubCategory(question.getSubCategory());
-					tempQuestion.setReadCount(question.getReadCount());
-					tempQuestion.setRegDt(question.getRegDt());
-					tempQuestion.setTitle(question.getTitle());
-//					tempQuestion.setUser(question.getUser());
-//					tempQuestion.setReportQuestion(question.getReportQuestion());
-//					tempQuestion.setHashtag(question.getHashtag());
-//					tempQuestion.setAnswer(question.getAnswer());
-//					tempQuestion.setBookmarkQuestion(question.getBookmarkQuestion());
-//					tempQuestion.setConference(question.getConference());
-//					tempQuestion.setConferenceReservation(question.getConferenceReservation());
-//					tempQuestion.setFavoriteQuestion(question.getFavoriteQuestion());
-//					tempQuestion.setFavoriteUser(question.getFavoriteUser());
-					
-					tempList.add(tempQuestion);
-				}
 			
-				profileTabRes.setAnswerQuestionList(tempList);
+				profileTabRes = ProfileTabRes.makeAnswerQuestionList(answerQuestionList);
 			}
 		}
 		//내가 작성한 질문 목록
 		else if(tabNum == 2) {
 			List<Question> questionList = questionRepository.findByUserId(userId);
 			
-			profileTabRes.setMyQuestionList(questionList);
+			profileTabRes = ProfileTabRes.makeMyQuestionList(questionList);
+		}
+		//내가 북마크한 질문 목록
+		else if(tabNum == 3) {
+			List<BookmarkQuestion> bookmarkList = bookmarkQuestionRepository.findAllByUserId(userId);
+			
+			Set<String> questionIdSet = new HashSet<>();
+			
+			for (BookmarkQuestion bookmark : bookmarkList) {
+				questionIdSet.add(bookmark.getQuestion().getId());
+			}
+			
+			List<String> questionIdList = new ArrayList<>(questionIdSet);
+			
+			List<Question> questionList = questionRepository.findAllById(questionIdList);
+			
+			profileTabRes = ProfileTabRes.makeBookmarkQuestionList(questionList);
 		}
 		
 		return profileTabRes;
