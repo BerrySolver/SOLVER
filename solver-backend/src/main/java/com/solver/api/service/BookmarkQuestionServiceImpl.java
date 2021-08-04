@@ -1,6 +1,10 @@
 package com.solver.api.service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import com.solver.common.auth.KakaoUtil;
@@ -59,6 +63,21 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 		bookmarkQuestionRepository.save(bookmarkQuestion);
 		
 		return true;
+	}
+
+	@Override
+	public void deleteBookmark(Question question, String token) {
+		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		
+		Optional<BookmarkQuestion> bookmarkQuestion = bookmarkQuestionRepository.findByUserIdAndQuestionId(user.get().getId(), question.getId());
+		
+		try {
+			bookmarkQuestionRepository.deleteById(bookmarkQuestion.get().getId());
+		} catch (NoSuchElementException e) {
+			throw new NoSuchElementException();
+		}
+		
+		return;
 	}
 
 }

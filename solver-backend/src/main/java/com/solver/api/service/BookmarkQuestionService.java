@@ -6,4 +6,6 @@ public interface BookmarkQuestionService {
 
 	boolean createBookmark(String accessToken, Question question);
 
+	void deleteBookmark(Question question, String token);
+
 }
