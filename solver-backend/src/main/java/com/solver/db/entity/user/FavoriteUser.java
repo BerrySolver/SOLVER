@@ -20,6 +20,6 @@ public class FavoriteUser extends BaseEntity{
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="questionId")
-	private Question question;
+	@JoinColumn(name="followingUserId")
+	private User followingUser;
 }

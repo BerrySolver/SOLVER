@@ -13,4 +13,6 @@ public interface ProfileService {
 	void updateProfilePossibleTime(ProfilePossibleTimePatchReq profilePossibleTimePatchReq, String accessToken);
 
 	ProfileTabRes getProfileTabInfo(String nickname, int tabNum);
+
+	int followUser(String accessToken, String nickname);
 }

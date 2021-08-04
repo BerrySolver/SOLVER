@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMe
 
 @Api(value="유저 API", tags = {"Profile"})
 @RestController
-@RequestMapping("/api/v1/profile")
+@RequestMapping("/api/v1/profiles")
 public class ProfileController {
 	
 	@Autowired
@@ -114,5 +115,26 @@ public class ProfileController {
 		profileTabRes.setStatusCode(201);
 		
 		return ResponseEntity.status(201).body(profileTabRes);
+	}
+	
+
+	@PostMapping("/{nickname}/follow")
+	@ApiOperation(value = "사용자 팔로우", notes = "관심있는 사용자를 팔로우") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "팔로우 추가 성공"),
+        @ApiResponse(code = 409, message = "팔로우 추가 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> followUser(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String nickname
+			)
+	{
+		int flag = profileService.followUser(accessToken, nickname);
+		
+		if(flag != 3) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "팔로우 추가 실패"));
+		}
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "팔로우 추가 성공"));
 	}
 }
