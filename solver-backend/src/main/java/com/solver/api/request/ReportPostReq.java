@@ -1,7 +1,5 @@
 package com.solver.api.request;
 
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -10,7 +8,7 @@ import lombok.Setter;
 // 신고 생성 시 사용자에게 받는 입력값들
 @Getter
 @Setter
-@ApiModel("QuestionPostReq")
+@ApiModel("ReportPostReq")
 public class ReportPostReq {
 	
 	// 신고 대상 타입

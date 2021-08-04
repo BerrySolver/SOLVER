@@ -131,12 +131,12 @@ public class AnswerController {
 	@PostMapping("/{answerId}/recommend")
 	@ApiOperation(value = "답변 좋아요 추가", notes = "사용자가 답변에 대해 좋아요 추가") 
     @ApiResponses({
-        @ApiResponse(code = 200, message = "답변 좋아요 추가 성공"),
+        @ApiResponse(code = 201, message = "답변 좋아요 추가 성공"),
         @ApiResponse(code = 409, message = "답변 좋아요 추가 실패")
     })
 	public ResponseEntity<? extends BaseResponse> createFavoriteAnswer(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
-			@PathVariable @ApiParam(value="답변을 조회할 질문 ID", required=true) String answerId
+			@PathVariable @ApiParam(value="좋아요를 추가할 답변 ID", required=true) String answerId
 			) 
 	{
 		int flag = favoriteAnswerService.createFavoriteAnswer(accessToken, answerId);
@@ -145,26 +145,29 @@ public class AnswerController {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 좋아요 추가 실패"));
 		}
 		
-		return ResponseEntity.status(200).body(BaseResponse.of(200, "답변 좋아요 추가 성공"));
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "답변 좋아요 추가 성공"));
 	}
 	
-//	/* 답변 좋아요 삭제 */
-//	@DeleteMapping("/{answerId}/recommend")
-//	@ApiOperation(value = "답변 목록 조회", notes = "질문에 대한 답변 목록 조회") 
-//    @ApiResponses({
-//        @ApiResponse(code = 200, message = "답변 목록 조회 성공"),
-//        @ApiResponse(code = 409, message = "답변 목록 조회 실패")
-//    })
-//	public ResponseEntity<? extends BaseResponse> deleteFavoriteAnswer(
-//			@PathVariable @ApiParam(value="답변을 조회할 질문 ID", required=true) String answerId
-//			) 
-//	{
-//		List<Answer> answerList = answerService.getAnswerList(questionId);
-//		
-//		if(answerList == null) {
-//			return ResponseEntity.status(409).body(AnswerListRes.of(409, "답변 목록 조회 실패"));
-//		}
-//		
-//		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList));
-//	}
+	/* 답변 좋아요 삭제 */
+	@DeleteMapping("/{answerId}/recommend")
+	@ApiOperation(value = "답변 좋아요 삭제", notes = "사용자가 답변에 대해 좋아요 삭제") 
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "답변 좋아요 삭제 성공"),
+        @ApiResponse(code = 409, message = "답변 좋아요 삭제 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> deleteFavoriteAnswer(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable @ApiParam(value="좋아요를 추가할 답변 질문 ID", required=true) String answerId
+			) 
+	{
+		int flag = favoriteAnswerService.deleteFavoriteAnswer(accessToken, answerId);
+		
+		if(flag != 3) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 좋아요 삭제 실패"));
+		}
+		
+		System.out.println("!!!");
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "답변 좋아요 삭제 성공"));
+	}
 }
