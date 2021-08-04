@@ -43,13 +43,9 @@ public class SolverController {
 	@ApiResponses({ 
 			@ApiResponse(code = 201, message = "정해진 조건에 알맞는 사람들을 찾아왔습니다."),
 			@ApiResponse(code = 400, message = "잘못된 접근입니다. 다시 확인해주세요.") })
-	public ResponseEntity<? extends BaseResponse> createQuestion(
+	public ResponseEntity<? extends BaseResponse> getSolverList(
 			@ModelAttribute SolverGetListReq solverGetListReq) 
-	{
-		// 대분류, 소분류로 조회
-		Code mainCategory = codeRepository.findByCode(solverGetListReq.getMainCategory());
-		Category subCategory = categoryRepository.findBySubCategoryCode(solverGetListReq.getSubCategory());
-		
+	{		
 		List<SolverRes> list;
 		
 		try {

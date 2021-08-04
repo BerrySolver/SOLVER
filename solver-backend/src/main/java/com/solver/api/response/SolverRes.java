@@ -28,6 +28,9 @@ public class SolverRes extends BaseResponse {
 
 	@ApiModelProperty(name = "관심 분야 목록")
 	private List<String> favoriteFieldNameList;
+	
+	@ApiModelProperty(name = "팔로워 수")
+	private int follower;
 
 	public static SolverRes of(Integer statusCode, String message, SolverRes solverRes) {
 		SolverRes res = solverRes;

@@ -1,6 +1,8 @@
 package com.solver.api.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -194,7 +196,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<SolverRes> getUserList(SolverGetListReq solverGetListReq) {
+		
 		// 대분류, 소분류로 조회
+		String mode = solverGetListReq.getMode();
 		Code mainCategory = codeRepository.findByCode(solverGetListReq.getMainCategory());
 		Category subCategory = categoryRepository.findBySubCategoryCode(solverGetListReq.getSubCategory());
 		List<User> userList = userRepositorySupport.findAll(mainCategory, subCategory, solverGetListReq.getQuery(), solverGetListReq.getMode());
@@ -209,7 +213,7 @@ public class UserServiceImpl implements UserService {
 			Optional<User> oneUser = userRepository.findByNickname(nickname);
 			
 			List<PointLog> pointList = oneUser.get().getPointLog();
-			List<Evaluation> evaluationList = oneUser.get().getEvaluatedAnswer();
+			List<Evaluation> evaluationList = oneUser.get().getEvaluateAnswer();
 			List<FavoriteField> favoriteFieldList = oneUser.get().getFavoriteField();
 			
 			/* 포인트 계산 - entity 변경할 예정이어서 수정 필요 */
@@ -217,39 +221,78 @@ public class UserServiceImpl implements UserService {
 			
 			for (PointLog pointLog : pointList) {
 				PointCode pointCode = pointCodeRepository.findByPointCode(pointLog.getPointCode().getPointCode());
+				int type = pointCode.getPointCode().charAt(0) - '0'; // 코드의 시작이 0이면 얻는 포인트 - 1이면 잃는 포인트
 				
-				if(!(pointCode.getPointCode().equals("100") || pointCode.getPointCode().equals("101") || pointCode.getPointCode().equals("102"))) {
+				if(type == 0) {
 					point += pointCode.getValue();
 				}
 			}
 			/* 포인트 계산 끝*/
 			
-			/* 평점 계산 */			
-			float evaluationScore = 0;
-			
-			for (Evaluation evaluation : evaluationList) {
-				evaluationScore += evaluation.getScore();
+			if(point >= 100) {
+				/* 평점 계산 */			
+				float evaluationScore = 0;
+				
+				for (Evaluation evaluation : evaluationList) {
+					evaluationScore += evaluation.getScore();
+				}
+				
+				evaluationScore /= evaluationList.size();			
+				/* 평점 계산 끝 */
+				
+				/* 관심 분야 이름 리스트 생성 */
+				boolean flag = false;
+				List<String> favoriteFieldNameList = new ArrayList<>();
+				
+				if(subCategory==null) {
+					flag = true;
+					for (FavoriteField favoriteField : favoriteFieldList) {
+						favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
+					}
+				}else {
+					for (FavoriteField favoriteField : favoriteFieldList) {
+						if(favoriteField.getCategory().getSubCategoryCode().equals(subCategory.getSubCategoryCode())) {
+							flag = true;
+						}
+						favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
+					}
+					if(flag)
+						solverRes.setFavoriteFieldNameList(favoriteFieldNameList);
+				}
+				/* 관심 분야 이름 리스트 생성 끝 */
+				
+				solverRes.setProfileUrl(profileUrl);
+				solverRes.setPoint(point);
+				solverRes.setNickname(nickname);
+				solverRes.setEvaluationScore(evaluationScore);
+				
+				if(flag) {
+					solverRes.setFavoriteFieldNameList(favoriteFieldNameList);
+					solverList.add(solverRes);
+				}
 			}
-			
-			evaluationScore /= evaluationList.size();			
-			/* 평점 계산 끝 */
-			
-			/* 관심 분야 이름 리스트 생성 */
-			List<String> favoriteFieldNameList = new ArrayList<>();
-			
-			for (FavoriteField favoriteField : favoriteFieldList) {
-				favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
-			}
-			/* 관심 분야 이름 리스트 생성 끝 */
-			
-			solverRes.setProfileUrl(profileUrl);
-			solverRes.setPoint(point);
-			solverRes.setNickname(nickname);
-			solverRes.setEvaluationScore(evaluationScore);
-			solverRes.setFavoriteFieldNameList(favoriteFieldNameList);
-			
-			solverList.add(solverRes);
 		}
+		
+		if(mode != null && mode.equals("pointDesc")) {
+			Collections.sort(solverList, new Comparator<SolverRes>() {
+
+				@Override
+				public int compare(SolverRes o1, SolverRes o2) {
+					return o2.getPoint() - o1.getPoint();
+				}
+				
+			});
+		}else if(mode != null && mode.equals("evaluationDesc")) {
+			Collections.sort(solverList, new Comparator<SolverRes>() {
+
+				@Override
+				public int compare(SolverRes o1, SolverRes o2) {
+					return (int) o2.getEvaluationScore() - (int) o1.getEvaluationScore();
+				}
+				
+			});			
+		}
+		
 		return solverList;
 	}
 }
