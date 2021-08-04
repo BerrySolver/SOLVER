@@ -1,6 +1,7 @@
 package com.solver.api.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +39,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import javassist.NotFoundException;
 import springfox.documentation.annotations.ApiIgnore;
 
 @CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
 methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
 
-@Api(value="질문 API", tags = {"Qeustion"})
+@Api(value="질문 API", tags = {"Question"})
 @RestController
-@RequestMapping("/api/v1/question")
+@RequestMapping("/api/v1/questions")
 public class QuestionController {
 	@Autowired
 	QuestionService questionService;
@@ -226,5 +228,32 @@ public class QuestionController {
 		}
 		
 		return ResponseEntity.status(200).body(BaseResponse.of(200, "북마크 추가 성공"));
+	}
+	
+	// 북마크 취소
+	@DeleteMapping("/{questionId}/bookmark")
+	@ApiOperation(value = "북마크 취소", notes = "질문 북마크 취소")
+	@ApiResponses({
+		@ApiResponse(code = 204, message = "북마크 취소 성공"),
+        @ApiResponse(code = 404, message = "북마크 기록이 없습니다."),
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
+	})
+	public ResponseEntity<? extends BaseResponse> deleteBookmark(
+			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
+	{
+		String token = accessToken.split(" ")[1];
+		Optional<Question> question = questionService.getById(questionId);
+		if (question == null) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		try {
+			bookmarkService.deleteBookmark(question.get(), token);
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "북마크 기록이 없습니다."));
+		}
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "북마크 취소 성공"));
 	}
 }
