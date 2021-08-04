@@ -1,5 +1,8 @@
 package com.solver.api.service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +59,22 @@ public class ConferenceReservationServiceImpl implements ConferenceReservationSe
 		conferenceReservation.setId(id);
 
 		return conferenceReservationRepository.save(conferenceReservation);
+	}
+
+	@Override
+	public void deleteConferenceReservation(String token, Question question) {
+		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		
+		Optional<ConferenceReservation> conferenceReservation = conferenceReservationRepository.findByUserIdAndQuestionId(user.get().getId(), question.getId());
+		
+		try {
+			conferenceReservationRepository.deleteById(conferenceReservation.get().getId());
+		} catch (NoSuchElementException e) {
+			throw new NoSuchElementException();
+		}
+		
+		return;
+		
 	}
 
 }
