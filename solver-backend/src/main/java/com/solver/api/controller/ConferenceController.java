@@ -51,10 +51,7 @@ public class ConferenceController {
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "상태 변경 성공"));
 	}
 	
-	/* 질문 화상 회의 상태 변경 
-	 * 
-	 * 상태 변경은 public으로 변환만 하는 건가?
-	 * */
+	/* 화상 회의 나가기 */
 	@DeleteMapping(value="/{conferenceId}/{nickname}")
 	@ApiOperation(value = "화상 회의 나가기", notes = "참관자 혹은 질문자의 화상 회의 나가기") 
     @ApiResponses({
@@ -73,5 +70,26 @@ public class ConferenceController {
 		}
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "화상 회의 나가기 성공"));
+	}
+	
+	/* 화상 회의 종료 */
+	@DeleteMapping(value="/{conferenceId}")
+	@ApiOperation(value = "화상 회의 종료", notes = "화상 회의를 닫는다") 
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "화상 회의 종료 성공"),
+        @ApiResponse(code = 409, message = "화상 회의 종료 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> deleteConference(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String conferenceId
+			) 
+	{
+		int flag = conferenceService.deleteConference(accessToken, conferenceId);
+		
+		if(flag != 3) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "화상 회의 종료 실패"));
+		}
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "화상 회의 종료 성공"));
 	}
 }
