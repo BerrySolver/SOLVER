@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.QuestionGetListReq;
@@ -28,10 +27,12 @@ import com.solver.api.response.QuestionListRes;
 import com.solver.api.response.QuestionMeRes;
 import com.solver.api.response.QuestionRes;
 import com.solver.api.service.BookmarkQuestionService;
+import com.solver.api.service.FavoriteQuestionService;
 import com.solver.api.service.QuestionService;
 import com.solver.api.service.UserService;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.BaseResponse;
+import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 
 import io.swagger.annotations.Api;
@@ -39,7 +40,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import javassist.NotFoundException;
 import springfox.documentation.annotations.ApiIgnore;
 
 @CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
@@ -54,6 +54,9 @@ public class QuestionController {
 	
 	@Autowired
 	BookmarkQuestionService bookmarkService;
+	
+	@Autowired
+	FavoriteQuestionService favoriteQuestionService;
 	
 	@Autowired
 	UserService userService;
@@ -256,4 +259,60 @@ public class QuestionController {
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "북마크 취소 성공"));
 	}
+	
+	// 질문 좋아요 
+	@PostMapping("/{questionId}/recommend")
+	@ApiOperation(value = "질문 좋아요", notes = "질문 좋아요")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "좋아요 성공"),
+        @ApiResponse(code = 400, message = "좋아요 실패"),
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
+	})
+	public ResponseEntity<? extends BaseResponse> createFavoriteQuestion(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String questionId
+			)
+	{
+		Optional<Question> question = questionService.getById(questionId);
+		
+		if (question == null) {
+			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		FavoriteQuestion favoriteQuestion = favoriteQuestionService.createFavoriteQuestion(accessToken, question.get());
+		
+		if(favoriteQuestion == null) {
+			return ResponseEntity.status(400).body(BaseResponse.of(400, "좋아요 실패"));
+		}
+		
+		return ResponseEntity.status(200).body(BaseResponse.of(200, "좋아요 성공"));
+	}
+	
+	// 좋아요 취소
+	@DeleteMapping("/{questionId}/recommend")
+	@ApiOperation(value = "질문 좋아요 취소", notes = "질문 좋아요 취소")
+	@ApiResponses({
+		@ApiResponse(code = 204, message = "좋아요 취소 성공"),
+        @ApiResponse(code = 404, message = "좋아요 기록이 없습니다."),
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
+	})
+	public ResponseEntity<? extends BaseResponse> deleteFavoriteQuestion(
+			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
+	{
+		String token = accessToken.split(" ")[1];
+		Optional<Question> question = questionService.getById(questionId);
+		if (question == null) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		try {
+			favoriteQuestionService.deleteFavoriteQuestion(token, question.get());
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "좋아요 기록이 없습니다."));
+		}
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "좋아요 취소 성공"));
+	}
+	
 }
