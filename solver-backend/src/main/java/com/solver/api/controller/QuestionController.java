@@ -206,14 +206,20 @@ public class QuestionController {
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "북마크 추가 성공"),
         @ApiResponse(code = 400, message = "북마크 추가 실패"),
-        @ApiResponse(code = 403, message = "권한이 없습니다")
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> createBookmark(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId
 			)
 	{
-		boolean isSuccess = bookmarkService.createBookmark(accessToken, questionId);
+		Optional<Question> question = questionService.getById(questionId);
+		
+		if (question == null) {
+			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		boolean isSuccess = bookmarkService.createBookmark(accessToken, question.get());
 		
 		if(!isSuccess) {
 			return ResponseEntity.status(400).body(BaseResponse.of(400, "북마크 추가 실패"));
