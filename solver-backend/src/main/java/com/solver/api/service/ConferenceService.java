@@ -6,4 +6,6 @@ public interface ConferenceService {
 
 	int goOutConference(String accessToken, String conferenceId);
 
+	int deleteConference(String accessToken, String conferenceId);
+
 }

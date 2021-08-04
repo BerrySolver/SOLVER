@@ -12,6 +12,7 @@ import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceLog;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.conference.ConferenceLogRepository;
+import com.solver.db.repository.conference.ConferenceParticipantRepository;
 import com.solver.db.repository.conference.ConferenceRepository;
 import com.solver.db.repository.user.UserRepository;
 
@@ -26,6 +27,9 @@ public class ConferenceServiceImpl implements ConferenceService{
 	
 	@Autowired
 	ConferenceRepository conferenceRepository;
+	
+	@Autowired
+	ConferenceParticipantRepository conferenceParticipantRepository;
 	
 	@Autowired
 	ConferenceLogRepository conferenceLogRepository;
@@ -106,9 +110,43 @@ public class ConferenceServiceImpl implements ConferenceService{
 		
 		conference.setCount(conference.getCount()-1);
 		
+		conferenceParticipantRepository.deleteByUserId(user.getId());
 		conferenceRepository.save(conference);
 		conferenceLogRepository.save(conferenceLog);
 		
+		return 3;
+	}
+
+	@Override
+	public int deleteConference(String accessToken, String conferenceId) {
+		/* 회의 주관자인 경우의 예외처리가 필요할까? */
+		String token = accessToken.split(" ")[1];
+		
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		if(user == null) {
+			return 0;
+		}
+		
+		Conference conference = conferenceRepository.findById(conferenceId).orElse(null);
+		
+		if(conference == null) {
+			return 1;
+		}
+		
+		if(conferenceRepository.findByIdAndQuestionUserId(conference.getId(), user.getId()).orElse(null) == null) {
+			return 2;
+		}
+		
+		/* 현재 화상회의 종료시에 conference 테이블에서 해당 데이터를 삭제하는데
+		 * conference_log와 FK 로 연결되어 있어 conference 데이터를 삭제할 때 
+		 * conference_log의 해당 화상회의 관련 데이터도 삭제되는 문제가 있음
+		 *  */
+		
+//		conferenceRepository.deleteById(conferenceId);
+			
 		return 3;
 	}
 
