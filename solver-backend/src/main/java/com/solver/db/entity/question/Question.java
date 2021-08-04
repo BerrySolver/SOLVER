@@ -56,9 +56,6 @@ public class Question extends BaseEntity{
 	private Category subCategory;
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<FavoriteUser> favoriteUser;
-	
-	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteQuestion> favoriteQuestion;
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)

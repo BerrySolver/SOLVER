@@ -17,6 +17,7 @@ import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.Evaluation;
+import com.solver.db.entity.answer.FavoriteAnswer;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
@@ -24,6 +25,7 @@ import com.solver.db.entity.conference.ConferenceLog;
 import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.question.BookmarkQuestion;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.FavoriteUser;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 import com.solver.db.entity.user.UserCalendar;
@@ -36,6 +38,7 @@ import com.solver.db.repository.conference.ConferenceLogRepository;
 import com.solver.db.repository.group.GroupMemberRepository;
 import com.solver.db.repository.question.BookmarkQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.user.FavoriteUserRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserCalendarRepository;
 import com.solver.db.repository.user.UserRepository;
@@ -77,6 +80,9 @@ public class ProfileServiceImpl implements ProfileService{
 	
 	@Autowired
 	GroupMemberRepository groupMemberRepository;
+	
+	@Autowired
+	FavoriteUserRepository favoriteUserRepository;
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
@@ -303,5 +309,50 @@ public class ProfileServiceImpl implements ProfileService{
 		}
 		
 		return profileTabRes;
+	}
+
+	@Override
+	public int followUser(String accessToken, String nickname) {
+		String token = accessToken.split(" ")[1];
+
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+
+		User myUserInfo = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+		//없는 유저인 경우
+		if (myUserInfo == null) {
+			return 0;
+		}
+
+		User followingUserInfo = userRepository.findByNickname(nickname).orElse(null);
+		
+		//없는 유저인 경우
+		if (followingUserInfo == null) {
+			return 0;
+		}
+
+		String id = "";
+
+		while (true) {
+			id = RandomIdUtil.makeRandomId(13);
+
+			if (favoriteUserRepository.findById(id).orElse(null) == null)
+				break;
+		}
+
+		//이미 팔로우 한 유저인 경우
+		if (favoriteUserRepository.findByUserIdAndFollowingUserId(myUserInfo.getId(), followingUserInfo.getId()).orElse(null) != null) {
+			return 2;
+		}
+
+		
+		FavoriteUser favoriteUser = new FavoriteUser();
+		favoriteUser.setFollowingUser(followingUserInfo);
+		favoriteUser.setUser(myUserInfo);
+		favoriteUser.setId(id);
+
+		favoriteUserRepository.save(favoriteUser);
+
+		return 3;
 	}
 }

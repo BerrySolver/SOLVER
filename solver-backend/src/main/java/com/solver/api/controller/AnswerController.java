@@ -166,8 +166,6 @@ public class AnswerController {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 좋아요 삭제 실패"));
 		}
 		
-		System.out.println("!!!");
-		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "답변 좋아요 삭제 성공"));
 	}
 }
