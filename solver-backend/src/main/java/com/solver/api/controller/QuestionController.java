@@ -27,11 +27,13 @@ import com.solver.api.response.QuestionListRes;
 import com.solver.api.response.QuestionMeRes;
 import com.solver.api.response.QuestionRes;
 import com.solver.api.service.BookmarkQuestionService;
+import com.solver.api.service.ConferenceReservationService;
 import com.solver.api.service.FavoriteQuestionService;
 import com.solver.api.service.QuestionService;
 import com.solver.api.service.UserService;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.BaseResponse;
+import com.solver.db.entity.conference.ConferenceReservation;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 
@@ -57,6 +59,9 @@ public class QuestionController {
 	
 	@Autowired
 	FavoriteQuestionService favoriteQuestionService;
+	
+	@Autowired
+	ConferenceReservationService conferenceReservationService;
 	
 	@Autowired
 	UserService userService;
@@ -221,7 +226,7 @@ public class QuestionController {
 		Optional<Question> question = questionService.getById(questionId);
 		
 		if (question == null) {
-			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
 		}
 		
 		boolean isSuccess = bookmarkService.createBookmark(accessToken, question.get());
@@ -264,7 +269,7 @@ public class QuestionController {
 	@PostMapping("/{questionId}/recommend")
 	@ApiOperation(value = "질문 좋아요", notes = "질문 좋아요")
 	@ApiResponses({
-		@ApiResponse(code = 200, message = "좋아요 성공"),
+		@ApiResponse(code = 201, message = "좋아요 성공"),
         @ApiResponse(code = 400, message = "좋아요 실패"),
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
@@ -276,7 +281,7 @@ public class QuestionController {
 		Optional<Question> question = questionService.getById(questionId);
 		
 		if (question == null) {
-			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
 		}
 		
 		FavoriteQuestion favoriteQuestion = favoriteQuestionService.createFavoriteQuestion(accessToken, question.get());
@@ -313,6 +318,35 @@ public class QuestionController {
 		}
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "좋아요 취소 성공"));
+	}
+	
+	// 참관 신청
+	@PostMapping("/{questionId}/observers")
+	@ApiOperation(value = "참관 신청", notes = "참관 신청 API")
+	@ApiResponses({
+		@ApiResponse(code = 201, message = "참관 신청 성공"),
+        @ApiResponse(code = 400, message = "참관 신청 실패"),
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
+	})
+	public ResponseEntity<? extends BaseResponse> createConferenceReservation(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String questionId
+			)
+	{
+		String token = accessToken.split(" ")[1];
+		Optional<Question> question = questionService.getById(questionId);
+		
+		if (question == null) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		ConferenceReservation conferenceReservation = conferenceReservationService.createConferenceReservation(token, question.get());
+		
+		if(conferenceReservation == null) {
+			return ResponseEntity.status(400).body(BaseResponse.of(400, "참관 신청 실패"));
+		}
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "참관 신청 성공"));
 	}
 	
 }
