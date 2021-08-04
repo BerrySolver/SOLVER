@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.CommentCreatePostReq;
+import com.solver.api.request.CommentUpdatePatchReq;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
@@ -64,7 +65,7 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public boolean deleteAnswer(String accessToken, String commentId) {
+	public boolean deleteComment(String accessToken, String commentId) {
 		//작성자인지 확인
 		String token = accessToken.split(" ")[1];
 		
@@ -85,6 +86,37 @@ public class CommentServiceImpl implements CommentService{
 		}
 		
 		commentRepository.deleteById(commentId);
+		
+		return true;
+	}
+
+	@Override
+	public boolean updateComment(String accessToken, String commentId, CommentUpdatePatchReq commentUpdatePatchReq) {
+		//작성자인지 확인
+		String token = accessToken.split(" ")[1];
+		
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		User user = userRepository.findByKakaoId(kakaoId).get();
+		
+		Comment comment = commentRepository.findById(commentId).orElse(null);
+		
+		//잘못된 요청 예외처리
+		if(comment == null) {
+			return false;
+		}
+		
+		//다른 유저의 답변을 수정하는 경우
+		if(!comment.getUser().getId().equals(user.getId())) {
+			return false;
+		}
+		
+		comment.setContent(commentUpdatePatchReq.getContent());
+		
+		Comment resultComment = commentRepository.save(comment);
+		
+		if(resultComment == null)
+			return false;
 		
 		return true;
 	}
