@@ -7,9 +7,6 @@
 <script>
 export default {
     name: 'ProfileHistory',
-    data() {
-        
-    }
 }
 </script>
 

@@ -1,4 +1,48 @@
+.info {
+  color: #84898C;
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-left {
+  text-align: left;
+}
+
+.nickname {
+  color: #0F4C81;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.point-berry {
+  width: 49px;
+}
+
+.point-berry-g {
+  opacity: 25%;
+  width: 49px;
+}
+
+.profile {
+  font-family: 'NanumSquare', sans-serif;
+}
+
 .profile-img {
-  width: 200px;
-  height: 200px;
+  width: 220px;
+  height: 220px;
+}
+
+.social-url {
+  font-family: 'NanumSquare', sans-serif; 
+  font-size: 12px;
+  margin-bottom: 0;
+  margin-top: 22px;
+  text-align: right;
+}
+
+.line {
+  background-color: #B5C7D3;
+  height: 0.1px;
+  margin: 0;
 }

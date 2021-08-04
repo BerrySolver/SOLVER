@@ -65,6 +65,7 @@ export default {
   font-family: 'NanumSquare', sans-serif;
   height: 30vh;
   position: relative;
+  /* 세로로 줄일때 위치가 이동되는 현상 발생 */
 }
 
 .footer-router {

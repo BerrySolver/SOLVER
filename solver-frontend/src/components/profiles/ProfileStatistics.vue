@@ -7,9 +7,6 @@
 <script>
 export default {
     name: 'ProfileStatistics',
-    data() {
-        
-    }
 }
 </script>
 

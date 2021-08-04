@@ -1,0 +1,33 @@
+.content-text-b {
+  color: black;
+  text-align: left;
+}
+
+.content-text-g {
+  color: #84898C;
+  text-align: left;
+}
+
+.interval {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.m-top-3 {
+  margin-top: 20px;
+}
+
+.point-color-1 {
+  color: #A58D7F;
+}
+
+.solver-font {
+  font-family: 'NanumSquare', sans-serif; 
+}
+
+.subheading {
+  color: #658DC6;
+  font-size: 17px;
+  font-weight: 600;
+  text-align: left;
+}
