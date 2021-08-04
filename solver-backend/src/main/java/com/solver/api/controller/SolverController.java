@@ -1,7 +1,6 @@
 package com.solver.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
-import com.solver.db.entity.user.User;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 
@@ -48,17 +46,9 @@ public class SolverController {
 	public ResponseEntity<? extends BaseResponse> createQuestion(
 			@ModelAttribute SolverGetListReq solverGetListReq) 
 	{
-		System.out.println(solverGetListReq.getMainCategory());
-		System.out.println(solverGetListReq.getSubCategory());
-		System.out.println(solverGetListReq.getQuery());
-		System.out.println(solverGetListReq.getMode());	
-
 		// 대분류, 소분류로 조회
 		Code mainCategory = codeRepository.findByCode(solverGetListReq.getMainCategory());
 		Category subCategory = categoryRepository.findBySubCategoryCode(solverGetListReq.getSubCategory());
-
-		System.out.println(mainCategory);
-		System.out.println(subCategory);
 		
 		List<SolverRes> list;
 		
@@ -68,6 +58,6 @@ public class SolverController {
 			return ResponseEntity.status(201).body(SolverListRes.of(400, "잘못된 접근입니다."));
 		}
 		
-		return ResponseEntity.status(201).body(SolverListRes.of(201, "정해진 조건에 알맞는 사람들을 찾아왔습니다."));
+		return ResponseEntity.status(201).body(SolverListRes.of(201, "정해진 조건에 알맞는 사람들을 찾아왔습니다.", list));
 	}
 }
