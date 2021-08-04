@@ -124,16 +124,11 @@ public class AnswerServiceImpl implements AnswerService{
 
 	@Override
 	public List<Answer> getAnswerList(String questionId) {
-		Question question = new Question();
-		question.setId(questionId);
-		
 		List<Answer> answerList = answerRepository.findByQuestionIdOrderByRegDtAsc(questionId);
-		
 		
 		if(answerList == null) {
 			return null;
 		}
-		
 		
 		return answerList;
 	}
