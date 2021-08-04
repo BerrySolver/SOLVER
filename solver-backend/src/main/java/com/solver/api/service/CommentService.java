@@ -6,4 +6,6 @@ public interface CommentService {
 
 	void createComment(String accessToken, CommentCreatePostReq commentCreatePostReq, String answerId);
 
+	boolean deleteAnswer(String accessToken, String commentId);
+
 }

@@ -4,6 +4,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -17,6 +18,7 @@ import com.solver.common.model.BaseResponse;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
@@ -50,27 +52,27 @@ public class CommentController {
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "댓글 작성에 성공했습니다"));
 	}
 	
-//	/* 답변 삭제 */
-//	@DeleteMapping("/{answerId}")
-//	@ApiOperation(value = "답변 삭제", notes = "내 답변 삭제") 
-//    @ApiResponses({
-//        @ApiResponse(code = 204, message = "답변 삭제에 성공했습니다"),
-//        @ApiResponse(code = 409, message = "답변 삭제에 실패했습니다")
-//    })
-//	public ResponseEntity<? extends BaseResponse> deleteComment(
-//			@ApiIgnore @RequestHeader("Authorization") String accessToken,
-//			@PathVariable @ApiParam(value="삭제할 답변 ID", required=true) String answerId
-//			) 
-//	{
-//		
-//		boolean isSuccess = answerService.deleteAnswer(accessToken, answerId);
-//		
-//		if(!isSuccess)
-//			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 삭제에 실패했습니다"));
-//		
-//		return ResponseEntity.status(204).body(BaseResponse.of(204, "답변 삭제에 성공했습니다"));
-//	}
-//	
+	/* 댓글 삭제 */
+	@DeleteMapping("/{commentId}")
+	@ApiOperation(value = "댓글 삭제", notes = "내 댓글 삭제") 
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "댓글 삭제 성공"),
+        @ApiResponse(code = 409, message = "댓글 삭제 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> deleteComment(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable @ApiParam(value="삭제할 댓글 ID", required=true) String commentId
+			) 
+	{
+		
+		boolean isSuccess = commentService.deleteAnswer(accessToken, commentId);
+		
+		if(!isSuccess)
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "댓글 삭제 실패"));
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "댓글 삭제 성공"));
+	}
+	
 //	/* 답변 수정 */
 //	@PatchMapping("/{answerId}")
 //	@ApiOperation(value = "답변 수정", notes = "내 답변 수정") 

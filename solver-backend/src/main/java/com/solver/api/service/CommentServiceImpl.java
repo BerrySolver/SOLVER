@@ -63,4 +63,30 @@ public class CommentServiceImpl implements CommentService{
 		commentRepository.save(comment);
 	}
 
+	@Override
+	public boolean deleteAnswer(String accessToken, String commentId) {
+		//작성자인지 확인
+		String token = accessToken.split(" ")[1];
+		
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		User user = userRepository.findByKakaoId(kakaoId).get();
+		
+		Comment comment = commentRepository.findById(commentId).orElse(null);
+		
+		//잘못된 요청 예외처리
+		if(comment == null) {
+			return false;
+		}
+		
+		//다른 유저의 댓글을 삭제하는 경우
+		if(!comment.getUser().getId().equals(user.getId())) {
+			return false;
+		}
+		
+		commentRepository.deleteById(commentId);
+		
+		return true;
+	}
+
 }
