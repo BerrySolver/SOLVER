@@ -4,17 +4,23 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
+import com.solver.api.response.ProfileTabRes;
 import com.solver.api.service.ProfileService;
 import com.solver.common.model.BaseResponse;
 
@@ -24,9 +30,12 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
+@CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
+methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
+
 @Api(value="유저 API", tags = {"Profile"})
 @RestController
-@RequestMapping("/api/v1/profile")
+@RequestMapping("/api/v1/profiles")
 public class ProfileController {
 	
 	@Autowired
@@ -84,5 +93,69 @@ public class ProfileController {
 		profileService.updateProfilePossibleTime(profilePossibleTimePatchReq, accessToken);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 테이블 정보 수정에 성공하였습니다"));
+	}
+	
+	/* 유저 탭 정보 조회
+	 * tabNum
+	 * 0: SOLVE 기록
+	 * 1: 답변 목록
+	 * 2: 질문 목록 
+	 * */
+	@PatchMapping("/{nickname}/tab")
+	@ApiOperation(value = "회원 화상 회의 테이블 정보 수정", notes = "회원 화상 회의 테이블 정보 수정") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "성공하였습니다"),
+        @ApiResponse(code = 409, message = "실패하였습니다")
+    })
+	public ResponseEntity<? extends BaseResponse> profileTabInfo(
+			@PathVariable String nickname,
+			@RequestParam int tabNum)
+	{
+		ProfileTabRes profileTabRes = profileService.getProfileTabInfo(nickname, tabNum);
+		profileTabRes.setMessage("성공하였습니다");
+		profileTabRes.setStatusCode(201);
+		
+		return ResponseEntity.status(201).body(profileTabRes);
+	}
+	
+
+	@PostMapping("/{nickname}/follow")
+	@ApiOperation(value = "사용자 팔로우", notes = "관심있는 사용자를 팔로우") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "팔로우 추가 성공"),
+        @ApiResponse(code = 409, message = "팔로우 추가 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> followUser(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String nickname
+			)
+	{
+		int flag = profileService.followUser(accessToken, nickname);
+		
+		if(flag != 3) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "팔로우 추가 실패"));
+		}
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "팔로우 추가 성공"));
+	}
+	
+	@DeleteMapping("/{nickname}/follow")
+	@ApiOperation(value = "사용자 팔로우", notes = "관심있는 사용자를 팔로우") 
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "팔로우 추가 성공"),
+        @ApiResponse(code = 409, message = "팔로우 추가 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> unFollowUser(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String nickname
+			)
+	{
+		int flag = profileService.unFollowUser(accessToken, nickname);
+		
+		if(flag != 3) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "팔로우 삭제 실패"));
+		}
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "팔로우 삭제 성공"));
 	}
 }

@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceLog;
@@ -17,6 +19,7 @@ import com.solver.db.entity.group.GroupComment;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.Message;
 import com.solver.db.entity.user.Notification;
+import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 
 import lombok.Getter;
@@ -32,6 +35,7 @@ public class Code {
 	private String codeName;
 	private boolean useYn;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="commonCode")
 	private CommonCode commonCode;
@@ -48,9 +52,14 @@ public class Code {
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Message> message;
 	
+	@OneToMany(mappedBy="pointCode", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	private List<PointLog> pointLog;
+	
+	@JsonManagedReference
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> question;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="mainCategory", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Question> questionMainCategory;
 	

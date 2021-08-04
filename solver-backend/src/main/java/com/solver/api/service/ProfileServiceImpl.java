@@ -1,8 +1,10 @@
 package com.solver.api.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,21 +12,32 @@ import org.springframework.stereotype.Service;
 import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
+import com.solver.api.response.ProfileTabRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
+import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.Evaluation;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
+import com.solver.db.entity.conference.ConferenceLog;
 import com.solver.db.entity.group.GroupMember;
+import com.solver.db.entity.question.BookmarkQuestion;
+import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.FavoriteUser;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 import com.solver.db.entity.user.UserCalendar;
+import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.answer.EvaluationRepository;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
+import com.solver.db.repository.conference.ConferenceLogRepository;
 import com.solver.db.repository.group.GroupMemberRepository;
+import com.solver.db.repository.question.BookmarkQuestionRepository;
+import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.user.FavoriteUserRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserCalendarRepository;
 import com.solver.db.repository.user.UserRepository;
@@ -33,6 +46,18 @@ import com.solver.db.repository.user.UserRepository;
 public class ProfileServiceImpl implements ProfileService{
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	QuestionRepository questionRepository;
+	
+	@Autowired
+	ConferenceLogRepository conferenceLogRepository;
+	
+	@Autowired
+	BookmarkQuestionRepository bookmarkQuestionRepository;
+	
+	@Autowired
+	AnswerRepository answerRepository;
 	
 	@Autowired
 	UserCalendarRepository userCalendarRepository;
@@ -56,6 +81,9 @@ public class ProfileServiceImpl implements ProfileService{
 	GroupMemberRepository groupMemberRepository;
 	
 	@Autowired
+	FavoriteUserRepository favoriteUserRepository;
+	
+	@Autowired
 	KakaoUtil kakaoUtil;
 
 	/* 마이페이지 정보를 불러 올 때 그룹이나 관심분야는 그냥 이름만 불러오나 - o
@@ -66,7 +94,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Optional<User> user = userRepository.findByNickname(nickname);
 		
 		List<PointLog> pointList = user.get().getPointLog();
-		List<Evaluation> evaluationList = user.get().getEvaluatedAnswer();
+		List<Evaluation> evaluationList = user.get().getEvaluateAnswer();
 		List<GroupMember> groupMemberList = user.get().getGroupMember();
 		List<FavoriteField> favoriteFieldList = user.get().getFavoriteField();
 		
@@ -193,5 +221,169 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		userCalendarRepository.save(userCalendar);
 		
+	}
+
+	/* 유저 탭 정보 조회
+	 * tabNum
+	 * 0: SOLVE 기록
+	 * 1: 답변 목록
+	 * 2: 질문 목록 
+	 * */
+	@Override
+	public ProfileTabRes getProfileTabInfo(String nickname, int tabNum) {
+		ProfileTabRes profileTabRes = new ProfileTabRes();
+		User user = userRepository.findByNickname(nickname).orElse(null);
+		
+		String userId = user.getId();
+		
+		if(tabNum == 0) {
+			//화상 답변 인지 그냥 답변 인지 뭘로 구분?
+			List<Answer> textAnswerList = answerRepository.findTextAnswerByUserId(userId);
+			List<Answer> videoAnswerList = answerRepository.findTextAnswerByUserId(userId);
+			
+			int textAnswerCount = textAnswerList.size();
+			int videoAnswerCount = videoAnswerList.size();
+			int videoAnswerTime = 0;
+			
+			List<ConferenceLog> conferenceEnterList = conferenceLogRepository.findByUserIdOrderByConferenceId(userId);
+			
+			for (ConferenceLog conferenceLog : conferenceEnterList) {
+				//입장
+				if(conferenceLog.getCode().getCode().equals("030")) {
+					videoAnswerTime -= conferenceLog.getRegDt().getTime();
+				}
+				//퇴장
+				else if(conferenceLog.getCode().getCode().equals("030")) {
+					videoAnswerTime += conferenceLog.getRegDt().getTime();
+				}
+			}
+			
+			videoAnswerTime /= (1000*60);
+			
+			profileTabRes.setVideoAnswerTime(videoAnswerTime);
+			profileTabRes.setVideoAnswerCount(videoAnswerCount);
+			profileTabRes.setTextAnswerCount(textAnswerCount);
+			
+			profileTabRes.setVideoAnswerTime(videoAnswerTime);
+		}
+		//답변을 달은 질문 목록
+		else if(tabNum == 1) {
+			List<Answer> answerList = answerRepository.findByUserId(userId);
+			
+			Set<String> questionIdSet = new HashSet<>();
+			
+			for (Answer answer : answerList) {
+				questionIdSet.add(answer.getQuestion().getId());
+			}
+			
+			List<String> questionIdList = new ArrayList<>(questionIdSet);
+			
+			if(questionIdList.size() != 0) {
+				List<Question> answerQuestionList = questionRepository.findAllById(questionIdList);
+			
+				profileTabRes = ProfileTabRes.makeAnswerQuestionList(answerQuestionList);
+			}
+		}
+		//내가 작성한 질문 목록
+		else if(tabNum == 2) {
+			List<Question> questionList = questionRepository.findByUserId(userId);
+			
+			profileTabRes = ProfileTabRes.makeMyQuestionList(questionList);
+		}
+		//내가 북마크한 질문 목록
+		else if(tabNum == 3) {
+			List<BookmarkQuestion> bookmarkList = bookmarkQuestionRepository.findAllByUserId(userId);
+			
+			Set<String> questionIdSet = new HashSet<>();
+			
+			for (BookmarkQuestion bookmark : bookmarkList) {
+				questionIdSet.add(bookmark.getQuestion().getId());
+			}
+			
+			List<String> questionIdList = new ArrayList<>(questionIdSet);
+			
+			List<Question> questionList = questionRepository.findAllById(questionIdList);
+			
+			profileTabRes = ProfileTabRes.makeBookmarkQuestionList(questionList);
+		}
+		
+		return profileTabRes;
+	}
+
+	@Override
+	public int followUser(String accessToken, String nickname) {
+		String token = accessToken.split(" ")[1];
+
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+
+		User myUserInfo = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+		//없는 유저인 경우
+		if (myUserInfo == null) {
+			return 0;
+		}
+
+		User followingUserInfo = userRepository.findByNickname(nickname).orElse(null);
+		
+		//없는 유저인 경우
+		if (followingUserInfo == null) {
+			return 0;
+		}
+
+		String id = "";
+
+		while (true) {
+			id = RandomIdUtil.makeRandomId(13);
+
+			if (favoriteUserRepository.findById(id).orElse(null) == null)
+				break;
+		}
+
+		//이미 팔로우 한 유저인 경우
+		if (favoriteUserRepository.findByUserIdAndFollowingUserId(myUserInfo.getId(), followingUserInfo.getId()).orElse(null) != null) {
+			return 2;
+		}
+
+		
+		FavoriteUser favoriteUser = new FavoriteUser();
+		favoriteUser.setFollowingUser(followingUserInfo);
+		favoriteUser.setUser(myUserInfo);
+		favoriteUser.setId(id);
+
+		favoriteUserRepository.save(favoriteUser);
+
+		return 3;
+	}
+	
+	@Override
+	public int unFollowUser(String accessToken, String nickname) {
+		String token = accessToken.split(" ")[1];
+
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+
+		User myUserInfo = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+		//없는 유저인 경우
+		if (myUserInfo == null) {
+			return 0;
+		}
+
+		User followingUserInfo = userRepository.findByNickname(nickname).orElse(null);
+		
+		//없는 유저인 경우
+		if (followingUserInfo == null) {
+			return 0;
+		}
+		
+		FavoriteUser favoriteUser = favoriteUserRepository.findByUserIdAndFollowingUserId(myUserInfo.getId(), followingUserInfo.getId()).orElse(null);
+
+		//팔로우 하지 않은 유저인 경우
+		if (favoriteUser == null) {
+			return 2;
+		}
+
+		favoriteUserRepository.delete(favoriteUser);
+
+		return 3;
 	}
 }

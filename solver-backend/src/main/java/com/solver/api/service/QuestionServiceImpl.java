@@ -1,12 +1,14 @@
 package com.solver.api.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
 import com.solver.common.auth.KakaoUtil;
@@ -18,12 +20,16 @@ import com.solver.db.entity.user.User;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.question.QuestionRepositorySupport;
 import com.solver.db.repository.user.UserRepository;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	QuestionRepository questionRepository;
+	
+	@Autowired
+	QuestionRepositorySupport questionRepositorySupport;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -36,6 +42,20 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
+
+	// 질문 목록 조회
+	@Override
+	public List<Question> getQuestionList(QuestionGetListReq questionGetListReq) {
+		// 대분류, 소분류, 질문 상태는 외래키 필드이기 때문에 객체를 구해서 진행
+		Code mainCategory = codeRepository.findByCode(questionGetListReq.getMainCategory());
+		Category subCategory = categoryRepository.findBySubCategoryCode(questionGetListReq.getSubCategory());
+		Code type = codeRepository.findByCode(questionGetListReq.getType());
+		
+		List<Question> questionList = questionRepositorySupport.findDynamicQueryQuestion(
+				mainCategory, subCategory, questionGetListReq.getQuery(), questionGetListReq.getDifficulty(), type, questionGetListReq.getMode());
+		
+		return questionList;
+	}
 	
 	// 질문 생성
 	@Override
@@ -90,11 +110,13 @@ public class QuestionServiceImpl implements QuestionService{
 		
 		return question;
 	}
-
+	
+	// 질문 수정
 	@Override
 	public Question updateQuestion(QuestionPatchReq questionPatchReq, Question question, String token) {
 		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
 		
+		// 작성자가 현재 내가 아니면 null을 반환, controller에서 403에러 띄우게 됨
 		if (!user.get().getId().equals(question.getUser().getId())) {
 			return null;
 		}
@@ -113,11 +135,13 @@ public class QuestionServiceImpl implements QuestionService{
 		
 		return questionRepository.save(question);
 	}
-
+	
+	// 질문 삭제
 	@Override
 	public void deleteQuestion(Question question, String token) {
 		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
 		
+		// 작성자가 현재 내가 아니면 에러를 던져줌
 		if (!user.get().getId().equals(question.getUser().getId())) {
 			throw new AccessDeniedException(null);
 		}
@@ -125,6 +149,16 @@ public class QuestionServiceImpl implements QuestionService{
 		questionRepository.deleteById(question.getId());
 		
 		return;
+	}
+	
+	// 내 질문 목록 조회
+	@Override
+	public List<Question> getMyQuestionList(String token) {
+		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		
+		List<Question> questionList = questionRepository.findByUserId(user.get().getId());
+		
+		return questionList;
 	}
 
 }

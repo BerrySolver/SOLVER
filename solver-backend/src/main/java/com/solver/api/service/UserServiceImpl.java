@@ -32,6 +32,7 @@ import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.group.GroupInfoRepository;
 import com.solver.db.repository.group.GroupMemberRepository;
+import com.solver.db.repository.user.FavoriteUserRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.TokenRepository;
 import com.solver.db.repository.user.UserCalendarRepository;
@@ -74,6 +75,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	CodeRepository codeRepository;
+	
+	@Autowired
+	FavoriteUserRepository favoriteUserRepository;
 
 	@Autowired
 	KakaoUtil kakaoUtil;
@@ -197,19 +201,26 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<SolverRes> getUserList(SolverGetListReq solverGetListReq) {
 		
-		// 대분류, 소분류로 조회
+		// 필터, 조회 값이 존재하는지 얻기
 		String mode = solverGetListReq.getMode();
+		String query = solverGetListReq.getQuery();
 		Code mainCategory = codeRepository.findByCode(solverGetListReq.getMainCategory());
 		Category subCategory = categoryRepository.findBySubCategoryCode(solverGetListReq.getSubCategory());
+		
+		// 기본 유저 데이터 불러오기
 		List<User> userList = userRepositorySupport.findAll(mainCategory, subCategory, solverGetListReq.getQuery(), solverGetListReq.getMode());
 		
 		List<SolverRes> solverList = new ArrayList<SolverRes>();
 		for (User user : userList) {
-			SolverRes solverRes = new SolverRes();
-			
-			String profileUrl = user.getProfileUrl();
 			String nickname = user.getNickname();
+
+			if(query != null && !nickname.contains(query))
+				continue;
 			
+			SolverRes solverRes = new SolverRes();			
+			String profileUrl = user.getProfileUrl();
+			
+			// 닉네임(UNIQUE)을 기준으로 기본 정보 부르기
 			Optional<User> oneUser = userRepository.findByNickname(nickname);
 			
 			List<PointLog> pointList = oneUser.get().getPointLog();
@@ -227,7 +238,8 @@ public class UserServiceImpl implements UserService {
 					point += pointCode.getValue();
 				}
 			}
-			/* 포인트 계산 끝*/
+			/* 포인트 계산 끝*/			
+			
 			
 			if(point >= 100) {
 				/* 평점 계산 */			
@@ -268,11 +280,16 @@ public class UserServiceImpl implements UserService {
 				
 				if(flag) {
 					solverRes.setFavoriteFieldNameList(favoriteFieldNameList);
+
+					int follower = favoriteUserRepository.findByUserId(user.getId()).size();
+					solverRes.setFollower(follower);
+					
 					solverList.add(solverRes);
 				}
 			}
 		}
 		
+		/* 정렬 기준(Mode) 시작 */
 		if(mode != null && mode.equals("pointDesc")) {
 			Collections.sort(solverList, new Comparator<SolverRes>() {
 
@@ -291,7 +308,17 @@ public class UserServiceImpl implements UserService {
 				}
 				
 			});			
+		}else if(mode != null && mode.equals("followerDesc")) {
+			Collections.sort(solverList, new Comparator<SolverRes>() {
+
+				@Override
+				public int compare(SolverRes o1, SolverRes o2) {
+					return (int) o2.getFollower() - (int) o1.getFollower();
+				}
+				
+			});			
 		}
+		/* 정렬 기준(Mode) 끝 */
 		
 		return solverList;
 	}

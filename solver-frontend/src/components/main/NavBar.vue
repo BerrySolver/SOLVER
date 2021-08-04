@@ -63,8 +63,10 @@ export default {
   align-items: center;
   font-family: 'NanumSquare', sans-serif;
   font-size: 15px;
+  height: 6vh;
   position: fixed;
   width: 100%;
+  z-index: 100;
 }
 
 .nav-logo {

@@ -1,6 +1,7 @@
 package com.solver.db.entity.conference;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -19,7 +20,7 @@ public class ConferenceReservation extends BaseEntity{
 	@JoinColumn(name="userId")
 	private User user;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="questionId")
 	private Question question;
 }

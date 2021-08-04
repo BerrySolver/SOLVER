@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+//질문 상세조회 시 반환하는 형태
 @Getter
 @Setter
 @ApiModel("QuestionResponse")
@@ -52,6 +53,8 @@ public class QuestionRes extends BaseResponse{
 	
 	public static QuestionRes of(Integer statusCode, String message, Question question) {
 		QuestionRes res = new QuestionRes();
+		
+		// 외래키 필드들은 객체를 넣어야 한다.
 		User user = new User();
 		Code type = new Code();
 		Code mainCategory = new Code();
