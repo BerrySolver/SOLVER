@@ -44,4 +44,19 @@ public class NotificationController {
 		
 		return ResponseEntity.status(notificationListRes.getStatusCode()).body(notificationListRes);
 	}
+	
+	@GetMapping("/video")
+	@ApiOperation(value = "화상 알림 목록", notes = "화상 알림 목록 조회") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "전체 알림 목록 조회 성공"),
+        @ApiResponse(code = 409, message = "전체 알림 목록 조회 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> getVideoNotificationList(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken
+			)
+	{
+		NotificationListRes notificationListRes = notificationService.getVideoNotificationList(accessToken);
+		
+		return ResponseEntity.status(notificationListRes.getStatusCode()).body(notificationListRes);
+	}
 }
