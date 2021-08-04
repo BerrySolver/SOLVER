@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.user.User;
@@ -34,6 +35,7 @@ public class Comment extends BaseEntity{
 	@JoinColumn(name="answerId")
 	private Answer answer;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="comment", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ReportComment> reportComment;
 }

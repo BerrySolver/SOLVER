@@ -1,8 +1,6 @@
 package com.solver.api.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -270,9 +268,38 @@ public class ProfileServiceImpl implements ProfileService{
 			
 			List<String> questionIdList = new ArrayList<>(questionIdSet);
 			
-			List<Question> answerQuestionList = questionRepository.findAllById(questionIdList);
+			if(questionIdList.size() != 0) {
+				List<Question> answerQuestionList = questionRepository.findAllById(questionIdList);
+				
+				List<Question> tempList = new ArrayList<>();
+				
+				for (Question question : answerQuestionList) {
+					Question tempQuestion = new Question();
+					tempQuestion.setId(question.getId());
+					tempQuestion.setCode(question.getCode());
+					tempQuestion.setContent(question.getContent());
+					tempQuestion.setDifficulty(question.getDifficulty());
+					tempQuestion.setExpirationTime(question.getExpirationTime());
+					tempQuestion.setMainCategory(question.getMainCategory());
+					tempQuestion.setSubCategory(question.getSubCategory());
+					tempQuestion.setReadCount(question.getReadCount());
+					tempQuestion.setRegDt(question.getRegDt());
+					tempQuestion.setTitle(question.getTitle());
+//					tempQuestion.setUser(question.getUser());
+//					tempQuestion.setReportQuestion(question.getReportQuestion());
+//					tempQuestion.setHashtag(question.getHashtag());
+//					tempQuestion.setAnswer(question.getAnswer());
+//					tempQuestion.setBookmarkQuestion(question.getBookmarkQuestion());
+//					tempQuestion.setConference(question.getConference());
+//					tempQuestion.setConferenceReservation(question.getConferenceReservation());
+//					tempQuestion.setFavoriteQuestion(question.getFavoriteQuestion());
+//					tempQuestion.setFavoriteUser(question.getFavoriteUser());
+					
+					tempList.add(tempQuestion);
+				}
 			
-			profileTabRes.setAnswerQuestionList(answerQuestionList);
+				profileTabRes.setAnswerQuestionList(tempList);
+			}
 		}
 		//내가 작성한 질문 목록
 		else if(tabNum == 2) {
