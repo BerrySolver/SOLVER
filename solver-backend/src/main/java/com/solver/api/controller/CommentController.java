@@ -5,14 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.CommentCreatePostReq;
+import com.solver.api.request.CommentUpdatePatchReq;
 import com.solver.api.service.CommentService;
 import com.solver.common.model.BaseResponse;
 
@@ -65,7 +68,7 @@ public class CommentController {
 			) 
 	{
 		
-		boolean isSuccess = commentService.deleteAnswer(accessToken, commentId);
+		boolean isSuccess = commentService.deleteComment(accessToken, commentId);
 		
 		if(!isSuccess)
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "댓글 삭제 실패"));
@@ -73,27 +76,27 @@ public class CommentController {
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "댓글 삭제 성공"));
 	}
 	
-//	/* 답변 수정 */
-//	@PatchMapping("/{answerId}")
-//	@ApiOperation(value = "답변 수정", notes = "내 답변 수정") 
-//    @ApiResponses({
-//        @ApiResponse(code = 201, message = "답변 수정에 성공했습니다"),
-//        @ApiResponse(code = 409, message = "답변 수정에 실패했습니다")
-//    })
-//	public ResponseEntity<? extends BaseResponse> updateComment(
-//			@ApiIgnore @RequestHeader("Authorization") String accessToken,
-//			@PathVariable @ApiParam(value="변경할 답변 ID", required=true) String answerId,
-//			@RequestBody @ApiParam(value="변경할 답변 내용", required=true) AnswerUpdatePatchReq answerUpdatePatchReq
-//			) 
-//	{
-//		
-//		boolean isSuccess = answerService.updateAnswer(accessToken, answerId, answerUpdatePatchReq);
-//		
-//		if(!isSuccess)
-//			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 수정에 실패했습니다"));
-//		
-//		return ResponseEntity.status(204).body(BaseResponse.of(201, "답변 수정에 성공했습니다"));
-//	}
+	/* 댓글 수정 */
+	@PatchMapping("/{commentId}")
+	@ApiOperation(value = "댓글 수정", notes = "내 댓글 수정") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "답변 댓글 성공"),
+        @ApiResponse(code = 409, message = "답변 댓글 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> updateComment(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable @ApiParam(value="변경할 댓글 ID", required=true) String commentId,
+			@RequestBody @ApiParam(value="변경할 댓글 내용", required=true) CommentUpdatePatchReq commentUpdatePatchReq
+			) 
+	{
+		
+		boolean isSuccess = commentService.updateComment(accessToken, commentId, commentUpdatePatchReq);
+		
+		if(!isSuccess)
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 댓글 실패"));
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(201, "답변 댓글 성공"));
+	}
 //	
 //	/* 답변 목록 조회 */
 //	@GetMapping("/{questionId}")
