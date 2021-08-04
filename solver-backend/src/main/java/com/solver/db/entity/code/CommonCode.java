@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +21,7 @@ public class CommonCode {
 	
 	private String commonCodeName;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="commonCode", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Code> code;
 }

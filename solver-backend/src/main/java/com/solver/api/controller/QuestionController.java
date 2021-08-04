@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.QuestionGetListReq;
@@ -24,6 +23,7 @@ import com.solver.api.request.QuestionPostReq;
 import com.solver.api.response.QuestionListRes;
 import com.solver.api.response.QuestionMeRes;
 import com.solver.api.response.QuestionRes;
+import com.solver.api.service.BookmarkQuestionService;
 import com.solver.api.service.QuestionService;
 import com.solver.api.service.UserService;
 import com.solver.common.auth.KakaoUtil;
@@ -43,6 +43,9 @@ import springfox.documentation.annotations.ApiIgnore;
 public class QuestionController {
 	@Autowired
 	QuestionService questionService;
+	
+	@Autowired
+	BookmarkQuestionService bookmarkService;
 	
 	@Autowired
 	UserService userService;
@@ -189,5 +192,27 @@ public class QuestionController {
 		
 		return ResponseEntity.status(200).body(QuestionMeRes.of(200, "질문 목록을 성공적으로 조회했습니다.", questionList));
 		
+	}
+	
+	/* 질문 북마크 추가 */	
+	@PostMapping("/{questionId}/bookmark")
+	@ApiOperation(value = "북마크 추가", notes = "질문 북마크 추가")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "북마크 추가 성공"),
+        @ApiResponse(code = 400, message = "북마크 추가 실패"),
+        @ApiResponse(code = 403, message = "권한이 없습니다")
+	})
+	public ResponseEntity<? extends BaseResponse> createBookmark(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String questionId
+			)
+	{
+		boolean isSuccess = bookmarkService.createBookmark(accessToken, questionId);
+		
+		if(!isSuccess) {
+			return ResponseEntity.status(400).body(BaseResponse.of(400, "북마크 추가 실패"));
+		}
+		
+		return ResponseEntity.status(200).body(BaseResponse.of(200, "북마크 추가 성공"));
 	}
 }

@@ -9,5 +9,7 @@ import com.solver.db.entity.question.Question;
 public interface QuestionRepository extends JpaRepository<Question, String>{
 
 	List<Question> findByUserId(String userId);
+
+	List<Question> findByIdIn(List<String> questionIdList);
 	
 }
