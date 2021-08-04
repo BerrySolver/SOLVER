@@ -6,4 +6,6 @@ public interface NotificationService {
 
 	NotificationListRes getAllNotificationList(String accessToken);
 
+	NotificationListRes getVideoNotificationList(String accessToken);
+
 }
