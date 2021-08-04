@@ -7,4 +7,6 @@ public interface ConferenceReservationService {
 
 	ConferenceReservation createConferenceReservation(String token, Question question);
 
+	void deleteConferenceReservation(String token, Question question);
+
 }

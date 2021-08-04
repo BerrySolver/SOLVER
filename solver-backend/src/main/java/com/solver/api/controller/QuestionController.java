@@ -349,4 +349,30 @@ public class QuestionController {
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "참관 신청 성공"));
 	}
 	
+	// 참관 신청 취소
+	@DeleteMapping("/{questionId}/observers")
+	@ApiOperation(value = "참관 신청 취소", notes = "참관 신청 취소 API")
+	@ApiResponses({
+		@ApiResponse(code = 204, message = "참관 신청 취소 성공"),
+        @ApiResponse(code = 404, message = "참관 신청 기록이 없습니다."),
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
+	})
+	public ResponseEntity<? extends BaseResponse> deleteConferenceReservation(
+			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
+	{
+		String token = accessToken.split(" ")[1];
+		Optional<Question> question = questionService.getById(questionId);
+		if (question == null) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		try {
+			conferenceReservationService.deleteConferenceReservation(token, question.get());
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "참관 신청 기록이 없습니다."));
+		}
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "참관 신청 취소 성공"));
+	}
 }
