@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -136,5 +137,25 @@ public class ProfileController {
 		}
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "팔로우 추가 성공"));
+	}
+	
+	@DeleteMapping("/{nickname}/follow")
+	@ApiOperation(value = "사용자 팔로우", notes = "관심있는 사용자를 팔로우") 
+    @ApiResponses({
+        @ApiResponse(code = 204, message = "팔로우 추가 성공"),
+        @ApiResponse(code = 409, message = "팔로우 추가 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> unFollowUser(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String nickname
+			)
+	{
+		int flag = profileService.unFollowUser(accessToken, nickname);
+		
+		if(flag != 3) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "팔로우 삭제 실패"));
+		}
+		
+		return ResponseEntity.status(204).body(BaseResponse.of(204, "팔로우 삭제 성공"));
 	}
 }

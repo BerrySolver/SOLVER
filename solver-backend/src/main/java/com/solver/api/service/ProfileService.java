@@ -15,4 +15,6 @@ public interface ProfileService {
 	ProfileTabRes getProfileTabInfo(String nickname, int tabNum);
 
 	int followUser(String accessToken, String nickname);
+
+	int unFollowUser(String accessToken, String nickname);
 }
