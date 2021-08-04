@@ -28,7 +28,7 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 	KakaoUtil kakaoUtil;
 	
 	@Override
-	public boolean createBookmark(String accessToken, String questionId) {
+	public boolean createBookmark(String accessToken, Question question) {
 		//작성자인지 확인
 		String token = accessToken.split(" ")[1];
 		
@@ -36,14 +36,7 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		
-		Question question = questionRepository.findById(questionId).orElse(null);
-		
 		if(user == null) {
-			return false;
-		}
-		
-		//잘못된 요청 예외처리
-		if(question == null) {
 			return false;
 		}
 		
