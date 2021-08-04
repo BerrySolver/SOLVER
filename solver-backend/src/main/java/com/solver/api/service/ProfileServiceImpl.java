@@ -17,7 +17,6 @@ import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.Evaluation;
-import com.solver.db.entity.answer.FavoriteAnswer;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
