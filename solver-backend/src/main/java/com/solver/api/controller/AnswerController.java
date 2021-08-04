@@ -120,6 +120,6 @@ public class AnswerController {
 			return ResponseEntity.status(409).body(AnswerListRes.of(409, "답변 목록 조회 실패"));
 		}
 		
-		return ResponseEntity.status(409).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList));
+		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList));
 	}
 }

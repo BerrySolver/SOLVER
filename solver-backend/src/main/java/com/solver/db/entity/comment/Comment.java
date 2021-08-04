@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.user.User;
@@ -23,10 +24,12 @@ public class Comment extends BaseEntity{
 	private String content;
 	private Date regDt;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="answerId")
 	private Answer answer;

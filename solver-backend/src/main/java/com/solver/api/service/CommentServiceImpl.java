@@ -1,6 +1,7 @@
 package com.solver.api.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.comment.Comment;
+import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.comment.CommentRepository;
@@ -119,6 +121,15 @@ public class CommentServiceImpl implements CommentService{
 			return false;
 		
 		return true;
+	}
+
+	@Override
+	public List<Comment> getCommentList(String answerId) {
+		
+		List<Comment> commentList = commentRepository.findByAnswerIdOrderByRegDtAsc(answerId);
+		
+		
+		return commentList;
 	}
 
 }
