@@ -95,7 +95,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Optional<User> user = userRepository.findByNickname(nickname);
 		
 		List<PointLog> pointList = user.get().getPointLog();
-		List<Evaluation> evaluationList = user.get().getEvaluatedAnswer();
+		List<Evaluation> evaluationList = user.get().getEvaluateAnswer();
 		List<GroupMember> groupMemberList = user.get().getGroupMember();
 		List<FavoriteField> favoriteFieldList = user.get().getFavoriteField();
 		
@@ -352,6 +352,38 @@ public class ProfileServiceImpl implements ProfileService{
 		favoriteUser.setId(id);
 
 		favoriteUserRepository.save(favoriteUser);
+
+		return 3;
+	}
+	
+	@Override
+	public int unFollowUser(String accessToken, String nickname) {
+		String token = accessToken.split(" ")[1];
+
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+
+		User myUserInfo = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+		//없는 유저인 경우
+		if (myUserInfo == null) {
+			return 0;
+		}
+
+		User followingUserInfo = userRepository.findByNickname(nickname).orElse(null);
+		
+		//없는 유저인 경우
+		if (followingUserInfo == null) {
+			return 0;
+		}
+		
+		FavoriteUser favoriteUser = favoriteUserRepository.findByUserIdAndFollowingUserId(myUserInfo.getId(), followingUserInfo.getId()).orElse(null);
+
+		//팔로우 하지 않은 유저인 경우
+		if (favoriteUser == null) {
+			return 2;
+		}
+
+		favoriteUserRepository.delete(favoriteUser);
 
 		return 3;
 	}
