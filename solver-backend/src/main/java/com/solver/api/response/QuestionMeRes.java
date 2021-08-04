@@ -24,6 +24,7 @@ public class QuestionMeRes extends BaseResponse{
 		for (int i = 0; i < questionList.size(); i++) {
 			Question quetion = questionList.get(i);
 			QuestionMeForm qForm = new QuestionMeForm();
+			qForm.setId(quetion.getId());
 			qForm.setTitle(quetion.getTitle());
 			qForm.setAnswerCount(quetion.getAnswer().size());
 			myQuestionList.add(qForm);
@@ -42,6 +43,8 @@ public class QuestionMeRes extends BaseResponse{
 @Getter
 @Setter
 class QuestionMeForm{
+	// 질문 Id
+	private String Id;
 	// 제목
 	private String title;
 	// 답변 개수
