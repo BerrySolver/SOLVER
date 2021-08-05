@@ -1,3 +1,12 @@
+.box {
+  background-color: #658DC6;
+  display: inline-block;
+  height: 3px;
+  width: 3px;
+  margin-left: 4px;
+  margin-right: 6px;
+}
+
 .content-text-b {
   color: black;
   text-align: left;

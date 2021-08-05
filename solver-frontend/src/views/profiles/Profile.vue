@@ -84,9 +84,35 @@
       <!-- 오른쪽 여백용 col-1 -->
       <div class="col-xl-1"></div>
     </div>
-    <ProfileTimetable/>
-    <ProfileStatistics/>
-    <ProfileHistory/>
+
+    <br>
+
+    <!-- 컴포넌트 시작 -->
+    <div class="row">
+      <div class="col-3">
+        <ProfileTimetable/>
+      </div>
+      <div class="col-9">
+        <ul class="tab-ul">
+          <li v-for="tab in tabs" v-bind:key="tab.id" v-on:click="onClickTab(tab)" class="tab-li multi-button">
+            <button class="tab-btn">{{ tab }}</button>
+          </li>
+        </ul>
+        <hr class="line">
+
+        <!-- SOLVE 기록 TAB -->
+        <div v-if="'SOLVE 기록' == selectedTab">
+          <ProfileStatistics/>
+        </div>
+
+        <!-- 답변 목록 TAB -->
+        <div v-else>
+          <ProfileHistory/>
+        </div>
+      </div>
+    </div>
+    
+    
     <ProfileMyQuestions/>
   </div>
 </template>
@@ -99,13 +125,25 @@ import ProfileMyQuestions from "@/components/profiles/ProfileMyQuestions"
 
 
 export default {
-    name: 'Profile',
-    components: {
-        ProfileTimetable,
-        ProfileStatistics,
-        ProfileHistory,
-        ProfileMyQuestions,
+  name: 'Profile',
+  components: {
+    ProfileTimetable,
+    ProfileStatistics,
+    ProfileHistory,
+    ProfileMyQuestions,
+  },
+  data() {
+    return {
+      selectedTab: '',
+      tabs: ['SOLVE 기록', '답변 목록']
+    }
+  },
+  methods: {
+    onClickTab(tab) {
+      this.selectedTab = tab
+      console.log(this.selectedTab)
     },
+  },
 }
 </script>
 
