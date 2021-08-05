@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <NavBar/>
+    <NavBar id="navbar"/>
     <!-- 라우터 보여지는 부분 -->
-    <RouterView class="router"/>
-    <Footer class="footer-router2"/>
+    <RouterView id="router"/>
+    <Footer id="footer"/>
   </div>
 </template>
 
@@ -31,11 +31,17 @@ export default {
   overflow-x: hidden;
 }
 
-.router {
+#router {
   padding-top: 6vh;
+  min-width: 1190px;
 }
 
-.footer-router2 {
+#footer {
   bottom: 0;
+  min-width: 1190px;
+}
+
+#navbar {
+  min-width: 1190px;
 }
 </style>
