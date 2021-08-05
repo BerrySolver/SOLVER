@@ -8,6 +8,10 @@
   padding: 0.5rem;
 }
 
+.card-content{
+  min-height: 100px;
+}
+
 .card-ctg {
   color: white;
   font-weight: 300;
@@ -19,8 +23,8 @@
 }
 
 .card-header {
-  background-color: #2a2a72;
-  background-image: linear-gradient(315deg, #658DC6 0%, #0F4C81 90%);
+  background-color: #658DC6;
+  /* background-image: linear-gradient(315deg, #658DC6 0%, #0F4C81 90%); */
   opacity: 80%;
   padding: 0.3rem;
 }
