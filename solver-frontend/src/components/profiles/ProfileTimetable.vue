@@ -1,9 +1,8 @@
 <template>
-  <div class="row">
-    <div class="col-4"></div>
-    <div class="col-8">
-      <div>ProfileTimetable</div>
-    </div>
+  <div>
+    <div class="calendar-title">
+      화상시간 캘린더
+    </div>    
   </div>
 </template>
 
@@ -14,5 +13,7 @@ export default {
 </script>
 
 <style>
-
+.calendar-title {
+  color: #658DC6;
+}
 </style>
