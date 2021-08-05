@@ -34,7 +34,7 @@
             <RouterLink :to="{ name: 'Signup1' }" class="nav-router">회원가입</RouterLink>
           </li>
           <li class="nav-item" v-if="isLoggedIn">
-            <RouterLink :to="{ name: 'Profile' }" class="nav-router">프로필</RouterLink>
+            <RouterLink :to="`/profiles/${userNickname}`" class="nav-router">프로필</RouterLink>
           </li>
           <li class="nav-item" v-if="isLoggedIn">
             <a @click="logout" class="nav-logout">로그아웃</a>
@@ -46,11 +46,14 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters, mapState} from 'vuex'
 
 export default {
   name: "Navbar",
   computed: {
+    ...mapState({
+      userNickname: state => state.auth.userNickname,
+    }),
     ...mapGetters([
       'isLoggedIn',
     ]),
@@ -62,7 +65,7 @@ export default {
     ...mapActions([
       'logout',
     ]),
-  }
+  },
 };
 </script>
 
