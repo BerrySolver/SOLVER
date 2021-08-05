@@ -70,7 +70,7 @@ export default {
 }
 
 .footer-center {
-  margin-left: 4vw;
+  margin-left: 75px;
 }
 
 .footer-router {
@@ -82,30 +82,29 @@ export default {
   color: white;
   font-size: 12px;
   font-weight: 200;
-  line-height: 2em;
-  margin-top: 2vh;
+  line-height: 23px;
   text-align: left;
 }
 
 .footer-title {
   font-weight: 600;
   font-size: 15px;
-  margin-bottom: 1vh;
-  margin-top: 3vh;
+  margin-bottom: 20px;
+  margin-top: 20px;
   text-align: left;
 }
 
-.team-info {
+/* .team-info {
   bottom: 0;
   color: white;
   font-size: 12px;
   right: 20px;
-  /* position: relative; */
+  position: relative;
   text-align: right;
 }
 
 .team-info-title {
   font-size: 17px;
   font-weight: 600;
-}
+} */
 </style>

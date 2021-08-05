@@ -1,51 +1,54 @@
 <template>
-  <div class="row">
-    <!-- 답변 통계 -->
-    <div class="col-xl-1 statistics-title subheading">
+  <div>
+    <div class="statistics-info">
+      <!-- statistics-info의 firstchild(left) -->
       <div>
-        <div class="box"></div>
-        <span>답변 개수</span>
+        <!-- 답변 개수 -->
+        <div style="display:flex; align-items:center; ">
+          <div class="small-box"></div>
+          <span class="subheading interval">답변 개수</span>
+          <div style="display:inline-block">
+            <span class="interval">TEXT</span> <span class="point-color-1">20</span><span>개</span><br>
+            <span class="interval">VIDEO</span> <span class="point-color-1">05</span><span>개</span>
+          </div>
+        </div>
+        <br>
+
+        <!-- 화상 시간 -->
+        <div style="display:flex; align-items:center; ">
+          <div class="small-box"></div>
+          <span class="subheading interval">화상 시간</span>
+          <span class="point-color-1 interval">총 122분</span>
+        </div>
+        <br>
+        
+        <!-- 답변 통계 -->
+        <div class="answer-statistics">
+          <!-- answer-statistics의 firstchild(left) -->
+          <div style="display:flex; align-items:center;">
+            <div class="small-box"></div>
+            <span class="subheading interval">답변 통계</span>            
+          </div>
+          <!-- answer-statistics의 lastchild(right) -->
+          <div class="text-left">
+            <div>되나</div>
+            <div>되냐고</div>
+            <div>되냐고</div>
+          </div>
+        </div>
       </div>
-      <br>
-      <br>
+
+      <!-- statistics-info의 lastchild(right) -->
       <div>
-        <div class="box"></div>
-        <span>화상 시간</span>
-      </div>
-      <br>
-      <br>
-      <div>
-        <div class="box"></div>
-        <span>답변 통계</span>
+        <!-- 솔버 등급 -->
+        <div style="display:flex; align-items:center; ">
+          <div class="small-box"></div>
+          <span class="subheading interval">솔버 등급</span>
+        </div>
+        <img src="@/assets/berry-1.png" width="250px">
+        <div class="m-left-5 point-color-1">LV1. 으쌰으쌰 레벨</div>        
       </div>
     </div>
-
-    <div class="col-xl-5 statistics-title">
-      <div>
-        <span>TEXT</span>
-        <span class="interval point-color-1">35개</span>
-      </div>
-      <div>
-        <span>VIDEO</span>
-        <span class="interval point-color-1">05개</span>
-      </div>
-
-      <br>
-
-      <span class="point-color-1">총</span>
-    </div>
-
-    <!-- 베리 등급 캐릭터 -->
-    <div class="col-xl-5">
-      <!-- <div class="box"></div> -->
-      <div class="statistics-title subheading">솔버 등급</div>
-      <figure>
-        <img src="@/assets/berry-1.png" class="berry-character">
-      </figure>
-      <div class="point-color-1">LV.1 으쌰으쌰 단계</div>
-    </div>
-
-    <div class="col-xl-1"></div>
   </div>
 </template>
 
@@ -56,18 +59,33 @@ export default {
 </script>
 
 <style>
-.berry-character {
-  width: 75%;
-}
-
-.statistics-content {
-  display: inline-block;
-  font-size: 17px;
-}
-
-.statistics-title {
-  margin-top: 10px;
+.answer-statistics {
+  display: flex;
+  flex-direction: row;
   text-align: left;
-  padding-right: 0;
+}
+
+.answer-statistics > div:first-child {
+  flex: 1; /* 공간차지비율 */
+  height: 100%;
+}
+.answer-statistics > div:last-child {
+  flex: 5.5; /* 공간차지비율 */
+  height: 100%;
+}
+
+.statistics-info {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+}
+
+.statistics-info > div:first-child {
+  flex: 6; /* 공간차지비율 */
+  height: 100%;
+}
+.statistics-info > div:last-child {
+  flex: 4; /* 공간차지비율 */
+  height: 100%;
 }
 </style>

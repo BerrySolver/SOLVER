@@ -1,47 +1,74 @@
-.info {
-  color: #84898C;
-  display: flex;
-  justify-content: space-between;
+.gap-box {
+  width: 10px;
 }
 
-.info-left {
+.in-group {
+  display: flex;
+  flex-direction: row;
   text-align: left;
+}
+
+.in-group > div:first-child {
+  height: 100%;
+  float: 3;
+}
+
+.in-group > div:last-child {
+  height: 100%;
+  float: 3;
 }
 
 .nickname {
   color: #0F4C81;
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 700;
   text-align: left;
 }
 
-.point-berry {
-  width: 49px;
-}
-
-.point-berry-g {
-  opacity: 25%;
-  width: 49px;
-}
-
 .profile {
-  font-family: 'NanumSquare', sans-serif;
+  display: grid;
+  grid-template-rows: 300px 600px;
+  grid-template-columns: 300px 1090px;
+  margin-top: 30px;
 }
 
 .profile-img {
-  width: 220px;
-  height: 220px;
+  width: 240px;
+  height: 240px;
 }
 
+.profile-img-section {
+  display: inline-block;
+  width: 300px;
+  height: 300px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+}
+
+.profile-info > div:first-child {
+  flex: 6; /* 공간차지비율 */
+  height: 100%;
+}
+.profile-info > div:last-child {
+  flex: 4; /* 공간차지비율 */
+  height: 100%;
+}
+
+.small-box {
+  background-color: #658DC6;
+  height: 3px;
+  width: 3px;
+}
 
 .social-url {
-  font-family: 'NanumSquare', sans-serif; 
-  font-size: 12px;
-  margin-bottom: 0;
-  margin-top: 22px;
+  font-family: 'NanumSquare', sans-serif;
+  font-size: 15px;
   text-align: right;
 }
-
 
 .tab-ul {
   list-style: none;

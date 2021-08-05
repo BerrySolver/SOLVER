@@ -9,8 +9,4 @@ solver-backend/bin/
 solver-backend/.classpath
 solver-backend/.project
 solver-backend/build/
-<<<<<<< HEAD
 solver-backend/src/main/generated/
-=======
-solver-backend/src/main/generated/
->>>>>>> 7c6223d82c30ff238ce0b9b167285ee14280ca0c
