@@ -322,4 +322,15 @@ public class UserServiceImpl implements UserService {
 		
 		return solverList;
 	}
+
+	@Override
+	public String getNickname(String accessToken) {
+		String token = accessToken.split(" ")[1];
+		
+		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		return user.getNickname();
+	}
 }

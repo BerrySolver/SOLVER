@@ -54,6 +54,7 @@ public class Question extends BaseEntity{
 	@JoinColumn(name="subCategory")
 	private Category subCategory;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteQuestion> favoriteQuestion;
 	

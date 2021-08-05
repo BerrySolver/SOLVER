@@ -1,5 +1,6 @@
 package com.solver.api.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.json.simple.parser.ParseException;
@@ -11,14 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.solver.api.response.UserLoginRes;
 import com.solver.api.service.UserService;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.BaseResponse;
 import com.solver.common.model.OAuthToken;
+import com.solver.db.entity.code.Code;
+import com.solver.db.entity.code.CommonCode;
 import com.solver.db.entity.user.Token;
 import com.solver.db.entity.user.User;
+import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.user.UserRepository;
 
 import io.swagger.annotations.Api;
@@ -33,8 +40,12 @@ methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMe
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
+	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	CodeRepository codeRepository;
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
@@ -49,7 +60,8 @@ public class AuthController {
         @ApiResponse(code = 200, message = "로그인에 성공했습니다"),
         @ApiResponse(code = 409, message = "로그인에 실패했습니다")
     })
-	public ResponseEntity<UserLoginRes> loginUser(String code) throws ParseException {
+//	public ResponseEntity<UserLoginRes> loginUser(String code) throws ParseException {
+	public ModelAndView loginUser(String code) throws ParseException {
 		//카카오 접근 토큰 받아오기
     	OAuthToken oauthToken = kakaoUtil.getKakaoToken(code);
     	
@@ -75,9 +87,16 @@ public class AuthController {
 		UserLoginRes userLoginRes = UserLoginRes.builder().accessToken(oauthToken.getAccess_token()).build();
 		userLoginRes.setMessage("로그인에 성공했습니다");
 		userLoginRes.setStatusCode(200);
-
-		//access 토큰을 body에 넣어서 프론트 전송
-		return ResponseEntity.status(200).body(userLoginRes);
+		
+		ModelAndView mav = new ModelAndView("jsonView");
+		
+		mav.setViewName("redirect:http://localhost:8081/auth/login");
+		mav.addObject("accessToken", oauthToken.getAccess_token());
+		
+		RedirectAttributes ra = new RedirectAttributesModelMap();
+		ra.addFlashAttribute("token", oauthToken.getAccess_token());
+		
+	    return mav;
 	}
 	
 	@GetMapping("/logout")
@@ -89,5 +108,20 @@ public class AuthController {
 		userService.deleteToken(accessToken);
 		
 		return ResponseEntity.status(200).body(BaseResponse.of(200, "로그아웃"));
+	}
+	
+	@GetMapping("/category")
+	@ApiOperation(value = "메인 카테고리 리스트", notes = "아이디, 패스워드를 입력해 로그인") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "로그아웃에 성공했습니다")
+    })
+	public List<Code> mainCategoryList(){
+		
+		CommonCode commonCode = new CommonCode();
+		commonCode.setCommonCode("009");
+		
+		List<Code> categoryList = codeRepository.findByCommonCode(commonCode);
+		
+		return categoryList;
 	}
 }
