@@ -7,6 +7,9 @@ export default {
     logout: 'auth/logout',
 
     // 회원가입2 관련
-    signupdata: 'user/signup/data'
+    signupdata: 'user/signup/data',
+
+    // 질문 받아오기
+    getquestionlist: 'questions'
   }
 }
