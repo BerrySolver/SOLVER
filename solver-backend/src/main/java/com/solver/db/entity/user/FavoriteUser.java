@@ -6,7 +6,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.solver.db.entity.BaseEntity;
-import com.solver.db.entity.question.Question;
 
 import lombok.Getter;
 import lombok.Setter;

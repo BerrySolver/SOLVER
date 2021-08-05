@@ -12,7 +12,6 @@ import com.solver.common.auth.KakaoUtil;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.comment.Comment;
-import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.comment.CommentRepository;

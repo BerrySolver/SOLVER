@@ -17,7 +17,6 @@ import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceReservation;
-import com.solver.db.entity.user.FavoriteUser;
 import com.solver.db.entity.user.User;
 
 import lombok.Getter;

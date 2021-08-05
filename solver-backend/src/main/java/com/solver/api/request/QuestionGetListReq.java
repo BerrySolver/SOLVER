@@ -2,9 +2,6 @@ package com.solver.api.request;
 
 import java.util.List;
 
-import com.solver.db.entity.code.Category;
-import com.solver.db.entity.code.Code;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

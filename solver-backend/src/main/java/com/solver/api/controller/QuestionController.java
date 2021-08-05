@@ -191,8 +191,7 @@ public class QuestionController {
 	@ApiOperation(value = "내가 남긴 질문 목록", notes = "내 질문 목록 API")
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "질문 목록을 성공적으로 조회했습니다."),
-        @ApiResponse(code = 400, message = "질문 목록 조회에 실패했습니다."),
-        @ApiResponse(code = 403, message = "권한이 없습니다.")
+        @ApiResponse(code = 400, message = "질문 목록 조회에 실패했습니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> myQuestion(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)

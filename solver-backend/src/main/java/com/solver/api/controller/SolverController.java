@@ -14,8 +14,6 @@ import com.solver.api.response.SolverListRes;
 import com.solver.api.response.SolverRes;
 import com.solver.api.service.UserService;
 import com.solver.common.model.BaseResponse;
-import com.solver.db.entity.code.Category;
-import com.solver.db.entity.code.Code;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 
@@ -41,7 +39,7 @@ public class SolverController {
 	@GetMapping()
 	@ApiOperation(value = "답변자 목록", notes = "원하는 답변자를 찾아오기")
 	@ApiResponses({ 
-			@ApiResponse(code = 201, message = "정해진 조건에 알맞는 사람들을 찾아왔습니다."),
+			@ApiResponse(code = 200, message = "정해진 조건에 알맞는 사람들을 찾아왔습니다."),
 			@ApiResponse(code = 400, message = "잘못된 접근입니다. 다시 확인해주세요.") })
 	public ResponseEntity<? extends BaseResponse> getSolverList(
 			@ModelAttribute SolverGetListReq solverGetListReq) 
@@ -51,9 +49,9 @@ public class SolverController {
 		try {
 			list = userService.getUserList(solverGetListReq);
 		} catch (Exception e) {
-			return ResponseEntity.status(201).body(SolverListRes.of(400, "잘못된 접근입니다."));
+			return ResponseEntity.status(400).body(SolverListRes.of(400, "잘못된 접근입니다."));
 		}
 		
-		return ResponseEntity.status(201).body(SolverListRes.of(201, "정해진 조건에 알맞는 사람들을 찾아왔습니다.", list));
+		return ResponseEntity.status(200).body(SolverListRes.of(200, "정해진 조건에 알맞는 사람들을 찾아왔습니다.", list));
 	}
 }
