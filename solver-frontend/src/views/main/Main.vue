@@ -312,5 +312,5 @@ export default {
 </script>
 
 <style>
- @import './Main.css';
+ @import './main.css';
 </style>
