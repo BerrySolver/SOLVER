@@ -104,7 +104,7 @@ public class CommentController {
 	}
 	
 	/* 답변 목록 조회 */
-	@GetMapping("/{answerId}")
+	@GetMapping("/list/{answerId}")
 	@ApiOperation(value = "댓글 목록 조회", notes = "답변에 대한 댓글 목록 조회") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "답변에 대한 댓글 목록 조회 성공"),

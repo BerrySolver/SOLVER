@@ -108,7 +108,7 @@ public class AnswerController {
 	}
 	
 	/* 답변 목록 조회 */
-	@GetMapping("/{questionId}")
+	@GetMapping("list/{questionId}")
 	@ApiOperation(value = "답변 목록 조회", notes = "질문에 대한 답변 목록 조회") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "답변 목록 조회 성공"),

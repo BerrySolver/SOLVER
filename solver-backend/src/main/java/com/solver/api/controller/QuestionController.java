@@ -70,7 +70,7 @@ public class QuestionController {
 	KakaoUtil kakaoUtil;
 	
 	// 전체 질문 조회 API - 메인 카테고리, 서브 카테고리, 검색어, 난이도, 질문 상태(해결, 미해결, ...), 정렬 기준(최신순, ...)에 따라 질문 목록 조회
-	@GetMapping()
+	@GetMapping("/list")
 	@ApiOperation(value = "질문 목록", notes = "질문 목록을 조회하는 API") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "질문 목록을 성공적으로 조회했습니다."),
@@ -112,7 +112,7 @@ public class QuestionController {
 	}
 	
 	// 질문 상세조회 API
-	@GetMapping("/{questionId}")
+	@GetMapping("/{questionId}/info")
 	@ApiOperation(value = "질문 상세조회", notes = "질문 상세내용을 조회하는 API") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "질문을 성공적으로 조회했습니다."),
