@@ -2,8 +2,8 @@
   <div id="app">
     <NavBar/>
     <!-- 라우터 보여지는 부분 -->
-    <RouterView/>
-    <Footer/>
+    <RouterView class="router"/>
+    <Footer class="footer-router2"/>
   </div>
 </template>
 
@@ -28,18 +28,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  overflow-x: hidden;
 }
 
-#nav {
-  padding: 30px;
+.router {
+  padding-top: 6vh;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.footer-router2 {
+  bottom: 0;
 }
 </style>

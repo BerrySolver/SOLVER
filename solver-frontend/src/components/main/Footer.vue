@@ -2,10 +2,10 @@
   <div class="footer">
     <div class="row">
       <!-- 왼쪽 여백 col -->
-      <div class="col-2"></div>
+      <div class="col-3"></div>
 
       <!-- 중앙 footer 부분 -->
-      <div class="col-7 row">
+      <div class="footer-center col-6 row">
         <div class="col-3">
           <div class="footer-title"><RouterLink :to="{ name: 'Main' }" class="footer-router">솔버(SOLVER)</RouterLink></div>
           <div class="footer-text">
@@ -39,15 +39,14 @@
             <div>인기 솔버</div>
             <div>급상승 솔버</div>
           </div>
-
         </div>
       </div>
       <!-- 오른쪽 여백 col -->
       <div class="col-3">
-        <div class="team-info">
+        <!-- <div class="team-info">
           <div class="team-info-title">삼성SW청년아카데미 5기</div>
           <div>서울 캠퍼스 5반 7팀 - 나승호 당현아 박나영 조현민</div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -62,12 +61,16 @@ export default {
 <style>
 .footer {
   background-color: #84898C;
-  bottom: 0;
+  /* bottom: 0; */
   font-family: 'NanumSquare', sans-serif;
   height: 15rem;
-  position: relative;
+  /* position: absolute; */
   width: 100%;
 /* 세로로 줄일때 위치가 이동되는 현상 발생 */
+}
+
+.footer-center {
+  margin-left: 4vw;
 }
 
 .footer-router {
@@ -93,11 +96,11 @@ export default {
 }
 
 .team-info {
-  bottom: 20px;
+  bottom: 0;
   color: white;
   font-size: 12px;
   right: 20px;
-  position: absolute;
+  /* position: relative; */
   text-align: right;
 }
 
