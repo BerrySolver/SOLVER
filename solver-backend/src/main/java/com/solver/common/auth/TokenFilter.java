@@ -23,6 +23,9 @@ public class TokenFilter extends BasicAuthenticationFilter {
 			throws ServletException, IOException {
 		String header = request.getHeader("Authorization");
 		
+		System.out.println(request.getRequestURI());
+		System.out.println(header);
+		
 		if(header == null || !header.startsWith("Bearer")) {
 			filterChain.doFilter(request, response);
 			return;
@@ -30,6 +33,7 @@ public class TokenFilter extends BasicAuthenticationFilter {
 		
 		UsernamePasswordAuthenticationToken tokenAuthentication = new UsernamePasswordAuthenticationToken("Test",null, null);
 		
+		System.out.println(request.getRequestURI());
 		SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
 
         filterChain.doFilter(request, response);
