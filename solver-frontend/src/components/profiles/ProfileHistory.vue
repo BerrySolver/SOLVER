@@ -17,19 +17,9 @@
         <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>
         <div class="history-content">답변했던 질문 제목</div>
         <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
-        <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>
-        <div class="history-content">답변했던 질문 제목</div>
-        <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
-        <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>
-        <div class="history-content">답변했던 질문 제목</div>
-        <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
         <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>                
       </div>
     </div>
-
-    <!-- <div class="col-xl-11 history-content">
-      <div>답변했던 질문 제목</div>
-    </div>     -->
   </div>
 </template>
 

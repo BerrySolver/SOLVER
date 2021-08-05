@@ -106,14 +106,17 @@
         </div>
 
         <!-- 답변 목록 TAB -->
-        <div v-else>
+        <div v-if="'답변 목록' == selectedTab">
           <ProfileHistory/>
+        </div>
+
+        <div v-if="'질문 목록' == selectedTab">
+          <ProfileMyQuestions/>
         </div>
       </div>
     </div>
     
     
-    <ProfileMyQuestions/>
   </div>
 </template>
 
@@ -135,7 +138,7 @@ export default {
   data() {
     return {
       selectedTab: '',
-      tabs: ['SOLVE 기록', '답변 목록']
+      tabs: ['SOLVE 기록', '답변 목록', '질문 목록']
     }
   },
   methods: {
