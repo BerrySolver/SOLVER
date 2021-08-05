@@ -42,7 +42,7 @@ public class ProfileController {
 	ProfileService	profileService;
 	
 	/* 유저 프로필 정보 조회 */
-	@GetMapping("/{nickname}")
+	@GetMapping("/{nickname}/info")
 	@ApiOperation(value = "회원 프로필 정보", notes = "회원 마이페이지 기본 정보 조회") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "정보를 가져오기 성공"),

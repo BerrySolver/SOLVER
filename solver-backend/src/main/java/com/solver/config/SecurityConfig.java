@@ -1,3 +1,4 @@
+
 package com.solver.config;
 
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.solver.common.auth.TokenFilter;
 
 
 @Configuration
@@ -30,26 +33,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/static/**");
+		web.ignoring()
+		.antMatchers("/static/**")
+		.antMatchers("/api/v1/answers/list/**")
+		.antMatchers("/api/v1/profiles/*/info")
+		.antMatchers("/api/v1/profiles/*/tab")
+		.antMatchers("/api/v1/questions/list")
+		.antMatchers("/api/v1/questions/*/info")
+		.antMatchers("/api/v1/comments/list/**");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//        http
-//        .httpBasic().disable()
-//        .csrf().disable()
-//        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
-//        .and()
-//        .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService)) //HTTP 요청에 JWT 토큰 인증 필터를 거치도록 필터를 추가
-//        .authorizeRequests()
-//        .antMatchers("/api/v1/users/me").authenticated()       //인증이 필요한 URL과 필요하지 않은 URL에 대하여 설정
-//        	    .anyRequest().permitAll()
-//        .and().cors();
-
-
 		http.httpBasic().disable().csrf().disable().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 사용 하지않음
-				.and().authorizeRequests().anyRequest().permitAll().and().cors();
+				.and().addFilter(new TokenFilter(authenticationManager()))
+				.authorizeRequests()
+				.antMatchers("/api/v1/notifications/**").authenticated()
+				.antMatchers("/api/v1/answers/**").authenticated()
+				.antMatchers("/api/v1/comments/**").authenticated()
+				.antMatchers("/api/v1/conferences/**").authenticated()
+				.antMatchers("/api/v1/messages/**").authenticated()
+				.antMatchers("/api/v1/notifications/**").authenticated()
+				.antMatchers("/api/v1/profiles/**").authenticated()
+				.antMatchers("/api/v1/questions/**").authenticated()
+				.antMatchers("/api/v1/reports/**").authenticated()
+				.antMatchers("/api/v1/user").authenticated()
+				.anyRequest()
+				.permitAll()
+				.and()
+				.cors();
 
 	}
 
