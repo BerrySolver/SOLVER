@@ -27,14 +27,17 @@
           <li class="nav-item">
             <RouterLink :to="{ name: 'Solvers' }" class="nav-router">솔버</RouterLink>
           </li>
-          <li class="nav-item">
-            <RouterLink :to="{ name: 'Profile' }" class="nav-router">프로필</RouterLink>
-          </li>
           <li class="nav-item" v-if="!isLoggedIn">
             <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
           </li>
           <li class="nav-item" v-if="!isLoggedIn">
             <RouterLink :to="{ name: 'Signup1' }" class="nav-router">회원가입</RouterLink>
+          </li>
+          <li class="nav-item" v-if="isLoggedIn">
+            <RouterLink :to="{ name: 'Profile' }" class="nav-router">프로필</RouterLink>
+          </li>
+          <li class="nav-item" v-if="isLoggedIn">
+            <a @click="logout" class="nav-logout">로그아웃</a>
           </li>
         </ul>
       </div>
@@ -43,7 +46,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   name: "Navbar",
@@ -55,6 +58,11 @@ export default {
       return !(this.$route.name === 'Signup1' || this.$route.name === 'Signup2' || this.$route.name === 'Login');
     },
   },
+  methods:{
+    ...mapActions([
+      'logout',
+    ]),
+  }
 };
 </script>
 
@@ -80,5 +88,12 @@ export default {
   color: #84898C;
   margin-right: 20px;
   text-decoration: none;
+}
+
+.nav-logout {
+  color: #84898C;
+  margin-right: 20px;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>

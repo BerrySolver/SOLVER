@@ -32,7 +32,7 @@
               v-model="signup1Data.nickname"
               placeholder="닉네임"
               class="input-line full-width"
-              @input="checkNickname()"
+              @input="checkSameNickname()"
             />
             <div class="nickname-msg">{{ msg }} &nbsp;</div>
             <!-- <input type="password" v-model="signup1Data.password1" placeholder="비밀번호" class='input-line full-width'> -->
@@ -55,7 +55,7 @@
           }"
           style="text-decoration:none; color:#fff"
           >
-          <button class="ghost-round full-width" v-bind:disabled="isPossible == false">NEXT</button>
+          <button class="ghost-round" v-bind:disabled="isPossible == false">NEXT</button>
         
         </RouterLink>
       </div>
@@ -77,13 +77,12 @@ export default {
         password1: "",
         password2: "",
       },
-      msg: "",
+      msg: "닉네임을 입력해주세요",
       isPossible: false,
     };
   },
   methods: {
-    checkNickname(){
-      console.log("!!!")
+    checkSameNickname(){
       axios({
         url: API.URL + API.ROUTES.checkNickname,
         method: "get",
@@ -102,7 +101,8 @@ export default {
           this.msg = res.data.message;
           this.isPossible = false;
         }
-        console.log(this.isPossible)
+
+        this.chekcValidation();
         // console.log(this.signupInfo.Category)
       })
       .catch((e) => {
@@ -111,6 +111,24 @@ export default {
         console.log(this.isPossible)
         console.log(e);
       });
+    },
+    chekcValidation(){
+      const validNickname = this.signup1Data.nickname;
+      const regExp1 = /[!?@#$%^&*():;+-=~{}<>_[]|"',.]/g;
+      const regExp2 = /[ㄱ-ㅎㅏ-ㅣ]/g;
+
+      if(regExp1.test(validNickname)){
+        this.msg = "특수문자를 사용할 수 없습니다";
+        this.isPossible = false;
+      }
+      else if(regExp2.test(validNickname)){
+        this.msg = "자음/모음을 사용할 수 없습니다";
+        this.isPossible = false;
+      }
+      if(validNickname == ""){
+        this.msg = "닉네임을 입력해주세요";
+        this.isPossible = false;
+      }
     },
     isPossibleNickname(){
       return this.isPossible;
@@ -210,6 +228,7 @@ button:focus {
 
 .ghost-round {
   cursor: pointer;
+  width: 150px;
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: 25px;
@@ -219,8 +238,9 @@ button:focus {
   align-self: flex-end;
   font-size: 19px;
   font-size: 1.2rem;
-  font-weight: 300;
+  font-weight: 200;
   line-height: 2.5em;
+  padding: 0px;
   margin-top: auto;
   margin-bottom: 25px;
   -webkit-transition: all 0.2s ease;
