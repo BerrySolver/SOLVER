@@ -62,9 +62,12 @@ export default {
 <style>
 .footer {
   background-color: #84898C;
+  bottom: 0;
   font-family: 'NanumSquare', sans-serif;
-  height: 30vh;
+  height: 15rem;
   position: relative;
+  width: 100%;
+/* 세로로 줄일때 위치가 이동되는 현상 발생 */
 }
 
 .footer-router {

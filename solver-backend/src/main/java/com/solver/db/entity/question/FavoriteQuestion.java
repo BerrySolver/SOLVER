@@ -1,7 +1,6 @@
 package com.solver.db.entity.question;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -19,7 +18,7 @@ public class FavoriteQuestion extends BaseEntity{
 	@JoinColumn(name="userId")
 	private User user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="questionId")
 	private Question question;
 }

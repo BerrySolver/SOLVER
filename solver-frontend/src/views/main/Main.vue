@@ -156,7 +156,7 @@
 
         <div class="row">
           <!-- 왼쪽 여백용 col-2 -->
-          <div class="col-2z"></div>
+          <div class="col-2"></div>
 
           <!-- 중앙 카드용 col-8 -->
           <div class="row solver-row">
@@ -227,8 +227,11 @@
 
           <!-- 오른쪽 여백용 col-2 -->
           <div class="col-2"></div>
+          <br>
         </div>
 
+    
+    
     </div>
 
     <!-- 4번째 메인 페이지(모임) -->
@@ -309,5 +312,5 @@ export default {
 </script>
 
 <style>
- @import './main.css';
+ @import './Main.css';
 </style>
