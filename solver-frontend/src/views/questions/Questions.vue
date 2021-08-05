@@ -14,38 +14,35 @@
         <div class="question-category">
           <div><span class="info1">TODAY</span></div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">질문: </span> 1,326개
+            <span class="info2">질문: </span> 000개
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">답변: </span> 2,415개
+            <span class="info2">답변: </span> 000개
           </div>
           <div>
             <vs-collapse open-hover >
-              <vs-collapse-item not-arrow=true>
-                <div slot="header">
-                  Collapse item
+              <vs-collapse-item class="list-group-category" :not-arrow="true">
+                <div slot="header" @click="getAllQuestionList">
+                  전체
                 </div>
-                초중고
               </vs-collapse-item>
-              <vs-collapse-item not-arrow=true>
-                <div slot="header">
-                  Collapse item 2
+              <vs-collapse-item class="list-group-category" :not-arrow="true"
+                v-for="(mainCategory, idx) in categories" 
+                :key="idx" 
+                >
+                <div slot="header" @click="setMainCategory(mainCategory.code)">
+                  {{mainCategory.codeName}}
                 </div>
-                프로그래밍
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" 
+                      v-for="(subCategory, idx2) in mainCategory.category" 
+                      :key="idx2" 
+                      @click="setSubCategory(subCategory.subCategoryCode)">
+                      {{subCategory.subCategoryName}}
+                    </li>
+                  </ul>
               </vs-collapse-item>
-              <vs-collapse-item not-arrow=true>
-                <div slot="header">
-                  Collapse item 3
-                </div>
-                ㅇㅇㅇ
-              </vs-collapse-item>
-              <vs-collapse-item not-arrow=true>
-                <div slot="header">
-                  Collapse item 4
-                </div>
-                ㅇㅇㅇㅇ
-              </vs-collapse-item>
-              </vs-collapse>
+            </vs-collapse>
           </div>
         </div>
 
@@ -54,7 +51,12 @@
 
           </div>
           <div class="question-list">
-
+            <div 
+              v-for="(question, idx) in questionList" 
+              :key="idx"
+              >
+              {{question.title}}
+            </div>
           </div>
         </div>
       </div>
@@ -63,20 +65,82 @@
 </template>
 
 <script>
+import axios from 'axios'
+import API from '@/API.js'
+
 export default {
     name: 'Questions',
-    data: function() {
+    data() {
       return {
-
-        mainCategories: [{"초중고": "090", "인문": "091"}],
-        subCategories: [[{"국어": "910", "수학": "911"}], [{"문학": "920"}]]
+        categories: [],
+        request: {
+          mainCategory: null,
+          subCategory: null,
+          query: null,
+          difficulty: null,
+          type: "all",
+          mode: "releaseDesc",
+        },
+        questionList: []
       }
     },
     methods: {
-
+      getAllQuestionList: function () {
+        this.request.mainCategory = null
+        this.request.subCategory = null
+        this.request.query = null
+        this.request.difficulty = null
+        this.request.type = "all"
+        this.request.mode = "releaseDesc"
+        this.getQuestionList()
+      },
+      setMainCategory: function (code) {
+        this.request.mainCategory = code
+        this.request.subCategory = null
+        this.request.query = null
+        this.request.difficulty = null
+        this.request.type = "all"
+        this.request.mode = "releaseDesc"
+        this.getQuestionList()
+      },
+      setSubCategory: function (code) {
+        this.request.mainCategory = null
+        this.request.subCategory = code
+        this.request.query = null
+        this.request.difficulty = null
+        this.request.type = "all"
+        this.request.mode = "releaseDesc"
+        this.getQuestionList()
+      },
+      getQuestionList: function() {
+        console.log('실행')
+        axios({
+          url: API.URL + API.ROUTES.getQuestionList,
+          method: 'get',
+          params: this.request,
+        })
+        .then((res) => {
+          console.log('가져옴')
+          this.questionList = res.data.questionFormList
+          console.log(this.questionList)
+        })
+        .catch((err) => {
+          console.log(err.message)
+        })
+      }
     },
     created: function () {
-
+      axios({
+      url: API.URL + API.ROUTES.getCategory,
+      method: "get",
+      })
+      .then((res) => {
+        this.categories = res.data
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     }
 }
 </script>
@@ -92,6 +156,29 @@ export default {
     color: #0F4C81;
     font-weight: 700;
     font-size: 15px;
+  }
+
+  .list-group-category:hover {
+    color: #0F4C81;
+    animation: scale-up .1s forwards;
+  }
+
+  .list-group-item {
+    color: #84898C;
+  }
+
+  .list-group-item:hover {
+    color: #0F4C81;
+    animation: scale-up .1s forwards;
+  }
+
+  @keyframes scale-up {
+    0% {
+      font-size: 100%;
+    }
+    100% {
+      font-size: 120%;
+    }
   }
 
   .ment {

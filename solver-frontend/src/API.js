@@ -7,6 +7,10 @@ export default {
     logout: 'auth/logout',
 
     // 회원가입2 관련
-    signupdata: 'user/signup/data'
+    signupdata: 'user/signup/data',
+
+    // 질문/답변 페이지
+    getCategory: 'auth/category',
+    getQuestionList: 'questions/list'
   }
 }
