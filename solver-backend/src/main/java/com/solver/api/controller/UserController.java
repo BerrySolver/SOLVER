@@ -90,6 +90,7 @@ public class UserController {
 	public String getNickname(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
+		System.out.println(accessToken);
 		
 		String nickname = userService.getNickname(accessToken);
 		

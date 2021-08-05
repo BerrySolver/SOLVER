@@ -159,7 +159,8 @@ public class ProfileServiceImpl implements ProfileService{
 		profileRes.setLinkText(user.get().getLinkText());
 		profileRes.setProfileUrl(user.get().getProfileUrl());
 		
-		profileRes.setPossibleTime(user.get().getUserCalendar().getPossibleTime());
+		profileRes.setWeekdayTime(user.get().getUserCalendar().getWeekdayTime());
+		profileRes.setWeekendTime(user.get().getUserCalendar().getWeekendTime());
 		/* response 데이터 저장 끝 */
 		
 		return profileRes;
@@ -217,7 +218,8 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		UserCalendar userCalendar = userCalendarRepository.findByUserId(user.getId());
 		
-		userCalendar.setPossibleTime(profilePossibleTimePatchReq.getPossibleTime());
+		userCalendar.setWeekdayTime(profilePossibleTimePatchReq.getWeekdayTime());
+		userCalendar.setWeekendTime(profilePossibleTimePatchReq.getWeekendTime());
 		
 		userCalendarRepository.save(userCalendar);
 		

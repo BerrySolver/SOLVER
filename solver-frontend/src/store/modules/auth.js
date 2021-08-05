@@ -22,7 +22,6 @@ const mutations = {
   SET_POSSIBLE_DAY: (state, day) => {
     state.possibleDay = day;
   },
-
   SET_POSSIBLE_TIME: (state, time) => {
     state.possibleTime = time;
   },
@@ -40,6 +39,7 @@ const actions = {
       url: API.URL + API.ROUTES.signup,
       method: "post",
       data: credentials,
+      headers:{"Authorization": "Bearer " + localStorage.getItem("accessToken") },
     })
       .then((res) => {
         console.log(res);
@@ -51,6 +51,7 @@ const actions = {
   },
   tokenLogin({ commit }, token) {
     commit("SET_ACCESS_TOKEN", token);
+    localStorage.setItem("accessToken", token);
     //토큰으로 닉네임을 찾아오기
     axios({
       url: API.URL + API.ROUTES.getNickname,
@@ -61,10 +62,10 @@ const actions = {
         //닉네임을 찾고서 값이 없으면 회원가입으로, 있으면 isFirst 수정
         if (res.data == "") {
           router.push({ path: "/auth/signup1" });
+          console.log(this.getAccessToken);
         } else {
           console.log(res.data);
         }
-        localStorage.setItem("accessToken", res.data.accessToken);
         // commit("SET_ACCESS_TOKEN", res.data.accessToken);
         // router.push({ path: "/" });
       })
