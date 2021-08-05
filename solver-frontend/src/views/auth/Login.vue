@@ -16,12 +16,12 @@
     <div class='window'>
       <div class='content'>
         <div class='welcome'>SOLVER</div>
-        <div class='input-fields'>
-          <input type='text' v-model="credentials.loginId" placeholder='아이디' class='input-line full-width'>
-          <input type='password' v-model="credentials.password" placeholder='비밀번호' class='input-line full-width'>
-        </div>
         <div class="for-margin"></div>
-        <div><button class='ghost-round full-width' @click="login(credentials)">LOGIN</button></div>
+        <div>
+          <a href="https://kauth.kakao.com/oauth/authorize?client_id=4d0b843e88238ebf6614549fce8bff85&redirect_uri=http://localhost:8080/api/v1/auth/login&response_type=code">
+          <img src="@/assets/kakao_login_medium_wide.png" >
+          </a>
+        </div>
       </div>
     </div>
     
@@ -36,17 +36,24 @@ export default {
     name: 'Login',
     data() {
       return {
-        credentials: {
-          loginId: '',
-          password: '',
-        },
+        // credentials: {
+        //   loginId: '',
+        //   password: '',
+        // },
       }
     },
     methods: {
       ...mapActions([
         'login',
+        'tokenLogin',
       ]),
-    }
+    },
+    mounted() {
+      var token = document.location.href.split("accessToken=")[1];
+      if(token != null){
+        this.tokenLogin(token);
+      }
+    },
 }
 </script>
 
