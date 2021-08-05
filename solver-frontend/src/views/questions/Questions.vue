@@ -476,6 +476,7 @@ export default {
 
   .question-category {
     color: #84898C;
+    margin-bottom: 100px;
     text-align: left;
     width: 180px;
   }
@@ -493,7 +494,8 @@ export default {
   }
 
   .question-list {
-    margin-bottom: 50px;
+    border-bottom: 1px solid #B5C7D3;
+    margin-bottom: 100px;
   }
 
   .question-list-item {
