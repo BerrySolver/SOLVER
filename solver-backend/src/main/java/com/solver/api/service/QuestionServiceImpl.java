@@ -1,12 +1,14 @@
 package com.solver.api.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
 import com.solver.common.auth.KakaoUtil;
@@ -18,12 +20,16 @@ import com.solver.db.entity.user.User;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.question.QuestionRepositorySupport;
 import com.solver.db.repository.user.UserRepository;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
 	@Autowired
 	QuestionRepository questionRepository;
+	
+	@Autowired
+	QuestionRepositorySupport questionRepositorySupport;
 	
 	@Autowired
 	UserRepository userRepository;

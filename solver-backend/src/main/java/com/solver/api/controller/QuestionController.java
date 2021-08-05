@@ -10,6 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
 import com.solver.api.response.QuestionListRes;
@@ -34,7 +36,6 @@ import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.conference.ConferenceReservation;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
-import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -124,6 +125,7 @@ public class QuestionController {
 		if (question == null) {
 			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
 		}
+		System.out.println(question.get().getAnswer());
 		
 		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get()));
 	}
@@ -181,7 +183,7 @@ public class QuestionController {
 			return ResponseEntity.status(403).body(QuestionRes.of(403, "권한이 없습니다."));
 		}
 		
-		return ResponseEntity.status(200).body(QuestionRes.of(204, "질문을 성공적으로 삭제했습니다."));
+		return ResponseEntity.status(204).body(QuestionRes.of(204, "질문을 성공적으로 삭제했습니다."));
 	}
 	
 	// 내 질문 목록 API
