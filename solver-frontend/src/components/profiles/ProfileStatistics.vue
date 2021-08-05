@@ -13,6 +13,7 @@
           </div>
         </div>
         <br>
+
         <!-- 화상 시간 -->
         <div style="display:flex; align-items:center; ">
           <div class="small-box"></div>
@@ -20,6 +21,7 @@
           <span class="point-color-1 interval">총 122분</span>
         </div>
         <br>
+        
         <!-- 답변 통계 -->
         <div class="answer-statistics">
           <!-- answer-statistics의 firstchild(left) -->
