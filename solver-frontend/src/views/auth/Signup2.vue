@@ -41,30 +41,32 @@
       <div class="layout"></div>
       <div class="row">
         <ul class="col" style="color:#fff; list-style:none;padding-left:0px;">
-          1. 관심있는 분야를 골라주세요.
-          <div class="row">
+          <div>관심있는 분야를 골라주세요</div>
+          <div class="mt-5 row">
+            <div class="col-1"></div>
             <div class="col">
               <li v-for="(main, index) in mainCategory" v-bind:key="main.code" @click="changeIndex(index)">
-                {{ main.codeName }}
+                <button class=" mb-2 category-btn">{{ main.codeName }}</button>
               </li>
               
             </div>
             <div class="col">
               <li v-for="(sub) in subCategory" v-bind:key="sub.subCategoryCode" @click="selectCategory(sub.subCategoryCode)">
-                {{ sub.subCategoryName }}
+                <button v-bind:class="{selected:isSelectedCategory(sub.subCategoryCode)}" class="mb-2 category-btn">{{ sub.subCategoryName }}</button>
               </li>
             </div>
+            <div class="col-1"></div>
           </div>
         </ul>
         <div class="col" style="color:#fff">
-          2. 가능하신 요일과 시간을 골라주세요.
-          <div>
-            <button @click="selectWeekday()">평일</button>
-            <button @click="selectWeekend()">주말</button>
+          <div>화상 응답이 가능한 요일과 시간을 골라주세요</div>
+          <div class="m-4">
+            <button v-bind:class="{selected: !isWeekend}" class="time-btn" @click="selectWeekday()">평일</button>
+            <button v-bind:class="{selected: isWeekend}" class="time-btn" @click="selectWeekend()">주말</button>
           </div>
           <div class="col">
             <span v-for="(time, index) in timeList" v-bind:key="time">
-              <button @click="selectTime(time)">{{ time }}</button>
+              <button v-bind:class="{selected:isSelectedTime(time)}" class="mb-2 time-btn" @click="selectTime(time)">{{time}}</button>
               <div v-if="(index+1)%8 == 0"></div>
             </span>
           </div>
@@ -72,7 +74,7 @@
       </div>
       <div>
         <button
-          class="ghost-round"
+          class="ghost-round m-4"
           @click="clickSignupBtn($route.params.nickname)"
         >
           SOLVER 이용하기
@@ -126,7 +128,6 @@ export default {
       }
 
       this.selectedCode.push(code);
-      console.log(this.selectedCode);
     },
     selectWeekday(){
       this.isWeekend = false;
@@ -174,7 +175,33 @@ export default {
         "weekdayTime": weekdayTime,
         "weekendTime": weekendTime,
       });
-    }
+    },
+    isSelectedTime(time){
+      if(this.isWeekend){
+        if(this.weekend.includes(time)){
+          return true;
+        }
+        else{
+          return false;
+        }
+      }
+      else{
+        if(this.weekday.includes(time)){
+          return true;
+        }
+        else{
+          return false;
+        }
+      }
+
+    },
+    isSelectedCategory(code){
+      if(this.selectedCode.includes(code)){
+        return true;
+      }
+
+      return false;
+    },
   },
   computed: {
     ...mapState({
@@ -199,17 +226,13 @@ export default {
       method: "get",
     })
     .then((res) => {
-      // console.log(res.data);
-      // console.log(res.data[0].category);
       this.Category = res.data;
-      // console.log(this.signupInfo.Category)
     })
     .catch(() => {
       console.log();
     });
   },
   mounted() {
-    console.log(this.$route.params.nickname);
   },
 };
 </script>
@@ -219,6 +242,37 @@ export default {
   background: linear-gradient(135deg, #658dc6, #b5c7d3);
   height: 100vh;
   width: 100vw;
+}
+
+ .category-btn{
+  cursor: pointer;
+  width: 200px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65);
+  -webkit-align-self: flex-end;
+  -ms-flex-item-align: end;
+  align-self: flex-end;
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+ }
+
+.time-btn{
+  cursor: pointer;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65);
+  -webkit-align-self: flex-end;
+  -ms-flex-item-align: end;
+  align-self: flex-end;
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .content {
@@ -240,7 +294,7 @@ export default {
 }
 
 .nav-for-signup {
-  height: 20vh;
+  height: 10vh;
   color: #fff;
 }
 
@@ -263,6 +317,13 @@ input {
   margin-left: 10px;
   padding-left: 10px;
   padding-right: 10px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.selected{
+  background: rgba(255, 255, 255, 0.5);
+  color: #fff;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
