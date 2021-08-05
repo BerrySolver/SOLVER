@@ -30,14 +30,14 @@
                 v-for="(mainCategory, idx) in categories" 
                 :key="idx" 
                 >
-                <div slot="header" @click="setMainCategory(mainCategory.code)">
+                <div slot="header" @click="setMainCategory(mainCategory.codeName, mainCategory.code)">
                   {{mainCategory.codeName}}
                 </div>
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item" 
                       v-for="(subCategory, idx2) in mainCategory.category" 
                       :key="idx2" 
-                      @click="setSubCategory(subCategory.subCategoryCode)">
+                      @click="setSubCategory(mainCategory.codeName, subCategory.subCategoryName, subCategory.subCategoryCode)">
                       {{subCategory.subCategoryName}}
                     </li>
                   </ul>
@@ -48,7 +48,30 @@
 
         <div class="question-main">
           <div class="question-query">
-
+            <div>
+              <span>{{request.curCategory}}</span>
+            </div>
+            <div class="form-group">
+                <input class="form-field" type="text" v-model="request.query" placeholder="궁금한 모든 것을 검색해보세요!" @keypress.enter="setQuery">
+                <span @click="setQuery">검&nbsp;&nbsp;색</span>
+            </div>
+            <div class="selectDifficultyBox">
+              <vs-select
+                color='#0F4C81'
+                class="selectDifficulty"
+                v-model="request.difficulty"
+                width=150px
+                @change="setDifficulty"
+                >
+                <vs-select-item 
+                  v-for="(item,index) in difficultyOptions"
+                  :key="index" 
+                  :value="item.value" 
+                  :text="item.text"
+                  style="font-size: 15px;"
+                  />
+              </vs-select>
+            </div>
           </div>
           <div class="question-list">
             <div 
@@ -74,6 +97,7 @@ export default {
       return {
         categories: [],
         request: {
+          curCategory: "전체",
           mainCategory: null,
           subCategory: null,
           query: null,
@@ -81,7 +105,13 @@ export default {
           type: "all",
           mode: "releaseDesc",
         },
-        questionList: []
+        questionList: [],
+        difficultyOptions: [
+          {text:'난이도 전체', value: null},
+          {text:'난이도 상', value: 3},
+          {text:'난이도 중', value: 2},
+          {text:'난이도 하', value: 1},
+        ]
       }
     },
     methods: {
@@ -94,7 +124,8 @@ export default {
         this.request.mode = "releaseDesc"
         this.getQuestionList()
       },
-      setMainCategory: function (code) {
+      setMainCategory: function (mainCategoryName, code) {
+        this.request.curCategory = `${mainCategoryName}`
         this.request.mainCategory = code
         this.request.subCategory = null
         this.request.query = null
@@ -103,7 +134,8 @@ export default {
         this.request.mode = "releaseDesc"
         this.getQuestionList()
       },
-      setSubCategory: function (code) {
+      setSubCategory: function (mainCategoryName, subCategoryName, code) {
+        this.request.curCategory = `${mainCategoryName} / ${subCategoryName}`
         this.request.mainCategory = null
         this.request.subCategory = code
         this.request.query = null
@@ -112,15 +144,24 @@ export default {
         this.request.mode = "releaseDesc"
         this.getQuestionList()
       },
+      setQuery: function () {
+        this.request.difficulty = null
+        this.request.type = "all"
+        this.request.mode = "releaseDesc"
+        this.getQuestionList()
+      },
+      setDifficulty: function () {
+        this.request.type = "all"
+        this.request.mode = "releaseDesc"
+        this.getQuestionList()
+      },
       getQuestionList: function() {
-        console.log('실행')
         axios({
           url: API.URL + API.ROUTES.getQuestionList,
           method: 'get',
           params: this.request,
         })
         .then((res) => {
-          console.log('가져옴')
           this.questionList = res.data.questionFormList
           console.log(this.questionList)
         })
@@ -146,6 +187,98 @@ export default {
 </script>
 
 <style>
+  .form-field {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: 6px;
+  -webkit-appearance: none;
+  color: #84898C;
+  border: 1px solid #CDD9ED;
+  background: #fff;
+  transition: border 0.3s ease;
+  }
+
+  .form-field::-moz-placeholder {
+    color: #CBD1DC;
+  }
+
+  .form-field:-ms-input-placeholder {
+    color: #CBD1DC;
+  }
+
+  .form-field::placeholder {
+    color: #CBD1DC;
+  }
+
+  .form-field:focus {
+    outline: none;
+    border-color: #275EFE;
+  }
+
+  .form-group {
+    display: flex;
+    float: left;
+    width: 761px;
+  }
+
+  .form-group > span,
+  .form-group .form-field {
+    white-space: nowrap;
+    display: block;
+  }
+
+  .form-group > span:not(:first-child):not(:last-child),
+  .form-group .form-field:not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+
+  .form-group > span:first-child,
+  .form-group .form-field:first-child {
+    border-radius: 6px 0 0 6px;
+  }
+
+  .form-group > span:last-child,
+  .form-group .form-field:last-child {
+    border-radius: 0 6px 6px 0;
+  }
+
+  .form-group > span:not(:first-child),
+  .form-group .form-field:not(:first-child) {
+    margin-left: -1px;
+  }
+
+  .form-group .form-field {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .form-group > span {
+    text-align: center;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 25px;
+    width: 100px;
+    color: #99A3BA;
+    background: #EEF4FF;
+    border: 1px solid #CDD9ED;
+    transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+  }
+
+  .form-group:focus-within > span {
+    color: #fff;
+    background: #678EFE;
+    border-color: #275EFE;
+  }
+
   .info1 {
     color: #0F4C81;
     font-weight: 700;
@@ -227,7 +360,6 @@ export default {
 
   .question-list {
     border: 1px solid black;
-    height: 200px;
   }
 
   .question-main{
@@ -248,4 +380,15 @@ export default {
     justify-content: center;
   }
 
+  .selectDifficulty {
+    border-color: #CDD9ED;
+    color: #84898C;
+    font-size: 15px;
+    padding-top: 2px;
+  }
+
+  .selectDifficultyBox {
+    float: left;
+    margin-left: 5px;
+  }
 </style>
