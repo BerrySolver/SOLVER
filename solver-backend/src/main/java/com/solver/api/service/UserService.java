@@ -26,4 +26,6 @@ public interface UserService {
 	void deleteUser(String accessToken);
 
 	List<SolverRes> getUserList(SolverGetListReq solverGetListReq);
+
+	String getNickname(String accessToken);
 }

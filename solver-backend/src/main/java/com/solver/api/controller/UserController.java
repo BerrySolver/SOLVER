@@ -43,6 +43,7 @@ public class UserController {
 	public ResponseEntity<? extends BaseResponse> checkNickname(
 			@RequestParam @ApiParam(value="닉네임", required=true) String nickname)
 	{
+		System.out.println("check");
 		if(userService.checkNickname(nickname).orElse(null) == null)
 			return ResponseEntity.status(200).body(BaseResponse.of(200, "사용 가능한 닉네임입니다"));
 		
@@ -78,5 +79,21 @@ public class UserController {
 		userService.deleteUser(accessToken);
 
 		return ResponseEntity.status(201).body(BaseResponse.of(204, "회원 탈퇴가 완료되었습니다"));
+	}
+	
+	@GetMapping("/nickname")
+	@ApiOperation(value = "Test", notes = "111") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "222"),
+        @ApiResponse(code = 409, message = "333")
+    })
+	public String getNickname(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
+	{
+		
+		String nickname = userService.getNickname(accessToken);
+		
+
+		return nickname;
 	}
 }
