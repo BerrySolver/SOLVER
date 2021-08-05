@@ -14,4 +14,8 @@ public interface QuestionService {
 	Question updateQuestion(QuestionPatchReq questionPatchReq, Question question, String token);
 
 	void deleteQuestion(Question question, String token);
+
+	List<Question> getQuestionList(QuestionGetListReq questionGetListReq);
+
+	List<Question> getMyQuestionList(String token);
 }	

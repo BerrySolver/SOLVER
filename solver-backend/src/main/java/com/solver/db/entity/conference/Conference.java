@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.question.Question;
@@ -25,25 +27,31 @@ public class Conference extends BaseEntity{
 	private int maxCount;
 	private int count;
 	
-	@ManyToOne
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="questionId")
 	private Question question;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="questionUserId")
 	private User questionUser;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="answerUserId")
 	private User answerUser;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="type")
 	private Code code;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="conference", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ConferenceParticipant> conferenceParticipant;
 	
-	@OneToMany(mappedBy="conference", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	@JsonManagedReference
+	@OneToMany(mappedBy="conference", orphanRemoval = true)
 	private List<ConferenceLog> conferenceLog;
 }

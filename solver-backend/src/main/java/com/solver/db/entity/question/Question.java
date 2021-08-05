@@ -15,7 +15,6 @@ import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceReservation;
-import com.solver.db.entity.user.FavoriteUser;
 import com.solver.db.entity.user.User;
 
 import lombok.Getter;
@@ -48,9 +47,6 @@ public class Question extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="subCategory")
 	private Category subCategory;
-	
-	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<FavoriteUser> favoriteUser;
 	
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteQuestion> favoriteQuestion;

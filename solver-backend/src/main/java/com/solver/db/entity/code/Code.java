@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceLog;
@@ -32,6 +34,7 @@ public class Code {
 	private String codeName;
 	private boolean useYn;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="commonCode")
 	private CommonCode commonCode;

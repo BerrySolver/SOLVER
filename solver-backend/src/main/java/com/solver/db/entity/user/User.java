@@ -49,6 +49,9 @@ public class User extends BaseEntity{
 	@OneToMany(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<FavoriteUser> favoriteUser;
 	
+	@OneToMany(mappedBy="followingUser", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
+	private List<FavoriteUser> favoriteFollowingUser;
+	
 	@OneToOne(mappedBy="user", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private UserCalendar userCalendar;
 	
