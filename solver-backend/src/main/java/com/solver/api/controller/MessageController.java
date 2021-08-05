@@ -34,7 +34,7 @@ public class MessageController {
 	@ApiOperation(value = "보낸 메시지 목록", notes = "보낸 메시지 목록 조회") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "보낸 메시지 목록 조회 성공"),
-        @ApiResponse(code = 409, message = "보낸 메시지 목록 실패")
+        @ApiResponse(code = 409, message = "보낸 메시지 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getSendMessageList(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken
@@ -49,7 +49,7 @@ public class MessageController {
 	@ApiOperation(value = "받은 메시지 목록", notes = "받은 메시지 목록 조회") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "받은 메시지 목록 조회 성공"),
-        @ApiResponse(code = 409, message = "받은 메시지 목록 실패")
+        @ApiResponse(code = 409, message = "받은 메시지 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getRecieveMessageList(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken

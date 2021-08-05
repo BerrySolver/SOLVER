@@ -85,8 +85,8 @@ public class CommentController {
 	@PatchMapping("/{commentId}")
 	@ApiOperation(value = "댓글 수정", notes = "내 댓글 수정") 
     @ApiResponses({
-        @ApiResponse(code = 201, message = "답변 댓글 성공"),
-        @ApiResponse(code = 409, message = "답변 댓글 실패")
+        @ApiResponse(code = 201, message = "댓글 수정 성공"),
+        @ApiResponse(code = 409, message = "댓글 수정 실패")
     })
 	public ResponseEntity<? extends BaseResponse> updateComment(
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
@@ -98,9 +98,9 @@ public class CommentController {
 		boolean isSuccess = commentService.updateComment(accessToken, commentId, commentUpdatePatchReq);
 		
 		if(!isSuccess)
-			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 댓글 실패"));
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "댓글 수정 실패"));
 		
-		return ResponseEntity.status(204).body(BaseResponse.of(201, "답변 댓글 성공"));
+		return ResponseEntity.status(204).body(BaseResponse.of(201, "댓글 수정 성공"));
 	}
 	
 	/* 답변 목록 조회 */
