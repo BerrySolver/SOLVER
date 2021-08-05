@@ -12,6 +12,6 @@ export default {
     signupdata: 'user/signup/data',
 
     // 질문 받아오기
-    getquestionlist: 'questions'
+    getquestionlist: 'questions/list'
   }
 }
