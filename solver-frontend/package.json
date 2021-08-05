@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "material-icons": "^1.1.0",
+    "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuesax": "^3.12.2",
