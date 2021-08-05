@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 @ApiModel("ProfilePossibleTimePatchReq")
 public class ProfilePossibleTimePatchReq {
-	@ApiModelProperty(name="categoryList", example="10:00|20:00")
-	private String possibleTime;
+	@ApiModelProperty(name="weekdayTime", example="10:00|20:00")
+	private String weekdayTime;
+	
+	@ApiModelProperty(name="weekendTime", example="10:00|20:00")
+	private String weekendTime;
 }

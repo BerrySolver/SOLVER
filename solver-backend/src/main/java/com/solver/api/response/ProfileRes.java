@@ -41,7 +41,10 @@ public class ProfileRes extends BaseResponse{
 	private String profileUrl;
 	
 	@ApiModelProperty(name="화상 회의 시간")
-	private String possibleTime;
+	private String weekendTime;
+	
+	@ApiModelProperty(name="화상 회의 시간")
+	private String weekdayTime;
 	
 	public static ProfileRes of(int i, String string, ProfileRes userProfileRes) {
 		ProfileRes res = userProfileRes;

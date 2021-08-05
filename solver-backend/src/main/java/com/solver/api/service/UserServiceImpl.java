@@ -42,7 +42,7 @@ import com.solver.db.repository.user.UserRepositorySupport;
 /*userService랑 profileService 구분 짓는게 나을 듯*/
 @Service
 public class UserServiceImpl implements UserService {
-
+	
 	@Autowired
 	UserRepository userRepository;
 
@@ -114,9 +114,26 @@ public class UserServiceImpl implements UserService {
 			if (userRepository.findById(userId).orElse(null) == null)
 				break;
 		}
-
+		
 		user.setId(userId);
+		
+		String userCalendarId = "";
 
+		// 새로운 user테이블의 id생성
+		while (true) {
+			userCalendarId = RandomIdUtil.makeRandomId(13);
+
+			if (userCalendarRepository.findById(userCalendarId).orElse(null) == null)
+				break;
+		}
+
+		UserCalendar userCalendar = new UserCalendar();
+		
+		userCalendar.setId(userCalendarId);
+		userCalendar.setUser(user);
+
+		userCalendarRepository.save(userCalendar);
+		
 		return userRepository.save(user);
 	}
 
@@ -151,6 +168,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void singUp(UserRegistPostReq userRegistPostReq, String accessToken) {
 		String token = accessToken.split(" ")[1];
+		System.out.println(token);
 		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
 		// DB에 저장된 더미 데이터 가져옴
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
@@ -158,7 +176,7 @@ public class UserServiceImpl implements UserService {
 		Code code = new Code();
 
 		// 유저 타입 입력
-		code.setCode(userRegistPostReq.getType());
+		code.setCode("001");
 
 		if (user == null) {
 			return;
@@ -168,21 +186,37 @@ public class UserServiceImpl implements UserService {
 		user.setNickname(userRegistPostReq.getNickname());
 		user.setCode(code);
 
-		UserCalendar userCalendar = new UserCalendar();
-		String userCalendarId = "";
-
-		// 새로운 user테이블의 id생성
-		while (true) {
-			userCalendarId = RandomIdUtil.makeRandomId(13);
-
-			if (userCalendarRepository.findById(userCalendarId).orElse(null) == null)
-				break;
-		}
+		UserCalendar userCalendar = userCalendarRepository.findByUserId(user.getId());
 
 		// 유저 시간표 정보
-		userCalendar.setId(userCalendarId);
-		userCalendar.setPossibleTime(userRegistPostReq.getPossibleTime());
-		userCalendar.setUser(user);
+		userCalendar.setWeekdayTime(userRegistPostReq.getWeekdayTime());
+		userCalendar.setWeekendTime(userRegistPostReq.getWeekendTime());
+		
+		favoriteFieldRepository.deleteByUserId(user.getId());
+		
+		for (String categoryCode : userRegistPostReq.getSelectedCode()) {
+			FavoriteField favoriteField = new FavoriteField();
+			
+			String favoriteFieldId = "";
+
+			// 새로운 user테이블의 id생성
+			while (true) {
+				favoriteFieldId = RandomIdUtil.makeRandomId(13);
+
+				if (favoriteFieldRepository.findById(favoriteFieldId).orElse(null) == null)
+					break;
+			}
+			
+			Category category = new Category();
+			
+			category.setSubCategoryCode(categoryCode);
+			
+			favoriteField.setUser(user);
+			favoriteField.setId(favoriteFieldId);
+			favoriteField.setCategory(category);
+			
+			favoriteFieldRepository.save(favoriteField);
+		}
 
 		// DB에 저장
 		userRepository.save(user);

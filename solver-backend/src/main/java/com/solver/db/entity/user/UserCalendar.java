@@ -13,7 +13,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserCalendar extends BaseEntity{
-	String possibleTime;
+	String weekdayTime;
+	
+	String weekendTime;
 	
 	@OneToOne
 	@JoinColumn(name="userId")
