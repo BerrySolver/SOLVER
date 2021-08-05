@@ -265,7 +265,7 @@ export default {
   }, 
   created(){
     axios({
-      url: API.URL + API.ROUTES.getquestionlist,
+      url: API.URL + API.ROUTES.getQuestionList,
       method: 'get',
       params: {"mode": "likeDesc"}
     })
