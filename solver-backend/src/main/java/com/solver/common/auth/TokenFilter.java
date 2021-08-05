@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.transaction.annotation.Transactional;
 
 public class TokenFilter extends BasicAuthenticationFilter {
 
@@ -28,5 +27,13 @@ public class TokenFilter extends BasicAuthenticationFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
+		
+		UsernamePasswordAuthenticationToken tokenAuthentication = new UsernamePasswordAuthenticationToken("Test",null, null);
+		
+		SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
+
+        filterChain.doFilter(request, response);
+		
 	}
+	
 }
