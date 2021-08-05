@@ -1,18 +1,19 @@
 <template>
-    <div>
-        <h1>ProfileTimetable</h1>
-    </div>
+  <div>
+    <div class="calendar-title">
+      화상시간 캘린더
+    </div>    
+  </div>
 </template>
 
 <script>
 export default {
     name: 'ProfileTimetable',
-    data() {
-        
-    }
 }
 </script>
 
 <style>
-
+.calendar-title {
+  color: #658DC6;
+}
 </style>

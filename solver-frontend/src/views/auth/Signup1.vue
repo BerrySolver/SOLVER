@@ -1,60 +1,127 @@
 <template>
   <div class="background">
-
     <div class="nav-for-signup">
       <div class="row pt-3">
-        <div class="col-2"><RouterLink :to="{ name: 'Main' }" style="text-decoration:none; color:#fff">← 돌아가기</RouterLink></div>
+        <div class="col-2">
+          <RouterLink :to="{ name: 'Main' }" style="text-decoration:none; color:#fff"
+            >← 돌아가기</RouterLink
+          >
+        </div>
         <div class="col-5"></div>
-        <div class="col-5">이미 솔버이신가요?
-          <button class='ghost-button'><RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff">LOGIN</RouterLink></button>
+        <div class="col-5">
+          이미 솔버이신가요?
+          <button class="ghost-button">
+            <RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff"
+              >LOGIN</RouterLink
+            >
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="logo"> <img src="@/assets/logo.png" alt="logo" height="100px" /> </div>
+    <div class="logo"><img src="@/assets/logo.png" alt="logo" height="100px" /></div>
 
-    <div class='window'>
-      <div class='content'>
-        <div class='welcome'>SOLVER</div>
-        <div class='input-fields'>
-          <input type="text" v-model="signup1Data.loginId" placeholder="아이디" class='input-line full-width'>
-          <input type="text" v-model="signup1Data.nickname" placeholder="닉네임" class='input-line full-width'>
-          <input type="password" v-model="signup1Data.password1" placeholder="비밀번호" class='input-line full-width'>
-          <input type="password" v-model="signup1Data.password2" placeholder="비밀번호 확인" class='input-line full-width'>
+    <div class="window">
+      <div class="content">
+        <div class="welcome">SOLVER</div>
+        <div class="row">
+          <div class="input-fields">
+            <!-- <input type="text" v-model="signup1Data.loginId" placeholder="아이디" class='input-line full-width'> -->
+            <input
+              type="text"
+              v-model="signup1Data.nickname"
+              placeholder="닉네임"
+              class="input-line full-width"
+              @input="checkNickname()"
+            />
+            <div class="nickname-msg">{{ msg }} &nbsp;</div>
+            <!-- <input type="password" v-model="signup1Data.password1" placeholder="비밀번호" class='input-line full-width'> -->
+            <!-- <input type="password" v-model="signup1Data.password2" placeholder="비밀번호 확인" class='input-line full-width'> -->
+          </div>
+          <!-- <div class="col-4">
+            <button class="nickname-button" @click="checkNickname()">닉네임 중복 체크</button>
+          </div>
+          <div class="nickname-message" >{{ msg }} &nbsp;</div> -->
         </div>
         <div class="for-margin"></div>
-        <button class='ghost-round full-width'>
-          <RouterLink :to="{ name: 'Signup2', params: {loginId: signup1Data.loginId, nickname: signup1Data.nickname, password: signup1Data.password1} }" style="text-decoration:none; color:#fff">NEXT</RouterLink>
-        </button>
-        <!-- <div><button @click="onClick($event)" class='ghost-round full-width'>NEXT</button></div>  //원래 기능--> 
+        <RouterLink
+          :to="{
+            name: 'Signup2',
+            params: {
+              loginId: signup1Data.loginId,
+              nickname: signup1Data.nickname,
+              password: signup1Data.password1,
+            },
+          }"
+          style="text-decoration:none; color:#fff"
+          >
+          <button class="ghost-round full-width" v-bind:disabled="isPossible == false">NEXT</button>
+        
+        </RouterLink>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import API from "@/API.js";
 
 export default {
-    name: 'Signup1',
-    data() {
-      return {
-        signup1Data: {
-          loginId: '',
-          nickname: '',
-          password1: '',
-          password2: '',
+  name: "Signup1",
+  data() {
+    return {
+      signup1Data: {
+        loginId: "",
+        nickname: "",
+        password1: "",
+        password2: "",
+      },
+      msg: "",
+      isPossible: false,
+    };
+  },
+  methods: {
+    checkNickname(){
+      console.log("!!!")
+      axios({
+        url: API.URL + API.ROUTES.checkNickname,
+        method: "get",
+        params:{
+          "nickname": this.signup1Data.nickname
         }
-      }
+      })
+      .then((res) => {
+        // console.log(res.data);
+        // console.log(res.data[0].category);
+        if(res.data.statusCode == 200){
+          this.msg = res.data.message;
+          this.isPossible = true;
+        }
+        else{
+          this.msg = res.data.message;
+          this.isPossible = false;
+        }
+        console.log(this.isPossible)
+        // console.log(this.signupInfo.Category)
+      })
+      .catch((e) => {
+        this.msg = "이미 사용중인 닉네임입니다";
+        this.isPossible = false;
+        console.log(this.isPossible)
+        console.log(e);
+      });
     },
-
-}
-
+    isPossibleNickname(){
+      return this.isPossible;
+    }
+  },
+};
 </script>
 
 <style>
 .background {
-  background: linear-gradient(135deg, #658DC6, #b5c7d3);
+  background: linear-gradient(135deg, #658dc6, #b5c7d3);
   height: 100vh;
   width: 100vw;
 }
@@ -65,7 +132,27 @@ export default {
 }
 
 input {
-  border: none;   
+  border: none;
+}
+
+.nickname-msg{
+  font-size: 15px;
+}
+
+.nickname-button{
+  cursor: pointer;
+  font-size: 13px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65);
+  -webkit-align-self: flex-end;
+  -ms-flex-item-align: end;
+  align-self: flex-end;
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .ghost-button {
@@ -79,15 +166,15 @@ input {
   margin-left: 10px;
   padding-left: 10px;
   padding-right: 10px;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .ghost-button:hover {
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 button:focus {
@@ -98,7 +185,7 @@ button:focus {
   color: rgba(255, 255, 255, 0.65);
 }
 
-::-webkit-input-placeholder .input-line:focus +::input-placeholder {
+::-webkit-input-placeholder .input-line:focus + ::input-placeholder {
   color: #fff;
 }
 
@@ -106,20 +193,19 @@ button:focus {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 400;
   cursor: pointer;
-  transition: color .2s ease;
+  transition: color 0.2s ease;
 }
 
 .highlight:hover {
   color: #fff;
-  transition: color .2s ease;
+  transition: color 0.2s ease;
 }
-
 
 .input-line:focus {
   outline: none;
   border-color: #fff;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .ghost-round {
@@ -137,15 +223,15 @@ button:focus {
   line-height: 2.5em;
   margin-top: auto;
   margin-bottom: 25px;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .ghost-round:hover {
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .input-line {
@@ -160,8 +246,8 @@ button:focus {
   font-size: 19px;
   font-size: 1.2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.65);
-  -webkit-transition: all .2s ease;
-  transition: all .2s ease;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .full-width {
@@ -201,9 +287,9 @@ button:focus {
   text-align: center;
   margin-left: 35%;
   margin-right: 35%;
-}  
+}
 
-.for-margin{
+.for-margin {
   height: 5vh;
 }
 </style>

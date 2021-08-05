@@ -27,9 +27,9 @@
           <li class="nav-item">
             <RouterLink :to="{ name: 'Solvers' }" class="nav-router">솔버</RouterLink>
           </li>
-          <!-- <li class="nav-item m-2">
-            <RouterLink :to="{ name: 'Profile' }">프로필</RouterLink>
-          </li> -->
+          <li class="nav-item">
+            <RouterLink :to="{ name: 'Profile' }" class="nav-router">프로필</RouterLink>
+          </li>
           <li class="nav-item" v-if="!isLoggedIn">
             <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
           </li>
@@ -63,8 +63,10 @@ export default {
   align-items: center;
   font-family: 'NanumSquare', sans-serif;
   font-size: 15px;
+  height: 6vh;
   position: fixed;
   width: 100%;
+  z-index: 100;
 }
 
 .nav-logo {

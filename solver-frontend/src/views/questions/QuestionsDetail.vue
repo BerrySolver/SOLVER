@@ -1,5 +1,8 @@
 <template>
-  
+  <div>
+    <Answer/>
+    <AnswerCreate/>
+  </div>
 </template>
 
 <script>

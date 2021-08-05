@@ -1,5 +1,8 @@
 <template>
-  
+  <div>
+    <Comments/>
+    <CommentsCreate/>
+  </div>
 </template>
 
 <script>

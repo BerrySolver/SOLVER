@@ -3,23 +3,25 @@ package com.solver.api.response;
 import java.util.Date;
 
 import com.solver.common.model.BaseResponse;
-import com.solver.db.entity.Code;
-import com.solver.db.entity.Question;
-import com.solver.db.entity.User;
+import com.solver.db.entity.code.Category;
+import com.solver.db.entity.code.Code;
+import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+//질문 상세조회 시 반환하는 형태
 @Getter
 @Setter
 @ApiModel("QuestionResponse")
 public class QuestionRes extends BaseResponse{
-	@ApiModelProperty(name="유저 ID")
-	private String userId;
+	@ApiModelProperty(name="유저 닉네임")
+	private String nickname;
 	
-	@ApiModelProperty(name="질문 유형")
+	@ApiModelProperty(name="질문 상태")
 	private String type;
 	
 	@ApiModelProperty(name="질문 제목")
@@ -51,20 +53,26 @@ public class QuestionRes extends BaseResponse{
 	
 	public static QuestionRes of(Integer statusCode, String message, Question question) {
 		QuestionRes res = new QuestionRes();
+		
+		// 외래키 필드들은 객체를 넣어야 한다.
 		User user = new User();
-		Code code = new Code();
+		Code type = new Code();
+		Code mainCategory = new Code();
+		Category subCategory = new Category();
 		
 		user = question.getUser();
-		code = question.getCode();
+		type = question.getCode();
+		mainCategory = question.getMainCategory();
+		subCategory = question.getSubCategory();
 		
 		res.setStatusCode(statusCode);
 		res.setMessage(message);
-		res.setUserId(user.getId());
-//		res.setType(code.getCode());
+		res.setNickname(user.getNickname());
+		res.setType(type.getCodeName());
 		res.setTitle(question.getTitle());
 		res.setContent(question.getContent());
-//		res.setMainCategory(question.getMainCategroy());
-//		res.setSubCategory(question.getSubCategory());
+		res.setMainCategory(mainCategory.getCodeName());
+		res.setSubCategory(subCategory.getSubCategoryName());
 		res.setDifficulty(question.getDifficulty());
 		res.setRegDt(question.getRegDt());
 		res.setExpirationTime(question.getExpirationTime());

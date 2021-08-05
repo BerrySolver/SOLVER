@@ -1,26 +1,31 @@
 package com.solver.api.service;
 
+import java.util.List;
 import java.util.Optional;
 
-import com.solver.api.request.UserLoginPostReq;
+import com.solver.api.request.SolverGetListReq;
 import com.solver.api.request.UserRegistPostReq;
-import com.solver.api.request.UserUpdatePatchReq;
-import com.solver.db.entity.Auth;
-import com.solver.db.entity.User;
+import com.solver.api.response.SolverRes;
+import com.solver.common.model.OAuthToken;
+import com.solver.db.entity.user.Token;
+import com.solver.db.entity.user.User;
 
 public interface UserService {
-	void createUser(UserRegistPostReq userRegistPostReq);
-
 	Optional<User> checkNickname(String nickname);
-	Optional<User> checkLoginId(String loginID);
 
-	Optional<Auth> loginUser(UserLoginPostReq userLoginPostReq);
+	Optional<User> getUserByKakaoId(Long kakaoId);
 
-	String makeToken(User user);
+	User insertUser(Long kakaoId);
 
-	Optional<User> getUserInfoByLoginId(String loginId);
+	Token insertToken(OAuthToken oauthToken, Long kakaoId);
 
-	void deleteUser(String tokenNickname);
-	
-	void updateUser(UserUpdatePatchReq userUpdatePatchReq, String tokenNickname);
+	void deleteToken(String accessToken);
+
+	void singUp(UserRegistPostReq userRegistPostReq, String accessToken);
+
+	void deleteUser(String accessToken);
+
+	List<SolverRes> getUserList(SolverGetListReq solverGetListReq);
+
+	String getNickname(String accessToken);
 }

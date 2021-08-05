@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <NavBar/>
+    <NavBar id="navbar"/>
     <!-- 라우터 보여지는 부분 -->
-    <RouterView/>
-    <Footer/>
+    <RouterView id="router"/>
+    <Footer id="footer"/>
   </div>
 </template>
 
@@ -12,11 +12,11 @@ import NavBar from "@/components/main/NavBar"
 import Footer from "@/components/main/Footer"
 
 export default {
-    name: 'App',
-    components: {
-        NavBar,
-        Footer,
-    },
+  name: 'App',
+  components: {
+      NavBar,
+      Footer,
+  },
 }
 </script>
 
@@ -28,18 +28,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  overflow-x: hidden;
 }
 
-#nav {
-  padding: 30px;
+#router {
+  padding-top: 6vh;
+  min-width: 1190px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+#footer {
+  bottom: 0;
+  min-width: 1190px;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+#navbar {
+  min-width: 1190px;
 }
 </style>
