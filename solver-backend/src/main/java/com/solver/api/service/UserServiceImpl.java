@@ -189,6 +189,22 @@ public class UserServiceImpl implements UserService {
 		user.setCode(code);
 
 		UserCalendar userCalendar = userCalendarRepository.findByUserId(user.getId());
+		
+		if(userCalendar == null) {
+			userCalendar = new UserCalendar();
+			userCalendar.setUser(user);
+			
+			String userCalenderId = "";
+			
+			while(true) {
+				userCalenderId = RandomIdUtil.makeRandomId(13);
+				
+				if(userRepository.findById(userCalenderId).orElse(null) == null)
+					break;
+			}
+			
+			userCalendar.setId(userCalenderId);
+		}
 
 		// 유저 시간표 정보
 		userCalendar.setWeekdayTime(userRegistPostReq.getWeekdayTime());
