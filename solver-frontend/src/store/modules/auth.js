@@ -8,6 +8,7 @@ const state = {
   possibleTime: [],
   accessToken: "",
   isFirst: false,
+  userNickname: "",
 };
 
 const getters = {
@@ -32,6 +33,9 @@ const mutations = {
   SET_IS_FIRST: (state, isFirst) => {
     state.isFirst = isFirst;
   },
+  SET_USER_NICKNAME: (state, userNickname) => {
+    state.userNickname = userNickname;
+  }
 };
 
 const actions = {
@@ -64,6 +68,7 @@ const actions = {
         if (res.data == "") {
           router.push({ path: "/auth/signup1" });
         } else {
+          commit('SET_USER_NICKNAME', res.data)
           router.push({ path: "/" });
         }
       })
