@@ -168,6 +168,7 @@ export default {
         'setStateQuery'
       ]),
       getAllQuestionList: function () {
+        this.request.curCategory = '전체'
         this.request.mainCategory = null
         this.request.subCategory = null
         this.request.query = null
