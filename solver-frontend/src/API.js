@@ -11,7 +11,8 @@ export default {
     // 회원가입2 관련
     signupdata: 'user/signup/data',
 
-    // 질문 받아오기
-    getquestionlist: 'questions/list'
+    // 질문/답변 페이지
+    getCategory: 'auth/category',
+    getQuestionList: 'questions/list'
   }
 }

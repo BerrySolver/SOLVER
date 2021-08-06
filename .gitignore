@@ -10,3 +10,5 @@ solver-backend/.classpath
 solver-backend/.project
 solver-backend/build/
 solver-backend/src/main/generated/
+backend/src/main/resources/dist/
+solver-backend/src/main/resources/dist/

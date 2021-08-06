@@ -157,7 +157,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteToken(String accessToken) {
-		long id = kakaoUtil.getKakaoUserIdByToken(accessToken);
+		String token = accessToken.split(" ")[1];
+		
+		long id = kakaoUtil.getKakaoUserIdByToken(token);
 
 		Optional<User> user = userRepository.findByKakaoId(id);
 
@@ -168,7 +170,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void singUp(UserRegistPostReq userRegistPostReq, String accessToken) {
 		String token = accessToken.split(" ")[1];
-		System.out.println(token);
+
 		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
 		// DB에 저장된 더미 데이터 가져옴
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
@@ -187,6 +189,22 @@ public class UserServiceImpl implements UserService {
 		user.setCode(code);
 
 		UserCalendar userCalendar = userCalendarRepository.findByUserId(user.getId());
+		
+		if(userCalendar == null) {
+			userCalendar = new UserCalendar();
+			userCalendar.setUser(user);
+			
+			String userCalenderId = "";
+			
+			while(true) {
+				userCalenderId = RandomIdUtil.makeRandomId(13);
+				
+				if(userRepository.findById(userCalenderId).orElse(null) == null)
+					break;
+			}
+			
+			userCalendar.setId(userCalenderId);
+		}
 
 		// 유저 시간표 정보
 		userCalendar.setWeekdayTime(userRegistPostReq.getWeekdayTime());

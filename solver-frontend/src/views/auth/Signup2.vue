@@ -42,7 +42,8 @@
       <div class="row">
         <ul class="col" style="color:#fff; list-style:none;padding-left:0px;">
           <div>관심있는 분야를 골라주세요</div>
-          <div class="mt-5 row">
+          <div>( {{ selectedCode.length }} / 3 )</div>
+          <div class="mt-2 row">
             <div class="col-1"></div>
             <div class="col">
               <li v-for="(main, index) in mainCategory" v-bind:key="main.code" @click="changeIndex(index)">
@@ -338,15 +339,16 @@ input {
 .ghost-round {
   cursor: pointer;
   background: none;
+  width: 200px;
   border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: 25px;
   color: rgba(255, 255, 255, 0.65);
   -webkit-align-self: flex-end;
   -ms-flex-item-align: end;
   align-self: flex-end;
-  font-size: 19px;
+  font-size: 16px;
   font-size: 1.2rem;
-  font-weight: 300;
+  font-weight: 200;
   line-height: 2.5em;
   margin-top: auto;
   margin-bottom: 25px;

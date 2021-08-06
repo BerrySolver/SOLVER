@@ -13,6 +13,7 @@ const state = {
 const getters = {
   isLoggedIn: (state) => state.accessToken,
   isFirst: (state) => state.isFirst,
+  getAccessToken: (state) => state.accessToken,
 };
 
 const mutations = {
@@ -62,12 +63,9 @@ const actions = {
         //닉네임을 찾고서 값이 없으면 회원가입으로, 있으면 isFirst 수정
         if (res.data == "") {
           router.push({ path: "/auth/signup1" });
-          console.log(this.getAccessToken);
         } else {
-          console.log(res.data);
+          router.push({ path: "/" });
         }
-        // commit("SET_ACCESS_TOKEN", res.data.accessToken);
-        // router.push({ path: "/" });
       })
       .catch(() => {
         console.log();
@@ -75,13 +73,31 @@ const actions = {
   },
   login({ commit }) {
     axios({
-      url: API.ROUTES.login,
+      url: API.URL + API.ROUTES.login,
       method: "get",
+      headers: { Authorization: "Bearer "},
     })
       .then((res) => {
         console.log(res);
         localStorage.setItem("accessToken", res.data.accessToken);
         commit("SET_ACCESS_TOKEN", res.data.accessToken);
+        router.push({ path: "/" });
+      })
+      .catch(() => {
+        console.log();
+      });
+  },
+  logout({ commit }) {
+    console.log("!!!")
+    axios({
+      url: API.URL + API.ROUTES.logout,
+      method: "get",
+      headers: { Authorization: "Bearer " + this.getters.getAccessToken},
+    })
+      .then((res) => {
+        console.log(res);
+        localStorage.removeItem("accessToken");
+        commit("SET_ACCESS_TOKEN", "");
         router.push({ path: "/" });
       })
       .catch(() => {

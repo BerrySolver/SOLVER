@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import springfox.documentation.annotations.ApiIgnore;
 
 @CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
 methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
@@ -60,7 +62,6 @@ public class AuthController {
         @ApiResponse(code = 200, message = "로그인에 성공했습니다"),
         @ApiResponse(code = 409, message = "로그인에 실패했습니다")
     })
-//	public ResponseEntity<UserLoginRes> loginUser(String code) throws ParseException {
 	public ModelAndView loginUser(String code) throws ParseException {
 		//카카오 접근 토큰 받아오기
     	OAuthToken oauthToken = kakaoUtil.getKakaoToken(code);
@@ -104,7 +105,10 @@ public class AuthController {
     @ApiResponses({
         @ApiResponse(code = 200, message = "로그아웃에 성공했습니다")
     })
-	public ResponseEntity<BaseResponse> logoutUser(@RequestParam(value = "state") String accessToken){
+	public ResponseEntity<BaseResponse> logoutUser(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken
+			)
+	{
 		userService.deleteToken(accessToken);
 		
 		return ResponseEntity.status(200).body(BaseResponse.of(200, "로그아웃"));

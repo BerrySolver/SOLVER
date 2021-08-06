@@ -9,13 +9,12 @@
     <!-- profile-text_info section -->
     <div class="profile-info-section">
       <div class="nickname">
-        <div>나약하지 않은 나약이</div>
+        <div>{{ userProfileInfo.nickname }}</div>
       </div>
       <div style="color:#84898C; display:flex; align-items: center; justify-content:space-between;">
-        <div>@na_0_i</div>
+        <div>{{ userProfileInfo.introduction }}</div>
         <div class="social-url">
-          https://github.com/na0i<br>
-          https://www.instagram.com/na_0_i
+          {{ userProfileInfo.profileUrl }}
         </div>
       </div>
 
@@ -27,7 +26,12 @@
         <div>
           <div style="display:flex; align-items:center;">
             <span class="subheading">주 활동분야</span>
-            <span class="interval">프로그래밍  디자인  영어  일본어</span>
+            <span
+              v-for="field in fields"
+              :key="field.id"
+              class="interval">
+              {{ field }}
+            </span>
           </div>
           <br>
           <div class="in-group">
@@ -35,23 +39,31 @@
             <div class="subheading">소속한 모임</div>
             <!-- ingroup의 last child -->
             <div class="d-inline-block interval">
-              <div>나당연합군</div>
-              <div>기억을 쌓다 SSATCHA</div> 
-              <div>나당연합군</div>                       
+              <div
+              v-for="group in groups"
+              :key="group.id">
+              {{ group }}  
+              </div>            
             </div>
           </div>          
         </div>
         <!-- profile-info의 last child(right) -->
         <div>
-          <div style="display:flex; align-items:center;">
-            <span class="subheading">베리 포인트</span>
-            <span class="interval">누적</span>
-            <span class="point-color-1">3200P</span>
+          <div class="berry-point">
+            <!-- ingroup의 first child -->
+            <div class="subheading">베리 포인트</div>
+            <!-- ingroup의 last child -->
+            <div class="d-inline-block interval">
+              <span>잔여</span>
+              <span class="interval point-color-1">{{ userProfileInfo.point }}P</span><br>
+              <span>누적</span>
+              <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
+            </div>
           </div>
           <br>
           <div style="display:flex; align-items:center;">
             <span class="subheading">베리 점수</span>
-            <span class="interval point-color-1">6.5</span>
+            <span class="interval point-color-1">{{ userProfileInfo.evaluationScore }}</span>
             <span>/&nbsp;&nbsp;&nbsp;10</span>
           </div>
           <div>
@@ -72,7 +84,8 @@
 
     <!-- calendar section -->
     <div>
-      <ProfileTimetable/>
+      <ProfileTimetable
+      v-bind:userProfileInfo="userProfileInfo"/>
     </div>
 
     <!-- tab-component section -->
@@ -106,6 +119,8 @@
 </template>
 
 <script>
+import {mapActions, mapState} from 'vuex'
+
 import ProfileTimetable from "@/components/profiles/ProfileTimetable"
 import ProfileStatistics from "@/components/profiles/ProfileStatistics"
 import ProfileHistory from "@/components/profiles/ProfileHistory"
@@ -127,14 +142,28 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['profileSetting']),
     onClickTab(tab) {
       this.selectedTab = tab
       console.log(this.selectedTab)
     },
   },
+  computed: {
+    ...mapState({
+      userNickname: state => state.auth.userNickname,
+      userProfileInfo: state => state.profiles.userProfileInfo,
+    }),
+    fields() {
+      return this.userProfileInfo.favoriteFieldNameList
+    },
+    groups() {
+      return this.userProfileInfo.groupNameList
+    },
+  },
   created() {
-    this.selectedTab = this.tabs[0]
-  }
+    this.selectedTab = this.tabs[0],
+    this.profileSetting(this.userNickname)
+  },
 }
 </script>
 

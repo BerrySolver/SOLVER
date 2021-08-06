@@ -1,3 +1,19 @@
+.berry-point {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+}
+
+.berry-point > div:first-child {
+  height: 100%;
+  float: 3;
+}
+
+.berry-point > div:last-child {
+  height: 100%;
+  float: 3;
+}
+
 .gap-box {
   width: 10px;
 }
