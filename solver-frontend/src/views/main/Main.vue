@@ -19,7 +19,7 @@
           </div>
 
           <div class="form__group">
-            <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />
+            <input type="input" class="form__field" v-model="query" placeholder="Name" name="name" id='name' required @keypress.enter="setStateQuery(query)"/>
             <label for="name" class="form__label">
               <span>질문을 검색해보세요!</span>
             </label>
@@ -254,6 +254,7 @@
 <script>
 import axios from 'axios'
 import API from '@/API.js'
+import {mapActions} from 'vuex'
 
 export default {
   name: 'Main',
@@ -261,8 +262,14 @@ export default {
     return{
       mainQuestion1 : [],
       mainQuestion2 : [],
+      query: null,
     }
   }, 
+  methods: {
+    ...mapActions([
+        'setStateQuery'
+      ]),
+  },
   created(){
     axios({
       url: API.URL + API.ROUTES.getQuestionList,

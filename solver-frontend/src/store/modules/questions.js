@@ -1,16 +1,25 @@
 // import axios from 'axios'
 // import API from '@/API.js'
+import router from "@/router";
 
 const state = {
-}
-
-const getters = {
+  query: null,
 }
 
 const mutations = {
+  SET_QUERY: (state, query) => {
+    state.query = query;
+  },
 }
 
 const actions = {
+  setStateQuery({commit}, query) {
+    commit('SET_QUERY', query)
+    router.push({ path: "/questions" });
+  }
+}
+
+const getters = {
 }
 
 export default {
