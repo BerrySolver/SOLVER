@@ -271,6 +271,7 @@ public class UserServiceImpl implements UserService {
 			
 			SolverRes solverRes = new SolverRes();			
 			String profileUrl = user.getProfileUrl();
+			String introduction = user.getIntroduction();
 			
 			// 닉네임(UNIQUE)을 기준으로 기본 정보 부르기
 			Optional<User> oneUser = userRepository.findByNickname(nickname);
@@ -329,6 +330,7 @@ public class UserServiceImpl implements UserService {
 				solverRes.setPoint(point);
 				solverRes.setNickname(nickname);
 				solverRes.setEvaluationScore(evaluationScore);
+				solverRes.setIntroduction(introduction);
 				
 				if(flag) {
 					solverRes.setFavoriteFieldNameList(favoriteFieldNameList);
