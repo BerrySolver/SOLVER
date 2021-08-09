@@ -1,13 +1,17 @@
 <template>
-  
+  <div>
+
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'CommentsCreate',
-    data() {
+  name: 'CommentsCreate',
+  data() {
+      return {
         
-    }
+      }
+  }
 }
 </script>
 
