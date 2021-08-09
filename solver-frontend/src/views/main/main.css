@@ -48,9 +48,9 @@
 .form__group {
   position: relative;
   padding-top: 15px;
-  margin-top: 10vh;
+  margin-top: 100px;
   /* margin-left: 2vw; */
-  width: 100%;
+  width: 800px;
 }
 
 .form__field {
@@ -134,8 +134,7 @@
 }
 
 .main-logo {
-  max-width: 100vh;
-  max-height: 60vh;
+  width: 500px;
 }
 
 .month-solver {

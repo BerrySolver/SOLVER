@@ -3,12 +3,10 @@
   <div class="main">
 
     <!-- 1번째 메인 페이지(SOLVER 설명) -->
-    <div class="container main-container">
-      <div class="row row-left align-items-center">
-        
-        <div class="col-1"></div>
+    <div class="main-container">
+      <div class="align-items-center">
 
-        <div class="row col-5">
+        <div class="">
           <div class="title">솔버(SOLVER)</div>
           <div class="introduction">
             무언가를 꾸준히 해서 얻는 성과는 달콤한 법이죠.
@@ -27,7 +25,7 @@
           </div>
         </div>
 
-        <div class="col-5">
+        <div class="">
           <img src="@/assets/logo.png" alt="main-logo" class="main-logo">
         </div>
 
