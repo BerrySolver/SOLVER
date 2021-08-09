@@ -50,7 +50,7 @@
   padding-top: 15px;
   margin-top: 100px;
   /* margin-left: 2vw; */
-  width: 800px;
+  width: 600px;
 }
 
 .form__field {
@@ -125,16 +125,27 @@
   z-index: 2;
 }
 
-.main {
-  font-family: 'NanumSquare', sans-serif;
+.main-container {
+  display: flex;
+  height: 880px;
+  justify-content: center;
 }
 
-.main-container {
-  height: 94vh;
+.main-container-contents {
+  padding-top: 150px;
+  width: 1190px;
+}
+
+.main-info {
+  float: left;
+  padding: 150px 0 0 25px;
+  width: 700px;
 }
 
 .main-logo {
-  width: 500px;
+  margin-left: 100px;
+  padding: 0 25px 0 0;
+  width: 390px;
 }
 
 .month-solver {

@@ -4,9 +4,8 @@
 
     <!-- 1번째 메인 페이지(SOLVER 설명) -->
     <div class="main-container">
-      <div class="align-items-center">
-
-        <div class="">
+      <div class="main-container-contents">
+        <div class="main-info">
           <div class="title">솔버(SOLVER)</div>
           <div class="introduction">
             무언가를 꾸준히 해서 얻는 성과는 달콤한 법이죠.
@@ -21,17 +20,11 @@
             <label for="name" class="form__label">
               <span>질문을 검색해보세요!</span>
             </label>
-            <!-- <img src="@/assets/main-search.png" alt="main-search-button" width="25px"> -->
           </div>
         </div>
 
-        <div class="">
-          <img src="@/assets/logo.png" alt="main-logo" class="main-logo">
-        </div>
-
-
+        <img src="@/assets/main-logo.png" alt="main-logo" class="main-logo">
       </div>
-
     </div>
 
     <!-- 2번째 메인 페이지(현재 인기 질문) -->
