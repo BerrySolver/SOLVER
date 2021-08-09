@@ -31,9 +31,9 @@
           </div>
           <!-- answer-statistics의 lastchild(right) -->
           <div class="text-left">
-            <div>되나</div>
-            <div>되냐고</div>
-            <div>되냐고</div>
+            <div>카테고리1</div>
+            <div>카테고리2</div>
+            <div>카테고리3</div>
           </div>
         </div>
       </div>

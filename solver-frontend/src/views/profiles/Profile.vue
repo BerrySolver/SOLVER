@@ -106,7 +106,7 @@
 
       <!-- 답변 목록 TAB -->
       <div v-if="1 == selectedTab">
-        <ProfileHistory class="m-top-3"/>
+        <ProfileHistory :myAnswersTab="selectedTab" class="m-top-3"/>
       </div>
 
       <!-- 질문 목록 TAB -->

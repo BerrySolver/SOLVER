@@ -23,10 +23,7 @@
   </div>
 </template>
 
-<script>
-export default {
-    name: 'ProfileHistory',
-}
+z
 </script>
 
 <style>

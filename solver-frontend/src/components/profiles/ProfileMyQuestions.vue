@@ -47,6 +47,7 @@ export default {
 }
 
 .my-question-title:hover {
-  color: #658DC6
+  background-color: #0F4C81;
+  color: white;
 }
 </style>
