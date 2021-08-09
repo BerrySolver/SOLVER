@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="answer">
+
+    </div>
     <Comments/>
     <CommentsCreate/>
   </div>
@@ -25,5 +28,7 @@ export default {
 </script>
 
 <style>
-
+  .answer {
+    height: 200px;
+  }
 </style>
