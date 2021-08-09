@@ -3,14 +3,13 @@
     <div class="statistics-info">
       <!-- statistics-info의 firstchild(left) -->
       <div>
-        <!-- {{ userStatistics }} -->
         <!-- 답변 개수 -->
         <div style="display:flex; align-items:center; ">
           <div class="small-box"></div>
           <span class="subheading interval">답변 개수</span>
           <div style="display:inline-block">
-            <span class="interval">TEXT</span> <span class="point-color-1">20</span><span>개</span><br>
-            <span class="interval">VIDEO</span> <span class="point-color-1">05</span><span>개</span>
+            <span class="interval">TEXT</span> <span class="point-color-1">{{ userStatistics.textAnswerCount }}</span><span>개</span><br>
+            <span class="interval">VIDEO</span> <span class="point-color-1">{{ userStatistics.videoAnswerCount }}</span><span>개</span>
           </div>
         </div>
         <br>
@@ -19,7 +18,7 @@
         <div style="display:flex; align-items:center; ">
           <div class="small-box"></div>
           <span class="subheading interval">화상 시간</span>
-          <span class="point-color-1 interval">총 122분</span>
+          <span class="point-color-1 interval">총 {{ userStatistics.videoAnswerTime }}분</span>
         </div>
         <br>
         
@@ -32,9 +31,9 @@
           </div>
           <!-- answer-statistics의 lastchild(right) -->
           <div class="text-left">
-            <div>되나</div>
-            <div>되냐고</div>
-            <div>되냐고</div>
+            <div>카테고리1</div>
+            <div>카테고리2</div>
+            <div>카테고리3</div>
           </div>
         </div>
       </div>
@@ -58,15 +57,15 @@ import {mapActions, mapState} from 'vuex'
 
 export default {
   name: 'ProfileStatistics',
-  // methods: {
-  //   ...mapActions(['statisticSetting']),
-  // },
-  // computed: {
-  //   ...mapState({
-  //     userNickname: state => state.auth.userNickname,
-  //     userStatistics: state => state.profiles.userStatistics,
-  //   })
-  // },
+  methods: {
+    ...mapActions(['statisticSetting']),
+  },
+  computed: {
+    ...mapState({
+      userNickname: state => state.auth.userNickname,
+      userStatistics: state => state.profiles.userStatistics,
+    })
+  },
   // created() {
   //   this.statisticSetting(this.userNickname)
   // }

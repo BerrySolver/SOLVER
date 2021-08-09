@@ -6,20 +6,11 @@
       <span class="subheading interval">질문 목록</span>
     </div>
     <!-- 질문한 질문 제목들 -->
-    <div>
-      <!-- {{ myQuestions }} -->
-      <div class="history-content">답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
-      <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>                
+    <div
+      v-for="question in myQuestions.myQuestionList"
+      :key="question.id"
+      class="my-question-title">
+      - {{ question.title }} [ {{ question.answerCount }} ]
     </div>
   </div>
 </template>
@@ -29,22 +20,34 @@ import {mapActions, mapState} from 'vuex'
 
 export default {
   name: 'ProfileMyQuestions',
-  // methods: {
-  //   ...mapActions(['myQuestionsSetting'])
-  // },
-  // computed: {
-  // ...mapState({
-  //   myQuestions: state => state.profiles.myQuestions,
-  //   userNickname: state => state.auth.userNickname,
-  //   }),
-  // },
-  // created() {
-  //   console.log(this.userNickname)
-  //   this.myQuestionsSetting(this.userNickname)
-  // }
+  props: ['myQuestionsTab'],
+  methods: {
+    ...mapActions(['myQuestionsSetting'])
+  },
+  computed: {
+  ...mapState({
+    userNickname: state => state.auth.userNickname,
+    myQuestions: state => state.profiles.myQuestions,
+    }),
+  },
+  created() {
+    const myQuestionsTabInfo = {
+      userNickname: this.userNickname,
+      tabnum: this.myQuestionsTab,
+    }
+    this.myQuestionsSetting(myQuestionsTabInfo)
+  }
 }
 </script>
 
 <style>
+.my-question-title {
+  text-align: left;
+  margin: 10px;
+}
 
+.my-question-title:hover {
+  background-color: #0F4C81;
+  color: white;
+}
 </style>
