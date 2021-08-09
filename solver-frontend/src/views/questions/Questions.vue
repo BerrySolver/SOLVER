@@ -169,7 +169,8 @@ export default {
     },
     methods: {
       ...mapActions([
-        'setStateQuery'
+        'setStateQuery',
+        'goQuestionDetail'
       ]),
       getAllQuestionList: function () {
         this.request.curCategory = '전체'
@@ -251,14 +252,6 @@ export default {
         console.log('ㅇㅇ')
         this.$router.push({
           name: 'QuestionsCreate'
-        })
-      },
-      goQuestionDetail(questionId) {
-        this.$router.push({
-          name: 'QuestionsDetail',
-          params: {
-            questionId: questionId
-          }
         })
       },
       humanize: function (now, date) {
