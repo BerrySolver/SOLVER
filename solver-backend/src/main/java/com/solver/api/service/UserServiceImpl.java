@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
 		userCalendar.setId(userCalendarId);
 		userCalendar.setUser(user);
 
-		userCalendarRepository.save(userCalendar);
+//		userCalendarRepository.save(userCalendar);
 		
 		return userRepository.save(user);
 	}
