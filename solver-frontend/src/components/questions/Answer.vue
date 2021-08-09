@@ -11,14 +11,16 @@ import CommentsCreate from "@/components/questions/CommentsCreate"
 
 
 export default {
-    name: 'Answer',
-    components: {
-        Comments,
-        CommentsCreate,
-    },
-    data() {
-        
+  name: 'Answer',
+  components: {
+    Comments,
+    CommentsCreate,
+  },
+  data() {
+    return {
+      
     }
+  }
 }
 </script>
 

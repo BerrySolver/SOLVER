@@ -86,7 +86,7 @@
               <span style="margin: 0 30px 0 30px;">|</span>
               <span class="question-mode-item" :style="{color: modeColor[2]}" @click="setMode(2)">좋아요순</span>
             </div>
-            <div class="question-create-btn">
+            <div class="question-create-btn" @click="goQuestionCreate">
               글쓰기
             </div>
           </div>
@@ -95,6 +95,7 @@
               class="question-list-item"
               v-for="(question, idx) in questionList" 
               :key="idx"
+              @click="goQuestionDetail(question.questionId)"
               >
               <div class="d-flex" style="margin-bottom: 10px;">
                 <div style="background-color: #B5C7D3; border-radius: 6px; height: 27px; margin-top: 1px; width: 27px;">
@@ -246,7 +247,21 @@ export default {
           console.log(err.message)
         })
       },
-        humanize: function (now, date) {
+      goQuestionCreate: function () {
+        console.log('ㅇㅇ')
+        this.$router.push({
+          name: 'QuestionsCreate'
+        })
+      },
+      goQuestionDetail(questionId) {
+        this.$router.push({
+          name: 'QuestionsDetail',
+          params: {
+            questionId: questionId
+          }
+        })
+      },
+      humanize: function (now, date) {
         const moment = require('moment')
         const dateData = new Date(date)
         let r = now - dateData

@@ -1,13 +1,17 @@
 <template>
-  
+  <div>
+
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'Comment',
-    data() {
-        
+  name: 'Comment',
+  data() {
+    return {
+      
     }
+  }
 }
 </script>
 
