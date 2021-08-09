@@ -32,6 +32,9 @@ public class SolverRes extends BaseResponse {
 	@ApiModelProperty(name = "팔로워 수")
 	private int follower;
 
+	@ApiModelProperty(name = "유저 소개")
+	private String introduction;
+
 	public static SolverRes of(Integer statusCode, String message, SolverRes solverRes) {
 		SolverRes res = solverRes;
 		res.setStatusCode(statusCode);
