@@ -86,6 +86,9 @@
               <span style="margin: 0 30px 0 30px;">|</span>
               <span class="question-mode-item" :style="{color: modeColor[2]}" @click="setMode(2)">좋아요순</span>
             </div>
+            <div class="question-create-btn">
+              글쓰기
+            </div>
           </div>
           <div class="question-list">
             <div 
@@ -98,11 +101,11 @@
                   <span style="color: white; font-size: 20px; font-weight: 700;">{{question.difficulty}}</span>
                 </div>
                 <div>
-                  <span style="font-size: 20px; font-weight: 700; margin-left: 10px;">{{question.title}}</span>
+                  <span class="question-list-item-title" style="font-size: 20px; font-weight: 700; margin-left: 10px;">{{question.title}}</span>
                 </div>
               </div>
               <div class="d-flex">
-                <span style="font-size: 17px; margin-bottom: 30px;">{{question.content}}</span>
+                <span class="question-list-item-content" style="font-size: 17px; margin-bottom: 30px;">{{question.content}}</span>
               </div>
               <div class="d-flex justify-content-between">
                 <div class="d-flex">
@@ -498,6 +501,22 @@ export default {
     margin-top: 20px;
   }
 
+  .question-create-btn {
+    background-color: #0F4C81;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    float: left;
+    margin-left: 520px;
+    margin-top: 45px;
+    width: 100px;
+  }
+
+  .question-create-btn:hover {
+    background-color: #658DC6;
+    transition: 0.4s;
+  }
+
   .question-header {
     background-color: #658DC6;
     display: flex;
@@ -512,8 +531,27 @@ export default {
 
   .question-list-item {
     border-top: 1px solid #B5C7D3;
+    cursor: pointer;
     padding: 15px 15px 15px 15px;
   }
+
+  .question-list-item-content {
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; 
+    display: -webkit-box;
+    text-align: left;
+    overflow: hidden;
+  }
+
+  .question-list-item-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    width: 850px;
+    text-align: left;
+  }
+
 
   .question-list-item .material-icons {
     font-size: 21px;
@@ -522,6 +560,11 @@ export default {
 
   .question-list-item .count {
     font-size: 16px;
+  }
+
+  .question-list-item:hover {
+    background-color: #f3f3f3;
+    transition: color 0.2s;
   }
 
   .question-main{
