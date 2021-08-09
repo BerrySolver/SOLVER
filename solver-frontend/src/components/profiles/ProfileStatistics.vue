@@ -3,6 +3,7 @@
     <div class="statistics-info">
       <!-- statistics-info의 firstchild(left) -->
       <div>
+        <!-- {{ userStatistics }} -->
         <!-- 답변 개수 -->
         <div style="display:flex; align-items:center; ">
           <div class="small-box"></div>
@@ -57,17 +58,18 @@ import {mapActions, mapState} from 'vuex'
 
 export default {
   name: 'ProfileStatistics',
-  methods: {
-    ...mapActions(['statisticSetting']),
-  },
-  computed: {
-    ...mapState({
-      userNickname: state => state.auth.userNickname,
-    })
-  },
-  created() {
-    this.statisticSetting(this.userNickname)
-  }
+  // methods: {
+  //   ...mapActions(['statisticSetting']),
+  // },
+  // computed: {
+  //   ...mapState({
+  //     userNickname: state => state.auth.userNickname,
+  //     userStatistics: state => state.profiles.userStatistics,
+  //   })
+  // },
+  // created() {
+  //   this.statisticSetting(this.userNickname)
+  // }
 }
 </script>
 

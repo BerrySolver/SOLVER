@@ -24,11 +24,11 @@ export default {
 <style>
 #app {
   font-family: 'NanumSquare', sans-serif;
+  transform: skew(-0.001deg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  overflow-x: hidden;
 }
 
 #router {

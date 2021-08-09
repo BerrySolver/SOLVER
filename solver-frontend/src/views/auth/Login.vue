@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Login",
@@ -46,7 +46,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login", "tokenLogin"]),
+    ...mapActions(["login", "tokenLogin", "profileSetting"]),
+  },
+  computed: {
+    ...mapState({
+      userNickname: (state) => state.auth.userNickname,
+    }),
   },
   mounted() {
     // var too = document.location.href.
@@ -56,6 +61,9 @@ export default {
     if (token != null) {
       this.tokenLogin(token);
     }
+  },
+  destroyed() {
+    this.profileSetting(this.userNickname);
   },
 };
 </script>

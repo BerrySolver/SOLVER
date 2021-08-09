@@ -84,8 +84,9 @@
 
     <!-- calendar section -->
     <div>
-      <ProfileTimetable
-      v-bind:userProfileInfo="userProfileInfo"/>
+      <ProfileTimetable 
+      v-bind:weekdayTime="userProfileInfo.weekdayTime"
+      :weekendTime="userProfileInfo.weekendTime"/>
     </div>
 
     <!-- tab-component section -->
@@ -93,7 +94,7 @@
       <!-- TAB_BAR 선택 -->
       <ul class="tab-ul">
         <li v-for="tab in tabs" v-bind:key="tab.id" v-on:click="onClickTab(tab)" class="tab-li multi-button">
-          <button class="tab-btn">{{ tab }}</button>
+          <button class="tab-btn">{{ tab.tabName }}</button>
         </li>
       </ul>
       <hr class="line">
@@ -138,14 +139,17 @@ export default {
   data() {
     return {
       selectedTab: '',
-      tabs: ['SOLVE 기록', '답변 목록', '질문 목록']
+      tabs: [
+        {tabNum: 0, tabName: 'SOLVE 기록'},
+        {tabNum: 1, tabName: '답변 목록'},
+        {tabNum: 2, tabName: '질문 목록'},
+      ]
     }
   },
   methods: {
     ...mapActions(['profileSetting']),
     onClickTab(tab) {
-      this.selectedTab = tab
-      console.log(this.selectedTab)
+      this.selectedTab = tab.tabName
     },
   },
   computed: {
@@ -161,8 +165,9 @@ export default {
     },
   },
   created() {
-    this.selectedTab = this.tabs[0],
-    this.profileSetting(this.userNickname)
+    this.selectedTab = this.tabs[0].tabName,
+    console.log(this.tabs[0].tabNum)
+    // this.profileSetting(this.userNickname)
   },
 }
 </script>

@@ -48,7 +48,7 @@ const routes = [
   // questions
   { path: '/questions',  name: 'Questions', component: Questions }, // 질문 목록
   { path: '/questions/create',  name: 'QuestionsCreate', component: QuestionsCreate }, // 질문 작성
-  { path: '/:question_id',  name: 'QuestionsDetail', component: QuestionsDetail },
+  { path: '/questions/:question_id',  name: 'QuestionsDetail', component: QuestionsDetail },
 
   // notifications
   { path: '/notifications',  name: 'Notifications', component: Notifications },
