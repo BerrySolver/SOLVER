@@ -93,7 +93,6 @@ const actions = {
       });
   },
   logout({ commit }) {
-    console.log("!!!")
     axios({
       url: API.URL + API.ROUTES.logout,
       method: "get",

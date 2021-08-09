@@ -7,6 +7,7 @@
     </div>
     <!-- 질문한 질문 제목들 -->
     <div>
+      <!-- {{ myQuestions }} -->
       <div class="history-content">답변했던 질문 제목</div>
       <div class="history-content">답변했던 질문 제목 답변했던 질문 제목 답변했던 질문 제목</div>
       <div class="history-content">답변했던 질문 제목 답변했던 질문 제목</div>
@@ -24,8 +25,23 @@
 </template>
 
 <script>
+import {mapActions, mapState} from 'vuex'
+
 export default {
-    name: 'ProfileMyQuestions',
+  name: 'ProfileMyQuestions',
+  // methods: {
+  //   ...mapActions(['myQuestionsSetting'])
+  // },
+  // computed: {
+  // ...mapState({
+  //   myQuestions: state => state.profiles.myQuestions,
+  //   userNickname: state => state.auth.userNickname,
+  //   }),
+  // },
+  // created() {
+  //   console.log(this.userNickname)
+  //   this.myQuestionsSetting(this.userNickname)
+  // }
 }
 </script>
 

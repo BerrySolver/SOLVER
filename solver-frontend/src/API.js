@@ -13,6 +13,6 @@ export default {
 
     // 질문/답변 페이지
     getCategory: 'auth/category',
-    getQuestionList: 'questions/list'
+    getQuestionList: 'questions/list',
   }
 }
