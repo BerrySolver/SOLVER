@@ -3,12 +3,15 @@ package com.solver.api.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.CommentCreatePostReq;
 import com.solver.api.request.CommentUpdatePatchReq;
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.comment.Comment;
@@ -33,10 +36,18 @@ public class CommentServiceImpl implements CommentService{
 	KakaoUtil kakaoUtil;
 
 	@Override
-	public void createComment(String accessToken, CommentCreatePostReq commentCreatePostReq, String answerId) {
+	public void createComment(String accessToken, CommentCreatePostReq commentCreatePostReq, String answerId, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		
@@ -66,11 +77,19 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public boolean deleteComment(String accessToken, String commentId) {
+	public boolean deleteComment(String accessToken, String commentId, HttpServletResponse response) {
 		//작성자인지 확인
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		
@@ -92,11 +111,19 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public boolean updateComment(String accessToken, String commentId, CommentUpdatePatchReq commentUpdatePatchReq) {
+	public boolean updateComment(String accessToken, String commentId, CommentUpdatePatchReq commentUpdatePatchReq, HttpServletResponse response) {
 		//작성자인지 확인
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		

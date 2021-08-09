@@ -3,12 +3,15 @@ package com.solver.api.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.AnswerCreatePostReq;
 import com.solver.api.request.AnswerUpdatePatchReq;
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.code.Code;
@@ -30,10 +33,18 @@ public class AnswerServiceImpl implements AnswerService{
 	KakaoUtil kakaoUtil;
 
 	@Override
-	public void createAnswer(String accessToken, AnswerCreatePostReq answerCreatePostReq, String questionId) {
+	public void createAnswer(String accessToken, AnswerCreatePostReq answerCreatePostReq, String questionId, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		
@@ -66,11 +77,19 @@ public class AnswerServiceImpl implements AnswerService{
 	}
 
 	@Override
-	public boolean deleteAnswer(String accessToken, String answerId) {
+	public boolean deleteAnswer(String accessToken, String answerId, HttpServletResponse response) {
 		//작성자인지 확인
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		
@@ -92,11 +111,19 @@ public class AnswerServiceImpl implements AnswerService{
 	}
 
 	@Override
-	public boolean updateAnswer(String accessToken, String answerId, AnswerUpdatePatchReq answerUpdatePatchReq) {
+	public boolean updateAnswer(String accessToken, String answerId, AnswerUpdatePatchReq answerUpdatePatchReq, HttpServletResponse response) {
 		//작성자인지 확인
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		

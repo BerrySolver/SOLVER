@@ -1,5 +1,7 @@
 package com.solver.api.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -56,10 +58,11 @@ public class UserController {
         @ApiResponse(code = 409, message = "회원 가입에 실패했습니다")
     })
 	public ResponseEntity<? extends BaseResponse> signUp(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@RequestBody @ApiParam(value="회원 가입 정보", required=true) UserRegistPostReq userRegistPostReq)
 	{
-		userService.singUp(userRegistPostReq, accessToken);
+		userService.singUp(userRegistPostReq, accessToken, response);
 
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "회원 가입에 성공했습니다"));
 	}
@@ -72,9 +75,10 @@ public class UserController {
         @ApiResponse(code = 409, message = "회원 탈퇴에 실패하였습니다")
     })
 	public ResponseEntity<? extends BaseResponse> deleteUser(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
-		userService.deleteUser(accessToken);
+		userService.deleteUser(accessToken, response);
 
 		return ResponseEntity.status(201).body(BaseResponse.of(204, "회원 탈퇴가 완료되었습니다"));
 	}
@@ -86,11 +90,12 @@ public class UserController {
         @ApiResponse(code = 409, message = "333")
     })
 	public String getNickname(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		System.out.println(accessToken);
 		
-		String nickname = userService.getNickname(accessToken);
+		String nickname = userService.getNickname(accessToken, response);
 		
 
 		return nickname;

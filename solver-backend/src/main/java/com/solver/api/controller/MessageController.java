@@ -1,5 +1,7 @@
 package com.solver.api.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,10 +37,11 @@ public class MessageController {
         @ApiResponse(code = 409, message = "보낸 메시지 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getSendMessageList(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken
 			)
 	{
-		MessageListRes messageListRes = messageService.getSendMessageList(accessToken);
+		MessageListRes messageListRes = messageService.getSendMessageList(accessToken, response);
 		
 		return ResponseEntity.status(messageListRes.getStatusCode()).body(messageListRes);
 	}
@@ -50,10 +53,11 @@ public class MessageController {
         @ApiResponse(code = 409, message = "받은 메시지 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getRecieveMessageList(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken
 			)
 	{
-		MessageListRes messageListRes = messageService.getReceiveMessageList(accessToken);
+		MessageListRes messageListRes = messageService.getReceiveMessageList(accessToken, response);
 		
 		return ResponseEntity.status(messageListRes.getStatusCode()).body(messageListRes);
 	}

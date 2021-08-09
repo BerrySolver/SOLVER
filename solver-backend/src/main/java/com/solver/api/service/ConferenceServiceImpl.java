@@ -2,10 +2,13 @@ package com.solver.api.service;
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.conference.Conference;
@@ -35,10 +38,18 @@ public class ConferenceServiceImpl implements ConferenceService{
 	ConferenceLogRepository conferenceLogRepository;
 
 	@Override
-	public int updateConference(String accessToken, String conferenceId) {
+	public int updateConference(String accessToken, String conferenceId, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		
@@ -68,13 +79,21 @@ public class ConferenceServiceImpl implements ConferenceService{
 	}
 
 	@Override
-	public int goOutConference(String accessToken, String conferenceId) {
+	public int goOutConference(String accessToken, String conferenceId, HttpServletResponse response) {
 		/* 회의 주관자인 경우의 예외처리가 필요할까? */
 		
 		
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		
@@ -118,11 +137,19 @@ public class ConferenceServiceImpl implements ConferenceService{
 	}
 
 	@Override
-	public int deleteConference(String accessToken, String conferenceId) {
+	public int deleteConference(String accessToken, String conferenceId, HttpServletResponse response) {
 		/* 회의 주관자인 경우의 예외처리가 필요할까? */
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		

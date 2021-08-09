@@ -3,10 +3,13 @@ package com.solver.api.service;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.conference.ConferenceReservation;
 import com.solver.db.entity.question.Question;
@@ -31,8 +34,18 @@ public class ConferenceReservationServiceImpl implements ConferenceReservationSe
 	KakaoUtil kakaoUtil;
 
 	@Override
-	public ConferenceReservation createConferenceReservation(String token, Question question) {
-		User user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token)).orElse(null);
+	public ConferenceReservation createConferenceReservation(String token, Question question, HttpServletResponse response) {
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 
 		// 유저 인증에서 오류가 있는 경우
 		if (user == null) {
@@ -62,8 +75,18 @@ public class ConferenceReservationServiceImpl implements ConferenceReservationSe
 	}
 
 	@Override
-	public void deleteConferenceReservation(String token, Question question) {
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+	public void deleteConferenceReservation(String token, Question question, HttpServletResponse response) {
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		
 		Optional<ConferenceReservation> conferenceReservation = conferenceReservationRepository.findByUserIdAndQuestionId(user.get().getId(), question.getId());
 		

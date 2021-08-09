@@ -2,11 +2,14 @@ package com.solver.api.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.response.NotificationListRes;
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.user.Notification;
 import com.solver.db.entity.user.User;
@@ -26,10 +29,18 @@ public class NotificationServiceImpl implements NotificationService{
 	NotificationRepository notificationRepository;
 
 	@Override
-	public NotificationListRes getAllNotificationList(String accessToken) {
+	public NotificationListRes getAllNotificationList(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		
@@ -50,10 +61,18 @@ public class NotificationServiceImpl implements NotificationService{
 	}
 
 	@Override
-	public NotificationListRes getVideoNotificationList(String accessToken) {
+	public NotificationListRes getVideoNotificationList(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		

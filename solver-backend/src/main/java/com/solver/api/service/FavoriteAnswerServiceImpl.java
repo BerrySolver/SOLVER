@@ -1,9 +1,12 @@
 package com.solver.api.service;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.FavoriteAnswer;
@@ -28,10 +31,18 @@ public class FavoriteAnswerServiceImpl implements FavoriteAnswerService {
 	KakaoUtil kakaoUtil;
 
 	@Override
-	public int createFavoriteAnswer(String accessToken, String answerId) {
+	public int createFavoriteAnswer(String accessToken, String answerId, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 
@@ -72,10 +83,18 @@ public class FavoriteAnswerServiceImpl implements FavoriteAnswerService {
 	}
 
 	@Override
-	public int deleteFavoriteAnswer(String accessToken, String answerId) {
+	public int deleteFavoriteAnswer(String accessToken, String answerId, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 
