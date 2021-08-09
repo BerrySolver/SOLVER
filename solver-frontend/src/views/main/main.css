@@ -1,47 +1,54 @@
 /* 이달의 질문 CARD */
-.card {
-  border: none;
-  margin: 0.5vw;
-}
-
-.card-body {
-  padding: 0.5rem;
+.card-question-body {
+  padding: 10px;
 }
 
 .card-content{
-  min-height: 100px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; 
+  display: -webkit-box;
+  height: 40px;
+  margin-bottom: 60px;
+  overflow: hidden;
 }
 
-.card-ctg {
-  color: white;
-  font-weight: 300;
+.card-grid {
+  display: flex;
+  flex-flow: row wrap;
+  margin-left: 200px;
 }
 
-.card-group :hover {
-  color: #B5C7D3;
+.card-item {
+  border: none;
+  color: #84898C;
+  margin: 0 20px 40px 0;
+  max-width: 310px;
+  min-width: 310px;
+  cursor: pointer;
+}
+
+.card-item:hover {
+  background-color: #f3f3f3;
   transition: color 0.2s;
 }
 
-.card-header {
-  background-color: #658DC6;
-  /* background-image: linear-gradient(315deg, #658DC6 0%, #0F4C81 90%); */
-  opacity: 80%;
-  padding: 0.3rem;
+.card-text {
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 2px;
+  text-align: left;
 }
-
 
 .card-title {
-  font-size: 1rem;
+  border-bottom: solid 4px #658DC6;
+  color: black;
+  font-size: 17px;
   font-weight: 600;
+  overflow: hidden;
+  padding: 5px;
   text-align: left;
-}
-
-.card-text {
-  color: #84898C;
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-top: 0.15rem;
-  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* MAIN 1번째 페이지 검색창 */
@@ -49,7 +56,6 @@
   position: relative;
   padding-top: 15px;
   margin-top: 100px;
-  /* margin-left: 2vw; */
   width: 600px;
 }
 
@@ -104,14 +110,18 @@
   box-shadow: none;
 }
 
+.group-container {
+  display: flex;
+  height: 800px;
+  justify-content: center;
+}
 
-.group {
-  background-color: white;
-  height: 90vh;
+.group-container-contents {
+  width: 1190px;
 }
 
 .group-title {
-  margin-top: 20vh;
+  margin-top: 190px;
   text-align: right;
   padding: 0;
 }
@@ -150,36 +160,31 @@
 
 .month-solver {
   background-color: #658DC6;
-  height: 100%;
+  height: 750px;
+}
+
+.month-solver-text {
+  margin-top: 40px;
+  margin-bottom: 10px;
 }
 
 .popular-question {
   background-color: white;
-  height: 80vh;
+  display: flex;
+  height: 600px;
+  justify-content: center;
 }
 
-.row-left {
-  margin-left: 5vw;
-}
-
-.search-input {
-  margin-top: 1%;
-  width: 65%;
+.popular-question-contents {
+  max-width: 1190px;
+  min-width: 1190px;
 }
 
 .semi-title {
-  margin-left: 5vw;
+  float: left;
   font-weight: 800;
-  font-size: 3vh;
-}
-
-.slogan {
-  font-size: 17px;
-  vertical-align: middle;
-}
-
-.slogan-center {
-  font-weight: 700;
+  font-size: 30px;
+  text-align: left;
 }
 
 .small-logo {
@@ -189,13 +194,13 @@
 .solver-card-img {
   border-radius: 100%;
   height: 100px;
-  margin-bottom: 1vh;
+  margin-bottom: 15px;
   width: 100px;
 }
 
 .solver-card-content {
   color: white;
-  margin-top: 5vh;
+  margin-top: 50px;
   position: relative;
   z-index: 2;
 }
@@ -204,7 +209,7 @@
   color: white;
   font-size: 50px;
   font-weight: 700;
-  margin-left: 2vw;
+  margin-left: 40px;
   position: absolute;
   opacity: 50%;
   z-index: 1;
@@ -212,16 +217,19 @@
 
 .solver-intro {
   color: white;
+  font-size: 16px;
   font-weight: 200;
 }
 
 .solver-title {
   color: white;
+  font-size: 25px;
   font-weight: 700;
+  margin-bottom: 0px;
 }
 
 .solver-row {
-  margin-top: 5vh;
+  margin-top: 50px;
 }
 
 .title {
@@ -240,40 +248,40 @@
 
 .data-card {
   display: block;
-  width: 25vw;
-  height: 38vh;
+  width: 200px;
+  height: 350px;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 0.5em;
+  border-radius: 7px;
   text-decoration: none;
-  margin: 0.5em;
-  padding: 2em 2em;
+  margin: 10px;
+  padding: 30px 30px;
   box-shadow: 0 1.5em 2.5em -0.5em rgba(0, 0, 0, 0.1);
   transition: transform 0.45s ease, background 0.45s ease;
 }
 .data-card h3 {
   color: #2E3C40;
-  font-size: 1.5em;
+  font-size: 24px;
   font-weight: 600;
   line-height: 1;
-  padding-bottom: 0.3em;
+  padding-bottom: 7px;
   border-bottom: 2px solid #0F4C81;
   transition: color 0.45s ease, border 0.45s ease;
 }
 .data-card h4 {
   color: #B5C7D3;
   text-transform: uppercase;
-  font-size: 0.9em;
+  font-size: 14px;
   font-weight: 600;
   transition: color 0.45s ease;
 }
 .data-card p {
   opacity: 0;
   color: #FFFFFF;
-  font-size: 0.75em;
+  font-size: 12px;
   font-weight: 400;
   line-height: 1.8;
-  margin: 0 0 1.25em;
+  margin: 0 0 15px;
   transform: translateY(-1em);
   transition: opacity 0.45s ease, transform 0.5s ease;
 }
@@ -281,13 +289,13 @@
   bottom: 0;
   color: #0F4C81;
   display: block;
-  font-size: 0.9em;
+  font-size: 14px;
   font-weight: 500;
-  margin-bottom: 3vh;
+  margin-bottom: 20px;
   transition: color 0.45s ease;
 }
 .data-card .link-text svg {
-  margin-left: 0.5em;
+  margin-left: 5px;
   transition: transform 0.6s ease;
 }
 .data-card .link-text svg path {
