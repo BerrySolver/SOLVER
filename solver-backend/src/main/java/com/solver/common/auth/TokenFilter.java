@@ -12,7 +12,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.solver.common.model.TokenResponse;
+
 public class TokenFilter extends BasicAuthenticationFilter {
+	
+	KakaoUtil kakaoUtil;
 
 	public TokenFilter(AuthenticationManager authenticationManager) {
 		super(authenticationManager);
@@ -31,6 +35,7 @@ public class TokenFilter extends BasicAuthenticationFilter {
 			return;
 		}
 		
+		response.setHeader("test", "token");
 		UsernamePasswordAuthenticationToken tokenAuthentication = new UsernamePasswordAuthenticationToken("Test",null, null);
 		
 		System.out.println(request.getRequestURI());

@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.response.SolverRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.OAuthToken;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Evaluation;
 import com.solver.db.entity.code.Category;
@@ -156,10 +159,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteToken(String accessToken) {
+	public void deleteToken(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		long id = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		long id = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 
 		Optional<User> user = userRepository.findByKakaoId(id);
 
@@ -168,10 +179,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void singUp(UserRegistPostReq userRegistPostReq, String accessToken) {
+	public void singUp(UserRegistPostReq userRegistPostReq, String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
+		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
 
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
 		// DB에 저장된 더미 데이터 가져옴
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 
@@ -242,10 +262,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(String accessToken) {
+	public void deleteUser(String accessToken, HttpServletResponse response) {
 		// accessToken부분
 		String token = accessToken.split(" ")[1];
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 
 		userRepository.deleteByKakaoId(kakaoId);
 	}
@@ -376,10 +405,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String getNickname(String accessToken) {
+	public String getNickname(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		

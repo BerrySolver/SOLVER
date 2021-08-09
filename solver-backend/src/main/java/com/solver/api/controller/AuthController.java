@@ -3,6 +3,8 @@ package com.solver.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -82,7 +84,8 @@ public class AuthController {
 		
 		Token createdToken = userService.insertToken(oauthToken, kakaoId);
 		
-		UserLoginRes userLoginRes = UserLoginRes.builder().accessToken(oauthToken.getAccess_token()).build();
+		UserLoginRes userLoginRes = new UserLoginRes();
+		userLoginRes.setAccessToken(oauthToken.getAccess_token());
 		userLoginRes.setMessage("로그인에 성공했습니다");
 		userLoginRes.setStatusCode(200);
 		
@@ -103,10 +106,11 @@ public class AuthController {
         @ApiResponse(code = 200, message = "로그아웃에 성공했습니다")
     })
 	public ResponseEntity<BaseResponse> logoutUser(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken
 			)
 	{
-		userService.deleteToken(accessToken);
+		userService.deleteToken(accessToken, response);
 		
 		return ResponseEntity.status(200).body(BaseResponse.of(200, "로그아웃"));
 	}

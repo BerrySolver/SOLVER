@@ -3,10 +3,13 @@ package com.solver.api.service;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
@@ -32,10 +35,19 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 	
 	// 좋아요
 	@Override
-	public FavoriteQuestion createFavoriteQuestion(String accessToken, Question question) {
+	public FavoriteQuestion createFavoriteQuestion(String accessToken, Question question, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
 
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 
@@ -68,8 +80,19 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 	
 	// 좋아요 취소
 	@Override
-	public void deleteFavoriteQuestion(String token, Question question) {
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+	public void deleteFavoriteQuestion(String token, Question question, HttpServletResponse response) {
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		
 		Optional<FavoriteQuestion> favoriteQuestion = favoriteQuestionRepository.findByUserIdAndQuestionId(user.get().getId(), question.getId());
 		

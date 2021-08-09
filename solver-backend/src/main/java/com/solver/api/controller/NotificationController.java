@@ -1,5 +1,7 @@
 package com.solver.api.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,10 +37,11 @@ public class NotificationController {
         @ApiResponse(code = 409, message = "전체 알림 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getAllNotificationList(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken
 			)
 	{
-		NotificationListRes notificationListRes = notificationService.getAllNotificationList(accessToken);
+		NotificationListRes notificationListRes = notificationService.getAllNotificationList(accessToken, response);
 		
 		return ResponseEntity.status(notificationListRes.getStatusCode()).body(notificationListRes);
 	}
@@ -50,10 +53,11 @@ public class NotificationController {
         @ApiResponse(code = 409, message = "전체 알림 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getVideoNotificationList(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken
 			)
 	{
-		NotificationListRes notificationListRes = notificationService.getVideoNotificationList(accessToken);
+		NotificationListRes notificationListRes = notificationService.getVideoNotificationList(accessToken, response);
 		
 		return ResponseEntity.status(notificationListRes.getStatusCode()).body(notificationListRes);
 	}

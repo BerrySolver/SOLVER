@@ -1,5 +1,7 @@
 package com.solver.api.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,11 +41,12 @@ public class ConferenceController {
         @ApiResponse(code = 409, message = "상태 변경 실패")
     })
 	public ResponseEntity<? extends BaseResponse> updateConference(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String conferenceId
 			) 
 	{
-		int flag = conferenceService.updateConference(accessToken, conferenceId);
+		int flag = conferenceService.updateConference(accessToken, conferenceId, response);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "상태 변경 실패"));
@@ -61,11 +64,12 @@ public class ConferenceController {
         @ApiResponse(code = 409, message = "화상 회의 나가기 실패")
     })
 	public ResponseEntity<? extends BaseResponse> goOutConference(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String conferenceId
 			) 
 	{
-		int flag = conferenceService.goOutConference(accessToken, conferenceId);
+		int flag = conferenceService.goOutConference(accessToken, conferenceId, response);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "화상 회의 나가기 실패"));
@@ -82,11 +86,12 @@ public class ConferenceController {
         @ApiResponse(code = 409, message = "화상 회의 종료 실패")
     })
 	public ResponseEntity<? extends BaseResponse> deleteConference(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String conferenceId
 			) 
 	{
-		int flag = conferenceService.deleteConference(accessToken, conferenceId);
+		int flag = conferenceService.deleteConference(accessToken, conferenceId, response);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "화상 회의 종료 실패"));
