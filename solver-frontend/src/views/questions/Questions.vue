@@ -135,6 +135,7 @@
 <script>
 import axios from 'axios'
 import API from '@/API.js'
+import {mapState, mapActions} from 'vuex'
 
 export default {
     name: 'Questions',
@@ -163,7 +164,11 @@ export default {
       }
     },
     methods: {
+      ...mapActions([
+        'setStateQuery'
+      ]),
       getAllQuestionList: function () {
+        this.request.curCategory = '전체'
         this.request.mainCategory = null
         this.request.subCategory = null
         this.request.query = null
@@ -255,6 +260,9 @@ export default {
       },
     },
     created: function () {
+      if (this.query != null) {
+        this.request.query = this.query
+      }
       axios({
       url: API.URL + API.ROUTES.getCategory,
       method: "get",
@@ -262,12 +270,16 @@ export default {
       .then((res) => {
         this.categories = res.data
         this.getQuestionList()
+        this.setStateQuery(null)
       })
       .catch((err) => {
         console.log(err);
       });
     },
     computed: {
+      ...mapState({
+        query: state => state.questions.query,
+      }),
       typeWatch: function () {
         return this.request.type
       },
