@@ -152,12 +152,15 @@
                   <span
                     class="question-list-item-title"
                     style="font-size: 20px; font-weight: 700; margin-left: 10px;"
-                    >{{ question.title }}</span
+                    >{{ question.title }}
+                    
+                    </span
                   >
                 </div>
               </div>
               <div class="d-flex">
                 <span
+                  id="question-content"
                   class="question-list-item-content"
                   style="font-size: 17px; margin-bottom: 30px;"
                   v-html="question.content"
@@ -318,14 +321,33 @@ export default {
           this.totalCount = res.data.totalCount;
           pageNationStore.state.totalListItemCount = this.totalCount;
           // console.log(this.questionList);
-          console.log(this.totalCount);
+          // console.log(this.totalCount);
+          this.questionList.forEach(e=>{
+            var isImage = false;
+            var isVideo = false;
+            while(e.content.indexOf("<figure") != -1){
+              if(e.content.indexOf("<figure class=\"image\">")!=-1){
+                isImage = true;
+              }
+              if(e.content.indexOf("<figure class=\"media\">")!=-1){
+                isVideo = true;
+              }
+              // console.log("전 - ", e.content);
+              // console.log(e.content.indexOf("<figure"), e.content.indexOf("</figure>"));
+              // console.log("앞", e.content.slice(0, e.content.indexOf("<figure")));
+              // console.log("미디어", e.content.slice(e.content.indexOf("<figure"), e.content.indexOf("</figure>")+9));
+              // console.log("뒤", e.content.slice(e.content.indexOf("</figure>")+9));
+              e.content = e.content.slice(0, e.content.indexOf("<figure")) + e.content.slice(e.content.indexOf("</figure>")+9);
+            }
+            e.isImage = isImage;
+            e.isVideo = isVideo;
+          });
         })
         .catch((err) => {
           console.log(err.message);
         });
     },
     goQuestionCreate: function() {
-      console.log("ㅇㅇ");
       this.$router.push({
         name: "QuestionsCreate",
       });
