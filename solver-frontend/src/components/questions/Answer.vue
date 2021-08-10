@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="answer">
+
+    </div>
     <Comments/>
     <CommentsCreate/>
   </div>
@@ -11,17 +14,21 @@ import CommentsCreate from "@/components/questions/CommentsCreate"
 
 
 export default {
-    name: 'Answer',
-    components: {
-        Comments,
-        CommentsCreate,
-    },
-    data() {
-        
+  name: 'Answer',
+  components: {
+    Comments,
+    CommentsCreate,
+  },
+  data() {
+    return {
+      
     }
+  }
 }
 </script>
 
 <style>
-
+  .answer {
+    height: 200px;
+  }
 </style>

@@ -98,8 +98,7 @@ const actions = {
       method: "get",
       headers: { Authorization: "Bearer " + this.getters.getAccessToken },
     })
-      .then((res) => {
-        // console.log(res);
+      .then(() => {
         localStorage.removeItem("accessToken");
         commit("SET_ACCESS_TOKEN", "");
         router.push({ path: "/" });

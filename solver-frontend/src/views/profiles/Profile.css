@@ -45,7 +45,6 @@
   display: grid;
   grid-template-rows: 300px 600px;
   grid-template-columns: 300px 1090px;
-  margin-top: 30px;
 }
 
 .profile-img {

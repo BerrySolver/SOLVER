@@ -93,24 +93,25 @@
     <div>
       <!-- TAB_BAR 선택 -->
       <ul class="tab-ul">
-        <li v-for="tab in tabs" v-bind:key="tab.id" v-on:click="onClickTab(tab)" class="tab-li multi-button">
+        <li v-for="(tab, index) in tabs" v-bind:key="tab.index" v-on:click="onClickTab(index)" class="tab-li multi-button">
           <button class="tab-btn">{{ tab.tabName }}</button>
         </li>
       </ul>
       <hr class="line">
 
       <!-- SOLVE 기록 TAB -->
-      <div v-if="'SOLVE 기록' == selectedTab">
+      <div v-if="0 == selectedTab">
         <ProfileStatistics class="m-top-3"/>
       </div>
 
       <!-- 답변 목록 TAB -->
-      <div v-if="'답변 목록' == selectedTab">
-        <ProfileHistory class="m-top-3"/>
+      <div v-if="1 == selectedTab">
+        <ProfileHistory :myAnswersTab="selectedTab" class="m-top-3"/>
       </div>
 
-      <div v-if="'질문 목록' == selectedTab">
-        <ProfileMyQuestions class="m-top-3"/>
+      <!-- 질문 목록 TAB -->
+      <div v-if="2 == selectedTab">
+        <ProfileMyQuestions :myQuestionsTab="selectedTab" class="m-top-3"/>
       </div>      
     </div>
 
@@ -138,18 +139,18 @@ export default {
   },
   data() {
     return {
-      selectedTab: '',
+      selectedTab: 0,
       tabs: [
         {tabNum: 0, tabName: 'SOLVE 기록'},
         {tabNum: 1, tabName: '답변 목록'},
         {tabNum: 2, tabName: '질문 목록'},
-      ]
+      ],
     }
   },
   methods: {
-    ...mapActions(['profileSetting']),
-    onClickTab(tab) {
-      this.selectedTab = tab.tabName
+    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting']),
+    onClickTab(tabIndex) {
+      this.selectedTab = tabIndex
     },
   },
   computed: {
@@ -165,9 +166,12 @@ export default {
     },
   },
   created() {
-    this.selectedTab = this.tabs[0].tabName,
-    console.log(this.tabs[0].tabNum)
-    // this.profileSetting(this.userNickname)
+    const solveTabInfo = {
+      userNickname: this.userNickname,
+      tabnum: this.selectedTab,
+    }
+    this.selectedTab = this.tabs[0].tabNum
+    this.statisticSetting(solveTabInfo)
   },
 }
 </script>

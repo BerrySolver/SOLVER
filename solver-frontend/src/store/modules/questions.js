@@ -16,6 +16,14 @@ const actions = {
   setStateQuery({commit}, query) {
     commit('SET_QUERY', query)
     router.push({ path: "/questions" });
+  },
+  goQuestionDetail(context, questionId) {
+    router.push({
+      name: 'QuestionsDetail',
+      params: {
+        questionId: questionId
+      }
+    })
   }
 }
 

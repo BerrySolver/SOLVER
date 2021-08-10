@@ -36,7 +36,7 @@
           </div>
           <!-- 인기질문 -->
           <div class="card-grid">
-            <div class="card-item" v-for="(question, index) in mainQuestion" :key="index">
+            <div class="card-item" v-for="(question, index) in mainQuestion" :key="index" @click="goQuestionDetail(question.questionId)">
               <div class="card-title">
                 {{question.title}}
               </div>
@@ -221,7 +221,8 @@ export default {
   }, 
   methods: {
     ...mapActions([
-        'setStateQuery'
+        'setStateQuery',
+        'goQuestionDetail'
       ]),
   },
   created(){

@@ -4,7 +4,7 @@
       화상시간 캘린더
     </div>
     <div class="m-top-3">
-      <button class="day-button" @click="[onClickWeekday(), isInWdt()]">평일</button>
+      <button class="day-button" @click="onClickWeekday()">평일</button>
       <button class="day-button" @click="onClickWeekend()">주말</button>
     </div>
     <br>
