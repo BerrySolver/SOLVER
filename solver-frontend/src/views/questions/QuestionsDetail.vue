@@ -86,12 +86,14 @@ export default {
       return r;
     },
     modifyUrl(url) {
-      let endpoint = url;
-      endpoint = endpoint.replace("oembed", "iframe");
-      endpoint = endpoint.replace("url", "src");
-      endpoint = endpoint.replace("watch?v=", "embed/");
-      endpoint = endpoint.replace("oembed", "iframe");
-      return endpoint;
+      // let endpoint = url;
+      // endpoint = endpoint.replaceAll("oembed", "iframe");
+      // endpoint = endpoint.replaceAll("url", "src");
+      // endpoint = endpoint.replaceAll("watch?v=", "embed/");
+      // endpoint = endpoint.replaceAll("oembed", "iframe");
+
+      // console.log(endpoint);
+      return url;
     },
   },
   created() {
