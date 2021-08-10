@@ -13,5 +13,6 @@ export default {
 
     // 질문/답변 페이지
     getQuestionList: "questions/list",
+    createQuestion: "questions",
   },
 };
