@@ -41,7 +41,7 @@
       <div class="solver-body"  v-for="(solvers, idx1) in solverList" :key="idx1">
         <div class="solver-body-contents">
           <div class="solver-list">
-            <div class="solver-user-card" v-for="(solverData, idx2) in solvers" :key="idx2">
+            <div class="solver-user-card" v-for="(solverData, idx2) in solvers" :key="idx2" @click="goUserProfile(solverData.nickname)">
               <img class="user-level-badge" src="@/assets/berry-1.png" alt="">
               <div class="solver-user-col1">
                 <img class="user-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>
@@ -112,6 +112,13 @@ export default {
       this.subCategoryCode = event.target.value;
       console.log("Sub : " + this.subCategoryCode);
       this.setSolverList();
+    }, goUserProfile(nickname){
+        this.$router.push({
+          name: 'Profile',
+          params: {
+            nickname: nickname
+          }
+        });
     }, setSolverList(){
       axios({
         url: API.URL + API.ROUTES.getSolverList,
