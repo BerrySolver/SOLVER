@@ -13,5 +13,8 @@ export default {
 
     // 질문/답변 페이지
     getQuestionList: "questions/list",
+
+    // 솔버리스트
+    getSolverList: "solver",
   },
 };
