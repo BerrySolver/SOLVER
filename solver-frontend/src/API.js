@@ -9,10 +9,16 @@ export default {
     checkNickname: "user/signup/check-nickname",
 
     // 회원가입2 관련
-    signupdata: 'user/signup/data',
+    signupdata: "user/signup/data",
 
     // 질문/답변 페이지
-    getCategory: 'auth/category',
-    getQuestionList: 'questions/list'
-  }
-}
+    getQuestionList: "questions/list",
+
+    // 솔버리스트
+    getSolverList: "solver",
+
+    createQuestion: "questions",
+    // 프로필
+    editProfile: "profiles",
+  },
+};

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.comment.Comment;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
@@ -24,9 +25,12 @@ public class CommentListRes extends BaseResponse{
 		
 		for (Comment comment : commentList) {
 			CommentInfo commentInfo = new CommentInfo();
+			User user = comment.getUser();
 			
 			commentInfo.setContent(comment.getContent());
 			commentInfo.setId(comment.getId());
+			commentInfo.setNickname(user.getNickname());
+			commentInfo.setProfileUrl(user.getProfileUrl());
 			commentInfo.setRegDt(comment.getRegDt());
 			
 			tempCommentList.add(commentInfo);
@@ -53,6 +57,8 @@ public class CommentListRes extends BaseResponse{
 @Setter
 class CommentInfo{
 	private String id;
+	private String nickname;
+	private String profileUrl;
 	private String content;
 	private Date regDt;
 }

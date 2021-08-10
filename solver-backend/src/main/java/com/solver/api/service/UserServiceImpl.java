@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.response.SolverRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.OAuthToken;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Evaluation;
 import com.solver.db.entity.code.Category;
@@ -42,7 +45,7 @@ import com.solver.db.repository.user.UserRepositorySupport;
 /*userService랑 profileService 구분 짓는게 나을 듯*/
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	@Autowired
 	UserRepository userRepository;
 
@@ -75,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	CodeRepository codeRepository;
-	
+
 	@Autowired
 	FavoriteUserRepository favoriteUserRepository;
 
@@ -114,9 +117,9 @@ public class UserServiceImpl implements UserService {
 			if (userRepository.findById(userId).orElse(null) == null)
 				break;
 		}
-		
+
 		user.setId(userId);
-		
+
 		String userCalendarId = "";
 
 		// 새로운 user테이블의 id생성
@@ -128,11 +131,11 @@ public class UserServiceImpl implements UserService {
 		}
 
 		UserCalendar userCalendar = new UserCalendar();
-		
+
 		userCalendar.setId(userCalendarId);
 		userCalendar.setUser(user);
 
-		userCalendarRepository.save(userCalendar);
+//		userCalendarRepository.save(userCalendar);
 		
 		return userRepository.save(user);
 	}
@@ -156,10 +159,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteToken(String accessToken) {
+	public void deleteToken(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		long id = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		long id = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 
 		Optional<User> user = userRepository.findByKakaoId(id);
 
@@ -168,10 +179,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void singUp(UserRegistPostReq userRegistPostReq, String accessToken) {
+	public void singUp(UserRegistPostReq userRegistPostReq, String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
+		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
 
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
 		// DB에 저장된 더미 데이터 가져옴
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 
@@ -189,32 +209,32 @@ public class UserServiceImpl implements UserService {
 		user.setCode(code);
 
 		UserCalendar userCalendar = userCalendarRepository.findByUserId(user.getId());
-		
-		if(userCalendar == null) {
+
+		if (userCalendar == null) {
 			userCalendar = new UserCalendar();
 			userCalendar.setUser(user);
-			
+
 			String userCalenderId = "";
-			
-			while(true) {
+
+			while (true) {
 				userCalenderId = RandomIdUtil.makeRandomId(13);
-				
-				if(userRepository.findById(userCalenderId).orElse(null) == null)
+
+				if (userRepository.findById(userCalenderId).orElse(null) == null)
 					break;
 			}
-			
+
 			userCalendar.setId(userCalenderId);
 		}
 
 		// 유저 시간표 정보
 		userCalendar.setWeekdayTime(userRegistPostReq.getWeekdayTime());
 		userCalendar.setWeekendTime(userRegistPostReq.getWeekendTime());
-		
+
 		favoriteFieldRepository.deleteByUserId(user.getId());
-		
+
 		for (String categoryCode : userRegistPostReq.getSelectedCode()) {
 			FavoriteField favoriteField = new FavoriteField();
-			
+
 			String favoriteFieldId = "";
 
 			// 새로운 user테이블의 id생성
@@ -224,15 +244,15 @@ public class UserServiceImpl implements UserService {
 				if (favoriteFieldRepository.findById(favoriteFieldId).orElse(null) == null)
 					break;
 			}
-			
+
 			Category category = new Category();
-			
+
 			category.setSubCategoryCode(categoryCode);
-			
+
 			favoriteField.setUser(user);
 			favoriteField.setId(favoriteFieldId);
 			favoriteField.setCategory(category);
-			
+
 			favoriteFieldRepository.save(favoriteField);
 		}
 
@@ -242,147 +262,180 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(String accessToken) {
+	public void deleteUser(String accessToken, HttpServletResponse response) {
 		// accessToken부분
 		String token = accessToken.split(" ")[1];
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 
 		userRepository.deleteByKakaoId(kakaoId);
 	}
 
 	@Override
 	public List<SolverRes> getUserList(SolverGetListReq solverGetListReq) {
-		
+
 		// 필터, 조회 값이 존재하는지 얻기
 		String mode = solverGetListReq.getMode();
 		String query = solverGetListReq.getQuery();
 		Code mainCategory = codeRepository.findByCode(solverGetListReq.getMainCategory());
 		Category subCategory = categoryRepository.findBySubCategoryCode(solverGetListReq.getSubCategory());
-		
+
 		// 기본 유저 데이터 불러오기
-		List<User> userList = userRepositorySupport.findAll(mainCategory, subCategory, solverGetListReq.getQuery(), solverGetListReq.getMode());
-		
+		List<User> userList = userRepositorySupport.findAll(mainCategory, subCategory, solverGetListReq.getQuery(),
+				solverGetListReq.getMode());
+
 		List<SolverRes> solverList = new ArrayList<SolverRes>();
 		for (User user : userList) {
 			String nickname = user.getNickname();
 
-			if(query != null && !nickname.contains(query))
+			if (query != null && !nickname.contains(query))
 				continue;
-			
-			SolverRes solverRes = new SolverRes();			
+
+			SolverRes solverRes = new SolverRes();
 			String profileUrl = user.getProfileUrl();
-			
+			String introduction = user.getIntroduction();
+
 			// 닉네임(UNIQUE)을 기준으로 기본 정보 부르기
 			Optional<User> oneUser = userRepository.findByNickname(nickname);
-			
+
 			List<PointLog> pointList = oneUser.get().getPointLog();
 			List<Evaluation> evaluationList = oneUser.get().getEvaluateAnswer();
 			List<FavoriteField> favoriteFieldList = oneUser.get().getFavoriteField();
-			
+
 			/* 포인트 계산 - entity 변경할 예정이어서 수정 필요 */
 			int point = 0;
-			
+
 			for (PointLog pointLog : pointList) {
 				PointCode pointCode = pointCodeRepository.findByPointCode(pointLog.getPointCode().getPointCode());
 				int type = pointCode.getPointCode().charAt(0) - '0'; // 코드의 시작이 0이면 얻는 포인트 - 1이면 잃는 포인트
-				
-				if(type == 0) {
+
+				if (type == 0) {
 					point += pointCode.getValue();
 				}
 			}
-			/* 포인트 계산 끝*/			
-			
-			
-			if(point >= 100) {
-				/* 평점 계산 */			
+			/* 포인트 계산 끝 */
+
+			// 최소 노출 기준 : 100베리
+			if (point >= 100) {
+
+				/* 평점 계산 */
 				float evaluationScore = 0;
-				
+
 				for (Evaluation evaluation : evaluationList) {
 					evaluationScore += evaluation.getScore();
 				}
-				
-				evaluationScore /= evaluationList.size();			
+
+				evaluationScore /= evaluationList.size();
 				/* 평점 계산 끝 */
-				
-				/* 관심 분야 이름 리스트 생성 */
-				boolean flag = false;
-				List<String> favoriteFieldNameList = new ArrayList<>();
-				
-				if(subCategory==null) {
-					flag = true;
+
+				boolean main_falg = false;
+				List<Category> checkList = new ArrayList<>();
+				if (mainCategory == null) {
 					for (FavoriteField favoriteField : favoriteFieldList) {
-						favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
-					}
-				}else {
+						checkList.add(favoriteField.getCategory());
+					}	
+					main_falg = true;				
+				} else {
 					for (FavoriteField favoriteField : favoriteFieldList) {
-						if(favoriteField.getCategory().getSubCategoryCode().equals(subCategory.getSubCategoryCode())) {
-							flag = true;
+						if (mainCategory.getCode().equals(favoriteField.getCategory().getCode().getCode())) {
+							checkList.add(favoriteField.getCategory());
+							main_falg = true;
 						}
-						favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
 					}
-					if(flag)
-						solverRes.setFavoriteFieldNameList(favoriteFieldNameList);
 				}
-				/* 관심 분야 이름 리스트 생성 끝 */
-				
-				solverRes.setProfileUrl(profileUrl);
-				solverRes.setPoint(point);
-				solverRes.setNickname(nickname);
-				solverRes.setEvaluationScore(evaluationScore);
-				
-				if(flag) {
+
+				boolean sub_flag = false;
+				if(main_falg && (subCategory != null)) {
+					for (Category category : checkList) {
+						if(category.getSubCategoryCode().equals(subCategory.getSubCategoryCode())) {
+							sub_flag=true;
+						}
+					}
+				}else if(main_falg && !sub_flag) {
+					sub_flag=true;
+				}
+
+				if((mainCategory==null&&subCategory==null)||(main_falg&&subCategory==null)||(main_falg&&sub_flag)) {
+					List<String> favoriteFieldNameList = new ArrayList<>();
+					
+					for (FavoriteField favoriteField : favoriteFieldList) {
+						favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
+					}			
+					
+					solverRes.setProfileUrl(profileUrl);
+					solverRes.setPoint(point);
+					
+					solverRes.setNickname(nickname);
+					solverRes.setEvaluationScore(evaluationScore);
+					solverRes.setIntroduction(introduction);
 					solverRes.setFavoriteFieldNameList(favoriteFieldNameList);
 
 					int follower = favoriteUserRepository.findByUserId(user.getId()).size();
 					solverRes.setFollower(follower);
-					
+
 					solverList.add(solverRes);
 				}
 			}
 		}
-		
+
 		/* 정렬 기준(Mode) 시작 */
-		if(mode != null && mode.equals("pointDesc")) {
+		if (mode != null && mode.equals("pointDesc")) {
 			Collections.sort(solverList, new Comparator<SolverRes>() {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
 					return o2.getPoint() - o1.getPoint();
 				}
-				
+
 			});
-		}else if(mode != null && mode.equals("evaluationDesc")) {
+		} else if (mode != null && mode.equals("evaluationDesc")) {
 			Collections.sort(solverList, new Comparator<SolverRes>() {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
 					return (int) o2.getEvaluationScore() - (int) o1.getEvaluationScore();
 				}
-				
-			});			
-		}else if(mode != null && mode.equals("followerDesc")) {
+
+			});
+		} else if (mode != null && mode.equals("followerDesc")) {
 			Collections.sort(solverList, new Comparator<SolverRes>() {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
 					return (int) o2.getFollower() - (int) o1.getFollower();
 				}
-				
-			});			
+
+			});
 		}
 		/* 정렬 기준(Mode) 끝 */
-		
+
 		return solverList;
 	}
 
 	@Override
-	public String getNickname(String accessToken) {
+	public String getNickname(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
-		
+
 		return user.getNickname();
 	}
 }

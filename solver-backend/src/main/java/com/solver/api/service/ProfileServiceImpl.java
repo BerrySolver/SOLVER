@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
 import com.solver.api.response.ProfileTabRes;
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.Evaluation;
@@ -140,9 +143,11 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		/* 관심 분야 이름 리스트 생성 */
 		List<String> favoriteFieldNameList = new ArrayList<>();
+		List<String> favoriteFieldCodeList = new ArrayList<>();
 		
 		for (FavoriteField favoriteField : favoriteFieldList) {
 			favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
+			favoriteFieldCodeList.add(favoriteField.getCategory().getSubCategoryCode());
 		}
 		/* 관심 분야 이름 리스트 생성 끝 */
 		
@@ -151,6 +156,7 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		profileRes.setEvaluationScore(evaluationScore);
 		profileRes.setFavoriteFieldNameList(favoriteFieldNameList);
+		profileRes.setFavoriteFieldCodeList(favoriteFieldCodeList);
 		profileRes.setGroupNameList(groupNameList);
 		profileRes.setPoint(point);
 		profileRes.setRemainingPoint(remainingPoint);
@@ -168,9 +174,19 @@ public class ProfileServiceImpl implements ProfileService{
 
 	//프로필 이미지 저장 부분 추가 필요
 	@Override
-	public void updateProfile(ProfileUpdatePatchReq profileUpdatePatchReq, String accessToken) {
+	public void updateProfile(ProfileUpdatePatchReq profileUpdatePatchReq, String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		//여기서 기존 이미지 삭제 필요
@@ -184,9 +200,17 @@ public class ProfileServiceImpl implements ProfileService{
 		List<String> categoryList = profileUpdatePatchReq.getCategoryList();
 		favoriteFieldRepository.deleteByUserId(user.getId());
 		
+		if(categoryList == null) {
+            return;
+        }
+		
 		for (String subCategoryCode : categoryList) {
 			FavoriteField favoriteField = new FavoriteField();
 			String id = "";
+			
+			if(categoryList == null) {
+	            return;
+	        }
 			
 			while(true) {
 				id = RandomIdUtil.makeRandomId(13);
@@ -210,9 +234,19 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public void updateProfilePossibleTime(ProfilePossibleTimePatchReq profilePossibleTimePatchReq, String accessToken) {
+	public void updateProfilePossibleTime(ProfilePossibleTimePatchReq profilePossibleTimePatchReq, String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
 		
 		User user = userRepository.findByKakaoId(kakaoId).get();
 		
@@ -313,10 +347,19 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public int followUser(String accessToken, String nickname) {
+	public int followUser(String accessToken, String nickname, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
 
 		User myUserInfo = userRepository.findByKakaoId(kakaoId).orElse(null);
 
@@ -358,10 +401,19 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 	
 	@Override
-	public int unFollowUser(String accessToken, String nickname) {
+	public int unFollowUser(String accessToken, String nickname, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
 
 		User myUserInfo = userRepository.findByKakaoId(kakaoId).orElse(null);
 

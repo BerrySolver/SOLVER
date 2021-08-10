@@ -2,11 +2,14 @@ package com.solver.api.service;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.ReportPostReq;
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.ReportAnswer;
@@ -51,7 +54,7 @@ public class ReportServiceImpl implements ReportService{
 	KakaoUtil kakaoUtil;
 
 	@Override
-	public ReportQuestion createReportQuestion(ReportPostReq reportPostReq, String token) {
+	public ReportQuestion createReportQuestion(ReportPostReq reportPostReq, String token, HttpServletResponse response) {
 		ReportQuestion reportQuestion = new ReportQuestion();
 		
 		String reportQuestionId = "";
@@ -63,8 +66,18 @@ public class ReportServiceImpl implements ReportService{
 				break;
 		}
 		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
 		// 외래키 참조값 생성
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		Optional<Question> question = questionRepository.findById(reportPostReq.getTargetId());
 		
 		if (user.orElse(null) == null || question.orElse(null) == null) {
@@ -80,7 +93,7 @@ public class ReportServiceImpl implements ReportService{
 	}
 
 	@Override
-	public ReportAnswer createReportAnswer(ReportPostReq reportPostReq, String token) {
+	public ReportAnswer createReportAnswer(ReportPostReq reportPostReq, String token, HttpServletResponse response) {
 		ReportAnswer reportAnswer = new ReportAnswer();
 		
 		String reportAnswerId = "";
@@ -92,8 +105,18 @@ public class ReportServiceImpl implements ReportService{
 				break;
 		}
 		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
 		// 외래키 참조값 생성
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		Optional<Answer> answer = answerRepository.findById(reportPostReq.getTargetId());
 		
 		if (user.orElse(null) == null || answer.orElse(null) == null) {
@@ -109,7 +132,7 @@ public class ReportServiceImpl implements ReportService{
 	}
 
 	@Override
-	public ReportComment createReportComment(ReportPostReq reportPostReq, String token) {
+	public ReportComment createReportComment(ReportPostReq reportPostReq, String token, HttpServletResponse response) {
 		ReportComment reportComment = new ReportComment();
 		
 		String reportCommentId = "";
@@ -121,8 +144,18 @@ public class ReportServiceImpl implements ReportService{
 				break;
 		}
 		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
 		// 외래키 참조값 생성
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		Optional<Comment> comment = commentRepository.findById(reportPostReq.getTargetId());
 		
 		if (user.orElse(null) == null || comment.orElse(null) == null) {

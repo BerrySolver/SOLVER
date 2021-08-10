@@ -1,16 +1,10 @@
-<template>
-  
-</template>
+<template> </template>
 
 <script>
 export default {
-    name: 'GroupCreate',
-    data() {
-        
-    }
-}
+  name: "GroupCreate",
+  data() {},
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

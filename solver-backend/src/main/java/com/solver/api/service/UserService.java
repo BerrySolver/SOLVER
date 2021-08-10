@@ -3,6 +3,8 @@ package com.solver.api.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.solver.api.request.SolverGetListReq;
 import com.solver.api.request.UserRegistPostReq;
 import com.solver.api.response.SolverRes;
@@ -19,13 +21,13 @@ public interface UserService {
 
 	Token insertToken(OAuthToken oauthToken, Long kakaoId);
 
-	void deleteToken(String accessToken);
+	void deleteToken(String accessToken, HttpServletResponse response);
 
-	void singUp(UserRegistPostReq userRegistPostReq, String accessToken);
+	void singUp(UserRegistPostReq userRegistPostReq, String accessToken, HttpServletResponse response);
 
-	void deleteUser(String accessToken);
+	void deleteUser(String accessToken, HttpServletResponse response);
 
 	List<SolverRes> getUserList(SolverGetListReq solverGetListReq);
 
-	String getNickname(String accessToken);
+	String getNickname(String accessToken, HttpServletResponse response);
 }

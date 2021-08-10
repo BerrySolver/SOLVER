@@ -14,6 +14,19 @@
   float: 3;
 }
 
+.edit-end-button {
+  background-color: transparent;
+  border: solid 0.1px #0F4C81;
+  color: #0F4C81;
+  font-size: 14px;
+  padding: 0px 3px 0px 3px;
+}
+
+.edit-end-button:hover {
+  background-color: #0F4C81;
+  color: white;
+}
+
 .gap-box {
   width: 10px;
 }
@@ -34,10 +47,21 @@
   float: 3;
 }
 
+.intro-input {
+  background-color: #658dc61b;
+  font-size: 14px;
+  height: 22px;
+  margin-bottom: 3px;
+  width: 300px;
+}
+
 .nickname {
+  align-items: center;
   color: #0F4C81;
+  display:flex; 
   font-size: 23px;
   font-weight: 700;
+  justify-content:space-between;
   text-align: left;
 }
 
@@ -45,7 +69,6 @@
   display: grid;
   grid-template-rows: 300px 600px;
   grid-template-columns: 300px 1090px;
-  margin-top: 30px;
 }
 
 .profile-img {

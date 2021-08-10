@@ -12,3 +12,4 @@ solver-backend/build/
 solver-backend/src/main/generated/
 backend/src/main/resources/dist/
 solver-backend/src/main/resources/dist/
+package-lock.json

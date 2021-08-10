@@ -13,4 +13,6 @@ public interface TokenRepository extends JpaRepository<Token, User>{
 	@Modifying
 	void deleteByUserId(String id);
 
+	Token findByAccessToken(String accessToken);
+
 }

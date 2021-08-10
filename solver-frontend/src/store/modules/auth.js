@@ -35,7 +35,7 @@ const mutations = {
   },
   SET_USER_NICKNAME: (state, userNickname) => {
     state.userNickname = userNickname;
-  }
+  },
 };
 
 const actions = {
@@ -44,7 +44,7 @@ const actions = {
       url: API.URL + API.ROUTES.signup,
       method: "post",
       data: credentials,
-      headers:{"Authorization": "Bearer " + localStorage.getItem("accessToken") },
+      headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
     })
       .then((res) => {
         console.log(res);
@@ -68,7 +68,7 @@ const actions = {
         if (res.data == "") {
           router.push({ path: "/auth/signup1" });
         } else {
-          commit('SET_USER_NICKNAME', res.data)
+          commit("SET_USER_NICKNAME", res.data);
           router.push({ path: "/" });
         }
       })
@@ -80,10 +80,10 @@ const actions = {
     axios({
       url: API.URL + API.ROUTES.login,
       method: "get",
-      headers: { Authorization: "Bearer "},
+      headers: { Authorization: "Bearer " },
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         localStorage.setItem("accessToken", res.data.accessToken);
         commit("SET_ACCESS_TOKEN", res.data.accessToken);
         router.push({ path: "/" });
@@ -93,14 +93,12 @@ const actions = {
       });
   },
   logout({ commit }) {
-    console.log("!!!")
     axios({
       url: API.URL + API.ROUTES.logout,
       method: "get",
-      headers: { Authorization: "Bearer " + this.getters.getAccessToken},
+      headers: { Authorization: "Bearer " + this.getters.getAccessToken },
     })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         localStorage.removeItem("accessToken");
         commit("SET_ACCESS_TOKEN", "");
         router.push({ path: "/" });

@@ -1,5 +1,7 @@
 package com.solver.api.controller;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -7,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ReportPostReq;
@@ -22,8 +23,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
-@CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
-methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
+@CrossOrigin("*")
 
 @Api(value="신고 API", tags = {"Report"})
 @RestController
@@ -41,6 +41,7 @@ public class ReportController {
         @ApiResponse(code = 400, message = "신고 접수에 실패했습니다.")
     })
 	public ResponseEntity<? extends BaseResponse> createReport(
+			HttpServletResponse response, 
 			@RequestBody @ApiParam(value="신고 정보", required=true) ReportPostReq reportPostReq,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
@@ -48,15 +49,15 @@ public class ReportController {
 		int flag = 1;
 		
 		if (reportPostReq.getTarget().equals("question")) {
-			if (reportService.createReportQuestion(reportPostReq, token) == null) {
+			if (reportService.createReportQuestion(reportPostReq, token, response) == null) {
 				flag = 0;
 			}
 		} else if (reportPostReq.getTarget().equals("answer")) {
-			if (reportService.createReportAnswer(reportPostReq, token) == null) {
+			if (reportService.createReportAnswer(reportPostReq, token, response) == null) {
 				flag = 0;
 			}
 		} else if (reportPostReq.getTarget().equals("comment")) {
-			if (reportService.createReportComment(reportPostReq, token) == null) {
+			if (reportService.createReportComment(reportPostReq, token, response) == null) {
 				flag = 0;
 			}
 		}

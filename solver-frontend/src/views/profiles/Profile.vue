@@ -10,11 +10,33 @@
     <div class="profile-info-section">
       <div class="nickname">
         <div>{{ userProfileInfo.nickname }}</div>
+        <div
+        style="color:#658DC6; font-size: 14px"
+        @click="editRequest">
+          <span>수정</span>
+          <img src="@/assets/edit-button.png" width="20px">
+        </div>
       </div>
       <div style="color:#84898C; display:flex; align-items: center; justify-content:space-between;">
-        <div>{{ userProfileInfo.introduction }}</div>
+        
+        <!-- 한줄 소개 -->
+        <div>
+          <div v-if="!isEdit">
+            <span>한줄 소개</span>
+            <span class="content-text-b m-left-1">{{ userProfileInfo.introduction }}</span>
+          </div>
+          <div v-if="isEdit" @keyup.enter="[editRequest(), editSelfIntro(editInfo.selfIntro)]">
+            한줄 소개 
+            <span><input v-model="editInfo.selfIntro" class="intro-input m-left-1" type="text"></span>
+            <button
+            @click="[editRequest(), editSelfIntro(editInfo.selfIntro)]"
+            class="edit-end-button m-left-1">수정</button>
+          </div>
+        </div>
+        
+        <!-- 개인 URL -->
         <div class="social-url">
-          {{ userProfileInfo.profileUrl }}
+          URL {{ userProfileInfo.profileUrl }}
         </div>
       </div>
 
@@ -75,41 +97,39 @@
           </div>
         </div>
       </div>
-
-      <!-- TAB_BAR 전 여백 -->
-      <br>
-      <br>
     </div>
 
 
     <!-- calendar section -->
     <div>
-      <ProfileTimetable
-      v-bind:userProfileInfo="userProfileInfo"/>
+      <ProfileTimetable 
+      v-bind:weekdayTime="userProfileInfo.weekdayTime"
+      :weekendTime="userProfileInfo.weekendTime"/>
     </div>
 
     <!-- tab-component section -->
     <div>
       <!-- TAB_BAR 선택 -->
       <ul class="tab-ul">
-        <li v-for="tab in tabs" v-bind:key="tab.id" v-on:click="onClickTab(tab)" class="tab-li multi-button">
-          <button class="tab-btn">{{ tab }}</button>
+        <li v-for="(tab, index) in tabs" v-bind:key="tab.index" v-on:click="onClickTab(index)" class="tab-li multi-button">
+          <button class="tab-btn">{{ tab.tabName }}</button>
         </li>
       </ul>
       <hr class="line">
 
       <!-- SOLVE 기록 TAB -->
-      <div v-if="'SOLVE 기록' == selectedTab">
+      <div v-if="0 == selectedTab">
         <ProfileStatistics class="m-top-3"/>
       </div>
 
       <!-- 답변 목록 TAB -->
-      <div v-if="'답변 목록' == selectedTab">
-        <ProfileHistory class="m-top-3"/>
+      <div v-if="1 == selectedTab">
+        <ProfileHistory :myAnswersTab="selectedTab" class="m-top-3"/>
       </div>
 
-      <div v-if="'질문 목록' == selectedTab">
-        <ProfileMyQuestions class="m-top-3"/>
+      <!-- 질문 목록 TAB -->
+      <div v-if="2 == selectedTab">
+        <ProfileMyQuestions :myQuestionsTab="selectedTab" class="m-top-3"/>
       </div>      
     </div>
 
@@ -126,6 +146,8 @@ import ProfileStatistics from "@/components/profiles/ProfileStatistics"
 import ProfileHistory from "@/components/profiles/ProfileHistory"
 import ProfileMyQuestions from "@/components/profiles/ProfileMyQuestions"
 
+import axios from 'axios'
+import API from "@/API.js"
 
 export default {
   name: 'Profile',
@@ -137,19 +159,54 @@ export default {
   },
   data() {
     return {
-      selectedTab: '',
-      tabs: ['SOLVE 기록', '답변 목록', '질문 목록']
+      isEdit: false,
+      editInfo: {
+        selfIntro: '',
+        selfUrl: '',
+      },
+      selectedTab: 0,
+      tabs: [
+        {tabNum: 0, tabName: 'SOLVE 기록'},
+        {tabNum: 1, tabName: '답변 목록'},
+        {tabNum: 2, tabName: '질문 목록'},
+      ],
     }
   },
   methods: {
-    ...mapActions(['profileSetting']),
-    onClickTab(tab) {
-      this.selectedTab = tab
-      console.log(this.selectedTab)
+    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'profileSetting']),
+    onClickTab(tabIndex) {
+      this.selectedTab = tabIndex
     },
+    editRequest() {
+      this.isEdit = !this.isEdit
+    },
+    // 프로필 자기소개 수정
+    editSelfIntro(selfIntro) {
+      console.log('자기소개 수정')
+      axios({
+        url: API.URL + API.ROUTES.editProfile,
+        method: "patch",
+        headers: { Authorization: "Bearer " + this.accessToken},
+        data: {
+          nickname: this.userNickname,
+          profileUrl: this.userProfileInfo.profileUrl,
+          introduction: selfIntro,
+          link_text: this.userProfileInfo.link_text,
+          category: this.userProfileInfo.favoriteFieldNameList
+        }
+      })
+      .then((res) => {
+        // 실시간 업데이트를 위해
+        this.profileSetting(this.userNickname)
+        })
+      .catch((err) => console.log(err))
+    },
+
+    // 프로필 URL 수정
   },
   computed: {
     ...mapState({
+      accessToken: state => state.auth.accessToken,
       userNickname: state => state.auth.userNickname,
       userProfileInfo: state => state.profiles.userProfileInfo,
     }),
@@ -161,8 +218,12 @@ export default {
     },
   },
   created() {
-    this.selectedTab = this.tabs[0],
-    this.profileSetting(this.userNickname)
+    const solveTabInfo = {
+      userNickname: this.userNickname,
+      tabnum: this.selectedTab,
+    }
+    this.selectedTab = this.tabs[0].tabNum
+    this.statisticSetting(solveTabInfo)
   },
 }
 </script>

@@ -2,11 +2,14 @@ package com.solver.api.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.response.MessageListRes;
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.db.entity.user.Message;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.user.MessageRepository;
@@ -25,12 +28,20 @@ public class MessageServiceImpl implements MessageService{
 	KakaoUtil kakaoUtil;
 
 	@Override
-	public MessageListRes getSendMessageList(String accessToken) {
+	public MessageListRes getSendMessageList(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = UserRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		MessageListRes messageListRes = new MessageListRes();
 		
@@ -50,12 +61,20 @@ public class MessageServiceImpl implements MessageService{
 	}
 	
 	@Override
-	public MessageListRes getReceiveMessageList(String accessToken) {
+	public MessageListRes getReceiveMessageList(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = UserRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
 		
 		MessageListRes messageListRes = new MessageListRes();
 		

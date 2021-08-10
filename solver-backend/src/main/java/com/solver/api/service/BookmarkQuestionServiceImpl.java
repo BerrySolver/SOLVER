@@ -3,10 +3,13 @@ package com.solver.api.service;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.question.BookmarkQuestion;
 import com.solver.db.entity.question.Question;
@@ -31,11 +34,19 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 	KakaoUtil kakaoUtil;
 	
 	@Override
-	public boolean createBookmark(String accessToken, Question question) {
+	public boolean createBookmark(String accessToken, Question question, HttpServletResponse response) {
 		//작성자인지 확인
 		String token = accessToken.split(" ")[1];
 		
-		Long kakaoId = kakaoUtil.getKakaoUserIdByToken(token);
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		Long kakaoId = tokenResponse.getKakaoId();
 		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		
@@ -65,8 +76,18 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 	}
 
 	@Override
-	public void deleteBookmark(Question question, String token) {
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+	public void deleteBookmark(Question question, String token, HttpServletResponse response) {
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		
 		Optional<BookmarkQuestion> bookmarkQuestion = bookmarkQuestionRepository.findByUserIdAndQuestionId(user.get().getId(), question.getId());
 		
