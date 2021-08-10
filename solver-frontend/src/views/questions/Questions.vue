@@ -97,7 +97,7 @@
                 placeholder="궁금한 모든 것을 검색해보세요!"
                 @keypress.enter="setQuery"
               />
-              <span @click="setQuery">검&nbsp;&nbsp;색</span>
+              <span style="cursor: pointer;" @click="setQuery">검&nbsp;&nbsp;색</span>
             </div>
             <div class="selectDifficultyBox">
               <vs-select

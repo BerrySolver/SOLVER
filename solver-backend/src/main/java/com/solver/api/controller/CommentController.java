@@ -53,7 +53,7 @@ public class CommentController {
 			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String answerId,
-			CommentCreatePostReq commentCreatePostReq
+			@RequestBody CommentCreatePostReq commentCreatePostReq
 			) throws ParseException 
 	{
 		commentService.createComment(accessToken, commentCreatePostReq, answerId, response);
