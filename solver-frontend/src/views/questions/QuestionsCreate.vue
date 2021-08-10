@@ -211,7 +211,6 @@ export default {
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
-      this.getQuestionList();
     },
     setType: function(typeNum) {
       if (typeNum === 1) {
@@ -222,7 +221,6 @@ export default {
         this.request.type = null;
       }
       this.request.mode = "releaseDesc";
-      this.getQuestionList();
     },
     setMode: function(modeNum) {
       if (modeNum === 1) {
@@ -232,7 +230,6 @@ export default {
       } else {
         this.request.mode = "releaseDesc";
       }
-      this.getQuestionList();
     },
     humanize: function(now, date) {
       const moment = require("moment");
@@ -316,6 +313,16 @@ export default {
   mounted() {
     ClassicEditor.create(document.querySelector("#divEditorInsert"), {
       extraPlugins: [MyCustomUploadAdapterPlugin],
+        toolbar: {
+          items: [
+            'heading', '|',
+            'bold', 'italic', '|',
+            'link', '|',
+            'bulletedList', 'numberedList', '|',
+            'ckfinder', '|',
+            'undo', 'redo'
+        ],
+      }
     })
       .then((editor) => {
         this.CKEditor = editor;
