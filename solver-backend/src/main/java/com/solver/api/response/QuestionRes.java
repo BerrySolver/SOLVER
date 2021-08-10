@@ -51,6 +51,15 @@ public class QuestionRes extends BaseResponse{
 	@ApiModelProperty(name="조회수")
 	private int readCount;
 	
+	@ApiModelProperty(name="댓글수")
+	private int answerCount;
+	
+	@ApiModelProperty(name="좋아요수")
+	private int likeCount;
+	
+	@ApiModelProperty(name="북마크수")
+	private int bookmarkCount;
+	
 	public static QuestionRes of(Integer statusCode, String message, Question question) {
 		QuestionRes res = new QuestionRes();
 		
@@ -64,7 +73,6 @@ public class QuestionRes extends BaseResponse{
 		type = question.getCode();
 		mainCategory = question.getMainCategory();
 		subCategory = question.getSubCategory();
-		
 		res.setStatusCode(statusCode);
 		res.setMessage(message);
 		res.setNickname(user.getNickname());
@@ -78,6 +86,9 @@ public class QuestionRes extends BaseResponse{
 		res.setExpirationTime(question.getExpirationTime());
 		res.setConferenceOpened(question.isConferenceOpened());
 		res.setReadCount(question.getReadCount());
+		res.setAnswerCount(question.getAnswer().size());
+		res.setLikeCount(question.getFavoriteQuestion().size());
+		res.setBookmarkCount(question.getBookmarkQuestion().size());
 		
 		return res;
 	}

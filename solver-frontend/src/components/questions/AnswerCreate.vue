@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    답변 작성 에디터
   </div>
 </template>
 

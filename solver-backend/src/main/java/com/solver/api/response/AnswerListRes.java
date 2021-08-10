@@ -33,6 +33,8 @@ public class AnswerListRes extends BaseResponse{
 			answerInfo.setNickname(user.getNickname());
 			answerInfo.setProfileUrl(user.getProfileUrl());
 			answerInfo.setRegDt(answer.getRegDt());
+			answerInfo.setLikeCount(answer.getFavoriteAnswer().size());
+			answerInfo.setCommentCount(answer.getComment().size());
 			
 			tempAnswerList.add(answerInfo);
 		}
@@ -63,4 +65,6 @@ class AnswerInfo{
 	private String profileUrl;
 	private String content;
 	private Date regDt;
+	private int likeCount;
+	private int commentCount;
 }
