@@ -321,7 +321,6 @@ export default {
             'heading', '|',
             'bold', 'italic', '|',
             'link', '|',
-            'outdent', 'indent', '|',
             'bulletedList', 'numberedList', '|',
             'uploadImage', '|',
             'undo', 'redo'
