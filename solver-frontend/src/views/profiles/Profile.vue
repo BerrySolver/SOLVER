@@ -10,11 +10,33 @@
     <div class="profile-info-section">
       <div class="nickname">
         <div>{{ userProfileInfo.nickname }}</div>
+        <div
+        style="color:#658DC6; font-size: 14px"
+        @click="editRequest">
+          <span>수정</span>
+          <img src="@/assets/edit-button.png" width="20px">
+        </div>
       </div>
       <div style="color:#84898C; display:flex; align-items: center; justify-content:space-between;">
-        <div>{{ userProfileInfo.introduction }}</div>
+        
+        <!-- 한줄 소개 -->
+        <div>
+          <div v-if="!isEdit">
+            <span>한줄 소개</span>
+            <span class="content-text-b m-left-1">{{ userProfileInfo.introduction }}</span>
+          </div>
+          <div v-if="isEdit" @keyup.enter="[editRequest(), editSelfIntro(editInfo.selfIntro)]">
+            한줄 소개 
+            <span><input v-model="editInfo.selfIntro" class="intro-input m-left-1" type="text"></span>
+            <button
+            @click="[editRequest(), editSelfIntro(editInfo.selfIntro)]"
+            class="edit-end-button m-left-1">수정</button>
+          </div>
+        </div>
+        
+        <!-- 개인 URL -->
         <div class="social-url">
-          {{ userProfileInfo.profileUrl }}
+          URL {{ userProfileInfo.profileUrl }}
         </div>
       </div>
 
@@ -75,10 +97,6 @@
           </div>
         </div>
       </div>
-
-      <!-- TAB_BAR 전 여백 -->
-      <br>
-      <br>
     </div>
 
 
@@ -128,6 +146,8 @@ import ProfileStatistics from "@/components/profiles/ProfileStatistics"
 import ProfileHistory from "@/components/profiles/ProfileHistory"
 import ProfileMyQuestions from "@/components/profiles/ProfileMyQuestions"
 
+import axios from 'axios'
+import API from "@/API.js"
 
 export default {
   name: 'Profile',
@@ -139,6 +159,11 @@ export default {
   },
   data() {
     return {
+      isEdit: false,
+      editInfo: {
+        selfIntro: '',
+        selfUrl: '',
+      },
       selectedTab: 0,
       tabs: [
         {tabNum: 0, tabName: 'SOLVE 기록'},
@@ -148,13 +173,40 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting']),
+    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'profileSetting']),
     onClickTab(tabIndex) {
       this.selectedTab = tabIndex
     },
+    editRequest() {
+      this.isEdit = !this.isEdit
+    },
+    // 프로필 자기소개 수정
+    editSelfIntro(selfIntro) {
+      console.log('자기소개 수정')
+      axios({
+        url: API.URL + API.ROUTES.editProfile,
+        method: "patch",
+        headers: { Authorization: "Bearer " + this.accessToken},
+        data: {
+          nickname: this.userNickname,
+          profileUrl: this.userProfileInfo.profileUrl,
+          introduction: selfIntro,
+          link_text: this.userProfileInfo.link_text,
+          category: this.userProfileInfo.favoriteFieldNameList
+        }
+      })
+      .then((res) => {
+        // 실시간 업데이트를 위해
+        this.profileSetting(this.userNickname)
+        })
+      .catch((err) => console.log(err))
+    },
+
+    // 프로필 URL 수정
   },
   computed: {
     ...mapState({
+      accessToken: state => state.auth.accessToken,
       userNickname: state => state.auth.userNickname,
       userProfileInfo: state => state.profiles.userProfileInfo,
     }),

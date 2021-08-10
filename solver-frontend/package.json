@@ -13,6 +13,7 @@
     "@ckeditor/ckeditor5-vue2": "^1.0.5",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "install": "^0.13.0",
     "material-icons": "^1.1.0",
     "moment": "^2.29.1",
     "vue": "^2.6.11",

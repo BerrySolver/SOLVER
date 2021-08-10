@@ -291,9 +291,14 @@ export default {
     axios({
       url: API.URL + API.ROUTES.getQuestionList,
       method: "get",
-      params: { mode: "likeDesc" },
+      params: {
+        mode: "likeDesc",
+        limit: 6,
+        offest: 0,
+      },
     })
       .then((res) => {
+        console.log(res);
         for (var i = 0; i < 6; i++) {
           this.mainQuestion.push(res.data.questionFormList[i]);
         }

@@ -4,12 +4,16 @@ import router from "@/router";
 
 const state = {
   query: null,
+  commentCreateTrigger: false,
 };
 
 const mutations = {
   SET_QUERY: (state, query) => {
     state.query = query;
   },
+  SET_COMMENT_CREATE_TRIGGER: (state) => {
+    state.commentCreateTrigger = !state.commentCreateTrigger
+  }
 };
 
 const actions = {
@@ -28,6 +32,9 @@ const actions = {
       },
     });
   },
+  triggerCommentReload({ commit }) {
+    commit("SET_COMMENT_CREATE_TRIGGER")
+  }
 };
 
 const getters = {};
