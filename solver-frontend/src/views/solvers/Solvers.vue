@@ -94,17 +94,14 @@ export default {
     }
   }, methods:{ 
     setQuery(){
-      console.log("Query : " + this.query);
       this.setSolverList();
     }, selectSort(event){
       this.sortValue = event.target.value;
-      console.log("Sort : " + this.sortValue);
       this.setSolverList();
     }, setSubCategory(event) { 
       this.subCategoryCode = "";
       this.mainCategoryCode = event.target.value;
       document.getElementById("sub-select").value="";
-      console.log("Main : " + this.mainCategoryCode);
       this.Category.forEach(element => {
         if(element.code == event.target.value){
           this.subCategory = element.category;
@@ -176,10 +173,6 @@ export default {
     margin: 0px 5px 0px 0px;
   }
 
-  .solver-user-row > img {
-    width: 15px;
-  }
-
   img.user-image {
     width:110px;
     height:110px;
@@ -195,6 +188,10 @@ export default {
   .search-col{
     width: 290px;
     padding: 0px 3px;
+  }
+
+  select{
+    cursor: pointer;
   }
 
   .solver-form-field {
@@ -346,7 +343,7 @@ export default {
     border: 1px solid white;
     background-color: #f3f3f3;
     transition: color 0.2s;
-    
+    cursor: pointer;
   }
 
   .solver-user-col1 {
@@ -371,6 +368,10 @@ export default {
     margin: 7px 12px;
     float: left;
     /* background-color: #84898C; */
+  }
+
+  .solver-user-row > img {
+    width: 15px;
   }
 
   .solver-user-row > span {
