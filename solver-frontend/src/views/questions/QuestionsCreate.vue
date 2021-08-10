@@ -211,7 +211,6 @@ export default {
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
-      this.getQuestionList();
     },
     setType: function(typeNum) {
       if (typeNum === 1) {
@@ -222,7 +221,6 @@ export default {
         this.request.type = null;
       }
       this.request.mode = "releaseDesc";
-      this.getQuestionList();
     },
     setMode: function(modeNum) {
       if (modeNum === 1) {
@@ -232,7 +230,6 @@ export default {
       } else {
         this.request.mode = "releaseDesc";
       }
-      this.getQuestionList();
     },
     humanize: function(now, date) {
       const moment = require("moment");
@@ -322,7 +319,7 @@ export default {
             'bold', 'italic', '|',
             'link', '|',
             'bulletedList', 'numberedList', '|',
-            'uploadImage', '|',
+            'ckfinder', '|',
             'undo', 'redo'
         ],
       }
