@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
+import com.solver.api.response.QuestionListRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
@@ -48,16 +49,25 @@ public class QuestionServiceImpl implements QuestionService{
 
 	// 질문 목록 조회
 	@Override
-	public List<Question> getQuestionList(QuestionGetListReq questionGetListReq) {
+	public QuestionListRes getQuestionList(QuestionGetListReq questionGetListReq) {
 		// 대분류, 소분류, 질문 상태는 외래키 필드이기 때문에 객체를 구해서 진행
 		Code mainCategory = codeRepository.findByCode(questionGetListReq.getMainCategory());
 		Category subCategory = categoryRepository.findBySubCategoryCode(questionGetListReq.getSubCategory());
 		Code type = codeRepository.findByCode(questionGetListReq.getType());
 		
+		int limit = questionGetListReq.getLimit();
+		int offset = questionGetListReq.getOffset();
+		
 		List<Question> questionList = questionRepositorySupport.findDynamicQueryQuestion(
 				mainCategory, subCategory, questionGetListReq.getQuery(), questionGetListReq.getDifficulty(), type, questionGetListReq.getMode());
 		
-		return questionList;
+		int totalCount = questionList.size();
+		
+		int listLimit = limit > questionList.size() - (offset*limit) ? questionList.size(): limit*(offset+1);
+		
+		questionList = questionList.subList(offset*limit, listLimit);
+		
+		return QuestionListRes.of(200, "질문 목록을 성공적으로 조회했습니다.", questionList, totalCount);
 	}
 	
 	// 질문 생성

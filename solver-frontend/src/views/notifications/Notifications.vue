@@ -1,16 +1,12 @@
 <template>
-  
+  <div></div>
 </template>
 
 <script>
 export default {
-    name: 'Notifications',
-    data() {
-        
-    }
-}
+  name: "Notifications",
+  data() {},
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

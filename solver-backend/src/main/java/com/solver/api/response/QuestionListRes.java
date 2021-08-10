@@ -18,9 +18,12 @@ import lombok.Setter;
 public class QuestionListRes extends BaseResponse{
 	// 전체 조회 시에는 사용자에게 보여줄 필요한 정보들을 새로 가공해야 한다. 따라서, 새로운 클래스를 만들고 그 객체의 리스트를 반환한다.
 	private List<QuestionForm> questionFormList;
+	private int totalCount;
 	
-	public static QuestionListRes of(Integer statusCode, String message, List<Question> questionList) {
+	public static QuestionListRes of(Integer statusCode, String message, List<Question> questionList, int totalCount) {
 		QuestionListRes res = new QuestionListRes();
+		
+		res.setTotalCount(totalCount);
 		// 기본 question 형태의 자료들을 전부 qustionForm 형태로 바꿔서 새로운 questionForm 리스트에 담아 결과로 반환할 것이다.
 		List<QuestionForm> questionFormList = new ArrayList<QuestionForm>();
 		
