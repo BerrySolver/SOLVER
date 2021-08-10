@@ -18,5 +18,7 @@ export default {
     getSolverList: "solver",
 
     createQuestion: "questions",
+    // 프로필
+    editProfile: "profiles",
   },
 };
