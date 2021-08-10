@@ -316,6 +316,17 @@ export default {
   mounted() {
     ClassicEditor.create(document.querySelector("#divEditorInsert"), {
       extraPlugins: [MyCustomUploadAdapterPlugin],
+        toolbar: {
+          items: [
+            'heading', '|',
+            'bold', 'italic', '|',
+            'link', '|',
+            'outdent', 'indent', '|',
+            'bulletedList', 'numberedList', '|',
+            'uploadImage', '|',
+            'undo', 'redo'
+        ],
+      }
     })
       .then((editor) => {
         this.CKEditor = editor;
