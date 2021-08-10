@@ -155,3 +155,11 @@
   color: #F1F2F2;
   outline: 5px auto #658DC6;
 }
+
+.url-input {
+  background-color: #658dc61b;
+  font-size: 14px;
+  height: 22px;
+  margin-bottom: 3px;
+  width: 500px;
+}

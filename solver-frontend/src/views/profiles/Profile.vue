@@ -36,7 +36,17 @@
         
         <!-- 개인 URL -->
         <div class="social-url">
-          URL {{ userProfileInfo.profileUrl }}
+          <div v-if="!isEdit">
+            <span>URL</span>
+            <span class="content-text-b m-left-1">{{ userProfileInfo.linkText }}</span>
+          </div>
+          <div v-if="isEdit" @keyup.enter="[editRequest(), editSelfUrl(editInfo.selfUrl)]">
+            URL
+            <span><input v-model="editInfo.selfUrl" class="url-input m-left-1" type="text"></span>
+            <button
+            @click="[editRequest(), editSelfUrl(editInfo.selfUrl)]"
+            class="edit-end-button m-left-1">수정</button>
+          </div>
         </div>
       </div>
 
@@ -191,8 +201,8 @@ export default {
           nickname: this.userNickname,
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: selfIntro,
-          link_text: this.userProfileInfo.link_text,
-          category: this.userProfileInfo.favoriteFieldNameList
+          linkText: this.userProfileInfo.linkText,
+          category: this.userProfileInfo.favoriteFieldCodeList
         }
       })
       .then((res) => {
@@ -203,6 +213,26 @@ export default {
     },
 
     // 프로필 URL 수정
+    editSelfUrl(selfUrl) {
+      console.log(selfUrl)
+      axios({
+        url: API.URL + API.ROUTES.editProfile,
+        method: "patch",
+        headers: { Authorization: "Bearer " + this.accessToken},
+        data: {
+          nickname: this.userNickname,
+          profileUrl: this.userProfileInfo.profileUrl,
+          introduction: this.userProfileInfo.introduction,
+          linkText: selfUrl,
+          category: this.userProfileInfo.favoriteFieldCodeList
+        }
+      })
+      .then((res) => {
+        // 실시간 업데이트를 위해
+        this.profileSetting(this.userNickname)
+        })
+      .catch((err) => console.log(err))
+    },
   },
   computed: {
     ...mapState({
