@@ -79,15 +79,15 @@ public class QuestionController {
 	public ResponseEntity<? extends BaseResponse> getQuestionList(
 			@ModelAttribute QuestionGetListReq questionGetListReq)
 	{	
-		List<Question> questionList;
+		QuestionListRes questionListRes;
 		try {
-			questionList = questionService.getQuestionList(questionGetListReq);
+			questionListRes = questionService.getQuestionList(questionGetListReq);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(400).body(QuestionListRes.of(400, "질문 목록 조회에 실패했습니다."));
 		}
 		
-		return ResponseEntity.status(200).body(QuestionListRes.of(200, "질문 목록을 성공적으로 조회했습니다.", questionList));
+		return ResponseEntity.status(200).body(questionListRes);
 	}
 	
 	// 질문 생성 API

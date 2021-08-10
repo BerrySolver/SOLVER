@@ -1,16 +1,12 @@
 <template>
-  
+  <div></div>
 </template>
 
 <script>
 export default {
-    name: 'MessageForwarding',
-    data() {
-        
-    }
-}
+  name: "MessageForwarding",
+  data() {},
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

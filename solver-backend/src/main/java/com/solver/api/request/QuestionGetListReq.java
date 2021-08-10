@@ -40,4 +40,10 @@ public class QuestionGetListReq {
 	@ApiModelProperty(name="mode", example="releaseDesc")
 	private String mode;
 	
+	@ApiModelProperty(name="offset", example="1")
+	private int offset;
+	
+	@ApiModelProperty(name="limit", example="10")
+	private int limit;
+	
 }

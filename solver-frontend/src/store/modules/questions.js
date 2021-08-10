@@ -4,32 +4,37 @@ import router from "@/router";
 
 const state = {
   query: null,
-}
+};
 
 const mutations = {
   SET_QUERY: (state, query) => {
     state.query = query;
   },
-}
+};
 
 const actions = {
-  setStateQuery({commit}, query) {
-    commit('SET_QUERY', query)
+  setStateQuery({ commit }, query) {
+    commit("SET_QUERY", query);
+  },
+  setStateQueryMain({ commit }, query) {
+    commit("SET_QUERY", query);
     router.push({ path: "/questions" });
   },
   goQuestionDetail(context, questionId) {
     router.push({
-      name: 'QuestionsDetail',
+      name: "QuestionsDetail",
       params: {
-        questionId: questionId
-      }
-    })
-  }
-}
+        questionId: questionId,
+      },
+    });
+  },
+};
 
-const getters = {
-}
+const getters = {};
 
 export default {
-  state, getters, mutations, actions
-}
+  state,
+  getters,
+  mutations,
+  actions,
+};

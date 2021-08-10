@@ -143,9 +143,11 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		/* 관심 분야 이름 리스트 생성 */
 		List<String> favoriteFieldNameList = new ArrayList<>();
+		List<String> favoriteFieldCodeList = new ArrayList<>();
 		
 		for (FavoriteField favoriteField : favoriteFieldList) {
 			favoriteFieldNameList.add(favoriteField.getCategory().getSubCategoryName());
+			favoriteFieldCodeList.add(favoriteField.getCategory().getSubCategoryCode());
 		}
 		/* 관심 분야 이름 리스트 생성 끝 */
 		
@@ -154,6 +156,7 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		profileRes.setEvaluationScore(evaluationScore);
 		profileRes.setFavoriteFieldNameList(favoriteFieldNameList);
+		profileRes.setFavoriteFieldCodeList(favoriteFieldCodeList);
 		profileRes.setGroupNameList(groupNameList);
 		profileRes.setPoint(point);
 		profileRes.setRemainingPoint(remainingPoint);
