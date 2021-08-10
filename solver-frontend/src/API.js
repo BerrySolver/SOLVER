@@ -16,5 +16,7 @@ export default {
 
     // 솔버리스트
     getSolverList: "solver",
+
+    createQuestion: "questions",
   },
 };

@@ -258,7 +258,7 @@ export default {
       // "difficulty": this.request.difficulty,
       // };
 
-      auth.state.accessToken = "mwPcveN5NG_7-ewnQwyEiju69cluaMaO44WJIgopyV8AAAF7Lekhlw";
+      auth.state.accessToken = "E9BoCaA7JUkwIUrt_CHaAvU-E-WVG0B3b2z02go9dVoAAAF7L10guw";
 
       axios({
         url: API.URL + API.ROUTES.createQuestion,
