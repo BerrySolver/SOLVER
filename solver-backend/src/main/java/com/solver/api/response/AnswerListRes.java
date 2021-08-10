@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
@@ -24,9 +25,13 @@ public class AnswerListRes extends BaseResponse{
 		
 		for (Answer answer : answerList) {
 			AnswerInfo answerInfo = new AnswerInfo();
+			User user = answer.getUser();
 			
+			answerInfo.setAnswerId(answer.getId());
 			answerInfo.setContent(answer.getContent());
-			answerInfo.setId(answer.getId());
+			answerInfo.setUserId(user.getId());
+			answerInfo.setNickname(user.getNickname());
+			answerInfo.setProfileUrl(user.getProfileUrl());
 			answerInfo.setRegDt(answer.getRegDt());
 			
 			tempAnswerList.add(answerInfo);
@@ -52,7 +57,10 @@ public class AnswerListRes extends BaseResponse{
 @Getter
 @Setter
 class AnswerInfo{
-	private String id;
+	private String answerId;
+	private String userId;
+	private String nickname;
+	private String profileUrl;
 	private String content;
 	private Date regDt;
 }

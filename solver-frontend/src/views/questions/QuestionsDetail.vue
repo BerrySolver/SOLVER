@@ -13,7 +13,7 @@
             <img class="question-detail-profileImg" src="@/assets/profile-ex.jpg" alt="profile-image">
             <span class="question-detail-nickname">{{question.nickname}}</span>
           </div>
-          <div class="question-detail-content">
+          <div class="question-detail-content" v-html="question.content">
             {{question.content}}
           </div>
           <div class="question-detail-info">
