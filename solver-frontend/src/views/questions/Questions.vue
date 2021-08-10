@@ -197,11 +197,43 @@
             <div v-if="questionList.length === 0" class="question-list-item">
               <span>저쪽 신사분께 첫 질문을 남겨보시겠어요?</span>
             </div>
-            <div>
-              <pagination v-on:call-parent="movePage"></pagination>
-
-              <div id="paginationWrapper"></div>
-            </div>
+          </div>
+          <div>
+            <nav aria-label="Page navigation" class="page-nav">
+              <ul class="pagination justify-content-center">
+                <li v-if="prev" class="page-item">
+                  <a
+                    class="page-link"
+                    aria-label="Previous"
+                    @click="paginationChanged(startPageIndex - 1)"
+                  >
+                    <span aria-hidden="true">«</span>
+                  </a>
+                </li>
+                <li
+                  v-for="index in endPageIndex - startPageIndex + 1"
+                  :key="index"
+                  v-bind:class="{
+                    active: startPageIndex + index - 1 == pageIndex(),
+                  }"
+                  class="page-item"
+                >
+                  <a @click="paginationChanged(startPageIndex + index - 1)" class="page-link">{{
+                    startPageIndex + index - 1
+                  }}</a>
+                  <!-- href 는 그대로, 커서 모양 유지-->
+                </li>
+                <li v-if="next" class="page-item">
+                  <a
+                    class="page-link"
+                    aria-label="Next"
+                    @click="paginationChanged(endPageIndex + 1)"
+                  >
+                    <span aria-hidden="true">»</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
@@ -213,14 +245,10 @@
 import axios from "axios";
 import API from "@/API.js";
 import { mapState, mapActions } from "vuex";
-import Pagination from "@/components/main/Pagination.vue";
-import pageNationStore from "@/store/modules/pagenation.js";
 
 export default {
   name: "Questions",
-  components: {
-    Pagination,
-  },
+  components: {},
   data() {
     return {
       categories: [],
@@ -245,11 +273,14 @@ export default {
       typeColor: ["#0F4C81", "#89848C", "#89848C"],
       modeColor: ["#0F4C81", "#89848C", "#89848C"],
       now: new Date(),
-      totalCount: null,
+      listRowCount: 10,
+      pageLinkCount: 10,
+      currentPageIndex: 1,
+      totalListItemCount: 10,
     };
   },
   methods: {
-    ...mapActions(["setStateQuery", "goQuestionDetail", "setCurrectPage"]),
+    ...mapActions(["setStateQuery", "goQuestionDetail", "setCurrentPage"]),
     getAllQuestionList: function() {
       this.request.curCategory = "전체";
       this.request.mainCategory = null;
@@ -315,10 +346,9 @@ export default {
       })
         .then((res) => {
           this.questionList = res.data.questionFormList;
-          this.totalCount = res.data.totalCount;
-          pageNationStore.state.totalListItemCount = this.totalCount;
+          this.totalListItemCount = res.data.totalCount;
           // console.log(this.questionList);
-          console.log(this.totalCount);
+          console.log(this.totalListItemCount);
         })
         .catch((err) => {
           console.log(err.message);
@@ -345,19 +375,14 @@ export default {
       }
       return r;
     },
-    movePage(pageIndex) {
-      console.log("movePage : pageIndex : " + pageIndex);
-
-      // store commit 으로 변경
-      // this.offset = (pageIndex - 1) * this.listRowCount;
-      // this.currentPageIndex = pageIndex;
-      // this.$store.commit("SET_NOTICE_MOVE_PAGE", pageIndex);
+    paginationChanged(pageIndex) {
+      // console.log("movePage : pageIndex : " + pageIndex);
       this.request.offset = pageIndex - 1;
-      pageNationStore.commit("SET_MOVE_PAGE", pageIndex);
-      // pageNationStore.state.currentPageIndex = pageIndex;
-      console.log(pageNationStore.state.currentPageIndex);
+      this.currentPageIndex = pageIndex;
       this.getQuestionList();
-      // this.noticeList();
+    },
+    pageIndex() {
+      return this.currentPageIndex;
     },
   },
   created: function() {
@@ -386,6 +411,45 @@ export default {
     },
     modeWatch: function() {
       return this.request.mode;
+    },
+    pageCount: function() {
+      return Math.ceil(this.totalListItemCount / this.listRowCount);
+    },
+    startPageIndex: function() {
+      if (this.currentPageIndex % this.pageLinkCount == 0) {
+        //10, 20...맨마지막
+        return (this.currentPageIndex / this.pageLinkCount - 1) * this.pageLinkCount + 1;
+      } else {
+        return Math.floor(this.currentPageIndex / this.pageLinkCount) * this.pageLinkCount + 1;
+      }
+    },
+    endPageIndex: function() {
+      let ret = 0;
+      if (this.currentPageIndex % this.pageLinkCount == 0) {
+        //10, 20...맨마지막
+        ret =
+          (this.currentPageIndex / this.pageLinkCount - 1) * this.pageLinkCount +
+          this.pageLinkCount;
+      } else {
+        ret =
+          Math.floor(this.currentPageIndex / this.pageLinkCount) * this.pageLinkCount +
+          this.pageLinkCount;
+      }
+      return ret > this.pageCount ? this.pageCount : ret;
+    },
+    prev: function() {
+      if (this.currentPageIndex <= this.pageLinkCount) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    next: function() {
+      if (this.endPageIndex >= this.pageCount) {
+        return false;
+      } else {
+        return true;
+      }
     },
   },
   watch: {
@@ -624,7 +688,7 @@ export default {
 
 .question-list {
   border-bottom: 1px solid #b5c7d3;
-  margin-bottom: 100px;
+  margin-bottom: 20px;
 }
 
 .question-list-item {
@@ -711,5 +775,44 @@ export default {
 .selectDifficultyBox {
   float: left;
   margin-left: 5px;
+}
+
+.page-nav {
+  margin-bottom: 80px;
+}
+
+/* li a {
+  border-style: solid;
+  color: #7b27d8;
+}
+li a:hover {
+  border-style: solid;
+  background: #cba3f8;
+  color: #fff;
+} */
+/* li {
+  border-style: none;
+} */
+li.active.page-item a {
+  background: #0f4c81 !important;
+  /* background: linear-gradient(20deg, #5846f9 0%, #7b27d8 100%); */
+  border-color: #0f4c81 !important;
+  color: #fff;
+  cursor: pointer;
+}
+
+li.page-item a {
+  background: #fff !important;
+  /* background: linear-gradient(20deg, #5846f9 0%, #7b27d8 100%); */
+  border-color: #0f4c81 !important;
+  color: #0f4c81;
+  cursor: pointer;
+}
+
+li.page-item a:hover {
+  background: #658dc6 !important;
+  /* background: linear-gradient(20deg, #5846f9 0%, #7b27d8 100%); */
+  border-color: #658dc6 !important;
+  color: #fff;
 }
 </style>
