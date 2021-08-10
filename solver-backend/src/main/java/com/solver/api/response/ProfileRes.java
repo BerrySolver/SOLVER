@@ -28,6 +28,9 @@ public class ProfileRes extends BaseResponse{
 	@ApiModelProperty(name="관심 분야 목록")
 	private List<String> favoriteFieldNameList;
 	
+	@ApiModelProperty(name="관심 분야 목록")
+	private List<String> favoriteFieldCodeList;
+	
 	@ApiModelProperty(name="사용자 닉네임")
 	private String nickname;
 	
