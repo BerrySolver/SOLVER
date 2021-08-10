@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.QuestionGetListReq;
@@ -44,8 +45,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
-@CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
-methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
+@CrossOrigin("*")
 
 @Api(value="질문 API", tags = {"Question"})
 @RestController
@@ -98,12 +98,13 @@ public class QuestionController {
         @ApiResponse(code = 400, message = "질문 생성에 실패했습니다.")
     })
 	public ResponseEntity<? extends BaseResponse> createQuestion(
+			HttpServletResponse response, 
 			@RequestBody @ApiParam(value="질문 정보", required=true) QuestionPostReq questionPostReq,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		// accessToken은 'Bearer token' 형태로 넘어오므로 처리가 필요하다.
 		String token = accessToken.split(" ")[1];
-		Question question = questionService.createQuestion(questionPostReq, token);
+		Question question = questionService.createQuestion(questionPostReq, token, response);
 		if (question == null) {
 			return ResponseEntity.status(400).body(QuestionRes.of(400, "질문 생성에 실패했습니다."));
 		}
@@ -139,6 +140,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
     })
 	public ResponseEntity<? extends BaseResponse> updateQuestion(
+			HttpServletResponse response, 
 			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
 			@RequestBody @ApiParam(value="수정 내용", required=true) QuestionPatchReq questionPatchReq,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
@@ -150,7 +152,7 @@ public class QuestionController {
 		}
 		
 		Question question = optionalQuestion.get();		
-		question = questionService.updateQuestion(questionPatchReq, optionalQuestion.get(), token);
+		question = questionService.updateQuestion(questionPatchReq, optionalQuestion.get(), token, response);
 		
 		if (question == null) {
 			return ResponseEntity.status(403).body(QuestionRes.of(403, "권한이 없습니다."));
@@ -168,6 +170,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
     })
 	public ResponseEntity<? extends BaseResponse> deleteQuestion(
+			HttpServletResponse response, 
 			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
@@ -178,7 +181,7 @@ public class QuestionController {
 		}
 		
 		try {
-			questionService.deleteQuestion(question.get(), token);
+			questionService.deleteQuestion(question.get(), token, response);
 		} catch (AccessDeniedException e) {
 			return ResponseEntity.status(403).body(QuestionRes.of(403, "권한이 없습니다."));
 		}
@@ -194,12 +197,13 @@ public class QuestionController {
         @ApiResponse(code = 400, message = "질문 목록 조회에 실패했습니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> myQuestion(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		String token = accessToken.split(" ")[1];
 		List<Question> questionList;
 		try {
-			questionList = questionService.getMyQuestionList(token);
+			questionList = questionService.getMyQuestionList(token, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(400).body(QuestionListRes.of(400, "질문 목록 조회에 실패했습니다."));
@@ -218,6 +222,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> createBookmark(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId
 			)
@@ -228,7 +233,7 @@ public class QuestionController {
 			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
 		}
 		
-		boolean isSuccess = bookmarkService.createBookmark(accessToken, question.get());
+		boolean isSuccess = bookmarkService.createBookmark(accessToken, question.get(), response);
 		
 		if(!isSuccess) {
 			return ResponseEntity.status(400).body(BaseResponse.of(400, "북마크 추가 실패"));
@@ -246,6 +251,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> deleteBookmark(
+			HttpServletResponse response, 
 			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
@@ -256,7 +262,7 @@ public class QuestionController {
 		}
 		
 		try {
-			bookmarkService.deleteBookmark(question.get(), token);
+			bookmarkService.deleteBookmark(question.get(), token, response);
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(404).body(BaseResponse.of(404, "북마크 기록이 없습니다."));
 		}
@@ -273,6 +279,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> createFavoriteQuestion(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId
 			)
@@ -283,7 +290,7 @@ public class QuestionController {
 			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
 		}
 		
-		FavoriteQuestion favoriteQuestion = favoriteQuestionService.createFavoriteQuestion(accessToken, question.get());
+		FavoriteQuestion favoriteQuestion = favoriteQuestionService.createFavoriteQuestion(accessToken, question.get(), response);
 		
 		if(favoriteQuestion == null) {
 			return ResponseEntity.status(400).body(BaseResponse.of(400, "좋아요 실패"));
@@ -301,6 +308,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> deleteFavoriteQuestion(
+			HttpServletResponse response, 
 			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
@@ -311,7 +319,7 @@ public class QuestionController {
 		}
 		
 		try {
-			favoriteQuestionService.deleteFavoriteQuestion(token, question.get());
+			favoriteQuestionService.deleteFavoriteQuestion(token, question.get(), response);
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(404).body(BaseResponse.of(404, "좋아요 기록이 없습니다."));
 		}
@@ -328,6 +336,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> createConferenceReservation(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId
 			)
@@ -339,7 +348,7 @@ public class QuestionController {
 			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
 		}
 		
-		ConferenceReservation conferenceReservation = conferenceReservationService.createConferenceReservation(token, question.get());
+		ConferenceReservation conferenceReservation = conferenceReservationService.createConferenceReservation(token, question.get(), response);
 		
 		if(conferenceReservation == null) {
 			return ResponseEntity.status(400).body(BaseResponse.of(400, "참관 신청 실패"));
@@ -357,6 +366,7 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
 	})
 	public ResponseEntity<? extends BaseResponse> deleteConferenceReservation(
+			HttpServletResponse response, 
 			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
@@ -367,7 +377,7 @@ public class QuestionController {
 		}
 		
 		try {
-			conferenceReservationService.deleteConferenceReservation(token, question.get());
+			conferenceReservationService.deleteConferenceReservation(token, question.get(), response);
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(404).body(BaseResponse.of(404, "참관 신청 기록이 없습니다."));
 		}

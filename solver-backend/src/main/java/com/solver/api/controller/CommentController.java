@@ -2,6 +2,8 @@ package com.solver.api.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.CommentCreatePostReq;
@@ -31,8 +32,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
-@CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
-methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
+@CrossOrigin("*")
 
 @Api(value="댓글 API", tags = {"Comment"})
 @RestController
@@ -50,12 +50,13 @@ public class CommentController {
         @ApiResponse(code = 409, message = "댓글 작성 실패")
     })
 	public ResponseEntity<? extends BaseResponse> createComment(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String answerId,
 			CommentCreatePostReq commentCreatePostReq
 			) throws ParseException 
 	{
-		commentService.createComment(accessToken, commentCreatePostReq, answerId);
+		commentService.createComment(accessToken, commentCreatePostReq, answerId, response);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "댓글 작성에 성공했습니다"));
 	}
@@ -68,12 +69,13 @@ public class CommentController {
         @ApiResponse(code = 409, message = "댓글 삭제 실패")
     })
 	public ResponseEntity<? extends BaseResponse> deleteComment(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable @ApiParam(value="삭제할 댓글 ID", required=true) String commentId
 			) 
 	{
 		
-		boolean isSuccess = commentService.deleteComment(accessToken, commentId);
+		boolean isSuccess = commentService.deleteComment(accessToken, commentId, response);
 		
 		if(!isSuccess)
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "댓글 삭제 실패"));
@@ -89,13 +91,14 @@ public class CommentController {
         @ApiResponse(code = 409, message = "댓글 수정 실패")
     })
 	public ResponseEntity<? extends BaseResponse> updateComment(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable @ApiParam(value="변경할 댓글 ID", required=true) String commentId,
 			@RequestBody @ApiParam(value="변경할 댓글 내용", required=true) CommentUpdatePatchReq commentUpdatePatchReq
 			) 
 	{
 		
-		boolean isSuccess = commentService.updateComment(accessToken, commentId, commentUpdatePatchReq);
+		boolean isSuccess = commentService.updateComment(accessToken, commentId, commentUpdatePatchReq, response);
 		
 		if(!isSuccess)
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "댓글 수정 실패"));

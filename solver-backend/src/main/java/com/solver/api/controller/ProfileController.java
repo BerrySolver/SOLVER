@@ -2,6 +2,8 @@ package com.solver.api.controller;
 
 import java.util.NoSuchElementException;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,8 +31,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
-@CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
-methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
+@CrossOrigin("*")
 
 @Api(value="유저 API", tags = {"Profile"})
 @RestController
@@ -52,6 +52,8 @@ public class ProfileController {
 	{
 		ProfileRes profileRes = null;
 		
+		System.out.println(nickname);
+		
 		try {
 			profileRes = profileService.getProfileInfo(nickname);
 		}
@@ -71,10 +73,11 @@ public class ProfileController {
         @ApiResponse(code = 409, message = "프로필 정보 수정 실패")
     })
 	public ResponseEntity<? extends BaseResponse> updateProfile(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@RequestBody ProfileUpdatePatchReq profileUpdatePatchReq)
 	{
-		profileService.updateProfile(profileUpdatePatchReq, accessToken);
+		profileService.updateProfile(profileUpdatePatchReq, accessToken, response);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "프로필 정보 수정 성공"));
 	}
@@ -87,10 +90,11 @@ public class ProfileController {
         @ApiResponse(code = 409, message = "화상 회의 테이블 정보 수정")
     })
 	public ResponseEntity<? extends BaseResponse> updateProfilePossibleTime(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@RequestBody ProfilePossibleTimePatchReq profilePossibleTimePatchReq)
 	{
-		profileService.updateProfilePossibleTime(profilePossibleTimePatchReq, accessToken);
+		profileService.updateProfilePossibleTime(profilePossibleTimePatchReq, accessToken, response);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 테이블 정보 수정 성공"));
 	}
@@ -126,11 +130,12 @@ public class ProfileController {
         @ApiResponse(code = 409, message = "팔로우 추가 실패")
     })
 	public ResponseEntity<? extends BaseResponse> followUser(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String nickname
 			)
 	{
-		int flag = profileService.followUser(accessToken, nickname);
+		int flag = profileService.followUser(accessToken, nickname, response);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "팔로우 추가 실패"));
@@ -146,11 +151,12 @@ public class ProfileController {
         @ApiResponse(code = 409, message = "팔로우 삭제 실패")
     })
 	public ResponseEntity<? extends BaseResponse> unFollowUser(
+			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String nickname
 			)
 	{
-		int flag = profileService.unFollowUser(accessToken, nickname);
+		int flag = profileService.unFollowUser(accessToken, nickname, response);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "팔로우 삭제 실패"));

@@ -3,28 +3,23 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import { mapActions } from "vuex";
 
 export default {
-    name: 'Logout',
-    methods: {
-      ...mapActions([
-        'logout',
-      ]),
-    },
-    created() {
-        console.log("out")
-        this.logout();
-    },
-}
+  name: "Logout",
+  methods: {
+    ...mapActions(["logout"]),
+  },
+  created() {
+    this.logout();
+  },
+};
 // export default {
 //     name: 'Logout',
 //     data() {
-        
+
 //     }
 // }
 </script>
 
-<style>
-
-</style>
+<style></style>

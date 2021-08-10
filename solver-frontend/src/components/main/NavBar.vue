@@ -34,7 +34,7 @@
             <RouterLink :to="{ name: 'Signup1' }" class="nav-router">회원가입</RouterLink>
           </li>
           <li class="nav-item" v-if="isLoggedIn">
-            <RouterLink :to="`/profiles/${userNickname}`" class="nav-router">프로필</RouterLink>
+            <RouterLink :to="`/profiles/${userNickname}`" class="nav-router" @click="profileClick">프로필</RouterLink>
           </li>
           <li class="nav-item" v-if="isLoggedIn">
             <a @click="logout" class="nav-logout">로그아웃</a>
@@ -65,6 +65,9 @@ export default {
     ...mapActions([
       'logout',
     ]),
+    profileClick() {
+      this.profileSetting(this.userNickname)
+    }
   },
 };
 </script>

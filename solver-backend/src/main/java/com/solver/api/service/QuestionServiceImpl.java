@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
 import com.solver.common.auth.KakaoUtil;
+import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
@@ -59,7 +62,7 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	// 질문 생성
 	@Override
-	public Question createQuestion(QuestionPostReq questionPostReq, String token) {
+	public Question createQuestion(QuestionPostReq questionPostReq, String token, HttpServletResponse response) {
 		// 질문 Id 생성
 		Question question = new Question();
 		String questionId = "";
@@ -70,8 +73,19 @@ public class QuestionServiceImpl implements QuestionService{
 			if(questionRepository.findById(questionId).orElse(null) == null)
 				break;
 		}
+		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
 		// 외래키 참조값 생성
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		
 		if (user.orElse(null) == null) {
 			return null;
@@ -113,8 +127,19 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	// 질문 수정
 	@Override
-	public Question updateQuestion(QuestionPatchReq questionPatchReq, Question question, String token) {
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+	public Question updateQuestion(QuestionPatchReq questionPatchReq, Question question, String token, HttpServletResponse response) {
+		
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		
 		// 작성자가 현재 내가 아니면 null을 반환, controller에서 403에러 띄우게 됨
 		if (!user.get().getId().equals(question.getUser().getId())) {
@@ -138,8 +163,18 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	// 질문 삭제
 	@Override
-	public void deleteQuestion(Question question, String token) {
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+	public void deleteQuestion(Question question, String token, HttpServletResponse response) {
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		
 		// 작성자가 현재 내가 아니면 에러를 던져줌
 		if (!user.get().getId().equals(question.getUser().getId())) {
@@ -153,8 +188,18 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	// 내 질문 목록 조회
 	@Override
-	public List<Question> getMyQuestionList(String token) {
-		Optional<User> user = userRepository.findByKakaoId(kakaoUtil.getKakaoUserIdByToken(token));
+	public List<Question> getMyQuestionList(String token, HttpServletResponse response) {
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		if(tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+		
+		Optional<User> user = userRepository.findByKakaoId(kakaoId);
 		
 		List<Question> questionList = questionRepository.findByUserId(user.get().getId());
 		

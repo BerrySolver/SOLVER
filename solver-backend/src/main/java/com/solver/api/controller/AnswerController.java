@@ -2,6 +2,8 @@ package com.solver.api.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.AnswerCreatePostReq;
@@ -32,8 +33,7 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import springfox.documentation.annotations.ApiIgnore;
 
-@CrossOrigin(origins = "http://localhost:8081", allowCredentials="true", allowedHeaders="*",
-methods= {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT, RequestMethod.HEAD, RequestMethod.OPTIONS})
+@CrossOrigin("*")
 
 @Api(value="답변 API", tags = {"Answer"})
 @RestController
@@ -53,13 +53,13 @@ public class AnswerController {
         @ApiResponse(code = 201, message = "답변 작성에 성공했습니다"),
         @ApiResponse(code = 409, message = "답변 작성에 실패했습니다")
     })
-	public ResponseEntity<? extends BaseResponse> createAnswer(
+	public ResponseEntity<? extends BaseResponse> createAnswer(HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId,
 			AnswerCreatePostReq answerCreatePostReq
 			) throws ParseException 
 	{
-		answerService.createAnswer(accessToken, answerCreatePostReq, questionId);
+		answerService.createAnswer(accessToken, answerCreatePostReq, questionId, response);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "답변 작성에 성공했습니다"));
 	}
@@ -71,13 +71,13 @@ public class AnswerController {
         @ApiResponse(code = 204, message = "답변 삭제에 성공했습니다"),
         @ApiResponse(code = 409, message = "답변 삭제에 실패했습니다")
     })
-	public ResponseEntity<? extends BaseResponse> deleteAnswer(
+	public ResponseEntity<? extends BaseResponse> deleteAnswer(HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable @ApiParam(value="삭제할 답변 ID", required=true) String answerId
 			) 
 	{
 		
-		boolean isSuccess = answerService.deleteAnswer(accessToken, answerId);
+		boolean isSuccess = answerService.deleteAnswer(accessToken, answerId, response);
 		
 		if(!isSuccess)
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 삭제에 실패했습니다"));
@@ -92,14 +92,14 @@ public class AnswerController {
         @ApiResponse(code = 201, message = "답변 수정에 성공했습니다"),
         @ApiResponse(code = 409, message = "답변 수정에 실패했습니다")
     })
-	public ResponseEntity<? extends BaseResponse> updateAnswer(
+	public ResponseEntity<? extends BaseResponse> updateAnswer(HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable @ApiParam(value="변경할 답변 ID", required=true) String answerId,
 			@RequestBody @ApiParam(value="변경할 답변 내용", required=true) AnswerUpdatePatchReq answerUpdatePatchReq
 			) 
 	{
 		
-		boolean isSuccess = answerService.updateAnswer(accessToken, answerId, answerUpdatePatchReq);
+		boolean isSuccess = answerService.updateAnswer(accessToken, answerId, answerUpdatePatchReq, response);
 		
 		if(!isSuccess)
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 수정에 실패했습니다"));
@@ -134,12 +134,12 @@ public class AnswerController {
         @ApiResponse(code = 201, message = "답변 좋아요 추가 성공"),
         @ApiResponse(code = 409, message = "답변 좋아요 추가 실패")
     })
-	public ResponseEntity<? extends BaseResponse> createFavoriteAnswer(
+	public ResponseEntity<? extends BaseResponse> createFavoriteAnswer(HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable @ApiParam(value="좋아요를 추가할 답변 ID", required=true) String answerId
 			) 
 	{
-		int flag = favoriteAnswerService.createFavoriteAnswer(accessToken, answerId);
+		int flag = favoriteAnswerService.createFavoriteAnswer(accessToken, answerId, response);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 좋아요 추가 실패"));
@@ -155,12 +155,12 @@ public class AnswerController {
         @ApiResponse(code = 204, message = "답변 좋아요 삭제 성공"),
         @ApiResponse(code = 409, message = "답변 좋아요 삭제 실패")
     })
-	public ResponseEntity<? extends BaseResponse> deleteFavoriteAnswer(
+	public ResponseEntity<? extends BaseResponse> deleteFavoriteAnswer(HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable @ApiParam(value="좋아요를 추가할 답변 질문 ID", required=true) String answerId
 			) 
 	{
-		int flag = favoriteAnswerService.deleteFavoriteAnswer(accessToken, answerId);
+		int flag = favoriteAnswerService.deleteFavoriteAnswer(accessToken, answerId, response);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "답변 좋아요 삭제 실패"));

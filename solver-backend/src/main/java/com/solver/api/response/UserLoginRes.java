@@ -8,7 +8,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 public class UserLoginRes extends BaseResponse{
 	private String accessToken;
 }

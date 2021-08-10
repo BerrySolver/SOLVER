@@ -28,6 +28,7 @@ public class QuestionListRes extends BaseResponse{
 		for (int i = 0; i < questionList.size(); i++) {
 			Question question = questionList.get(i);
 			QuestionForm qForm = new QuestionForm();
+			qForm.setQuestionId(question.getId());
 			qForm.setTitle(question.getTitle());
 			qForm.setDifficulty(question.getDifficulty());
 			qForm.setContent(question.getContent());
@@ -51,6 +52,8 @@ public class QuestionListRes extends BaseResponse{
 @Getter
 @Setter
 class QuestionForm{
+	// Id
+	private String questionId;
 	// 제목
 	private String title;
 	// 난이도
