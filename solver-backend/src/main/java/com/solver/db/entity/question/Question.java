@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,6 +28,7 @@ import lombok.Setter;
 @Setter
 public class Question extends BaseEntity{
 	private String title;
+	@Column(columnDefinition = "LONGTEXT")
 	private String content;
 	private int difficulty;
 	private Date regDt;

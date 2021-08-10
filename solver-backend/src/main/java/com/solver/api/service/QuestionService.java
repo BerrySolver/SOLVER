@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
+import com.solver.api.response.QuestionListRes;
 import com.solver.db.entity.question.Question;
 
 public interface QuestionService {
@@ -19,7 +20,7 @@ public interface QuestionService {
 
 	void deleteQuestion(Question question, String token, HttpServletResponse response);
 
-	List<Question> getQuestionList(QuestionGetListReq questionGetListReq);
+	QuestionListRes getQuestionList(QuestionGetListReq questionGetListReq);
 
 	List<Question> getMyQuestionList(String token, HttpServletResponse response);
 }	

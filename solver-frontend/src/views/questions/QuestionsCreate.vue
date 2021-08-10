@@ -18,62 +18,63 @@
           <div class="question-query">
             <div>
               <div class="selectBox row mb-2">
-                <select
+                <vs-select
                   color="#0F4C81"
                   class="selectMainCategory"
                   v-model="request.mainCategoryIndex"
-                  width="150px"
+                  width="285px"
                   @change="setMainCategory"
                 >
-                  <option
+                  <vs-select-item
                     v-for="(item, index) in categories"
                     :key="index"
                     :value="index"
+                    :text="item.codeName"
                     style="font-size: 15px;"
-                    >{{ item.codeName }}</option
+                    >{{ item.codeName }}</vs-select-item
                   >
-                </select>
-                <select
+                </vs-select>
+                <vs-select
                   color="#0F4C81"
                   class="selectSubCategory"
                   v-model="request.subCategoryIndex"
-                  width="150px"
+                  width="285px"
                   @change="setSubCategory"
                 >
-                  <option
+                  <vs-select-item
                     v-for="(item, index) in subCategories"
                     :key="index"
+                    :text="item.subCategoryName"
                     :value="index"
                     style="font-size: 15px;"
-                    >{{ item.subCategoryName }}</option
+                    >{{ item.subCategoryName }}</vs-select-item
                   >
-                </select>
-                <select
+                </vs-select>
+                <vs-select
                   color="#0F4C81"
                   class="selectDifficulty"
                   v-model="request.difficulty"
-                  width="150px"
+                  width="285px"
                   @change="setDifficulty"
                 >
-                  <option
+                  <vs-select-item
                     v-for="(item, index) in difficultyOptions"
                     :key="index"
                     :value="item.value"
                     :text="item.text"
                     style="font-size: 15px;"
-                    >{{ item.text }}</option
+                    >{{ item.text }}</vs-select-item
                   >
-                </select>
+                </vs-select>
               </div>
               <div class="title row mt-4">
-                <div class="col-3 titleText">제목</div>
-                <div class="col-9 titleInputDiv">
+                <!-- <div class="col-3 titleText">제목</div> -->
+                <div class="col-12 titleInputDiv">
                   <input
                     class="form-field titleInput"
                     type="text"
-                    v-model="request.query"
-                    placeholder="궁금한 모든 것을 검색해보세요!"
-                    @keypress.enter="setQuery"
+                    v-model="request.title"
+                    placeholder="제목을 입력해주세요"
                   />
                 </div>
               </div>
@@ -81,6 +82,14 @@
           </div>
           <div class="mb-3 editor">
             <div id="divEditorInsert"></div>
+            <div class="row btn-group">
+              <div class="question-create-btn1 col-5" @click="questionInsert">
+                글쓰기
+              </div>
+              <div class="question-cancel-btn1 col-5">
+                취소
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -95,8 +104,64 @@ import API from "@/API.js";
 import { mapState, mapActions } from "vuex";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import auth from "@/store/modules/auth.js";
 
 Vue.use(CKEditor);
+
+class UploadAdapter {
+  constructor(loader) {
+    this.loader = loader;
+  }
+
+  upload() {
+    return this.loader.file.then(
+      (file) =>
+        new Promise((resolve, reject) => {
+          this._initRequest();
+          this._initListeners(resolve, reject, file);
+          this._sendRequest(file);
+        })
+    );
+  }
+
+  _initRequest() {
+    const xhr = (this.xhr = new XMLHttpRequest());
+    xhr.open("POST", "http://localhost:8080/api/v1/test/image/drag", true);
+    xhr.responseType = "json";
+  }
+
+  _initListeners(resolve, reject) {
+    const xhr = this.xhr;
+    const genericErrorText = "파일을 업로드 할 수 없습니다.";
+
+    xhr.addEventListener("error", () => {
+      reject(genericErrorText);
+    });
+    xhr.addEventListener("abort", () => reject());
+    xhr.addEventListener("load", () => {
+      const response = xhr.response;
+      if (!response || response.error) {
+        return reject(response && response.error ? response.error.message : genericErrorText);
+      }
+
+      resolve({
+        default: response.url, //업로드된 파일 주소
+      });
+    });
+  }
+
+  _sendRequest(file) {
+    const data = new FormData();
+    data.append("upload", file);
+    this.xhr.send(data);
+  }
+}
+
+function MyCustomUploadAdapterPlugin(editor) {
+  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+    return new UploadAdapter(loader);
+  };
+}
 
 export default {
   name: "QuestionsCreate",
@@ -106,6 +171,7 @@ export default {
       categories: [],
       subCategories: [],
       request: {
+        title: "",
         curCategory: "전체",
         mainCategoryName: null,
         mainCategoryCode: null,
@@ -113,13 +179,12 @@ export default {
         subCategoryIndex: 0,
         subCategory: null,
         query: null,
-        difficulty: null,
+        difficulty: 1,
         type: null,
         mode: "releaseDesc",
       },
       questionList: [],
       difficultyOptions: [
-        { text: "난이도 전체", value: null },
         { text: "난이도 상", value: 3 },
         { text: "난이도 중", value: 2 },
         { text: "난이도 하", value: 1 },
@@ -184,6 +249,52 @@ export default {
       }
       return r;
     },
+    questionInsert() {
+      // const formData = {
+      // "title": this.request.title,
+      // "content": this.CKEditor.getData(),
+      // "mainCategory": this.categories[this.request.mainCategoryIndex].code,
+      // "SubCategory": this.subCategories[this.request.subCategoryIndex].subCategoryCode,
+      // "difficulty": this.request.difficulty,
+      // };
+
+      auth.state.accessToken = "mwPcveN5NG_7-ewnQwyEiju69cluaMaO44WJIgopyV8AAAF7Lekhlw";
+
+      axios({
+        url: API.URL + API.ROUTES.createQuestion,
+        method: "post",
+        data: {
+          title: this.request.title,
+          content: this.CKEditor.getData(),
+          mainCategory: this.categories[this.request.mainCategoryIndex].code,
+          subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
+          difficulty: this.request.difficulty,
+        },
+        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      // axios
+      //   .post("/notices", formData, { headers: { "Content-Type": "multipart/form-data" } })
+      //   .then(({ data }) => {
+      //     console.log("InsertModalVue: data : ");
+      //     console.log(data);
+      //     if (data.result == "login") {
+      //       this.$router.push("/login");
+      //     } else {
+      //       this.$router.push("/notice");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("InsertModalVue: error ");
+      //     console.log(error);
+      //   });
+    },
   },
   created: function() {
     if (this.query != null) {
@@ -203,7 +314,9 @@ export default {
       });
   },
   mounted() {
-    ClassicEditor.create(document.querySelector("#divEditorInsert"))
+    ClassicEditor.create(document.querySelector("#divEditorInsert"), {
+      extraPlugins: [MyCustomUploadAdapterPlugin],
+    })
       .then((editor) => {
         this.CKEditor = editor;
       })
@@ -345,19 +458,49 @@ export default {
   margin-top: 20px;
 }
 
-.question-create-btn {
-  background-color: #0f4c81;
+.btn-group {
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
+}
+
+.question-create-btn1 {
+  background-color: #658dc6;
   border-radius: 6px;
   color: white;
   cursor: pointer;
-  float: left;
-  margin-left: 520px;
-  margin-top: 45px;
-  width: 100px;
+  margin: 0px;
+  width: 430px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.question-create-btn:hover {
-  background-color: #658dc6;
+.question-cancel-btn1 {
+  background-color: white;
+  border-radius: 6px;
+  border-color: #658dc6;
+  border-style: solid;
+  color: #658dc6;
+  cursor: pointer;
+  border-width: 2px;
+  margin: 0px;
+  width: 430px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.question-create-btn1:hover {
+  color: white;
+  background: #0f4c81;
+  transition: 0.4s;
+}
+
+.question-cancel-btn1:hover {
+  background: #b5c7d3;
   transition: 0.4s;
 }
 
@@ -366,9 +509,6 @@ export default {
   display: flex;
   height: 180px;
   justify-content: center;
-}
-
-.question-main {
 }
 
 .question-query {
@@ -394,7 +534,7 @@ export default {
 }
 
 .selectDifficulty {
-  width: 30%;
+  padding: 0px;
   border-color: #cdd9ed;
   color: #84898c;
   font-size: 15px;
@@ -402,7 +542,7 @@ export default {
 }
 
 .selectMainCategory {
-  width: 30%;
+  padding: 0px;
   border-color: #cdd9ed;
   color: #84898c;
   font-size: 15px;
@@ -410,7 +550,7 @@ export default {
 }
 
 .selectSubCategory {
-  width: 30%;
+  padding: 0px;
   border-color: #cdd9ed;
   color: #84898c;
   font-size: 15px;
@@ -419,16 +559,18 @@ export default {
 
 .selectBox {
   width: 100%;
+  margin: 0px;
   display: flex;
   justify-content: space-between;
 }
 
 .ck.ck-editor__editable {
-  height: 400px;
-  margin-bottom: 100px;
+  height: 600px;
+  margin-bottom: 30px;
 }
 
 .titleText {
+  color: #696c6e;
   text-align: center;
   align-content: center;
 }
@@ -440,5 +582,12 @@ export default {
 .titleInputDiv {
   display: flex;
   align-items: center;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+
+  padding-bottom: 100px;
 }
 </style>
