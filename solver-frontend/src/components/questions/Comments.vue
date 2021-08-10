@@ -20,6 +20,7 @@
 <script>
 import axios from 'axios'
 import API from '@/API.js'
+import { mapState } from 'vuex'
 
 
 export default {
@@ -34,6 +35,18 @@ export default {
     }
   },
   methods: {
+    getCommentList: function () {
+      axios({
+        url: API.URL + `comments/list/${this.answerId}`,
+        method: "get"
+      })
+      .then((res) => {
+        this.commentList = res.data.commentList
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
     humanize: function (now, date) {
       const moment = require('moment')
       const dateData = new Date(date)
@@ -51,16 +64,17 @@ export default {
     },
   },
   created() {
-    axios({
-      url: API.URL + `comments/list/${this.answerId}`,
-      method: "get"
+    this.getCommentList()
+  },
+  computed: {
+    ...mapState({
+      commentCreateTrigger: (state) => state.questions.commentCreateTrigger,
     })
-    .then((res) => {
-      this.commentList = res.data.commentList
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  },
+  watch: {
+    commentCreateTrigger: function () {
+      this.getCommentList()
+    }
   }
 }
 </script>

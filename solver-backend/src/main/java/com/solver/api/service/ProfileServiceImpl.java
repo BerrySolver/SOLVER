@@ -200,6 +200,10 @@ public class ProfileServiceImpl implements ProfileService{
 		List<String> categoryList = profileUpdatePatchReq.getCategoryList();
 		favoriteFieldRepository.deleteByUserId(user.getId());
 		
+		if(categoryList == null) {
+            return;
+        }
+		
 		for (String subCategoryCode : categoryList) {
 			FavoriteField favoriteField = new FavoriteField();
 			String id = "";

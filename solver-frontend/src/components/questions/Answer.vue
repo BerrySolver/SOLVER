@@ -36,7 +36,7 @@
             </div>
             <span v-show="isTrue"></span>
             <Comments v-show="commentListOpen[idx]" :answerId="answer.answerId"/>
-            <CommentsCreate v-show="commentListOpen[idx]"/>
+            <CommentsCreate v-show="commentListOpen[idx]" :answerId="answer.answerId"/>
           </div>
         </div>
       </div>
