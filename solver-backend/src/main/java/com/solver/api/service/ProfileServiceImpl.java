@@ -201,6 +201,10 @@ public class ProfileServiceImpl implements ProfileService{
 			FavoriteField favoriteField = new FavoriteField();
 			String id = "";
 			
+			if(categoryList == null) {
+	            return;
+	        }
+			
 			while(true) {
 				id = RandomIdUtil.makeRandomId(13);
 				
