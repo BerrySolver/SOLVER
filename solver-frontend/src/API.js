@@ -12,9 +12,12 @@ export default {
     signupdata: "user/signup/data",
 
     // 질문/답변 페이지
-    getQuestionList: "questions/list",
+    getQuestionList: 'questions/list',
 
     // 솔버리스트
     getSolverList: "solver",
-  },
-};
+
+    // 프로필
+    editProfile: 'profiles'
+  }
+}
