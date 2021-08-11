@@ -9,6 +9,7 @@
     <div
       v-for="question in myQuestions.myQuestionList"
       :key="question.id"
+      @click="clickQuestion(question.id)"
       class="my-question-title">
       - {{ question.title }} [ {{ question.answerCount }} ]
     </div>
@@ -22,7 +23,10 @@ export default {
   name: 'ProfileMyQuestions',
   props: ['myQuestionsTab'],
   methods: {
-    ...mapActions(['myQuestionsSetting'])
+    ...mapActions(['myQuestionsSetting', 'goQuestionDetail']),
+    clickQuestion(questionId) {
+      this.goQuestionDetail(questionId)
+    }
   },
   computed: {
   ...mapState({
