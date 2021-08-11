@@ -66,9 +66,6 @@ export default {
       userStatistics: state => state.profiles.userStatistics,
     })
   },
-  // created() {
-  //   this.statisticSetting(this.userNickname)
-  // }
 }
 </script>
 

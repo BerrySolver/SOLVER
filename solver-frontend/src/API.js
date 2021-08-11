@@ -16,9 +16,10 @@ export default {
 
     // 솔버리스트
     getSolverList: "solver",
-
     createQuestion: "questions",
+
     // 프로필
     editProfile: "profiles",
+    editProfileCalendar: "profiles/time-table"
   },
 };
