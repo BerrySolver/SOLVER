@@ -81,7 +81,7 @@ const actions = {
     axios({
       url: API.URL + API.ROUTES.login,
       method: "get",
-      headers: { Authorization: "Bearer " },
+      headers: { Authorization: "Bearer" },
     })
       .then((res) => {
         // console.log(res);

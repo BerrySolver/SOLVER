@@ -11,7 +11,7 @@
       <div class="nickname">
         <div>{{ userProfileInfo.nickname }}</div>
         <div
-        style="color:#658DC6; font-size: 14px"
+        class="edit-img"
         @click="editRequest">
           <span>수정</span>
           <img src="@/assets/edit-button.png" width="20px">
@@ -36,7 +36,17 @@
         
         <!-- 개인 URL -->
         <div class="social-url">
-          URL {{ userProfileInfo.profileUrl }}
+          <div v-if="!isEdit">
+            <span>URL</span>
+            <span class="content-text-b m-left-1">{{ userProfileInfo.linkText }}</span>
+          </div>
+          <div v-if="isEdit" @keyup.enter="[editRequest(), editSelfUrl(editInfo.selfUrl)]">
+            URL
+            <span><input v-model="editInfo.selfUrl" class="url-input m-left-1" type="text"></span>
+            <button
+            @click="[editRequest(), editSelfUrl(editInfo.selfUrl)]"
+            class="edit-end-button m-left-1">수정</button>
+          </div>
         </div>
       </div>
 
@@ -182,7 +192,7 @@ export default {
     },
     // 프로필 자기소개 수정
     editSelfIntro(selfIntro) {
-      console.log('자기소개 수정')
+      console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
         method: "patch",
@@ -191,8 +201,8 @@ export default {
           nickname: this.userNickname,
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: selfIntro,
-          link_text: this.userProfileInfo.link_text,
-          category: this.userProfileInfo.favoriteFieldNameList
+          linkText: this.userProfileInfo.linkText,
+          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
         }
       })
       .then((res) => {
@@ -203,6 +213,47 @@ export default {
     },
 
     // 프로필 URL 수정
+    editSelfUrl(selfUrl) {
+      console.log(this.userProfileInfo.favoriteFieldCodeList)
+      axios({
+        url: API.URL + API.ROUTES.editProfile,
+        method: "patch",
+        headers: { Authorization: "Bearer " + this.accessToken},
+        data: {
+          nickname: this.userNickname,
+          profileUrl: this.userProfileInfo.profileUrl,
+          introduction: this.userProfileInfo.introduction,
+          linkText: selfUrl,
+          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
+        }
+      })
+      .then((res) => {
+        // 실시간 업데이트를 위해
+        this.profileSetting(this.userNickname)
+        })
+      .catch((err) => console.log(err))
+    },
+
+    // editCategory(myCategory) {
+    //   axios({
+    //     url: API.URL + API.ROUTES.editProfile,
+    //     method: "patch",
+    //     headers: { Authorization: "Bearer " + this.accessToken},
+    //     data: {
+    //       nickname: this.userNickname,
+    //       profileUrl: this.userProfileInfo.profileUrl,
+    //       introduction: this.userProfileInfo.introduction,
+    //       linkText: this.userProfileInfo.linkText,
+    //       favoriteFieldCodeList: myCategory,
+    //       favoriteFieldNameList: this.userProfileInfo.favoriteFieldNameList,
+    //     }
+    //   })
+    //   .then((res) => {
+    //     // 실시간 업데이트를 위해
+    //     this.profileSetting(this.userNickname)
+    //     })
+    //   .catch((err) => console.log(err))
+    // },
   },
   computed: {
     ...mapState({

@@ -148,7 +148,7 @@
                     question.difficulty
                   }}</span>
                 </div>
-                <div>
+                <div style="display: flex;">
                   <span
                     class="question-list-item-title"
                     style="font-size: 20px; font-weight: 700; margin-left: 10px;"
@@ -747,7 +747,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
-  width: 850px;
+  max-width: 800px;
   text-align: left;
 }
 
