@@ -48,7 +48,7 @@ import axios from 'axios'
 import API from '@/API.js'
 import Comments from "@/components/questions/Comments"
 import CommentsCreate from "@/components/questions/CommentsCreate"
-
+import { mapState } from 'vuex'
 
 export default {
   name: 'Answer',
@@ -61,7 +61,7 @@ export default {
       answerList: [],
       commentListOpen: [],
       isTrue: true,
-      now: new Date(),
+      now: new Date()
     }
   },
   methods: {
@@ -100,6 +100,25 @@ export default {
     .catch((err) => {
       console.log(err);
     });
+  },
+  computed: {
+    ...mapState({
+      commentDeleteTrigger: (state) => state.questions.commentDeleteTrigger,
+    })
+  },
+  watch: {
+    commentDeleteTrigger: function () {
+      axios({
+        url: API.URL + `answers/list/${this.$route.params.questionId}`,
+        method: "get"
+      })
+      .then((res) => {
+        this.answerList = res.data.answerList
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
   }
 }
 </script>
