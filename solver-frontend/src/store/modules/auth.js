@@ -57,7 +57,6 @@ const actions = {
   tokenLogin({ commit }, token) {
     commit("SET_ACCESS_TOKEN", token);
     // this.state.accessToken = token;
-    localStorage.setItem("solverToken", token);
     //토큰으로 닉네임을 찾아오기
     axios({
       url: API.URL + API.ROUTES.getNickname,
@@ -65,11 +64,21 @@ const actions = {
       headers: { Authorization: "Bearer " + token },
     })
       .then((res) => {
+        localStorage.setItem("solverToken", token);
         //닉네임을 찾고서 값이 없으면 회원가입으로, 있으면 isFirst 수정
         if (res.data == "") {
           router.push({ path: "/auth/signup1" });
         } else {
+          // const info = {
+          //   solverToken: token,
+          //   nickname: res.data,
+          // };
+          // localStorage.setItem("userInfo", JSON.stringify(info));
+          localStorage.setItem("solverNickname", res.data);
           commit("SET_USER_NICKNAME", res.data);
+          // commit("SET_ACCESS_TOKEN", token);
+
+          // const info2 = JSON.parse(localStorage.getItem("userInfo"));
           router.push({ path: "/" });
         }
       })
