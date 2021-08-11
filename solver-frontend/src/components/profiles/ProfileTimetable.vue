@@ -71,7 +71,7 @@ import API from "@/API.js"
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'ProfileTimetabl',
+  name: 'ProfileTimetable',
   props: ['weekdayTime', 'weekendTime'],
   data() {
     return {

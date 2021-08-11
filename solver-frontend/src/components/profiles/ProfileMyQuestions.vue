@@ -53,5 +53,6 @@ export default {
 .my-question-title:hover {
   background-color: #0F4C81;
   color: white;
+  cursor: pointer;
 }
 </style>
