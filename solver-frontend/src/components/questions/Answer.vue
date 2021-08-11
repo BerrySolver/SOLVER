@@ -40,7 +40,7 @@
               <div
                 v-if="answer.nickname == nickname"
                 class="answer-delete"
-                @click="deleteAnswer(answer)"
+                @click="deleteAnswerCheck(answer)"
               >
                 <img
                   style="width: 15px;"
@@ -370,6 +370,15 @@ export default {
           console.log(err);
         });
     },
+    deleteAnswerCheck(answer){
+      const $this =this;
+      alertify.confirm("답변삭제", "정말 삭제하시겠습니까?",
+      function(){
+        $this.deleteAnswer(answer);
+      }, function(){
+        
+      });
+    }
   },
   mounted() {
     this.nickname = localStorage.getItem("solverNickname");
