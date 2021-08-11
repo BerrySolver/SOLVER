@@ -24,8 +24,7 @@
               </div>
             </div>
           </div>
-          <div class="answer-item-body">
-            {{answer.content}}
+          <div class="answer-item-body" v-html="answer.content">
           </div>
           <div class="answer-comment-area">
             <div class="answer-comment-tab">
