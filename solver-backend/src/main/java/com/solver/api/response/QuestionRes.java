@@ -60,7 +60,13 @@ public class QuestionRes extends BaseResponse{
 	@ApiModelProperty(name="북마크수")
 	private int bookmarkCount;
 	
-	public static QuestionRes of(Integer statusCode, String message, Question question) {
+	@ApiModelProperty(name="현재 사용자의 좋아요 여부")
+	private boolean isLiked;
+	
+	@ApiModelProperty(name="현재 사용자의 북마크 여부")
+	private boolean isBookmarked;
+	
+	public static QuestionRes of(Integer statusCode, String message, Question question, boolean isLiked, boolean isBookmarked) {
 		QuestionRes res = new QuestionRes();
 		
 		// 외래키 필드들은 객체를 넣어야 한다.
@@ -89,6 +95,9 @@ public class QuestionRes extends BaseResponse{
 		res.setAnswerCount(question.getAnswer().size());
 		res.setLikeCount(question.getFavoriteQuestion().size());
 		res.setBookmarkCount(question.getBookmarkQuestion().size());
+		res.setLiked(isLiked);
+		res.setBookmarked(isBookmarked);
+		
 		
 		return res;
 	}

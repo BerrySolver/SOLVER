@@ -33,6 +33,30 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 	@Autowired
 	KakaoUtil kakaoUtil;
 	
+	// 좋아요 확인
+	@Override
+	public boolean checkFavoriteQuestion(String token, Question question) {
+		if (!token.equals("null")) {
+			TokenResponse tokenResponse = new TokenResponse();
+			tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+	
+			Long kakaoId = tokenResponse.getKakaoId();
+			
+			Optional<User> user = userRepository.findByKakaoId(kakaoId);
+			
+			for (FavoriteQuestion favoriteQuestion : question.getFavoriteQuestion()) {
+				if (favoriteQuestion.getUser().getId().equals(user.get().getId())) {
+					return true;
+				}
+			}
+			
+			return false;
+		
+		} else {
+			return false;
+		}
+	}
+	
 	// 좋아요
 	@Override
 	public FavoriteQuestion createFavoriteQuestion(String accessToken, Question question, HttpServletResponse response) {
@@ -104,6 +128,5 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 		
 		return;
 	}
-	
 	
 }

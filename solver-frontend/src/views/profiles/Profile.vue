@@ -64,12 +64,41 @@
               class="interval">
               {{ field }}
             </span>
+            <img src="@/assets/edit-button.png" width="20px" @click="requestEditCategory" class="edit-img">
           </div>
+
           <br>
-          <div class="in-group">
-            <!-- ingroup의 first child -->
+
+          <div class="category-edit-box" v-if="isCategoryEdit">
+            대분류
+            <span v-for="(mainCtg, index) in mainCtgs" :key="index">
+              <button @click="findMainCtgIdx(index)" class="offMainCtg"> {{ mainCtg.codeName }} </button>
+            </span>
+
+            <div><hr class="line"></div>
+
+            소분류
+            <span class='m-top-3'>
+              <button
+              v-for="(subCtg, index) in subCtgsList"
+              :key="subCtg.subCategoryCode"
+              :class="{onSubCtg:isInCtg(subCtg.subCategoryCode)}"
+              class="offSubCtg"
+              @click="selectCategory(subCtg.subCategoryCode)">
+                {{ subCtg.subCategoryName }}
+              </button>
+              <div v-if="(index+1)%3 == 0"></div>
+            </span>
+
+            <div class="complete-edit">
+              <button @click="postEditCategory" class="post-edit-button">수정 완료</button>            
+            </div>
+          </div>
+
+          <!-- <div class="in-group">
+            ingroup의 first child
             <div class="subheading">소속한 모임</div>
-            <!-- ingroup의 last child -->
+            ingroup의 last child
             <div class="d-inline-block interval">
               <div
               v-for="group in groups"
@@ -77,8 +106,9 @@
               {{ group }}  
               </div>            
             </div>
-          </div>          
+          </div>           -->
         </div>
+        
         <!-- profile-info의 last child(right) -->
         <div>
           <div class="berry-point">
@@ -169,11 +199,16 @@ export default {
   },
   data() {
     return {
-      isEdit: false,
       editInfo: {
         selfIntro: '',
         selfUrl: '',
       },
+      editedCategory: [],
+      isEdit: false,
+      isCategoryEdit: false,
+      mainCtgIndex: -1,
+      mainCtgs: [],
+      subCtgs: [],
       selectedTab: 0,
       tabs: [
         {tabNum: 0, tabName: 'SOLVE 기록'},
@@ -212,7 +247,12 @@ export default {
       .catch((err) => console.log(err))
     },
 
-    // 프로필 URL 수정
+    // main카테고리의 IDX 찾기 - for Sub카테고리
+    findMainCtgIdx(mainCtgIdx){
+      this.mainCtgIndex = mainCtgIdx
+    },
+
+    // 프로필 URL 수정 - AXIOS
     editSelfUrl(selfUrl) {
       console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
@@ -234,30 +274,74 @@ export default {
       .catch((err) => console.log(err))
     },
 
-    // editCategory(myCategory) {
-    //   axios({
-    //     url: API.URL + API.ROUTES.editProfile,
-    //     method: "patch",
-    //     headers: { Authorization: "Bearer " + this.accessToken},
-    //     data: {
-    //       nickname: this.userNickname,
-    //       profileUrl: this.userProfileInfo.profileUrl,
-    //       introduction: this.userProfileInfo.introduction,
-    //       linkText: this.userProfileInfo.linkText,
-    //       favoriteFieldCodeList: myCategory,
-    //       favoriteFieldNameList: this.userProfileInfo.favoriteFieldNameList,
-    //     }
-    //   })
-    //   .then((res) => {
-    //     // 실시간 업데이트를 위해
-    //     this.profileSetting(this.userNickname)
-    //     })
-    //   .catch((err) => console.log(err))
-    // },
+    // 카테고리 수정 요청 CLICK
+    requestEditCategory() {
+      this.isCategoryEdit = !this.isCategoryEdit
+      if (this.isCategoryEdit) {
+        this.getCategoryList()
+      }
+    },
+
+    // 카테고리 GET AXIOS
+    getCategoryList() {
+      axios({
+        url: API.URL + API.ROUTES.getCategory,
+        methods: 'get',
+      })
+      .then((res) => {
+        this.mainCtgs = res.data;
+        console.log(this.mainCtgs)
+      })
+      .catch((err) => console.log(err))
+    },
+
+    // 카테고리 수정한 것 담기
+    selectCategory(subCtgCode) {
+      if (this.editedCategory.includes(subCtgCode)) {
+        const subCtg_idx = this.editedCategory.indexOf(subCtgCode)
+        this.editedCategory.splice(subCtg_idx, 1)
+        return ;
+      } 
+
+      if (this.editedCategory.length == 3) {
+        return ;
+      }
+
+      this.editedCategory.push(subCtgCode)
+    },
+
+    // 카테고리 수정 - AXIOS
+    postEditCategory() {
+      axios({
+        url: API.URL + API.ROUTES.editProfile,
+        method: "patch",
+        headers: { Authorization: "Bearer " + this.accessToken},
+        data: {
+          nickname: this.userNickname,
+          profileUrl: this.userProfileInfo.profileUrl,
+          introduction: this.userProfileInfo.introduction,
+          linkText: this.userProfileInfo.linkText,
+          categoryCodeList: this.editedCategory,
+        }
+      })
+      .then((res) => {
+        this.profileSetting(this.userNickname)
+        this.isCategoryEdit = false
+      })
+      .catch((err) => console.log(err))
+    },
+
+    isInCtg(selectedCtgCode) {
+      if (this.editedCategory.includes(selectedCtgCode)) {
+        return true
+      } else {
+      return false }
+    },
   },
   computed: {
     ...mapState({
       accessToken: state => state.auth.accessToken,
+      categoryList: state => state.auth.categoryList,
       userNickname: state => state.auth.userNickname,
       userProfileInfo: state => state.profiles.userProfileInfo,
     }),
@@ -267,6 +351,16 @@ export default {
     groups() {
       return this.userProfileInfo.groupNameList
     },
+    mainCtgsList() {
+      return this.mainCtgs
+    },
+    subCtgsList() {
+      // 이부분이 없으니까 category를 못찾네..?
+      if (this.mainCtgIndex == -1)
+        return null;
+
+      return this.mainCtgs[this.mainCtgIndex].category
+    }
   },
   created() {
     const solveTabInfo = {
@@ -281,5 +375,5 @@ export default {
 
 <style>
  @import './Profile.css';
- @import '../../common.css'
+ @import '../../common.css';
 </style>

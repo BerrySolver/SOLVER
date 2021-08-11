@@ -14,6 +14,12 @@
   float: 3;
 }
 
+.complete-edit {
+  display: flex; 
+  align-items: center; 
+  margin-top: 30px;
+}
+
 .edit-end-button {
   background-color: transparent;
   border: solid 0.1px #0F4C81;
@@ -69,6 +75,64 @@
   font-weight: 700;
   justify-content:space-between;
   text-align: left;
+}
+
+.offMainCtg {
+  background-color: transparent;
+  border: solid 1px #658DC6;
+  color: #658DC6;
+  font-size: 14px;
+  height: 26px;
+  margin: 7px;
+  padding: 0 10px 0 10px ;
+  width: auto;
+}
+
+.offMainCtg:active {
+  background-color: #658DC6;
+  color: white;
+}
+
+.offMainCtg:hover {
+  background-color: #658DC6;
+  color: white;
+}
+
+.offMainCtg:focus, .offMainCtg:active:focus {
+  background-color: #658DC6;
+  color: white;
+}
+
+.offSubCtg {
+  background-color: transparent;
+  border: solid 1px #0F4C81;
+  color: #0F4C81;
+  font-size: 14px;
+  height: 26px;
+  margin: 7px;
+  padding: 0 10px 0 10px ;
+  width: auto;
+}
+
+.onSubCtg {
+  background-color: #0F4C81;
+  border: transparent;
+  color: white;
+}
+
+.post-edit-button {
+  background-color: #658DC6;
+  border: transparent;
+  color: white;
+  font-size: 14px;
+  height: 26px;
+  margin: auto;
+  padding: 0 10px 0 10px ;
+  width: 100px;  
+}
+
+.post-edit-button:hover {
+  background-color: #0F4C81;
 }
 
 .profile {

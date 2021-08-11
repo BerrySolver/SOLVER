@@ -15,18 +15,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("QuestionListResponse")
-public class QuestionListRes extends BaseResponse{
+public class QuestionListRes extends BaseResponse {
 	// 전체 조회 시에는 사용자에게 보여줄 필요한 정보들을 새로 가공해야 한다. 따라서, 새로운 클래스를 만들고 그 객체의 리스트를 반환한다.
 	private List<QuestionForm> questionFormList;
 	private int totalCount;
-	
+
 	public static QuestionListRes of(Integer statusCode, String message, List<Question> questionList, int totalCount) {
 		QuestionListRes res = new QuestionListRes();
-		
+
 		res.setTotalCount(totalCount);
-		// 기본 question 형태의 자료들을 전부 qustionForm 형태로 바꿔서 새로운 questionForm 리스트에 담아 결과로 반환할 것이다.
+		// 기본 question 형태의 자료들을 전부 qustionForm 형태로 바꿔서 새로운 questionForm 리스트에 담아 결과로 반환할
+		// 것이다.
 		List<QuestionForm> questionFormList = new ArrayList<QuestionForm>();
-		
+
 		// question 리스트에서 하나씩 가져와 questionForm으로 재가공
 		for (int i = 0; i < questionList.size(); i++) {
 			Question question = questionList.get(i);
@@ -40,13 +41,14 @@ public class QuestionListRes extends BaseResponse{
 			qForm.setAnswerCount(question.getAnswer().size());
 			qForm.setLikeCount(question.getFavoriteQuestion().size());
 			qForm.setBookMarkCount(question.getBookmarkQuestion().size());
+			qForm.setReadCount(question.getReadCount());
 			questionFormList.add(qForm);
 		}
-		
+
 		res.setStatusCode(statusCode);
 		res.setMessage(message);
 		res.setQuestionFormList(questionFormList);
-		
+
 		return res;
 	}
 }
@@ -54,7 +56,7 @@ public class QuestionListRes extends BaseResponse{
 //전체 목록에서 각 질문들이 갖고 있는 내용
 @Getter
 @Setter
-class QuestionForm{
+class QuestionForm {
 	// Id
 	private String questionId;
 	// 제목
@@ -73,4 +75,6 @@ class QuestionForm{
 	private int likeCount;
 	// 북마크 개수
 	private int bookMarkCount;
+	// 북마크 개수
+	private int readCount;
 }

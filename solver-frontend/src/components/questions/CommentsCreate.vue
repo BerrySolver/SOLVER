@@ -17,7 +17,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import {mapState, mapActions} from 'vuex';
+import {mapActions} from 'vuex';
 
 
 export default {
@@ -40,7 +40,7 @@ export default {
           url: API.URL + `comments/${this.answerId}`,
           method: "post",
           headers: { 
-            Authorization: "Bearer " + this.accessToken
+            Authorization: "Bearer " + localStorage.getItem("solverToken")
           },
           data: {
               content: this.inputValue
@@ -48,6 +48,7 @@ export default {
         })
         .then(() => {
           this.triggerCommentReload()
+          this.inputValue = ''
         })
         .catch((err) => {
           console.log(err);
@@ -55,11 +56,6 @@ export default {
       }
     } 
   },
-  computed: {
-    ...mapState({
-      accessToken: state => state.auth.accessToken,
-    })
-  }
 }
 </script>
 

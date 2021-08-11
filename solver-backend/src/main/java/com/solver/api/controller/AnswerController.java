@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.AnswerCreatePostReq;
@@ -33,8 +34,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
-@CrossOrigin("*")
-
+@CrossOrigin
 @Api(value="답변 API", tags = {"Answer"})
 @RestController
 @RequestMapping("/api/v1/answers")
@@ -86,7 +86,8 @@ public class AnswerController {
 	}
 	
 	/* 답변 수정 */
-	@PatchMapping("/{answerId}")
+	@CrossOrigin
+	@PostMapping("/{answerId}/modify")
 	@ApiOperation(value = "답변 수정", notes = "내 답변 수정") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "답변 수정에 성공했습니다"),
@@ -115,6 +116,7 @@ public class AnswerController {
         @ApiResponse(code = 409, message = "답변 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getAnswerList(
+			@RequestParam String nickname,
 			@PathVariable @ApiParam(value="답변을 조회할 질문 ID", required=true) String questionId
 			) 
 	{
@@ -124,7 +126,7 @@ public class AnswerController {
 			return ResponseEntity.status(409).body(AnswerListRes.of(409, "답변 목록 조회 실패"));
 		}
 		
-		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList));
+		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList, nickname));
 	}
 	
 	/* 답변 좋아요 추가 */

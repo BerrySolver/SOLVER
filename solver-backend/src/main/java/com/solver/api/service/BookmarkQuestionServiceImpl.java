@@ -12,6 +12,7 @@ import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.question.BookmarkQuestion;
+import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.question.BookmarkQuestionRepository;
@@ -32,6 +33,30 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
+	
+	// 북마크 확인
+	@Override
+	public boolean checkBookmarkQuestion(String token, Question question) {
+		if (!token.equals("null")) {
+			TokenResponse tokenResponse = new TokenResponse();
+			tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+	
+			Long kakaoId = tokenResponse.getKakaoId();
+			
+			Optional<User> user = userRepository.findByKakaoId(kakaoId);
+			
+			for (BookmarkQuestion bookmarkQuestion : question.getBookmarkQuestion()) {
+				if (bookmarkQuestion.getUser().getId().equals(user.get().getId())) {
+					return true;
+				}
+			}
+			
+			return false;
+		
+		} else {
+			return false;
+		}
+	}
 	
 	@Override
 	public boolean createBookmark(String accessToken, Question question, HttpServletResponse response) {
