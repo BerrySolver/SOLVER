@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.answer.FavoriteAnswer;
 import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.ApiModel;
@@ -18,7 +19,7 @@ import lombok.Setter;
 public class AnswerListRes extends BaseResponse{
 	private List<AnswerInfo> answerList;
 	
-	public static AnswerListRes of(Integer statusCode, String message, List<Answer> answerList) {
+	public static AnswerListRes of(Integer statusCode, String message, List<Answer> answerList, String nickname) {
 		AnswerListRes res = new AnswerListRes();
 		
 		List<AnswerInfo> tempAnswerList = new ArrayList<AnswerInfo>();
@@ -35,6 +36,15 @@ public class AnswerListRes extends BaseResponse{
 			answerInfo.setRegDt(answer.getRegDt());
 			answerInfo.setLikeCount(answer.getFavoriteAnswer().size());
 			answerInfo.setCommentCount(answer.getComment().size());
+			
+			List<FavoriteAnswer> favoriteAnswerList = answer.getFavoriteAnswer();
+			
+			for (FavoriteAnswer favoriteAnswer : favoriteAnswerList) {
+				if(favoriteAnswer.getUser().getNickname().equals(nickname)) {
+					answerInfo.setMyFavoriteAnswer(true);
+					break;
+				}
+			}
 			
 			tempAnswerList.add(answerInfo);
 		}
@@ -67,4 +77,5 @@ class AnswerInfo{
 	private Date regDt;
 	private int likeCount;
 	private int commentCount;
+	private boolean myFavoriteAnswer;
 }
