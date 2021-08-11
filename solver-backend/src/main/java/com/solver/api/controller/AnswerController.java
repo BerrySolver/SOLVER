@@ -26,7 +26,6 @@ import com.solver.api.service.AnswerService;
 import com.solver.api.service.FavoriteAnswerService;
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
-import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,8 +34,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
-@CrossOrigin("*")
-
+@CrossOrigin
 @Api(value="답변 API", tags = {"Answer"})
 @RestController
 @RequestMapping("/api/v1/answers")
@@ -88,7 +86,8 @@ public class AnswerController {
 	}
 	
 	/* 답변 수정 */
-	@PatchMapping("/{answerId}")
+	@CrossOrigin
+	@PostMapping("/{answerId}/modify")
 	@ApiOperation(value = "답변 수정", notes = "내 답변 수정") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "답변 수정에 성공했습니다"),

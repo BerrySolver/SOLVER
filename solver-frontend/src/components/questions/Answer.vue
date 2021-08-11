@@ -37,9 +37,28 @@
                   src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
                 />
               </div>
+              <div
+                v-if="answer.nickname == nickname"
+                class="answer-delete"
+                @click="deleteAnswer(answer)"
+              >
+                <img
+                  style="width: 15px;"
+                  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
+                />
+              </div>
             </div>
           </div>
           <div class="answer-item-body" v-html="answer.content"></div>
+          <div class="answer-modify-btn-wrapper">
+            <div
+              v-if="nickname == answer.nickname"
+              class="answer-modify-btn"
+              @click="clickModifyBtn(answer, idx)"
+            >
+              수정하기
+            </div>
+          </div>
           <div class="answer-comment-area">
             <div class="answer-comment-tab">
               <div class="answer-comment-button" @click="openComment(idx)">
@@ -51,13 +70,20 @@
                   answer.commentCount
                 }}</span>
               </div>
-              <div class="answer-modify-btn">
-                글쓰기
-              </div>
             </div>
             <span v-show="isTrue"></span>
             <Comments v-show="commentListOpen[idx]" :answerId="answer.answerId" />
             <CommentsCreate v-show="commentListOpen[idx]" :answerId="answer.answerId" />
+          </div>
+          <div :id="`answerModifyEditorInsert` + idx"></div>
+          <div>
+            <div
+              v-if="openedIdx == idx"
+              class="answer-modify-complete-btn"
+              @click="clickModifyCompleteBtn(answer)"
+            >
+              수정완료
+            </div>
           </div>
         </div>
       </div>
@@ -66,10 +92,70 @@
 </template>
 
 <script>
+import Vue from "vue";
 import axios from "axios";
 import API from "@/API.js";
 import Comments from "@/components/questions/Comments";
 import CommentsCreate from "@/components/questions/CommentsCreate";
+import CKEditor from "@ckeditor/ckeditor5-vue2";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+Vue.use(CKEditor);
+
+class UploadAdapter {
+  constructor(loader) {
+    this.loader = loader;
+  }
+
+  upload() {
+    return this.loader.file.then(
+      (file) =>
+        new Promise((resolve, reject) => {
+          this._initRequest();
+          this._initListeners(resolve, reject, file);
+          this._sendRequest(file);
+        })
+    );
+  }
+
+  _initRequest() {
+    const xhr = (this.xhr = new XMLHttpRequest());
+    xhr.open("POST", "http://localhost:8080/api/v1/test/image/drag", true);
+    xhr.responseType = "json";
+  }
+
+  _initListeners(resolve, reject) {
+    const xhr = this.xhr;
+    const genericErrorText = "파일을 업로드 할 수 없습니다.";
+
+    xhr.addEventListener("error", () => {
+      reject(genericErrorText);
+    });
+    xhr.addEventListener("abort", () => reject());
+    xhr.addEventListener("load", () => {
+      const response = xhr.response;
+      if (!response || response.error) {
+        return reject(response && response.error ? response.error.message : genericErrorText);
+      }
+
+      resolve({
+        default: response.url, //업로드된 파일 주소
+      });
+    });
+  }
+
+  _sendRequest(file) {
+    const data = new FormData();
+    data.append("upload", file);
+    this.xhr.send(data);
+  }
+}
+
+function MyCustomUploadAdapterPlugin(editor) {
+  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+    return new UploadAdapter(loader);
+  };
+}
 
 export default {
   name: "Answer",
@@ -79,10 +165,14 @@ export default {
   },
   data() {
     return {
+      nickname: "",
+      isOpened: false,
+      openedIdx: -1,
       answerList: [],
       commentListOpen: [],
       isTrue: true,
       now: new Date(),
+      CKEditor: "",
     };
   },
   methods: {
@@ -163,27 +253,128 @@ export default {
           console.log(e);
         });
     },
+    clickModifyBtn(answer, idx) {
+      const str = "#answerModifyEditorInsert" + idx;
+
+      if (this.openedIdx == idx) {
+        console.log(idx + " " + this.openedIdx);
+        this.CKEditor.setData("");
+        this.openedIdx = -1;
+        this.isOpened = false;
+        this.CKEditor.destroy();
+        return;
+      }
+
+      if (this.isOpened == true) {
+        this.CKEditor.setData("");
+        this.CKEditor.destroy();
+      }
+
+      this.openedIdx = idx;
+
+      ClassicEditor.create(document.querySelector(str), {
+        extraPlugins: [MyCustomUploadAdapterPlugin],
+        toolbar: {
+          items: [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "|",
+            "link",
+            "|",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "ckfinder",
+            "|",
+            "undo",
+            "redo",
+          ],
+        },
+      })
+        .then((editor) => {
+          this.CKEditor = editor;
+          this.CKEditor.setData(answer.content);
+        })
+        .catch((err) => {
+          console.error(err.stack);
+        });
+
+      this.isOpened = true;
+      let $this = this;
+      this.$el.addEventListener("show.bs.modal", function() {
+        $this.initUI();
+      });
+    },
+    clickModifyCompleteBtn(answer) {
+      const content = this.CKEditor.getData();
+      axios({
+        url: API.URL + `answers/${answer.answerId}/modify`,
+        method: "post",
+        data: {
+          content: content,
+        },
+        headers: {
+          "Access-Control-Allow-Methods": "GET,PUT,POST,PATCH,DELETE",
+          Authorization: "Bearer " + localStorage.getItem("solverToken"),
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          this.CKEditor.setData("");
+          this.openedIdx = -1;
+          this.isOpened = false;
+          this.CKEditor.destroy();
+          this.getAnswerList();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    deleteAnswer(answer) {
+      axios({
+        url: API.URL + `answers/${answer.answerId}`,
+        method: "delete",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("solverToken"),
+        },
+      })
+        .then((res) => {
+          console.log(res);
+          this.getAnswerList();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getAnswerList() {
+      axios({
+        url: API.URL + `answers/list/${this.$route.params.questionId}`,
+        method: "get",
+        params: {
+          nickname: localStorage.getItem("solverNickname"),
+        },
+        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      })
+        .then((res) => {
+          console.log(res);
+          this.answerList = res.data.answerList;
+          this.commentListOpen = new Array(res.data.answerList.length);
+          for (let i = 0; i < res.data.answerList.length; i++) {
+            this.commentListOpen[i] = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   created() {
-    axios({
-      url: API.URL + `answers/list/${this.$route.params.questionId}`,
-      method: "get",
-      params: {
-        nickname: localStorage.getItem("solverNickname"),
-      },
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
-    })
-      .then((res) => {
-        console.log(res);
-        this.answerList = res.data.answerList;
-        this.commentListOpen = new Array(res.data.answerList.length);
-        for (let i = 0; i < res.data.answerList.length; i++) {
-          this.commentListOpen[i] = false;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.getAnswerList();
+  },
+  mounted() {
+    this.nickname = localStorage.getItem("solverNickname");
   },
 };
 </script>
@@ -206,7 +397,8 @@ export default {
 
 .answer-buttons {
   display: flex;
-  margin-left: 600px;
+  margin-left: 580px;
+  align-items: center;
 }
 
 .answer-button:hover {
@@ -219,8 +411,6 @@ export default {
   border-top: 1px solid #e0e0e0;
   bottom: 0;
   width: 100%;
-  justify-content: space-between;
-  display: flex;
 }
 
 .answer-comment-button {
@@ -228,7 +418,6 @@ export default {
 }
 
 .answer-comment-tab {
-  width: 100px;
   align-items: center;
   display: flex;
   height: 48px;
@@ -245,6 +434,9 @@ export default {
   float: left;
   margin-left: 10px;
   text-align: left;
+}
+.answer-info div {
+  width: 50px;
 }
 
 .answer-item {
@@ -278,12 +470,64 @@ export default {
 }
 
 .answer-modify-btn {
-  background-color: #0f4c81;
+  background-color: #658dc6;
   border-radius: 6px;
   color: white;
   cursor: pointer;
   float: left;
+  height: 30px;
+  margin-right: 10px;
+  font-size: 15px;
+  width: 70px;
+  margin-left: 820px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.answer-modify-btn-wrapper {
+  display: flex;
+  justify-content: right;
+  height: 40px;
+  width: 100%;
   margin: 0px;
-  width: 100px;
+}
+
+.answer-modify-btn:hover {
+  color: white;
+  background: #0f4c81;
+  transition: 0.4s;
+}
+
+.answer-list .ck.ck-editor {
+  width: 900px;
+}
+
+.answer-list .ck.ck-editor__editable {
+  height: 400px;
+  margin-bottom: 30px;
+}
+
+.answer-modify-complete-btn {
+  background-color: #658dc6;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 17px;
+  margin: 0px;
+  width: 900px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.answer-delete {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: 10px;
+  margin-left: 20px;
+  top: 17px;
 }
 </style>
