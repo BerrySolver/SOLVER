@@ -35,9 +35,11 @@ import com.solver.api.service.QuestionService;
 import com.solver.api.service.UserService;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.BaseResponse;
+import com.solver.common.model.TokenResponse;
 import com.solver.db.entity.conference.ConferenceReservation;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -125,15 +127,20 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
     })
 	public ResponseEntity<? extends BaseResponse> getQuestionDetail(
-			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId)
+			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		Optional<Question> question = questionService.getById(questionId);
+		String token = accessToken.split(" ")[1];
+	
 		if (question == null) {
 			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
 		}
-		System.out.println(question.get().getAnswer());
 		
-		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get()));
+		boolean isLiked = favoriteQuestionService.checkFavoriteQuestion(token, question.get());
+		boolean isBookmarked = bookmarkService.checkBookmarkQuestion(token, question.get());
+				
+		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get(), isLiked, isBookmarked));
 	}
 	
 	// 질문 수정 API

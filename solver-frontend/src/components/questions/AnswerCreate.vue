@@ -86,6 +86,7 @@ export default {
   },
   data() {
     return{
+      accessToken: "",
       CKEditor: "",
     }
   },
@@ -108,6 +109,9 @@ export default {
         console.log(e);
       });
     }
+  },
+  created() {
+    this.accessToken = localStorage.getItem('solverToken')
   },
   mounted() {
     ClassicEditor.create(document.querySelector("#answerEditorInsert"), {
@@ -137,9 +141,8 @@ export default {
   },
   computed: {
     ...mapState({
-      accessToken: state => state.auth.accessToken,
       userNickname: state => state.auth.userNickname,
-    })
+    }),
   }
 }
 </script>
