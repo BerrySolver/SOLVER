@@ -104,7 +104,6 @@ import API from "@/API.js";
 import { mapState, mapActions, mapGetters } from "vuex";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import auth from "@/store/modules/auth.js";
 
 Vue.use(CKEditor);
 

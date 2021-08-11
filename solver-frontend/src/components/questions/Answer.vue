@@ -99,6 +99,7 @@ import Comments from "@/components/questions/Comments";
 import CommentsCreate from "@/components/questions/CommentsCreate";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { mapState } from "vuex";
 
 Vue.use(CKEditor);
 
@@ -179,6 +180,27 @@ export default {
     openComment: function(idx) {
       this.commentListOpen[idx] = !this.commentListOpen[idx];
       this.isTrue = !this.isTrue;
+    },
+    getAnswerList: function() {
+      axios({
+        url: API.URL + `answers/list/${this.$route.params.questionId}`,
+        method: "get",
+        params: {
+          nickname: localStorage.getItem("solverNickname"),
+        },
+        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      })
+        .then((res) => {
+          console.log(res);
+          this.answerList = res.data.answerList;
+          this.commentListOpen = new Array(res.data.answerList.length);
+          for (let i = 0; i < res.data.answerList.length; i++) {
+            this.commentListOpen[i] = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     humanize: function(now, date) {
       const moment = require("moment");
@@ -370,11 +392,21 @@ export default {
         });
     },
   },
+  mounted() {
+    this.nickname = localStorage.getItem("solverNickname");
+  },
   created() {
     this.getAnswerList();
   },
-  mounted() {
-    this.nickname = localStorage.getItem("solverNickname");
+  computed: {
+    ...mapState({
+      answerChangeTrigger: (state) => state.questions.answerChangeTrigger,
+    }),
+  },
+  watch: {
+    answerChangeTrigger: function() {
+      this.getAnswerList();
+    },
   },
 };
 </script>
