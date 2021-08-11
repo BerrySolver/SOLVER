@@ -34,7 +34,7 @@
             />
             <div>{{ answerCount }}</div>
           </div>
-          <div class="question-detail-count question-count-button" @click="changeLike(question.nickname)">
+          <div class="question-detail-count question-count-button" @click="changeLike()">
             <img 
               v-if="isLiked"
               style="width:20px; margin: 13px 0 3px 0;"
@@ -46,7 +46,7 @@
             />
             <div>{{ likeCount }}</div>
           </div>
-          <div class="question-detail-count question-count-button" @click="changeBookmark(question.nickname)"> 
+          <div class="question-detail-count question-count-button" @click="changeBookmark()"> 
             <img 
               v-if="isBookmarked"
               style="width:20px; margin: 13px 0 3px 0;"
@@ -91,8 +91,8 @@ export default {
     };
   },
   methods: {
-    changeLike: function (nickname) {
-      if (localStorage.getItem("solverToken") == nickname){
+    changeLike: function () {
+      if (localStorage.getItem("solverToken") != null){
         if (this.isLiked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
@@ -122,8 +122,8 @@ export default {
         }
       }
     },
-    changeBookmark: function (nickname) {
-      if (localStorage.getItem("solverToken") == nickname){
+    changeBookmark: function () {
+      if (localStorage.getItem("solverToken") != null){
         if (this.isBookmarked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,

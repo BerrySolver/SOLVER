@@ -18,7 +18,6 @@
 import Vue from "vue";
 import axios from "axios";
 import API from "@/API.js";
-import { mapState } from "vuex";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
@@ -88,6 +87,7 @@ export default {
     return{
       accessToken: "",
       CKEditor: "",
+      userNickname: localStorage.getItem("solverNickname")
     }
   },
   methods: {
@@ -139,11 +139,6 @@ export default {
       $this.initUI();
     });
   },
-  computed: {
-    ...mapState({
-      userNickname: state => state.auth.userNickname,
-    }),
-  }
 }
 </script>
 
