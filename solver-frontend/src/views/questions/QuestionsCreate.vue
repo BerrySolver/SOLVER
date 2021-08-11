@@ -86,7 +86,7 @@
               <div class="question-create-btn1 col-5" @click="questionInsert">
                 글쓰기
               </div>
-              <div class="question-cancel-btn1 col-5">
+              <div class="question-cancel-btn1 col-5" @click="clickCancle">
                 취소
               </div>
             </div>
@@ -195,7 +195,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setStateQuery"]),
+    ...mapActions(["setStateQuery", "goQuestionDetail"]),
     ...mapGetters(["getAccessToken"]),
     setMainCategory: function() {
       const idx = this.request.mainCategoryIndex;
@@ -248,13 +248,6 @@ export default {
       return r;
     },
     questionInsert() {
-      // const formData = {
-      // "title": this.request.title,
-      // "content": this.CKEditor.getData(),
-      // "mainCategory": this.categories[this.request.mainCategoryIndex].code,
-      // "SubCategory": this.subCategories[this.request.subCategoryIndex].subCategoryCode,
-      // "difficulty": this.request.difficulty,
-      // };
       if (
         localStorage.getItem("solverToken") == null ||
         localStorage.getItem("solverToken") == ""
@@ -277,6 +270,7 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          this.goQuestionDetail(res.data.questionId);
         })
         .catch((e) => {
           console.log(e);
@@ -297,6 +291,9 @@ export default {
       //     console.log("InsertModalVue: error ");
       //     console.log(error);
       //   });
+    },
+    clickCancle() {
+      this.$router.go(-1);
     },
   },
   created: function() {
