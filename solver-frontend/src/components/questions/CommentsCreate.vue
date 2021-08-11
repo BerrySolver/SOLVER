@@ -48,6 +48,7 @@ export default {
         })
         .then(() => {
           this.triggerCommentReload()
+          this.inputValue = ''
         })
         .catch((err) => {
           console.log(err);
