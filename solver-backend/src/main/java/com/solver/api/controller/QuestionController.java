@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
+import com.solver.api.response.QuestionCreateRes;
 import com.solver.api.response.QuestionListRes;
 import com.solver.api.response.QuestionMeRes;
 import com.solver.api.response.QuestionRes;
@@ -109,7 +110,11 @@ public class QuestionController {
 			return ResponseEntity.status(400).body(QuestionRes.of(400, "질문 생성에 실패했습니다."));
 		}
 		
-		return ResponseEntity.status(201).body(QuestionRes.of(201, "질문을 성공적으로 생성했습니다."));
+		QuestionCreateRes questionCreateRes = new QuestionCreateRes();
+		questionCreateRes.setStatusCode(200);
+		questionCreateRes.setQuestionId(question.getId());
+		
+		return ResponseEntity.status(201).body(questionCreateRes);
 	}
 	
 	// 질문 상세조회 API
