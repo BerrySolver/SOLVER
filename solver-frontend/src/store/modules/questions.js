@@ -6,6 +6,7 @@ const state = {
   query: null,
   answerChangeTrigger: false,
   commentCreateTrigger: false,
+  commentDeleteTrigger: false,
 };
 
 const mutations = {
@@ -17,6 +18,9 @@ const mutations = {
   },
   SET_COMMENT_CREATE_TRIGGER: (state) => {
     state.commentCreateTrigger = !state.commentCreateTrigger
+  },
+  SET_COMMENT_DELETE_TRIGGER: (state) => {
+    state.commentDeleteTrigger = !state.commentDeleteTrigger
   }
 };
 
@@ -41,7 +45,8 @@ const actions = {
   },
   triggerCommentReload({ commit }) {
     commit("SET_COMMENT_CREATE_TRIGGER")
-  }
+    commit("SET_COMMENT_DELETE_TRIGGER")
+  },
 };
 
 const getters = {};

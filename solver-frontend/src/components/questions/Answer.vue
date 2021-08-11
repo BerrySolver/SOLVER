@@ -396,19 +396,45 @@ export default {
     this.nickname = localStorage.getItem("solverNickname");
   },
   created() {
-    this.getAnswerList();
+    axios({
+      url: API.URL + `answers/list/${this.$route.params.questionId}`,
+      method: "get"
+    })
+    .then((res) => {
+      this.answerList = res.data.answerList
+      this.commentListOpen = new Array(res.data.answerList.length)
+      for (let i = 0; i < res.data.answerList.length; i++) {
+        this.commentListOpen[i] = false
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   },
   computed: {
     ...mapState({
+      commentDeleteTrigger: (state) => state.questions.commentDeleteTrigger,
       answerChangeTrigger: (state) => state.questions.answerChangeTrigger,
-    }),
+    })
   },
   watch: {
+    commentDeleteTrigger: function () {
+      axios({
+        url: API.URL + `answers/list/${this.$route.params.questionId}`,
+        method: "get"
+      })
+      .then((res) => {
+        this.answerList = res.data.answerList
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
     answerChangeTrigger: function() {
       this.getAnswerList();
     },
-  },
-};
+  }
+}
 </script>
 
 <style>
