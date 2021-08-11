@@ -96,7 +96,7 @@ const actions = {
     axios({
       url: API.URL + API.ROUTES.logout,
       method: "get",
-      headers: { Authorization: "Bearer " + this.getters.getAccessToken },
+      headers: { Authorization: "Bearer " + this.state.accessToken },
     })
       .then(() => {
         localStorage.removeItem("accessToken");
