@@ -7,6 +7,9 @@
       <span v-if="!isCalendarEdit">
         <img src="@/assets/edit-button.png" @click="timeEditRequest" class="calendar-edit-button">
       </span>
+      <span v-if="isCalendarEdit" class="goback" @click="timeEditRequest">
+        ←
+      </span>
     </div>
     <div class="m-top-3">
       <button class="first-setting day-button" @click="checkWeekday()">평일</button>
@@ -239,6 +242,17 @@ export default {
   margin-top: 1px;
   margin-bottom: 1px;
   width: 65px;
+}
+
+.goback {
+  border: solid 1px #658DC6;
+  padding: 0px 2px 0px 2px;
+  cursor: pointer;
+}
+
+.goback:hover {
+  background-color: #658DC6;
+  color: white;
 }
 
 .none-selected-button {
