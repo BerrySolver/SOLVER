@@ -44,7 +44,7 @@ const actions = {
       url: API.URL + API.ROUTES.signup,
       method: "post",
       data: credentials,
-      headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+      headers: { Authorization: "Bearer " + this.getters.isLoggedIn },
     })
       .then((res) => {
         console.log(res);
@@ -56,7 +56,8 @@ const actions = {
   },
   tokenLogin({ commit }, token) {
     commit("SET_ACCESS_TOKEN", token);
-    localStorage.setItem("accessToken", token);
+    // this.state.accessToken = token;
+    localStorage.setItem("solverToken", token);
     //토큰으로 닉네임을 찾아오기
     axios({
       url: API.URL + API.ROUTES.getNickname,
@@ -72,8 +73,8 @@ const actions = {
           router.push({ path: "/" });
         }
       })
-      .catch(() => {
-        console.log();
+      .catch((e) => {
+        console.log(e);
       });
   },
   login({ commit }) {
@@ -84,7 +85,6 @@ const actions = {
     })
       .then((res) => {
         // console.log(res);
-        localStorage.setItem("accessToken", res.data.accessToken);
         commit("SET_ACCESS_TOKEN", res.data.accessToken);
         router.push({ path: "/" });
       })
@@ -96,12 +96,12 @@ const actions = {
     axios({
       url: API.URL + API.ROUTES.logout,
       method: "get",
-      headers: { Authorization: "Bearer " + this.state.accessToken },
+      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
     })
       .then(() => {
-        localStorage.removeItem("accessToken");
+        localStorage.removeItem("solverToken");
         commit("SET_ACCESS_TOKEN", "");
-        router.push({ path: "/" });
+        router.push({ path: "/#" });
       })
       .catch(() => {
         console.log();

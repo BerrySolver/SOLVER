@@ -27,17 +27,16 @@
           <li class="nav-item">
             <RouterLink :to="{ name: 'Solvers' }" class="nav-router">솔버</RouterLink>
           </li>
-          <li class="nav-item" v-if="!isLoggedIn">
+          <li class="nav-item" v-if="!checkLogin()">
             <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
           </li>
-          <li class="nav-item" v-if="!isLoggedIn">
-            <RouterLink :to="{ name: 'Signup1' }" class="nav-router">회원가입</RouterLink>
+          <li class="nav-item" v-if="checkLogin()">
+            <RouterLink :to="`/profiles/${userNickname}`" class="nav-router" @click="profileClick"
+              >프로필</RouterLink
+            >
           </li>
-          <li class="nav-item" v-if="isLoggedIn">
-            <RouterLink :to="`/profiles/${userNickname}`" class="nav-router" @click="profileClick">프로필</RouterLink>
-          </li>
-          <li class="nav-item" v-if="isLoggedIn">
-            <a @click="logout" class="nav-logout">로그아웃</a>
+          <li class="nav-item" v-if="checkLogin()">
+            <a @click="clickLogout()" class="nav-logout">로그아웃</a>
           </li>
         </ul>
       </div>
@@ -46,28 +45,35 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex'
+import { mapActions, mapGetters, mapState } from "vuex";
+import router from "@/router";
 
 export default {
   name: "Navbar",
   computed: {
     ...mapState({
-      userNickname: state => state.auth.userNickname,
+      userNickname: (state) => state.auth.userNickname,
     }),
-    ...mapGetters([
-      'isLoggedIn',
-    ]),
+    ...mapGetters(["isLoggedIn"]),
     needHide() {
-      return !(this.$route.name === 'Signup1' || this.$route.name === 'Signup2' || this.$route.name === 'Login');
+      return !(
+        this.$route.name === "Signup1" ||
+        this.$route.name === "Signup2" ||
+        this.$route.name === "Login"
+      );
     },
   },
-  methods:{
-    ...mapActions([
-      'logout',
-    ]),
+  methods: {
+    ...mapActions(["logout"]),
     profileClick() {
-      this.profileSetting(this.userNickname)
-    }
+      this.profileSetting(this.userNickname);
+    },
+    checkLogin() {
+      return localStorage.getItem("solverToken") != null;
+    },
+    clickLogout() {
+      this.logout();
+    },
   },
 };
 </script>
@@ -75,7 +81,7 @@ export default {
 <style>
 .navbar {
   align-items: center;
-  font-family: 'NanumSquare', sans-serif;
+  font-family: "NanumSquare", sans-serif;
   font-size: 15px;
   height: 6vh;
   position: fixed;
@@ -84,20 +90,20 @@ export default {
 }
 
 .nav-logo {
-  color: #658DC6;
+  color: #658dc6;
   font-weight: 600;
   margin-right: 20px;
   text-decoration: none;
 }
 
 .nav-router {
-  color: #84898C;
+  color: #84898c;
   margin-right: 20px;
   text-decoration: none;
 }
 
 .nav-logout {
-  color: #84898C;
+  color: #84898c;
   margin-right: 20px;
   text-decoration: none;
   cursor: pointer;

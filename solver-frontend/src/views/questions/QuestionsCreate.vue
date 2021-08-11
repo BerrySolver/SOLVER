@@ -101,7 +101,7 @@
 import Vue from "vue";
 import axios from "axios";
 import API from "@/API.js";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import auth from "@/store/modules/auth.js";
@@ -196,6 +196,7 @@ export default {
   },
   methods: {
     ...mapActions(["setStateQuery"]),
+    ...mapGetters(["getAccessToken"]),
     setMainCategory: function() {
       const idx = this.request.mainCategoryIndex;
       this.subCategories = this.categories[idx].category;
@@ -254,8 +255,10 @@ export default {
       // "SubCategory": this.subCategories[this.request.subCategoryIndex].subCategoryCode,
       // "difficulty": this.request.difficulty,
       // };
-
-      if (auth.state.accessToken == null || auth.state.accessToken == "") {
+      if (
+        localStorage.getItem("solverToken") == null ||
+        localStorage.getItem("solverToken") == ""
+      ) {
         console.log("로그인 안 된 상태");
         return;
       }
@@ -270,7 +273,7 @@ export default {
           subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
           difficulty: this.request.difficulty,
         },
-        headers: { Authorization: "Bearer " + auth.state.accessToken },
+        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
       })
         .then((res) => {
           console.log(res);
@@ -316,16 +319,24 @@ export default {
   mounted() {
     ClassicEditor.create(document.querySelector("#divEditorInsert"), {
       extraPlugins: [MyCustomUploadAdapterPlugin],
-        toolbar: {
-          items: [
-            'heading', '|',
-            'bold', 'italic', '|',
-            'link', '|',
-            'bulletedList', 'numberedList', '|',
-            'ckfinder', '|',
-            'undo', 'redo'
+      toolbar: {
+        items: [
+          "heading",
+          "|",
+          "bold",
+          "italic",
+          "|",
+          "link",
+          "|",
+          "bulletedList",
+          "numberedList",
+          "|",
+          "ckfinder",
+          "|",
+          "undo",
+          "redo",
         ],
-      }
+      },
     })
       .then((editor) => {
         this.CKEditor = editor;

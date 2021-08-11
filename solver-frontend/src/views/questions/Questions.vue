@@ -153,9 +153,17 @@
                     class="question-list-item-title"
                     style="font-size: 20px; font-weight: 700; margin-left: 10px;"
                     >{{ question.title }}
+                    <img
+                      v-if="question.isImage"
+                      style="width:25px"
+                      src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDk1LjMwNCw2MS4yMTdIMTYuNjk2QzcuNDc1LDYxLjIxNywwLDY4LjY5MywwLDc3LjkxM3YzNTYuMTc0YzAsOS4yMiw3LjQ3NSwxNi42OTYsMTYuNjk2LDE2LjY5Nmg0NzguNjA5DQoJCQljOS4yMiwwLDE2LjY5Ni03LjQ3NSwxNi42OTYtMTYuNjk2Vjc3LjkxM0M1MTIsNjguNjkzLDUwNC41MjUsNjEuMjE3LDQ5NS4zMDQsNjEuMjE3eiBNNDc4LjYwOSw0MTcuMzkxSDMzLjM5MVYzNzAuNDMNCgkJCWw5My4yNjItOTguODY5bDc3Ljk1Niw4Mi42NDZjNi41OSw2Ljk4NSwxNy43MDYsNi45NzksMjQuMjksMEwzODUuNDM2LDE4OC4yNmw5My4xNzMsOTguNzY5VjQxNy4zOTF6IE00NzguNjA5LDIzOC4zNjgNCgkJCWwtODEuMDI5LTg1Ljg5NmMtNi41OS02Ljk4NS0xNy43MDUtNi45NzktMjQuMjksMEwyMTYuNzU1LDMxOC40MThsLTc3Ljk1Ni04Mi42NDZjLTYuNTktNi45ODUtMTcuNzA2LTYuOTc5LTI0LjI5LDANCgkJCWwtODEuMTE3LDg1Ljk5NFY5NC42MDloNDQ1LjIxN1YyMzguMzY4eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjE2Ljc1NCwxMzMuODEyYy0yNy43MjEsMC01MC4yNzUsMjIuNTU0LTUwLjI3NSw1MC4yNzRjMCwyNy43MjEsMjIuNTU0LDUwLjI3NSw1MC4yNzUsNTAuMjc1DQoJCQljMjcuNzIxLDAsNTAuMjc0LTIyLjU1NCw1MC4yNzQtNTAuMjc1QzI2Ny4wMjgsMTU2LjM2NiwyNDQuNDc0LDEzMy44MTIsMjE2Ljc1NCwxMzMuODEyeiBNMjE2Ljc1NCwyMDAuOTcNCgkJCWMtOS4zMSwwLTE2Ljg4NC03LjU3NC0xNi44ODQtMTYuODg0YzAtOS4zMDksNy41NzQtMTYuODgzLDE2Ljg4NC0xNi44ODNzMTYuODgzLDcuNTc0LDE2Ljg4MywxNi44ODMNCgkJCUMyMzMuNjM3LDE5My4zOTYsMjI2LjA2MiwyMDAuOTcsMjE2Ljc1NCwyMDAuOTd6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo="
+                    />
+                    <img
+                      v-if="question.isVideo"
+                      style="width:25px;margin-left:4px;"
+                      src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ2MS41MDEgNDYxLjUwMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDYxLjUwMSA0NjEuNTAxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8Zz4NCgkJPGc+DQoJCQk8cGF0aCBkPSJNNDI4LjYzNiw0Mi4yNUgzMi44NjVDMTQuNzQzLDQyLjI1LDAsNTYuOTkzLDAsNzUuMTE1djMxMS4yNzFjMCwxOC4xMjIsMTQuNzQzLDMyLjg2NSwzMi44NjUsMzIuODY1aDM5NS43NzENCgkJCQljMTguMTIyLDAsMzIuODY1LTE0Ljc0MywzMi44NjUtMzIuODY1Vjc1LjExNUM0NjEuNSw1Ni45OTMsNDQ2Ljc1Nyw0Mi4yNSw0MjguNjM2LDQyLjI1eiBNNDMxLjUwMSwzODYuMzg1TDQzMS41MDEsMzg2LjM4NQ0KCQkJCWMtMC4wMDEsMS41OC0xLjI4NiwyLjg2NS0yLjg2NiwyLjg2NUgzMi44NjVjLTEuNTgsMC0yLjg2NS0xLjI4NS0yLjg2NS0yLjg2NVY3NS4xMTVjMC0xLjU4LDEuMjg1LTIuODY1LDIuODY1LTIuODY1aDM5NS43NzENCgkJCQljMS41OCwwLDIuODY1LDEuMjg1LDIuODY1LDIuODY1VjM4Ni4zODV6Ii8+DQoJCQk8cGF0aCBkPSJNMjk2Ljc2NywyMTguNDY5bC0xMTQuODA5LTgwLjUxMWMtNC41ODEtMy4yMTMtMTAuNTctMy42MDktMTUuNTM0LTEuMDI2Yy00Ljk2NCwyLjU4Mi04LjA3OSw3LjcxMi04LjA3OSwxMy4zMDh2MTYxLjAyMw0KCQkJCWMwLDUuNTk1LDMuMTE0LDEwLjcyNiw4LjA3OSwxMy4zMDhjNC45OTEsMi41OTYsMTAuOTc3LDIuMTY5LDE1LjUzNC0xLjAyNmwxMTQuODA5LTgwLjUxMmM0LjAwNC0yLjgwOCw2LjM4OC03LjM5MSw2LjM4OC0xMi4yODENCgkJCQlTMzAwLjc3MSwyMjEuMjc3LDI5Ni43NjcsMjE4LjQ2OXogTTE4OC4zNDYsMjgyLjQyMlYxNzkuMDc5bDczLjY4NCw1MS42NzFMMTg4LjM0NiwyODIuNDIyeiIvPg0KCQk8L2c+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo="
+                    />
                   </span>
-                  <img v-if="question.isImage" style="width:15px; margin-left:5px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDk1LjMwNCw2MS4yMTdIMTYuNjk2QzcuNDc1LDYxLjIxNywwLDY4LjY5MywwLDc3LjkxM3YzNTYuMTc0YzAsOS4yMiw3LjQ3NSwxNi42OTYsMTYuNjk2LDE2LjY5Nmg0NzguNjA5DQoJCQljOS4yMiwwLDE2LjY5Ni03LjQ3NSwxNi42OTYtMTYuNjk2Vjc3LjkxM0M1MTIsNjguNjkzLDUwNC41MjUsNjEuMjE3LDQ5NS4zMDQsNjEuMjE3eiBNNDc4LjYwOSw0MTcuMzkxSDMzLjM5MVYzNzAuNDMNCgkJCWw5My4yNjItOTguODY5bDc3Ljk1Niw4Mi42NDZjNi41OSw2Ljk4NSwxNy43MDYsNi45NzksMjQuMjksMEwzODUuNDM2LDE4OC4yNmw5My4xNzMsOTguNzY5VjQxNy4zOTF6IE00NzguNjA5LDIzOC4zNjgNCgkJCWwtODEuMDI5LTg1Ljg5NmMtNi41OS02Ljk4NS0xNy43MDUtNi45NzktMjQuMjksMEwyMTYuNzU1LDMxOC40MThsLTc3Ljk1Ni04Mi42NDZjLTYuNTktNi45ODUtMTcuNzA2LTYuOTc5LTI0LjI5LDANCgkJCWwtODEuMTE3LDg1Ljk5NFY5NC42MDloNDQ1LjIxN1YyMzguMzY4eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjE2Ljc1NCwxMzMuODEyYy0yNy43MjEsMC01MC4yNzUsMjIuNTU0LTUwLjI3NSw1MC4yNzRjMCwyNy43MjEsMjIuNTU0LDUwLjI3NSw1MC4yNzUsNTAuMjc1DQoJCQljMjcuNzIxLDAsNTAuMjc0LTIyLjU1NCw1MC4yNzQtNTAuMjc1QzI2Ny4wMjgsMTU2LjM2NiwyNDQuNDc0LDEzMy44MTIsMjE2Ljc1NCwxMzMuODEyeiBNMjE2Ljc1NCwyMDAuOTcNCgkJCWMtOS4zMSwwLTE2Ljg4NC03LjU3NC0xNi44ODQtMTYuODg0YzAtOS4zMDksNy41NzQtMTYuODgzLDE2Ljg4NC0xNi44ODNzMTYuODgzLDcuNTc0LDE2Ljg4MywxNi44ODMNCgkJCUMyMzMuNjM3LDE5My4zOTYsMjI2LjA2MiwyMDAuOTcsMjE2Ljc1NCwyMDAuOTd6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" />
-                  <img v-if="question.isVideo" style="width:15px; margin-left:5px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ2MS41MDEgNDYxLjUwMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDYxLjUwMSA0NjEuNTAxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8Zz4NCgkJPGc+DQoJCQk8cGF0aCBkPSJNNDI4LjYzNiw0Mi4yNUgzMi44NjVDMTQuNzQzLDQyLjI1LDAsNTYuOTkzLDAsNzUuMTE1djMxMS4yNzFjMCwxOC4xMjIsMTQuNzQzLDMyLjg2NSwzMi44NjUsMzIuODY1aDM5NS43NzENCgkJCQljMTguMTIyLDAsMzIuODY1LTE0Ljc0MywzMi44NjUtMzIuODY1Vjc1LjExNUM0NjEuNSw1Ni45OTMsNDQ2Ljc1Nyw0Mi4yNSw0MjguNjM2LDQyLjI1eiBNNDMxLjUwMSwzODYuMzg1TDQzMS41MDEsMzg2LjM4NQ0KCQkJCWMtMC4wMDEsMS41OC0xLjI4NiwyLjg2NS0yLjg2NiwyLjg2NUgzMi44NjVjLTEuNTgsMC0yLjg2NS0xLjI4NS0yLjg2NS0yLjg2NVY3NS4xMTVjMC0xLjU4LDEuMjg1LTIuODY1LDIuODY1LTIuODY1aDM5NS43NzENCgkJCQljMS41OCwwLDIuODY1LDEuMjg1LDIuODY1LDIuODY1VjM4Ni4zODV6Ii8+DQoJCQk8cGF0aCBkPSJNMjk2Ljc2NywyMTguNDY5bC0xMTQuODA5LTgwLjUxMWMtNC41ODEtMy4yMTMtMTAuNTctMy42MDktMTUuNTM0LTEuMDI2Yy00Ljk2NCwyLjU4Mi04LjA3OSw3LjcxMi04LjA3OSwxMy4zMDh2MTYxLjAyMw0KCQkJCWMwLDUuNTk1LDMuMTE0LDEwLjcyNiw4LjA3OSwxMy4zMDhjNC45OTEsMi41OTYsMTAuOTc3LDIuMTY5LDE1LjUzNC0xLjAyNmwxMTQuODA5LTgwLjUxMmM0LjAwNC0yLjgwOCw2LjM4OC03LjM5MSw2LjM4OC0xMi4yODENCgkJCQlTMzAwLjc3MSwyMjEuMjc3LDI5Ni43NjcsMjE4LjQ2OXogTTE4OC4zNDYsMjgyLjQyMlYxNzkuMDc5bDczLjY4NCw1MS42NzFMMTg4LjM0NiwyODIuNDIyeiIvPg0KCQk8L2c+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" />
                 </div>
               </div>
               <div class="d-flex">
@@ -352,14 +360,14 @@ export default {
           this.totalListItemCount = res.data.totalCount;
           // console.log(this.questionList);
           // console.log(this.totalCount);
-          this.questionList.forEach(e=>{
+          this.questionList.forEach((e) => {
             var isImage = false;
             var isVideo = false;
-            while(e.content.indexOf("<figure") != -1){
-              if(e.content.indexOf("<figure class=\"image\">")!=-1){
+            while (e.content.indexOf("<figure") != -1) {
+              if (e.content.indexOf('<figure class="image">') != -1) {
                 isImage = true;
               }
-              if(e.content.indexOf("<figure class=\"media\">")!=-1){
+              if (e.content.indexOf('<figure class="media">') != -1) {
                 isVideo = true;
               }
               // console.log("전 - ", e.content);
@@ -367,7 +375,9 @@ export default {
               // console.log("앞", e.content.slice(0, e.content.indexOf("<figure")));
               // console.log("미디어", e.content.slice(e.content.indexOf("<figure"), e.content.indexOf("</figure>")+9));
               // console.log("뒤", e.content.slice(e.content.indexOf("</figure>")+9));
-              e.content = e.content.slice(0, e.content.indexOf("<figure")) + e.content.slice(e.content.indexOf("</figure>")+9);
+              e.content =
+                e.content.slice(0, e.content.indexOf("<figure")) +
+                e.content.slice(e.content.indexOf("</figure>") + 9);
             }
             e.isImage = isImage;
             e.isVideo = isVideo;
@@ -378,6 +388,11 @@ export default {
         });
     },
     goQuestionCreate: function() {
+      if (localStorage.getItem("solverToken") == null) {
+        //여기에 나중에 모달 or 메시지
+        return;
+      }
+
       this.$router.push({
         name: "QuestionsCreate",
       });
