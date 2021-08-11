@@ -11,7 +11,7 @@
       <div class="nickname">
         <div>{{ userProfileInfo.nickname }}</div>
         <div
-        style="color:#658DC6; font-size: 14px"
+        class="edit-img"
         @click="editRequest">
           <span>수정</span>
           <img src="@/assets/edit-button.png" width="20px">
@@ -192,7 +192,7 @@ export default {
     },
     // 프로필 자기소개 수정
     editSelfIntro(selfIntro) {
-      console.log('자기소개 수정')
+      console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
         method: "patch",
@@ -202,7 +202,7 @@ export default {
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: selfIntro,
           linkText: this.userProfileInfo.linkText,
-          category: this.userProfileInfo.favoriteFieldCodeList
+          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
         }
       })
       .then((res) => {
@@ -214,7 +214,7 @@ export default {
 
     // 프로필 URL 수정
     editSelfUrl(selfUrl) {
-      console.log(selfUrl)
+      console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
         method: "patch",
@@ -224,7 +224,7 @@ export default {
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: this.userProfileInfo.introduction,
           linkText: selfUrl,
-          category: this.userProfileInfo.favoriteFieldCodeList
+          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
         }
       })
       .then((res) => {
@@ -233,6 +233,27 @@ export default {
         })
       .catch((err) => console.log(err))
     },
+
+    // editCategory(myCategory) {
+    //   axios({
+    //     url: API.URL + API.ROUTES.editProfile,
+    //     method: "patch",
+    //     headers: { Authorization: "Bearer " + this.accessToken},
+    //     data: {
+    //       nickname: this.userNickname,
+    //       profileUrl: this.userProfileInfo.profileUrl,
+    //       introduction: this.userProfileInfo.introduction,
+    //       linkText: this.userProfileInfo.linkText,
+    //       favoriteFieldCodeList: myCategory,
+    //       favoriteFieldNameList: this.userProfileInfo.favoriteFieldNameList,
+    //     }
+    //   })
+    //   .then((res) => {
+    //     // 실시간 업데이트를 위해
+    //     this.profileSetting(this.userNickname)
+    //     })
+    //   .catch((err) => console.log(err))
+    // },
   },
   computed: {
     ...mapState({

@@ -27,6 +27,12 @@
   color: white;
 }
 
+.edit-img {
+  color:#658DC6;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 .gap-box {
   width: 10px;
 }
@@ -68,12 +74,13 @@
 .profile {
   display: grid;
   grid-template-rows: 300px 600px;
-  grid-template-columns: 300px 1090px;
+  grid-template-columns: 400px 1090px;
 }
 
 .profile-img {
-  width: 240px;
-  height: 240px;
+  margin-left: 70px;
+  width: 260px;
+  height: 260px;
 }
 
 .profile-img-section {
