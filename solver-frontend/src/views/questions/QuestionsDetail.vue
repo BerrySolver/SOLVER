@@ -5,7 +5,7 @@
         <div class="question-detail-texts">
           <div class="question-detail-category">
             <div>{{ question.mainCategory }} > {{ question.subCategory }}</div>
-            <div class="question-buttons">
+            <div v-if="checkNickname()" class="question-buttons">
               <div class="question-modify-btn" @click="modifyQuestion()">
                 수정하기
               </div>
@@ -216,6 +216,11 @@ export default {
       this.$router.push({
         name: "QuestionsModify",
       });
+    },
+    checkNickname() {
+      if (this.question.nickname == localStorage.getItem("solverNickname")) return true;
+
+      return false;
     },
   },
   created() {
