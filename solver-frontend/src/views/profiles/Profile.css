@@ -1,3 +1,7 @@
+.berry-opacity {
+  opacity: 50%;
+}
+
 .berry-point {
   display: flex;
   flex-direction: row;
@@ -37,6 +41,11 @@
   color:#658DC6;
   cursor: pointer;
   font-size: 14px;
+}
+
+.for-center {
+  display: flex;
+  justify-content: center;
 }
 
 .gap-box {

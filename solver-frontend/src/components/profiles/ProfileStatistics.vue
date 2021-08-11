@@ -31,9 +31,7 @@
           </div>
           <!-- answer-statistics의 lastchild(right) -->
           <div class="text-left">
-            <div>카테고리1</div>
-            <div>카테고리2</div>
-            <div>카테고리3</div>
+            <div v-for="cateName in userProfileInfo.favoriteFieldNameList" :key="cateName">{{ cateName }}</div>
           </div>
         </div>
       </div>
@@ -45,8 +43,28 @@
           <div class="small-box"></div>
           <span class="subheading interval">솔버 등급</span>
         </div>
-        <img src="@/assets/berry-1.png" width="250px">
-        <div class="m-left-5 point-color-1">LV1. 으쌰으쌰 레벨</div>        
+        <div v-if="userProfileInfo.remainingPoint < 100">
+          <img src="@/assets/berry-1.png" width="300px">
+          <div class="point-color-1">새싹베리</div> 
+        </div>
+        <div v-if="100 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 200">
+          <div>
+            <img src="@/assets/berry-2.png" width="300px">
+            <div class="point-color-1">베이비베리</div> 
+          </div>
+        </div>    
+        <div v-if="200 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 300">
+          <img src="@/assets/berry-3.png" width="300px">
+          <div class="point-color-1 content-center">전교1등베리</div> 
+        </div>
+        <div v-if="300 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 400">
+          <img src="@/assets/berry-4.png" width="300px">
+          <div class="point-color-1">척척박사베리</div> 
+        </div>         
+        <div v-if="400 <= userProfileInfo.remainingPoint">
+          <img src="@/assets/berry-5.png" width="300px">
+          <div class="point-color-1">베리킹</div> 
+        </div>             
       </div>
     </div>
   </div>
@@ -64,6 +82,7 @@ export default {
     ...mapState({
       userNickname: state => state.auth.userNickname,
       userStatistics: state => state.profiles.userStatistics,
+      userProfileInfo: state => state.profiles.userProfileInfo,
     })
   },
 }
@@ -83,6 +102,10 @@ export default {
 .answer-statistics > div:last-child {
   flex: 5.5; /* 공간차지비율 */
   height: 100%;
+}
+
+.content-center {
+  margin: 0 auto;
 }
 
 .statistics-info {
