@@ -255,7 +255,10 @@ export default {
       // "difficulty": this.request.difficulty,
       // };
 
-      auth.state.accessToken = "E9BoCaA7JUkwIUrt_CHaAvU-E-WVG0B3b2z02go9dVoAAAF7L10guw";
+      if (auth.state.accessToken == null || auth.state.accessToken == "") {
+        console.log("로그인 안 된 상태");
+        return;
+      }
 
       axios({
         url: API.URL + API.ROUTES.createQuestion,
@@ -267,7 +270,7 @@ export default {
           subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
           difficulty: this.request.difficulty,
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+        headers: { Authorization: "Bearer " + auth.state.accessToken },
       })
         .then((res) => {
           console.log(res);
@@ -331,8 +334,6 @@ export default {
         console.error(err.stack);
       });
 
-    // bootstrap modal show event hook
-    // InsertModal 이 보일 때 초기화
     let $this = this;
     this.$el.addEventListener("show.bs.modal", function() {
       $this.initUI();
