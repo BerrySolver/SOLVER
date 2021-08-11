@@ -572,7 +572,8 @@ export default {
   justify-content: space-between;
 }
 
-.ck.ck-editor__editable {
+.question-main .ck.ck-editor__editable {
+  width: 896px;
   height: 600px;
   margin-bottom: 30px;
 }

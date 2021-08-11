@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.AnswerCreatePostReq;
@@ -30,7 +31,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import springfox.documentation.annotations.ApiIgnore;
 
 @CrossOrigin("*")
@@ -56,7 +56,7 @@ public class AnswerController {
 	public ResponseEntity<? extends BaseResponse> createAnswer(HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId,
-			AnswerCreatePostReq answerCreatePostReq
+			@RequestBody AnswerCreatePostReq answerCreatePostReq
 			) throws ParseException 
 	{
 		answerService.createAnswer(accessToken, answerCreatePostReq, questionId, response);

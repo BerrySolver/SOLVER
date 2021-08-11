@@ -53,7 +53,7 @@
     </div>
     <hr style="color: #e0e0e0; opacity: 0.8;" />
     <Answer />
-    <AnswerCreate />
+    <AnswerCreate :questionId="$route.params.questionId" />
   </div>
 </template>
 
