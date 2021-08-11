@@ -370,71 +370,37 @@ export default {
           console.log(err);
         });
     },
-    getAnswerList() {
-      axios({
-        url: API.URL + `answers/list/${this.$route.params.questionId}`,
-        method: "get",
-        params: {
-          nickname: localStorage.getItem("solverNickname"),
-        },
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
-      })
-        .then((res) => {
-          console.log(res);
-          this.answerList = res.data.answerList;
-          this.commentListOpen = new Array(res.data.answerList.length);
-          for (let i = 0; i < res.data.answerList.length; i++) {
-            this.commentListOpen[i] = false;
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
   },
   mounted() {
     this.nickname = localStorage.getItem("solverNickname");
   },
   created() {
-    axios({
-      url: API.URL + `answers/list/${this.$route.params.questionId}`,
-      method: "get"
-    })
-    .then((res) => {
-      this.answerList = res.data.answerList
-      this.commentListOpen = new Array(res.data.answerList.length)
-      for (let i = 0; i < res.data.answerList.length; i++) {
-        this.commentListOpen[i] = false
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    this.getAnswerList();
   },
   computed: {
     ...mapState({
       commentDeleteTrigger: (state) => state.questions.commentDeleteTrigger,
       answerChangeTrigger: (state) => state.questions.answerChangeTrigger,
-    })
+    }),
   },
   watch: {
-    commentDeleteTrigger: function () {
+    commentDeleteTrigger: function() {
       axios({
         url: API.URL + `answers/list/${this.$route.params.questionId}`,
-        method: "get"
+        method: "get",
       })
-      .then((res) => {
-        this.answerList = res.data.answerList
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          this.answerList = res.data.answerList;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     answerChangeTrigger: function() {
       this.getAnswerList();
     },
-  }
-}
+  },
+};
 </script>
 
 <style>

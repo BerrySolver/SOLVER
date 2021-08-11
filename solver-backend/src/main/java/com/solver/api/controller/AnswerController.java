@@ -116,7 +116,7 @@ public class AnswerController {
         @ApiResponse(code = 409, message = "답변 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getAnswerList(
-			@RequestParam String nickname,
+			@RequestParam(required = false) String nickname,
 			@PathVariable @ApiParam(value="답변을 조회할 질문 ID", required=true) String questionId
 			) 
 	{
