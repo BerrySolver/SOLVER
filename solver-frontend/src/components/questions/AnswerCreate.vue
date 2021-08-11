@@ -20,6 +20,7 @@ import axios from "axios";
 import API from "@/API.js";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import {mapActions} from 'vuex';
 
 Vue.use(CKEditor);
 
@@ -91,6 +92,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'triggerAnswerReload'
+    ]),
     answerCreate: function () {
       const content = this.CKEditor.getData()
       console.log(content)
@@ -103,6 +107,7 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken },
       })
       .then(() => {
+        this.triggerAnswerReload()
         this.CKEditor.setData('')
       })
       .catch((e) => {

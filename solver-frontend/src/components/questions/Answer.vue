@@ -70,6 +70,7 @@ import axios from "axios";
 import API from "@/API.js";
 import Comments from "@/components/questions/Comments";
 import CommentsCreate from "@/components/questions/CommentsCreate";
+import { mapState } from 'vuex'
 
 export default {
   name: "Answer",
@@ -89,6 +90,27 @@ export default {
     openComment: function(idx) {
       this.commentListOpen[idx] = !this.commentListOpen[idx];
       this.isTrue = !this.isTrue;
+    },
+    getAnswerList: function () {
+      axios({
+        url: API.URL + `answers/list/${this.$route.params.questionId}`,
+        method: "get",
+        params: {
+          nickname: localStorage.getItem("solverNickname"),
+        },
+        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      })
+        .then((res) => {
+          console.log(res);
+          this.answerList = res.data.answerList;
+          this.commentListOpen = new Array(res.data.answerList.length);
+          for (let i = 0; i < res.data.answerList.length; i++) {
+            this.commentListOpen[i] = false;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     humanize: function(now, date) {
       const moment = require("moment");
@@ -165,26 +187,18 @@ export default {
     },
   },
   created() {
-    axios({
-      url: API.URL + `answers/list/${this.$route.params.questionId}`,
-      method: "get",
-      params: {
-        nickname: localStorage.getItem("solverNickname"),
-      },
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
-    })
-      .then((res) => {
-        console.log(res);
-        this.answerList = res.data.answerList;
-        this.commentListOpen = new Array(res.data.answerList.length);
-        for (let i = 0; i < res.data.answerList.length; i++) {
-          this.commentListOpen[i] = false;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.getAnswerList()
   },
+  computed: {
+    ...mapState({
+      answerChangeTrigger: (state) => state.questions.answerChangeTrigger,
+    })
+  },
+  watch: {
+    answerChangeTrigger: function () {
+      this.getAnswerList()
+    }
+  }
 };
 </script>
 
