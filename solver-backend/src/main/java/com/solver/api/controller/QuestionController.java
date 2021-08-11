@@ -144,7 +144,7 @@ public class QuestionController {
 	}
 	
 	// 질문 수정 API
-	@PatchMapping("/{questionId}")
+	@PostMapping("/{questionId}")
 	@ApiOperation(value = "질문 수정", notes = "질문 수정 API") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "질문을 성공적으로 수정했습니다."),

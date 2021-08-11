@@ -4,7 +4,15 @@
       <div class="question-detail-contents">
         <div class="question-detail-texts">
           <div class="question-detail-category">
-            {{ question.mainCategory }} > {{ question.subCategory }}
+            <div>{{ question.mainCategory }} > {{ question.subCategory }}</div>
+            <div v-if="checkNickname()" class="question-buttons">
+              <div class="question-modify-btn" @click="modifyQuestion()">
+                수정하기
+              </div>
+              <div class="question-delete-btn" @click="deleteQuestion()">
+                삭제하기
+              </div>
+            </div>
           </div>
           <div class="question-detail-title">
             {{ question.title }}
@@ -35,10 +43,11 @@
             <div>{{ answerCount }}</div>
           </div>
           <div class="question-detail-count question-count-button" @click="changeLike()">
-            <img 
+            <img
               v-if="isLiked"
               style="width:20px; margin: 13px 0 3px 0;"
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDM5MS44MzcgMzkxLjgzNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8cGF0aCBzdHlsZT0iIiBkPSJNMjg1LjI1NywzNS41MjhjNTguNzQzLDAuMjg2LDEwNi4yOTQsNDcuODM2LDEwNi41OCwxMDYuNTggICBjMCwxMDcuNjI0LTE5NS45MTgsMjE0LjIwNC0xOTUuOTE4LDIxNC4yMDRTMCwyNDguMTY1LDAsMTQyLjEwOGMwLTU4Ljg2Miw0Ny43MTctMTA2LjU4LDEwNi41OC0xMDYuNThsMCwwICAgYzM2LjAzMi0wLjI4MSw2OS43MTgsMTcuODQyLDg5LjMzOSw0OC4wNjVDMjE1LjY3NCw1My41MTcsMjQ5LjI3MywzNS40NDEsMjg1LjI1NywzNS41Mjh6IiBmaWxsPSIjZjViODk1IiBkYXRhLW9yaWdpbmFsPSIjZDc0NDNlIj48L3BhdGg+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPC9nPjwvc3ZnPg==" />
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDM5MS44MzcgMzkxLjgzNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8cGF0aCBzdHlsZT0iIiBkPSJNMjg1LjI1NywzNS41MjhjNTguNzQzLDAuMjg2LDEwNi4yOTQsNDcuODM2LDEwNi41OCwxMDYuNTggICBjMCwxMDcuNjI0LTE5NS45MTgsMjE0LjIwNC0xOTUuOTE4LDIxNC4yMDRTMCwyNDguMTY1LDAsMTQyLjEwOGMwLTU4Ljg2Miw0Ny43MTctMTA2LjU4LDEwNi41OC0xMDYuNThsMCwwICAgYzM2LjAzMi0wLjI4MSw2OS43MTgsMTcuODQyLDg5LjMzOSw0OC4wNjVDMjE1LjY3NCw1My41MTcsMjQ5LjI3MywzNS40NDEsMjg1LjI1NywzNS41Mjh6IiBmaWxsPSIjZjViODk1IiBkYXRhLW9yaWdpbmFsPSIjZDc0NDNlIj48L3BhdGg+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPC9nPjwvc3ZnPg=="
+            />
             <img
               v-else
               style="width:20px; margin: 13px 0 3px 0;"
@@ -46,11 +55,12 @@
             />
             <div>{{ likeCount }}</div>
           </div>
-          <div class="question-detail-count question-count-button" @click="changeBookmark()"> 
-            <img 
+          <div class="question-detail-count question-count-button" @click="changeBookmark()">
+            <img
               v-if="isBookmarked"
               style="width:20px; margin: 13px 0 3px 0;"
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiIGNsYXNzPSIiPjxnPgo8cG9seWdvbiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSIiIHBvaW50cz0iNDE0LjA0LDAgNDE0LjA0LDUwOS4zNjggMjU2LDM3Ni40ODggOTcuOTYsNTEyIDk3Ljk2LDAgIiBmaWxsPSIjZjJkNmFlIiBkYXRhLW9yaWdpbmFsPSIjZTIxYjFiIj48L3BvbHlnb24+Cjxwb2x5Z29uIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgc3R5bGU9IiIgcG9pbnRzPSI5Ny45NiwwIDk3Ljk2LDUxMiAyNTYsMzc2LjQ4OCAyNTYsMCAiIGZpbGw9IiNmMmQ2YWUiIGRhdGEtb3JpZ2luYWw9IiNmOTFlMWUiIGNsYXNzPSIiPjwvcG9seWdvbj4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPC9nPjwvc3ZnPg==" />
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiIGNsYXNzPSIiPjxnPgo8cG9seWdvbiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0eWxlPSIiIHBvaW50cz0iNDE0LjA0LDAgNDE0LjA0LDUwOS4zNjggMjU2LDM3Ni40ODggOTcuOTYsNTEyIDk3Ljk2LDAgIiBmaWxsPSIjZjJkNmFlIiBkYXRhLW9yaWdpbmFsPSIjZTIxYjFiIj48L3BvbHlnb24+Cjxwb2x5Z29uIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgc3R5bGU9IiIgcG9pbnRzPSI5Ny45NiwwIDk3Ljk2LDUxMiAyNTYsMzc2LjQ4OCAyNTYsMCAiIGZpbGw9IiNmMmQ2YWUiIGRhdGEtb3JpZ2luYWw9IiNmOTFlMWUiIGNsYXNzPSIiPjwvcG9seWdvbj4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPC9nPjwvc3ZnPg=="
+            />
             <img
               v-else
               style="width:20px; margin: 13px 0 3px 0;"
@@ -72,6 +82,8 @@ import axios from "axios";
 import API from "@/API.js";
 import Answer from "@/components/questions/Answer";
 import AnswerCreate from "@/components/questions/AnswerCreate";
+import router from "@/router";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "QuestionsDetail",
@@ -91,8 +103,9 @@ export default {
     };
   },
   methods: {
-    changeLike: function () {
-      if (localStorage.getItem("solverToken") != null){
+    ...mapActions(["setStateQuestionId", "setStateQuestion", "setStateContent"]),
+    changeLike: function() {
+      if (localStorage.getItem("solverToken") != null) {
         if (this.isLiked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
@@ -100,8 +113,8 @@ export default {
             headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
             .then(() => {
-              this.isLiked = !this.isLiked
-              this.likeCount -= 1
+              this.isLiked = !this.isLiked;
+              this.likeCount -= 1;
             })
             .catch((err) => {
               console.log(err);
@@ -113,8 +126,8 @@ export default {
             headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
             .then(() => {
-              this.isLiked = !this.isLiked
-              this.likeCount += 1
+              this.isLiked = !this.isLiked;
+              this.likeCount += 1;
             })
             .catch((err) => {
               console.log(err);
@@ -122,8 +135,8 @@ export default {
         }
       }
     },
-    changeBookmark: function () {
-      if (localStorage.getItem("solverToken") != null){
+    changeBookmark: function() {
+      if (localStorage.getItem("solverToken") != null) {
         if (this.isBookmarked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
@@ -131,8 +144,8 @@ export default {
             headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
             .then(() => {
-              this.isBookmarked = !this.isBookmarked
-              this.bookmarkCount -= 1
+              this.isBookmarked = !this.isBookmarked;
+              this.bookmarkCount -= 1;
             })
             .catch((err) => {
               console.log(err);
@@ -144,8 +157,8 @@ export default {
             headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
             .then(() => {
-              this.isBookmarked = !this.isBookmarked
-              this.bookmarkCount += 1
+              this.isBookmarked = !this.isBookmarked;
+              this.bookmarkCount += 1;
             })
             .catch((err) => {
               console.log(err);
@@ -183,6 +196,32 @@ export default {
 
       return endpoint;
     },
+    deleteQuestion() {
+      axios({
+        url: API.URL + `questions/${this.$route.params.questionId}`,
+        method: "delete",
+        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      })
+        .then((res) => {
+          router.push({ path: "/questions" });
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    modifyQuestion() {
+      this.setStateQuestion(this.question);
+      this.setStateQuestionId(this.$route.params.questionId);
+      this.$router.push({
+        name: "QuestionsModify",
+      });
+    },
+    checkNickname() {
+      if (this.question.nickname == localStorage.getItem("solverNickname")) return true;
+
+      return false;
+    },
   },
   created() {
     axios({
@@ -197,7 +236,7 @@ export default {
         this.bookmarkCount = res.data.bookmarkCount;
         this.isLiked = res.data.liked;
         this.isBookmarked = res.data.bookmarked;
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -228,10 +267,12 @@ iframe {
 }
 
 .question-detail-category {
+  display: flex;
   color: #84898c;
   font-size: 17px;
   margin-bottom: 10px;
   text-align: left;
+  justify-content: space-between;
 }
 
 .question-detail-content {
@@ -300,5 +341,56 @@ iframe {
   padding-left: 15px;
   text-align: left;
   width: 850px;
+}
+
+.question-buttons {
+  display: flex;
+}
+
+.question-buttons div {
+  display: flex;
+
+  width: 70px;
+}
+
+.question-modify-btn {
+  background-color: #658dc6;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  float: left;
+  height: 30px;
+  font-size: 15px;
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-delete-btn {
+  background-color: #b5c7d3;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  float: left;
+  height: 30px;
+  font-size: 15px;
+  width: 70px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-modify-btn:hover {
+  color: white;
+  background: #0f4c81;
+  transition: 0.4s;
+}
+
+.question-delete-btn:hover {
+  color: white;
+  background: #84898c;
+  transition: 0.4s;
 }
 </style>
