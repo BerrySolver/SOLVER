@@ -34,7 +34,7 @@
             />
             <div>{{ answerCount }}</div>
           </div>
-          <div class="question-detail-count question-count-button" @click="changeLike">
+          <div class="question-detail-count question-count-button" @click="changeLike(question.nickname)">
             <img 
               v-if="isLiked"
               style="width:20px; margin: 13px 0 3px 0;"
@@ -46,7 +46,7 @@
             />
             <div>{{ likeCount }}</div>
           </div>
-          <div class="question-detail-count question-count-button" @click="changeBookmark"> 
+          <div class="question-detail-count question-count-button" @click="changeBookmark(question.nickname)"> 
             <img 
               v-if="isBookmarked"
               style="width:20px; margin: 13px 0 3px 0;"
@@ -91,62 +91,66 @@ export default {
     };
   },
   methods: {
-    changeLike: function () {
-      if (this.isLiked) {
-        axios({
-          url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
-          method: "delete",
-          headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
-        })
-          .then(() => {
-            this.isLiked = !this.isLiked
-            this.likeCount -= 1
+    changeLike: function (nickname) {
+      if (localStorage.getItem("solverToken") == nickname){
+        if (this.isLiked) {
+          axios({
+            url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
+            method: "delete",
+            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        axios({
-          url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
-          method: "post",
-          headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
-        })
-          .then(() => {
-            this.isLiked = !this.isLiked
-            this.likeCount += 1
+            .then(() => {
+              this.isLiked = !this.isLiked
+              this.likeCount -= 1
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          axios({
+            url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
+            method: "post",
+            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
-          .catch((err) => {
-            console.log(err);
-          });
+            .then(() => {
+              this.isLiked = !this.isLiked
+              this.likeCount += 1
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       }
     },
-    changeBookmark: function () {
-      if (this.isBookmarked) {
-        axios({
-          url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
-          method: "delete",
-          headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
-        })
-          .then(() => {
-            this.isBookmarked = !this.isBookmarked
-            this.bookmarkCount -= 1
+    changeBookmark: function (nickname) {
+      if (localStorage.getItem("solverToken") == nickname){
+        if (this.isBookmarked) {
+          axios({
+            url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
+            method: "delete",
+            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        axios({
-          url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
-          method: "post",
-          headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
-        })
-          .then(() => {
-            this.isBookmarked = !this.isBookmarked
-            this.bookmarkCount += 1
+            .then(() => {
+              this.isBookmarked = !this.isBookmarked
+              this.bookmarkCount -= 1
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          axios({
+            url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
+            method: "post",
+            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
           })
-          .catch((err) => {
-            console.log(err);
-          });
+            .then(() => {
+              this.isBookmarked = !this.isBookmarked
+              this.bookmarkCount += 1
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       }
     },
     humanize: function(now, date) {
