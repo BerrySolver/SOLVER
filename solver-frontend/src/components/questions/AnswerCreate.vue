@@ -2,7 +2,8 @@
   <div class="answer-editor">
     <div style="width: 900px;">
       <div style="font-size: 17px; text-align: left;">
-        <span style="color: #0F4C81; font-size: 22px; font-weight: 700;">{{userNickname}}</span>님, 답변을 남겨주세요!
+        <span style="color: #0F4C81; font-size: 22px; font-weight: 700;">{{ userNickname }}</span
+        >님, 답변을 남겨주세요!
       </div>
       <div id="answerEditorInsert"></div>
       <div>
@@ -20,7 +21,7 @@ import axios from "axios";
 import API from "@/API.js";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import {mapActions} from 'vuex';
+import { mapActions } from "vuex";
 
 Vue.use(CKEditor);
 
@@ -80,57 +81,63 @@ function MyCustomUploadAdapterPlugin(editor) {
 }
 
 export default {
-  name: 'AnswerCreate',
+  name: "AnswerCreate",
   props: {
     questionId: String,
   },
   data() {
-    return{
+    return {
       accessToken: "",
       CKEditor: "",
-      userNickname: localStorage.getItem("solverNickname")
-    }
+      userNickname: localStorage.getItem("solverNickname"),
+    };
   },
   methods: {
-    ...mapActions([
-      'triggerAnswerReload'
-    ]),
-    answerCreate: function () {
-      const content = this.CKEditor.getData()
-      console.log(content)
+    ...mapActions(["triggerAnswerReload"]),
+    answerCreate: function() {
+      const content = this.CKEditor.getData();
+      console.log(content);
       axios({
         url: API.URL + `answers/${this.questionId}`,
         method: "post",
         data: {
           content: content,
         },
-        headers: { Authorization: "Bearer " + this.accessToken },
+        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
       })
-      .then(() => {
-        this.triggerAnswerReload()
-        this.CKEditor.setData('')
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    }
+        .then(() => {
+          this.triggerAnswerReload();
+          this.CKEditor.setData("");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
   created() {
-    this.accessToken = localStorage.getItem('solverToken')
+    this.accessToken = localStorage.getItem("solverToken");
   },
   mounted() {
     ClassicEditor.create(document.querySelector("#answerEditorInsert"), {
       extraPlugins: [MyCustomUploadAdapterPlugin],
-        toolbar: {
-          items: [
-            'heading', '|',
-            'bold', 'italic', '|',
-            'link', '|',
-            'bulletedList', 'numberedList', '|',
-            'ckfinder', '|',
-            'undo', 'redo'
+      toolbar: {
+        items: [
+          "heading",
+          "|",
+          "bold",
+          "italic",
+          "|",
+          "link",
+          "|",
+          "bulletedList",
+          "numberedList",
+          "|",
+          "ckfinder",
+          "|",
+          "undo",
+          "redo",
         ],
-      }
+      },
     })
       .then((editor) => {
         this.CKEditor = editor;
@@ -144,11 +151,11 @@ export default {
       $this.initUI();
     });
   },
-}
+};
 </script>
 
 <style>
-  .answer-create-btn {
+.answer-create-btn {
   background-color: #658dc6;
   border-radius: 6px;
   color: white;
@@ -160,27 +167,26 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  }
+}
 
-  .answer-create-btn:hover {
-    color: white;
-    background: #0f4c81;
-    transition: 0.4s;
-  }
+.answer-create-btn:hover {
+  color: white;
+  background: #0f4c81;
+  transition: 0.4s;
+}
 
-  .answer-editor {
-    display: flex;
-    margin: 50px 0 100px 0;
-    justify-content: center;
-  }
+.answer-editor {
+  display: flex;
+  margin: 50px 0 100px 0;
+  justify-content: center;
+}
 
-  .answer-editor .ck.ck-editor {
-    width: 900px;
-  }
+.answer-editor .ck.ck-editor {
+  width: 900px;
+}
 
-  .answer-editor .ck.ck-editor__editable {
-    height: 400px;
-    margin-bottom: 30px;
-  }
-
+.answer-editor .ck.ck-editor__editable {
+  height: 400px;
+  margin-bottom: 30px;
+}
 </style>
