@@ -51,6 +51,9 @@
                   answer.commentCount
                 }}</span>
               </div>
+              <div class="answer-modify-btn">
+                글쓰기
+              </div>
             </div>
             <span v-show="isTrue"></span>
             <Comments v-show="commentListOpen[idx]" :answerId="answer.answerId" />
@@ -216,6 +219,8 @@ export default {
   border-top: 1px solid #e0e0e0;
   bottom: 0;
   width: 100%;
+  justify-content: space-between;
+  display: flex;
 }
 
 .answer-comment-button {
@@ -223,6 +228,7 @@ export default {
 }
 
 .answer-comment-tab {
+  width: 100px;
   align-items: center;
   display: flex;
   height: 48px;
@@ -269,5 +275,15 @@ export default {
   height: 40px;
   object-fit: cover;
   width: 40px;
+}
+
+.answer-modify-btn {
+  background-color: #0f4c81;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  float: left;
+  margin: 0px;
+  width: 100px;
 }
 </style>
