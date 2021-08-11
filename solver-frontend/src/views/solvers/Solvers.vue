@@ -69,6 +69,9 @@
           </div>
         </div>
       </div>
+      <div class="solver-body" v-if="solverCnt == 0">
+        <img style="width:600px;" src="@/assets/no-solver.png">
+      </div>
     </div>
   </div>
 </template>
@@ -94,7 +97,8 @@ export default {
       mainCategoryCode: "",
       subCategoryCode: "",
       // 실질 List
-      solverList: []
+      solverList: [],
+      solverCnt: 0,
     }
   }, methods:{ 
     setQuery(){
@@ -138,16 +142,23 @@ export default {
         this.solverList = [];
         var tempList = [];
         var n = 4; // 행에 몇개를 보일 것인지 확인
+        var len = 0;
         for (var i in res.data.list){
           if (i % n == 0)
             tempList = [];
           tempList.push(res.data.list[i]);
-          if (i % n == n-1)
+          if (i % n == n-1){
             this.solverList.push(tempList);
+            len += tempList.length;
+          }
         }
 
-        if(tempList.length < n)
+        if(tempList.length < n){
           this.solverList.push(tempList);
+          len += tempList.length;
+        }
+
+        this.solverCnt = len;
       })
       .catch(()=>{
         console.log();
@@ -191,8 +202,8 @@ export default {
 
   img.user-level-badge{
     position: absolute;
-    width: 50px;
-    left:-5px;
+    width: 60px;
+    left:-7px;
     top:-5px;
   }
 
