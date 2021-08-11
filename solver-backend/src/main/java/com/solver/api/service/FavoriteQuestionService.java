@@ -7,7 +7,9 @@ import com.solver.db.entity.question.Question;
 
 public interface FavoriteQuestionService {
 	
-	FavoriteQuestion createFavoriteQuestion(String accessToken, Question question, HttpServletResponse response);
+	boolean checkFavoriteQuestion(String accessToken, Question question);
+	
+	FavoriteQuestion createFavoriteQuestion(String token, Question question, HttpServletResponse response);
 
 	void deleteFavoriteQuestion(String token, Question question, HttpServletResponse response);
 }

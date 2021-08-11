@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.AnswerCreatePostReq;
@@ -24,13 +26,13 @@ import com.solver.api.service.AnswerService;
 import com.solver.api.service.FavoriteAnswerService;
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import springfox.documentation.annotations.ApiIgnore;
 
 @CrossOrigin("*")
@@ -56,7 +58,7 @@ public class AnswerController {
 	public ResponseEntity<? extends BaseResponse> createAnswer(HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
 			@PathVariable String questionId,
-			AnswerCreatePostReq answerCreatePostReq
+			@RequestBody AnswerCreatePostReq answerCreatePostReq
 			) throws ParseException 
 	{
 		answerService.createAnswer(accessToken, answerCreatePostReq, questionId, response);
@@ -115,6 +117,7 @@ public class AnswerController {
         @ApiResponse(code = 409, message = "답변 목록 조회 실패")
     })
 	public ResponseEntity<? extends BaseResponse> getAnswerList(
+			@RequestParam String nickname,
 			@PathVariable @ApiParam(value="답변을 조회할 질문 ID", required=true) String questionId
 			) 
 	{
@@ -124,7 +127,7 @@ public class AnswerController {
 			return ResponseEntity.status(409).body(AnswerListRes.of(409, "답변 목록 조회 실패"));
 		}
 		
-		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList));
+		return ResponseEntity.status(200).body(AnswerListRes.of(200, "답변 목록 조회 성공", answerList, nickname));
 	}
 	
 	/* 답변 좋아요 추가 */

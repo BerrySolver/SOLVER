@@ -105,7 +105,7 @@ public class ProfileController {
 	 * 1: 답변 목록
 	 * 2: 질문 목록 
 	 * */
-	@PatchMapping("/{nickname}/tab")
+	@GetMapping("/{nickname}/tab")
 	@ApiOperation(value = "프로필 페이지 탭 정보", notes = "프로필 페이지 탭 정보 조회") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "탭 정보 가져오기 성공"),

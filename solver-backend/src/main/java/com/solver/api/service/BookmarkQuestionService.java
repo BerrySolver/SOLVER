@@ -10,4 +10,6 @@ public interface BookmarkQuestionService {
 
 	void deleteBookmark(Question question, String token, HttpServletResponse response);
 
+	boolean checkBookmarkQuestion(String token, Question question);
+
 }

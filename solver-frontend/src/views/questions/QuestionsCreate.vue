@@ -86,7 +86,7 @@
               <div class="question-create-btn1 col-5" @click="questionInsert">
                 글쓰기
               </div>
-              <div class="question-cancel-btn1 col-5">
+              <div class="question-cancel-btn1 col-5" @click="clickCancle">
                 취소
               </div>
             </div>
@@ -101,10 +101,9 @@
 import Vue from "vue";
 import axios from "axios";
 import API from "@/API.js";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import auth from "@/store/modules/auth.js";
 
 Vue.use(CKEditor);
 
@@ -195,7 +194,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setStateQuery"]),
+    ...mapActions(["setStateQuery", "goQuestionDetail"]),
+    ...mapGetters(["getAccessToken"]),
     setMainCategory: function() {
       const idx = this.request.mainCategoryIndex;
       this.subCategories = this.categories[idx].category;
@@ -211,7 +211,6 @@ export default {
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
-      this.getQuestionList();
     },
     setType: function(typeNum) {
       if (typeNum === 1) {
@@ -222,7 +221,6 @@ export default {
         this.request.type = null;
       }
       this.request.mode = "releaseDesc";
-      this.getQuestionList();
     },
     setMode: function(modeNum) {
       if (modeNum === 1) {
@@ -232,7 +230,6 @@ export default {
       } else {
         this.request.mode = "releaseDesc";
       }
-      this.getQuestionList();
     },
     humanize: function(now, date) {
       const moment = require("moment");
@@ -250,15 +247,13 @@ export default {
       return r;
     },
     questionInsert() {
-      // const formData = {
-      // "title": this.request.title,
-      // "content": this.CKEditor.getData(),
-      // "mainCategory": this.categories[this.request.mainCategoryIndex].code,
-      // "SubCategory": this.subCategories[this.request.subCategoryIndex].subCategoryCode,
-      // "difficulty": this.request.difficulty,
-      // };
-
-      auth.state.accessToken = "E9BoCaA7JUkwIUrt_CHaAvU-E-WVG0B3b2z02go9dVoAAAF7L10guw";
+      if (
+        localStorage.getItem("solverToken") == null ||
+        localStorage.getItem("solverToken") == ""
+      ) {
+        console.log("로그인 안 된 상태");
+        return;
+      }
 
       axios({
         url: API.URL + API.ROUTES.createQuestion,
@@ -270,10 +265,11 @@ export default {
           subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
           difficulty: this.request.difficulty,
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
       })
         .then((res) => {
           console.log(res);
+          this.goQuestionDetail(res.data.questionId);
         })
         .catch((e) => {
           console.log(e);
@@ -294,6 +290,9 @@ export default {
       //     console.log("InsertModalVue: error ");
       //     console.log(error);
       //   });
+    },
+    clickCancle() {
+      this.$router.go(-1);
     },
   },
   created: function() {
@@ -316,16 +315,24 @@ export default {
   mounted() {
     ClassicEditor.create(document.querySelector("#divEditorInsert"), {
       extraPlugins: [MyCustomUploadAdapterPlugin],
-        toolbar: {
-          items: [
-            'heading', '|',
-            'bold', 'italic', '|',
-            'link', '|',
-            'bulletedList', 'numberedList', '|',
-            'uploadImage', '|',
-            'undo', 'redo'
+      toolbar: {
+        items: [
+          "heading",
+          "|",
+          "bold",
+          "italic",
+          "|",
+          "link",
+          "|",
+          "bulletedList",
+          "numberedList",
+          "|",
+          "ckfinder",
+          "|",
+          "undo",
+          "redo",
         ],
-      }
+      },
     })
       .then((editor) => {
         this.CKEditor = editor;
@@ -334,8 +341,6 @@ export default {
         console.error(err.stack);
       });
 
-    // bootstrap modal show event hook
-    // InsertModal 이 보일 때 초기화
     let $this = this;
     this.$el.addEventListener("show.bs.modal", function() {
       $this.initUI();
@@ -574,7 +579,8 @@ export default {
   justify-content: space-between;
 }
 
-.ck.ck-editor__editable {
+.question-main .ck.ck-editor__editable {
+  width: 896px;
   height: 600px;
   margin-bottom: 30px;
 }
