@@ -38,11 +38,15 @@
     </div>
     <div style="min-height:500px;">
       <!-- 실제 리스트 -->
-      <div class="solver-body"  v-for="(solvers, idx1) in solverList" :key="idx1">
+      <div class="solver-body" v-for="(solvers, idx1) in solverList" :key="idx1">
         <div class="solver-body-contents">
           <div class="solver-list">
             <div class="solver-user-card" v-for="(solverData, idx2) in solvers" :key="idx2" @click="goUserProfile(solverData.nickname)">
-              <img class="user-level-badge" src="@/assets/berry-1.png" alt="">
+              <img class="user-level-badge" src="@/assets/berry-1.png" v-if="parseInt(solverData.point) < 100" alt="">
+              <img class="user-level-badge" src="@/assets/berry-2.png" v-if="parseInt(solverData.point) >= 100 && parseInt(solverData.point) < 200" alt="">
+              <img class="user-level-badge" src="@/assets/berry-3.png" v-if="parseInt(solverData.point) >= 200 && parseInt(solverData.point) < 300" alt="">
+              <img class="user-level-badge" src="@/assets/berry-4.png" v-if="parseInt(solverData.point) >= 300 && parseInt(solverData.point) < 400" alt="">
+              <img class="user-level-badge" src="@/assets/berry-5.png" v-if="parseInt(solverData.point) >= 400 " alt="">
               <div class="solver-user-col1">
                 <img class="user-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>
               </div>   
