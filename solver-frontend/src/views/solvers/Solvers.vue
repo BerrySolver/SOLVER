@@ -38,11 +38,15 @@
     </div>
     <div style="min-height:500px;">
       <!-- 실제 리스트 -->
-      <div class="solver-body"  v-for="(solvers, idx1) in solverList" :key="idx1">
+      <div class="solver-body" v-for="(solvers, idx1) in solverList" :key="idx1">
         <div class="solver-body-contents">
           <div class="solver-list">
             <div class="solver-user-card" v-for="(solverData, idx2) in solvers" :key="idx2" @click="goUserProfile(solverData.nickname)">
-              <img class="user-level-badge" src="@/assets/berry-1.png" alt="">
+              <img class="user-level-badge" src="@/assets/berry-1.png" v-if="parseInt(solverData.point) < 100" alt="">
+              <img class="user-level-badge" src="@/assets/berry-2.png" v-if="parseInt(solverData.point) >= 100 && parseInt(solverData.point) < 200" alt="">
+              <img class="user-level-badge" src="@/assets/berry-3.png" v-if="parseInt(solverData.point) >= 200 && parseInt(solverData.point) < 300" alt="">
+              <img class="user-level-badge" src="@/assets/berry-4.png" v-if="parseInt(solverData.point) >= 300 && parseInt(solverData.point) < 400" alt="">
+              <img class="user-level-badge" src="@/assets/berry-5.png" v-if="parseInt(solverData.point) >= 400 " alt="">
               <div class="solver-user-col1">
                 <img class="user-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>
               </div>   
@@ -64,6 +68,9 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="solver-body" v-if="solverCnt == 0">
+        <img style="width:600px;" src="@/assets/no-solver.png">
       </div>
     </div>
   </div>
@@ -90,7 +97,8 @@ export default {
       mainCategoryCode: "",
       subCategoryCode: "",
       // 실질 List
-      solverList: []
+      solverList: [],
+      solverCnt: 0,
     }
   }, methods:{ 
     setQuery(){
@@ -134,16 +142,23 @@ export default {
         this.solverList = [];
         var tempList = [];
         var n = 4; // 행에 몇개를 보일 것인지 확인
+        var len = 0;
         for (var i in res.data.list){
           if (i % n == 0)
             tempList = [];
           tempList.push(res.data.list[i]);
-          if (i % n == n-1)
+          if (i % n == n-1){
             this.solverList.push(tempList);
+            len += tempList.length;
+          }
         }
 
-        if(tempList.length < n)
+        if(tempList.length < n){
           this.solverList.push(tempList);
+          len += tempList.length;
+        }
+
+        this.solverCnt = len;
       })
       .catch(()=>{
         console.log();
@@ -187,8 +202,8 @@ export default {
 
   img.user-level-badge{
     position: absolute;
-    width: 50px;
-    left:-5px;
+    width: 60px;
+    left:-7px;
     top:-5px;
   }
 
