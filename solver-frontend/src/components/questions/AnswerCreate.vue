@@ -101,8 +101,8 @@ export default {
         },
         headers: { Authorization: "Bearer " + this.accessToken },
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        this.CKEditor.setData('')
       })
       .catch((e) => {
         console.log(e);
