@@ -71,7 +71,9 @@ const actions = {
 };
 
 const getters = {
-  getQuestion: (state) => state.question,
+  getQuestion(state) {
+    return state.question;
+  },
 };
 
 export default {

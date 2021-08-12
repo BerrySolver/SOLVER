@@ -196,7 +196,6 @@ export default {
   },
   methods: {
     ...mapActions(["setStateQuery", "goQuestionDetail"]),
-    ...mapGetters(["getAccessToken", "getQuestion"]),
     setMainCategory: function() {
       const idx = this.request.mainCategoryIndex;
       this.subCategories = this.categories[idx].category;
@@ -248,10 +247,7 @@ export default {
       return r;
     },
     questionModify() {
-      if (
-        localStorage.getItem("solverToken") == null ||
-        localStorage.getItem("solverToken") == ""
-      ) {
+      if (this.getAccessToken == null || this.getAccessToken == "") {
         console.log("로그인 안 된 상태");
         return;
       }
@@ -266,7 +262,7 @@ export default {
           subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
           difficulty: this.request.difficulty,
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.getAccessToken },
       })
         .then((res) => {
           console.log(res);
@@ -332,7 +328,7 @@ export default {
       });
   },
   mounted() {
-    console.log(this.categories);
+    console.log(this.getQuestion);
     this.request.difficulty = Question.state.question.difficulty;
     this.request.title = Question.state.question.title;
 
@@ -374,6 +370,7 @@ export default {
     ...mapState({
       query: (state) => state.questions.query,
     }),
+    ...mapGetters(["getQuestion", "getAccessToken"]),
     typeWatch: function() {
       return this.request.type;
     },

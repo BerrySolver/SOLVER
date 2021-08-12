@@ -15,6 +15,7 @@ const getters = {
   isLoggedIn: (state) => state.accessToken,
   isFirst: (state) => state.isFirst,
   getAccessToken: (state) => state.accessToken,
+  getUserNickname: (state) => state.userNickname,
 };
 
 const mutations = {
@@ -48,6 +49,7 @@ const actions = {
     })
       .then((res) => {
         console.log(res);
+        commit("SET_USER_NICKNAME", credentials.nickname);
         router.push({ path: "/" });
       })
       .catch(() => {
@@ -93,7 +95,6 @@ const actions = {
       headers: { Authorization: "Bearer" },
     })
       .then((res) => {
-        // console.log(res);
         commit("SET_ACCESS_TOKEN", res.data.accessToken);
         router.push({ path: "/" });
       })
@@ -110,6 +111,7 @@ const actions = {
       .then(() => {
         localStorage.removeItem("solverToken");
         commit("SET_ACCESS_TOKEN", "");
+        commit("SET_USER_NICKNAME", "");
         router.push({ path: "/#" });
       })
       .catch(() => {
