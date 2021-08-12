@@ -430,7 +430,7 @@ export default {
 
 .answer-buttons {
   display: flex;
-  margin-left: 590px;
+  margin-left: 580px;
   align-items: center;
 }
 
@@ -469,7 +469,7 @@ export default {
   text-align: left;
 }
 .answer-info div {
-  width: 50px;
+  width: 60px;
 }
 
 .answer-item {
