@@ -1,15 +1,13 @@
 <template>
   <div>
-    <!-- 질문 목록 소제목 -->
     <div style="display:flex; align-items:center; ">
       <div class="small-box"></div>
-      <span class="subheading interval">질문 목록</span>
+      <span class="subheading interval">북마크 목록</span>
     </div>
-    <!-- 질문한 질문 제목들 -->
     <div
-      v-for="question in myQuestions.myQuestionList"
+      v-for="question in myBookmarkQuestions.bookmarkQuestionList"
       :key="question.id"
-      class="my-question-title">
+      class="my-bookmark-title">
       <span @click="clickQuestion(question.id)">- {{ question.title }} [ {{ question.answerCount }} ]</span>
     </div>
   </div>
@@ -21,11 +19,11 @@ import API from "@/API.js"
 import {mapActions} from 'vuex'
 
 export default {
-  name: 'ProfileMyQuestions',
+  name: 'ProfileBookmark',
   props: ['nickname', 'tabNum'],
   data() {
     return {
-          myQuestions: {},
+          myBookmarkQuestions: {},
     }
   },
   methods: {
@@ -43,7 +41,8 @@ export default {
       }
     })
     .then((res) => {
-      this.myQuestions = res.data
+      console.log(res.data)
+      this.myBookmarkQuestions = res.data
     })
     .catch((err) => {
       console.log(err)
@@ -53,16 +52,16 @@ export default {
 </script>
 
 <style>
-.my-question-title {
+.my-bookmark-title {
   text-align: left;
   margin: 10px;
 }
 
-.my-question-title span{
+.my-bookmark-title span{
   padding-bottom: 3px;
 }
 
-.my-question-title span:hover {
+.my-bookmark-title span:hover {
   border-bottom: 2px solid #658DC6;
   cursor: pointer;
 }

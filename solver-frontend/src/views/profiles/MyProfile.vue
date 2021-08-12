@@ -132,7 +132,7 @@
               <span class="subheading">베리 점수</span>
               <!-- 소수점 보여주고 싶은데 NaN 인 사람들에게 오류가 발생 -->
               <!-- <span class="interval point-color-1">{{ userProfileInfo.evaluationScore.toFixed(1) }} 점</span> -->
-              <span class="interval point-color-1">{{ userProfileInfo.evaluationScore.toFixed(1) }} 점</span>
+              <span class="interval point-color-1">{{ userProfileInfo.evaluationScore }} 점</span>
               <span>/&nbsp;&nbsp;&nbsp;10 점</span>
             </div>
 
@@ -205,7 +205,7 @@
         <!-- TAB_BAR 선택 -->
         <ul class="tab-ul">
           <li v-for="(tab, index) in tabs" v-bind:key="tab.index" v-on:click="onClickTab(index)" class="tab-li multi-button">
-            <button v-if="!(index == 3 && !isLogin)" class="tab-btn" :class="{ 'tab-btn-selected': index == selectedTab}">{{ tab.tabName }}</button>
+            <button class="tab-btn" :class="{ 'tab-btn-selected': index == selectedTab}">{{ tab.tabName }}</button>
           </li>
         </ul>
         <hr class="line">
@@ -223,12 +223,12 @@
         <!-- 질문 목록 TAB -->
         <div v-if="2 == selectedTab">
           <ProfileMyQuestions :tabNum="selectedTab" :nickname="$route.params.nickname" class="m-top-3"/>
-        </div>  
+        </div> 
 
         <!-- 북마크 질문 목록 TAB -->
         <div v-if="3 == selectedTab">
           <ProfileBookmark :tabNum="selectedTab" :nickname="$route.params.nickname" class="m-top-3"/>
-        </div>    
+        </div>      
       </div>     
     </div>    
   </div>
@@ -247,7 +247,7 @@ import axios from 'axios'
 import API from "@/API.js"
 
 export default {
-  name: 'Profile',
+  name: 'MyProfile',
   components: {
     ProfileTimetable,
     ProfileStatistics,

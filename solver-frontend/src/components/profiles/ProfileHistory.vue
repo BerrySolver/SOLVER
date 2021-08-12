@@ -9,32 +9,45 @@
     <div
       v-for="answer in myAnswers.answerQuestionList"
       :key="answer.id"
-      @click="clickAnswer(answer.id)"
       class="my-answer-title">
-      - {{ answer.title }} [ {{ answer.answerCount }} ]
+      <span @click="clickAnswer(answer.id)">- {{ answer.title }} [ {{ answer.answerCount }} ]</span>
     </div>
   </div>
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import axios from 'axios'
+import API from "@/API.js"
+import {mapActions} from 'vuex'
 
 export default {
   name: 'ProfileMyQuestions',
-  props: ['myAnswersTab'],
+  props: ['nickname', 'tabNum'],
+  data() {
+    return {
+      myAnswers: {},
+    }
+  },
   methods: {
-    ...mapActions(['myAnswersSetting', 'goQuestionDetail']),
+    ...mapActions(['goQuestionDetail']),
     clickAnswer(questionId) {
       this.goQuestionDetail(questionId)
     }
   },
-  computed: {
-  ...mapState({
-    userNickname: state => state.auth.userNickname,
-    myAnswers: state => state.profiles.myAnswers,
-    }),
-  },
   created() {
+    axios({
+      url: API.URL + `profiles/${this.nickname}/tab`,
+      method: "get",
+      params: {
+        tabNum: this.tabNum,
+      }
+    })
+    .then((res) => {
+      this.myAnswers = res.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 }
 </script>
@@ -51,9 +64,12 @@ export default {
   margin: 10px;
 }
 
-.my-answer-title:hover {
-  background-color: #0F4C81;
-  color: white;
+.my-answer-title span{
+  padding-bottom: 3px;
+}
+
+.my-answer-title span:hover {
+  border-bottom: 2px solid #658DC6;
   cursor: pointer;
 } 
 </style>
