@@ -39,7 +39,6 @@
     <div class="popular-question">
       <div class="popular-question-contents">
         <div class="semi-title">
-          <div>현재</div>
           <span>인기 질문</span>
         </div>
         <!-- 인기질문 -->
@@ -77,7 +76,6 @@
       </div>
     </div>
 
-    <!-- 3번째 메인 페이지(이달의 솔버) -->
     <div class="month-solver">
       <br />
       <div class="month-solver-text">
@@ -85,80 +83,27 @@
         <p class="solver-title">이달의 SOLVER</p>
       </div>
 
-      <div class="row">
-        <!-- 왼쪽 여백용 col-2 -->
-        <div class="col-2"></div>
-
-        <!-- 중앙 카드용 col-8 -->
-        <div class="row solver-row">
-          <div class="col-2"></div>
-          <div class="col-2">
-            <div class="solver-card-rank">01</div>
+      <div class="solver-line-1">
+        <div class="solver-row">
+          <div style="float: left; margin-right: 140px;" v-for="(mul, idx) in solverLine1" :key="idx">
+            <div class="solver-card-rank">0{{idx+1}}</div>
             <div class="solver-card-content">
               <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
               <p class="solver-intro">1등 닉네임</p>
             </div>
           </div>
-          <div class="col-2">
-            <div class="solver-card-rank">02</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">2등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">03</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">3등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">04</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">4등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-3"></div>
         </div>
-
-        <div class="row solver-row">
-          <div class="col-3"></div>
-          <div class="col-2">
-            <div class="solver-card-rank">05</div>
+      </div>
+      <div class="solver-line-2">
+        <div class="solver-row">
+          <div style="float: left; margin-left: 100px;" v-for="(mul, idx) in solverLine2" :key="idx">
+            <div class="solver-card-rank">0{{idx+5}}</div>
             <div class="solver-card-content">
               <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">5등 닉네임</p>
+              <p class="solver-intro">1등 닉네임</p>
             </div>
           </div>
-          <div class="col-2">
-            <div class="solver-card-rank">06</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">6등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">07</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">7등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">08</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">8등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-1"></div>
         </div>
-
-        <!-- 오른쪽 여백용 col-2 -->
-        <div class="col-2"></div>
-        <br />
       </div>
     </div>
 
@@ -282,6 +227,8 @@ export default {
     return {
       mainQuestion: [],
       query: null,
+      solverLine1: [0, 0, 0, 0],
+      solverLine2: [0, 0, 0, 0]
     };
   },
   methods: {
