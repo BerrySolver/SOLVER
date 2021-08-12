@@ -10,7 +10,7 @@
       v-for="question in myQuestions.myQuestionList"
       :key="question.id"
       class="my-question-title">
-      <span @click="clickQuestion(question.id)">- {{ question.title }} [ {{ question.answerCount }} ]</span>
+      <div @click="clickQuestion(question.id)">- {{ question.title }} [ {{ question.answerCount }} ]</div>
     </div>
   </div>
 </template>
@@ -58,12 +58,14 @@ export default {
   margin: 10px;
 }
 
-.my-question-title span{
-  padding-bottom: 3px;
+.my-question-title div{
+  padding: 3px;
+  max-width: 800px;
 }
 
-.my-question-title span:hover {
-  border-bottom: 2px solid #658DC6;
+.my-question-title div:hover {
+  background-color: #658DC6;
+  color: white;
   cursor: pointer;
 }
 </style>

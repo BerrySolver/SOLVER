@@ -148,6 +148,7 @@
   display: grid;
   grid-template-rows: 300px 600px;
   grid-template-columns: 400px 1090px;
+  margin-top: 40px;
 }
 
 .profile-img {
