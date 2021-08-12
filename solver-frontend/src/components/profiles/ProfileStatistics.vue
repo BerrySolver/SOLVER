@@ -79,20 +79,38 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import axios from 'axios'
+import API from "@/API.js"
+import {mapState} from 'vuex'
 
 export default {
   name: 'ProfileStatistics',
-  methods: {
-    ...mapActions(['statisticSetting']),
+  props: ['nickname', 'tabNum'],
+  data() {
+    return {
+      userStatistics: {},
+    }
   },
   computed: {
     ...mapState({
-      userNickname: state => state.auth.userNickname,
-      userStatistics: state => state.profiles.userStatistics,
       userProfileInfo: state => state.profiles.userProfileInfo,
     })
   },
+  created() {
+    axios({
+      url: API.URL + `profiles/${this.nickname}/tab`,
+      method: "get",
+      params: {
+        tabNum: this.tabNum,
+      }
+    })
+    .then((res) => {
+      this.userStatistics = res.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 }
 </script>
 
