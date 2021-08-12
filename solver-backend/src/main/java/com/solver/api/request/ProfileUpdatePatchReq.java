@@ -23,6 +23,6 @@ public class ProfileUpdatePatchReq {
 	@ApiModelProperty(name="profileUrl", example="updateUrl")
 	private String profileUrl;
 	
-	@ApiModelProperty(name="categoryList", example="")
-	private List<String> categoryList;
+	@ApiModelProperty(name="categoryCodeList", example="")
+	private List<String> categoryCodeList;
 }
