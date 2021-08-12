@@ -12,6 +12,7 @@
         <div class="nickname">
           <div>{{ userProfileInfo.nickname }}</div>
           <div
+          v-if="isLogin"
           class="edit-img"
           @click="editRequest">
             <span>수정</span>
@@ -30,6 +31,7 @@
               한줄 소개 
               <span><input v-model="editInfo.selfIntro" class="intro-input m-left-1" type="text"></span>
               <button
+              v-if="isLogin"
               @click="[editRequest(), editSelfIntro(editInfo.selfIntro)]"
               class="edit-end-button m-left-1">수정</button>
             </div>
@@ -45,6 +47,7 @@
               URL
               <span><input v-model="editInfo.selfUrl" class="url-input m-left-1" type="text"></span>
               <button
+              v-if="isLogin"
               @click="[editRequest(), editSelfUrl(editInfo.selfUrl)]"
               class="edit-end-button m-left-1">수정</button>
             </div>
@@ -56,23 +59,25 @@
 
         <div class="profile-info m-top-3">
           <!-- profile-info의 first child(left) -->
+          <!-- 카테고리 -->
           <div>
             <div style="display:flex; align-items:center;">
               <span class="subheading">주 활동분야</span>
               <span
-                v-for="field in fields"
-                :key="field.id"
+                v-for="(field, index) in fields"
+                :key="'F'+ index"
                 class="interval">
                 {{ field }}
               </span>
-              <img src="@/assets/edit-button.png" width="20px" @click="requestEditCategory" class="edit-img">
+              <img src="@/assets/edit-button.png" width="20px" v-if="isLogin" @click="requestEditCategory" class="edit-img">
             </div>
 
             <br>
-
+            
+            <!-- 카테고리 수정 -->
             <div class="category-edit-box" v-if="isCategoryEdit">
               대분류
-              <span v-for="(mainCtg, index) in mainCtgs" :key="index">
+              <span v-for="(mainCtg, index) in mainCtgs" :key="'M'+index">
                 <button @click="findMainCtgIdx(index)" class="offMainCtg"> {{ mainCtg.codeName }} </button>
               </span>
 
@@ -116,60 +121,70 @@
               <div class="subheading">베리 포인트</div>
               <!-- ingroup의 last child -->
               <div class="d-inline-block interval">
-                <span>잔여</span>
-                <span class="interval point-color-1">{{ userProfileInfo.point }}P</span><br>
                 <span>누적</span>
                 <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
+                <span v-if="isLogin">잔여</span>
+                <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span><br>
               </div>
             </div>
             <br>
             <div style="display:flex; align-items:center;">
               <span class="subheading">베리 점수</span>
-              <span class="interval point-color-1">{{ userProfileInfo.evaluationScore.toFixed(1) }} 점</span>
+              <!-- 소수점 보여주고 싶은데 NaN 인 사람들에게 오류가 발생 -->
+              <!-- <span class="interval point-color-1">{{ userProfileInfo.evaluationScore.toFixed(1) }} 점</span> -->
+              <span class="interval point-color-1">{{ userProfileInfo.evaluationScore }} 점</span>
               <span>/&nbsp;&nbsp;&nbsp;10 점</span>
             </div>
 
             <!-- 베리 점수에 따른 berry 개수 -->
             <div>
-              <div v-if="userProfileInfo.remainingPoint < 100">
-                <span v-for="berryImg01 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg01">
-                  <img src="@/assets/berry-2.png" width="42px">
-                </span>
-                <span v-for="berryImg01 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg01">
-                  <img src="@/assets/berry-2-b.png" width="42px" class="berry-opacity">
+              <!-- null값 없으면 오류 발생 -->
+              <div v-if="!isNaN">
+                <span v-for="berryImg01 in 5" :key="'b0'+berryImg01">
+                  <img src="@/assets/berry-1-b.png" width="42px" class="berry-opacity">
                 </span>
               </div>
-              <div v-if="100 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 200">
-                <span v-for="berryImg02 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg02">
-                  <img src="@/assets/berry-2.png" width="42px">
-                </span>
-                <span v-for="berryImg02 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg02">
-                  <img src="@/assets/berry-2-b.png" width="42px" class="berry-opacity">
-                </span>                
-              </div>    
-              <div v-if="200 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 300">
-                <span v-for="berryImg03 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg03">
-                  <img src="@/assets/berry-3.png" width="42px">
-                </span>
-                <span v-for="berryImg03 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg03">
-                  <img src="@/assets/berry-3-b.png" width="42px" class="berry-opacity">
-                </span>  
-              </div>
-              <div v-if="300 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 400">
-                <span v-for="berryImg04 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg04">
-                  <img src="@/assets/berry-4.png" width="42px">
-                </span>
-                <span v-for="berryImg04 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg04">
-                  <img src="@/assets/berry-4-b.png" width="42px" class="berry-opacity">
-                </span> 
-              </div>         
-              <div v-if="400 <= userProfileInfo.remainingPoint">
-                <span v-for="berryImg05 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg05">
-                  <img src="@/assets/berry-5.png" width="42px">
-                </span>
-                <span v-for="berryImg05 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="berryImg05">
-                  <img src="@/assets/berry-5-b.png" width="42px" class="berry-opacity">
-                </span> 
+              <div v-if="isNaN">
+                <div v-if="userProfileInfo.point < 100">
+                  <span v-for="berryImg01 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c1'+berryImg01">
+                    <img src="@/assets/berry-1.png" width="42px">
+                  </span>
+                  <span v-for="berryImg01 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b1'+berryImg01">
+                    <img src="@/assets/berry-1-b.png" width="42px" class="berry-opacity">
+                  </span>
+                </div>
+                <div v-if="100 <= userProfileInfo.point && userProfileInfo.point < 200">
+                  <span v-for="berryImg02 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c2'+berryImg02">
+                    <img src="@/assets/berry-2.png" width="42px">
+                  </span>
+                  <span v-for="berryImg02 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b2'+berryImg02">
+                    <img src="@/assets/berry-2-b.png" width="42px" class="berry-opacity">
+                  </span>                
+                </div>    
+                <div v-if="200 <= userProfileInfo.point && userProfileInfo.point < 300">
+                  <span v-for="berryImg03 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c3'+berryImg03">
+                    <img src="@/assets/berry-3.png" width="42px">
+                  </span>
+                  <span v-for="berryImg03 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b3'+berryImg03">
+                    <img src="@/assets/berry-3-b.png" width="42px" class="berry-opacity">
+                  </span>  
+                </div>
+                <div v-if="300 <= userProfileInfo.point && userProfileInfo.point < 400">
+                  <span v-for="berryImg04 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c4'+berryImg04">
+                    <img src="@/assets/berry-4.png" width="42px">
+                  </span>
+                  <span v-for="berryImg04 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b4'+berryImg04">
+                    <img src="@/assets/berry-4-b.png" width="42px" class="berry-opacity">
+                  </span> 
+                </div>         
+                <div v-if="400 <= userProfileInfo.point">
+                  <span v-for="berryImg05 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c5'+berryImg05">
+                    <img src="@/assets/berry-5.png" width="42px">
+                  </span>
+                  <span v-for="berryImg05 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b5'+berryImg05">
+                    <img src="@/assets/berry-5-b.png" width="42px" class="berry-opacity">
+                  </span> 
+                </div>
               </div>
             </div>
 
@@ -251,7 +266,10 @@ export default {
       },
       editedCategory: [],
       isEdit: false,
+      isFirst: true,
       isCategoryEdit: false,
+      isLogin: true,
+      isNaN: false,
       mainCtgIndex: -1,
       mainCtgs: [],
       subCtgs: [],
@@ -264,10 +282,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'profileSetting']),
-    onClickTab(tabIndex) {
-      this.selectedTab = tabIndex
-    },
+    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'profileSetting',]),
+    // 프로필 수정 요청 CLICK
     editRequest() {
       this.isEdit = !this.isEdit
     },
@@ -283,7 +299,7 @@ export default {
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: selfIntro,
           linkText: this.userProfileInfo.linkText,
-          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
+          favoriteFieldCodeList: this.userProfileInfo.favoriteFieldCodeList,
         }
       })
       .then((res) => {
@@ -291,11 +307,6 @@ export default {
         this.profileSetting(this.userNickname)
         })
       .catch((err) => console.log(err))
-    },
-
-    // main카테고리의 IDX 찾기 - for Sub카테고리
-    findMainCtgIdx(mainCtgIdx){
-      this.mainCtgIndex = mainCtgIdx
     },
 
     // 프로필 URL 수정 - AXIOS
@@ -310,7 +321,7 @@ export default {
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: this.userProfileInfo.introduction,
           linkText: selfUrl,
-          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
+          favoriteFieldCodeList: this.userProfileInfo.favoriteFieldCodeList,
         }
       })
       .then((res) => {
@@ -318,6 +329,16 @@ export default {
         this.profileSetting(this.userNickname)
         })
       .catch((err) => console.log(err))
+    },
+
+    // main카테고리의 IDX 찾기 - for Sub카테고리
+    findMainCtgIdx(mainCtgIdx){
+      this.mainCtgIndex = mainCtgIdx
+    },
+
+    // 탭 클릭
+    onClickTab(tabIndex) {
+      this.selectedTab = tabIndex
     },
 
     // 카테고리 수정 요청 CLICK
@@ -377,12 +398,33 @@ export default {
       .catch((err) => console.log(err))
     },
 
+    // 카테고리 안에 있으면 button ON
     isInCtg(selectedCtgCode) {
       if (this.editedCategory.includes(selectedCtgCode)) {
         return true
       } else {
       return false }
     },
+
+    // 로그인 유저인지 CHECK
+    isLoginUser() {
+      if (this.userNickname === this.$route.params.nickname) {
+        this.isLogin = true
+      } else {
+        this.isLogin = false
+      }
+    },
+
+    // NULL 값 허용 X
+    isItNaN(x) {
+      if(isNaN(x)) {
+        console.log(x, 'Nan 이다')
+        this.isNaN = true
+      } else {
+        console.log(x, '아니야')
+        this.isNaN = false
+      }
+    }
   },
   computed: {
     ...mapState({
@@ -415,7 +457,12 @@ export default {
     }
     this.selectedTab = this.tabs[0].tabNum
     this.statisticSetting(solveTabInfo)
+    this.isLoginUser()
   },
+  // 재렌더링 안될 때를 대비해서
+  updated() {
+    this.isLoginUser()
+  }
 }
 </script>
 

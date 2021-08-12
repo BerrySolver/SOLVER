@@ -5,15 +5,15 @@
         화상시간 캘린더
       </span>
       <span v-if="!isCalendarEdit">
-        <img src="@/assets/edit-button.png" @click="timeEditRequest" class="calendar-edit-button">
+        <img v-if="isLogin" src="@/assets/edit-button.png" @click="timeEditRequest" class="calendar-edit-button">
       </span>
       <span v-if="isCalendarEdit" class="goback" @click="timeEditRequest">
         ←
       </span>
     </div>
     <div class="m-top-3">
-      <button class="first-setting day-button" @click="checkWeekday()">평일</button>
-      <button class="day-button" @click="checkWeekend()">주말</button>
+      <button class="day-button" :class="{'first-button':isFisrt}" @click="[checkWeekday(), changeFirst()]">평일</button>
+      <button class="day-button" :class="{'first-button':!isFisrt}" @click="[checkWeekend(), changeFirst()]">주말</button>
     </div>
     <br>
 
@@ -76,6 +76,8 @@ export default {
   data() {
     return {
       isCalendarEdit: false,
+      isFisrt: true,
+      isLogin: false,
       isWeekday: true,
       editedWeekday: [],
       editedWeekend: [],
@@ -91,6 +93,9 @@ export default {
   },
   methods: {
     ...mapActions(['profileSetting']),
+    changeFirst() {
+      this.isFisrt = !this.isFisrt
+    },
     checkWeekday () {
       this.isWeekday = true
     },
@@ -184,6 +189,15 @@ export default {
     timeEditRequest() {
       this.isCalendarEdit = !this.isCalendarEdit
     },
+
+    // 로그인 유저인지 CHECK
+    isLoginUser() {
+      if (this.userNickname === this.$route.params.nickname) {
+        this.isLogin = true
+      } else {
+        this.isLogin = false
+      }
+    }
   },
   computed: {
   ...mapState({
@@ -205,6 +219,10 @@ export default {
       return split_weekend      
     },
   },
+
+  created() {
+    this.isLoginUser()
+  }
 }
 </script>
 
@@ -244,6 +262,11 @@ export default {
   margin-top: 1px;
   margin-bottom: 1px;
   width: 65px;
+}
+
+.first-button {
+  background-color: #658DC6;
+  color: #F1F2F2;
 }
 
 .goback {
