@@ -154,6 +154,9 @@ public class ProfileServiceImpl implements ProfileService{
 		/* response 데이터 저장 */
 		ProfileRes profileRes = new ProfileRes();
 		
+		if (Double.isNaN(evaluationScore)) {
+			evaluationScore = 0;
+		}
 		profileRes.setEvaluationScore(evaluationScore);
 		profileRes.setFavoriteFieldNameList(favoriteFieldNameList);
 		profileRes.setFavoriteFieldCodeList(favoriteFieldCodeList);
