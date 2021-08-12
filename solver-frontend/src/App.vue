@@ -31,7 +31,7 @@ export default {
 }
 
 #router {
-  padding-top: 6vh;
+  padding-top: 56px;
   min-width: 1190px;
   transform: skew(-0.001deg);
 }
