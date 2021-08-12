@@ -62,16 +62,6 @@ const actions = {
     .catch((err) => console.log(err))
   },
 
-  // 프로필 기본정보 SETTING
-  profileSetting({commit}, nickname) {
-    axios.get(API.URL + `profiles/${nickname}/info`)
-    .then((res) => {
-      console.log(res.data)
-      commit('SET_USER_PROFILE', res.data)
-    })
-    .catch((err) => console.log(err))
-  },
-
   // SOLVE 기록 TAB(0)
   statisticSetting({commit}, statisticInfo ) {
     axios({
@@ -85,6 +75,16 @@ const actions = {
     .then((res) => {
       commit('SET_USER_STATISTICS', res.data)
     })
+  },
+
+  // 프로필 기본정보 SETTING
+  profileSetting({commit}, nickname) {
+    axios.get(API.URL + `profiles/${nickname}/info`)
+    .then((res) => {
+      console.log(res.data)
+      commit('SET_USER_PROFILE', res.data)
+    })
+    .catch((err) => console.log(err))
   },
 };
 

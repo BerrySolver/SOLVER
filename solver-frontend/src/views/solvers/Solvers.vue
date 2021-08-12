@@ -79,6 +79,7 @@
 <script>
 import API from "@/API.js";
 import axios from "axios";
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Solvers',
@@ -100,7 +101,8 @@ export default {
       solverList: [],
       solverCnt: 0,
     }
-  }, methods:{ 
+  }, methods:{
+    ...mapActions(['profileSetting']),
     setQuery(){
       this.setSolverList();
     }, selectSort(event){
@@ -121,6 +123,7 @@ export default {
       console.log("Sub : " + this.subCategoryCode);
       this.setSolverList();
     }, goUserProfile(nickname){
+        this.profileSetting(nickname)
         this.$router.push({
           name: 'Profile',
           params: {
