@@ -20,7 +20,7 @@
     "vue-router": "^3.2.0",
     "vuesax": "^3.12.2",
     "vuex": "^3.4.0",
-    "vuex-persistedstate": "^2.5.1"
+    "vuex-persistedstate": "^2.7.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
