@@ -218,16 +218,10 @@
   transition: all 0.25s ease-in-out;
   /* width: 95px; */
 }
-.tab-btn:hover {
+.tab-btn-selected {
   background-color: #658DC6;
   border-color: #658DC6;
   color: #F1F2F2;
-}
-.tab-btn:active {
-  background-color: #658DC6;
-  border-color: #658DC6;
-  color: #F1F2F2;
-  box-shadow: none;
 }
 .tab-btn:focus, .tab-btn:active:focus {
   background-color: #658DC6;

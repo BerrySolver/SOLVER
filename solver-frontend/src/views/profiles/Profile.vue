@@ -190,7 +190,7 @@
         <!-- TAB_BAR 선택 -->
         <ul class="tab-ul">
           <li v-for="(tab, index) in tabs" v-bind:key="tab.index" v-on:click="onClickTab(index)" class="tab-li multi-button">
-            <button class="tab-btn">{{ tab.tabName }}</button>
+            <button class="tab-btn" :class="{ 'tab-btn-selected': index == selectedTab}">{{ tab.tabName }}</button>
           </li>
         </ul>
         <hr class="line">
