@@ -24,7 +24,6 @@ export default {
 <style>
 #app {
   font-family: 'NanumSquare', sans-serif;
-  transform: skew(-0.001deg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -34,10 +33,12 @@ export default {
 #router {
   padding-top: 6vh;
   min-width: 1190px;
+  transform: skew(-0.001deg);
 }
 
 #footer {
   bottom: 0;
+  transform: skew(-0.001deg);
   min-width: 1190px;
 }
 

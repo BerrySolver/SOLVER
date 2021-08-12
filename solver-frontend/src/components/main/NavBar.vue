@@ -1,7 +1,6 @@
 <template>
   <nav v-if="needHide" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-      <!-- <a href="/">SOLVER</a> -->
       <RouterLink :to="{ name: 'Main' }" class="nav-logo">
         <img src="@/assets/logo.png" alt="logo" height="40px" />SOLVER
       </RouterLink>
