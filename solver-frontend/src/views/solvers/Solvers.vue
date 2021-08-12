@@ -69,7 +69,7 @@
           </div>
         </div>
       </div>
-      <div class="solver-body" v-if="solverCnt == 0">
+      <div class="solver-body" v-if="solverCnt == 0 && isLoaded">
         <img style="width:600px;" src="@/assets/no-solver.png">
       </div>
     </div>
@@ -100,6 +100,7 @@ export default {
       // 실질 List
       solverList: [],
       solverCnt: 0,
+      isLoaded: false,
     }
   }, methods:{
     ...mapActions(['profileSetting']),
@@ -175,6 +176,9 @@ export default {
     })
     .then((res) => {
       this.Category = res.data;
+      setTimeout(() => {
+        this.isLoaded = true
+      }, 1000)
     })
     .catch(() => {
       console.log();
