@@ -9,7 +9,7 @@
               <div class="question-modify-btn" @click="modifyQuestion()">
                 수정하기
               </div>
-              <div class="question-delete-btn" @click="deleteQuestion()">
+              <div class="question-delete-btn" @click="deleteQuestionCheck()">
                 삭제하기
               </div>
             </div>
@@ -209,6 +209,15 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    deleteQuestionCheck(){
+      const $this =this;
+      alertify.confirm("질문삭제", "정말 삭제하시겠습니까?",
+      function(){
+        $this.deleteQuestion();
+      }, function(){
+        
+      });
     },
     modifyQuestion() {
       this.setStateQuestion(this.question);
