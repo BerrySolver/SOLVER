@@ -126,7 +126,7 @@ export default {
           'weekendTime': str_weekend,
         }       
       })
-      .then((res) => {
+      .then(() => {
         this.profileSetting(this.userNickname)
         this.isCalendarEdit = false
       })

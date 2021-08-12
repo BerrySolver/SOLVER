@@ -31,6 +31,7 @@ const mutations = {
 const actions = {
   // 답변목록 TAB(1)
   myAnswersSetting({commit}, myAnswersInfo) {
+    console.log('날 불렀어요')
     axios({
       url: API.URL + `profiles/${myAnswersInfo.userNickname}/tab`,
       method: "get",

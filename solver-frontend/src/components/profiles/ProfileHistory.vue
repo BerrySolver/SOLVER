@@ -35,11 +35,6 @@ export default {
     }),
   },
   created() {
-    const myAnswersTabInfo = {
-      userNickname: this.userNickname,
-      tabnum: this.myAnswersTab,
-    }
-    this.myAnswersSetting(myAnswersTabInfo)
   }
 }
 </script>

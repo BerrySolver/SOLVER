@@ -282,7 +282,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'profileSetting',]),
+    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'myAnswersSetting', 'profileSetting',]),
     // 프로필 수정 요청 CLICK
     editRequest() {
       this.isEdit = !this.isEdit
@@ -299,10 +299,10 @@ export default {
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: selfIntro,
           linkText: this.userProfileInfo.linkText,
-          favoriteFieldCodeList: this.userProfileInfo.favoriteFieldCodeList,
+          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
         }
       })
-      .then((res) => {
+      .then(() => {
         // 실시간 업데이트를 위해
         this.profileSetting(this.userNickname)
         })
@@ -321,10 +321,10 @@ export default {
           profileUrl: this.userProfileInfo.profileUrl,
           introduction: this.userProfileInfo.introduction,
           linkText: selfUrl,
-          favoriteFieldCodeList: this.userProfileInfo.favoriteFieldCodeList,
+          categoryCodeList: this.userProfileInfo.favoriteFieldCodeList,
         }
       })
-      .then((res) => {
+      .then(() => {
         // 실시간 업데이트를 위해
         this.profileSetting(this.userNickname)
         })
@@ -391,7 +391,7 @@ export default {
           categoryCodeList: this.editedCategory,
         }
       })
-      .then((res) => {
+      .then(() => {
         this.profileSetting(this.userNickname)
         this.isCategoryEdit = false
       })
@@ -434,7 +434,9 @@ export default {
       userProfileInfo: state => state.profiles.userProfileInfo,
     }),
     fields() {
-      return this.userProfileInfo.favoriteFieldNameList
+      const favoriteFieldNameList = this.userProfileInfo.favoriteFieldNameList
+      favoriteFieldNameList.sort()
+      return favoriteFieldNameList
     },
     groups() {
       return this.userProfileInfo.groupNameList
@@ -452,12 +454,25 @@ export default {
   },
   created() {
     const solveTabInfo = {
-      userNickname: this.userNickname,
-      tabnum: this.selectedTab,
+      userNickname: this.$route.params.nickname,
+      tabnum: 0,
     }
     this.selectedTab = this.tabs[0].tabNum
     this.statisticSetting(solveTabInfo)
+    const myQuestionsTabInfo = {
+      userNickname: this.$route.params.nickname,
+      tabnum: 1,
+    }
+    this.myQuestionsSetting(myQuestionsTabInfo)
+    const myAnswersTabInfo = {
+      userNickname: this.$route.params.nickname,
+      tabnum: 2,
+    }
+    this.myAnswersSetting(myAnswersTabInfo)
     this.isLoginUser()
+    this.editInfo.selfIntro = this.userProfileInfo.introduction
+    this.editInfo.selfUrl = this. userProfileInfo.linkText
+    this.editedCategory = this.userProfileInfo.favoriteFieldCodeList
   },
   // 재렌더링 안될 때를 대비해서
   updated() {
