@@ -44,7 +44,6 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import router from "@/router";
 
 export default {
   name: "Navbar",
