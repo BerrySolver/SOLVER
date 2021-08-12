@@ -131,6 +131,10 @@ public class QuestionServiceImpl implements QuestionService{
 		if (question.orElse(null) == null) {
 			return null;
 		}
+
+		Question q = question.get();
+		q.setReadCount(q.getReadCount()+1);
+		questionRepository.save(q);
 		
 		return question;
 	}
