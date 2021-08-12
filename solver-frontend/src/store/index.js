@@ -17,7 +17,7 @@ export default new Vuex.Store({
   modules: { auth, groups, notifications, profiles, questions, reports, solvers, videos },
   plugins: [
     createPersistedState({
-      paths: ["auth"],
+      paths: ["auth", "profiles"],
     }),
   ],
 });

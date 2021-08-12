@@ -222,6 +222,10 @@ export default {
 
   created() {
     this.isLoginUser()
+  },
+  // 재렌더링 안될 때를 대비해서
+  updated() {
+    this.isLoginUser()
   }
 }
 </script>
