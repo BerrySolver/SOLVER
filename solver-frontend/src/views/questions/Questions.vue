@@ -211,7 +211,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="questionList.length === 0" class="question-list-item">
+            <div v-if="questionList.length === 0 && isLoaded" class="question-list-item">
               <span>저쪽 신사분께 첫 질문을 남겨보시겠어요?</span>
             </div>
           </div>
@@ -294,6 +294,7 @@ export default {
       pageLinkCount: 10,
       currentPageIndex: 1,
       totalListItemCount: 10,
+      isLoaded: false,
     };
   },
   methods: {
@@ -440,6 +441,9 @@ export default {
         this.categories = res.data;
         this.getQuestionList();
         this.setStateQuery(null);
+        setTimeout(() => {
+          this.isLoaded = true
+        }, 1000)
       })
       .catch((err) => {
         console.log(err);
