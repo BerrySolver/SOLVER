@@ -172,6 +172,26 @@ export default {
     this.today = d.getDay() - 1 < 0 ? 6 : d.getDay() - 1;
   }, computed: {
     getRequestDays : function(){
+      var d = new Date();
+      this.requestDay = "";
+      console.log(this.today, " ", this.chooseDays);
+      if (this.today <= this.chooseDays){
+        console.log("이번주 중에 가능!");
+        d.setDate(d.getDate() + (this.chooseDays - this.today));
+        this.requestDay = d.toLocaleDateString();
+      }else{
+        console.log("다음주에 가능");
+        d.setDate(d.getDate() + ((6 - this.today)+(this.chooseDays+1)));
+        this.requestDay = d.toLocaleDateString();
+      }
+
+      // regDt에 맞게 형태 변화
+      this.requestDay = this.requestDay.replaceAll(" ", "").replaceAll(".", "-").replace(/-$/, '');
+      console.log(this.requestDay);
+
+      // 화면 출력용 형태
+      var printDay = this.requestDay;
+      return printDay.replace("-", "년").replace("-", "월") + "일";
     }
   }
 }
