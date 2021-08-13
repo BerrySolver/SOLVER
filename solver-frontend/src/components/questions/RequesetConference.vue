@@ -2,7 +2,7 @@
   <div class="request-modal solver-font">
     <h3 class="request-title">화상 요청</h3>
     <hr>
-    <b>{{this.nickname}}</b>님에게 화상 요청하시겠어요?<br>
+    <b>{{this.answer.nickname}}</b>님에게 화상 요청하시겠어요?<br>
     <br>
     <div class="request-day-select-button">
       <button class="day-button" :class="{'first-button':isFisrt}" @click="[checkWeekday(), changeFirst()]">평일</button>
@@ -43,7 +43,7 @@
       <span v-else>오늘부터 가장 가까운 날로 요청드려요!<br>{{ getRequestDays }}({{ chooseDaysText }}) {{chooseTime}} 맞으신가요?</span>
     </div>
     <div class="request-button-bar">
-      <button type="button" class="btn btn-submit">신청하기</button>
+      <button type="button" class="btn btn-submit" @click="requestCallBtn" :disabled="isSelectAll">신청하기</button>
       <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소하기</button>
     </div>
   </div>
@@ -86,26 +86,18 @@ export default {
       requestDay: "",
     }
   }, props : [
-      'nickname',
+      'answer',
   ], methods : {
-    // 프로필 기본정보 SETTING
-    profileSetting(nickname) {
-        axios.get(API.URL + `profiles/${nickname}/info`)
-        .then((res) => {
-        console.log(res.data);
-        })
-        .catch((err) => console.log(err))
-    },
     changeFirst() {
       this.isFisrt = !this.isFisrt
     },
     // 주중, 주말 CLICK해 SWITCH
     checkWeekday () {
-      this.chooseTime ='';
+      this.chooseTime = '';
       this.isWeekday = true
     },
     checkWeekend () {
-      this.chooseTime ='';
+      this.chooseTime = '';
       this.isWeekday = false
     },
     // 주중, 주말에서 선택한 시간인 경우 (CSS 변동)
@@ -158,10 +150,29 @@ export default {
     },
     resetData(){
       this.chooseTime ='';
+    },
+    requestCallBtn(){
+      console.log(this.requestDay +" "+ this.chooseTime);
+      console.log(this.answer);
+      axios({
+        url: API.URL + `messages/regist`,
+        method: 'POST',
+        data: {
+          answerId: this.answer.answerId,
+          regDt: this.requestDay + " " + this.chooseTime,
+          answerUserId: this.answer.userId,
+          type: "072"
+        },
+        headers: { Authorization: "Bearer " + this.getAccessToken },
+      }).then((res)=>{
+        console.log(res);
+      }).catch((res)=>{
+        console.log(res);
+      });
     }
   }, 
   created: function(){
-    axios.get(API.URL + `profiles/${this.nickname}/info`)
+    axios.get(API.URL + `profiles/${this.answer.nickname}/info`)
     .then((res) => {
       this.weekdayTime = res.data.weekdayTime.split('|');
       this.weekendTime = res.data.weekendTime.split('|');
@@ -191,6 +202,12 @@ export default {
       // 화면 출력용 형태
       var printDay = this.requestDay;
       return printDay.replace("-", "년 ").replace("-", "월 ")+"일";
+    },
+    isSelectAll : function(){
+      if(this.chooseTime=="" && this.chooseDays == ""){
+        return true;
+      }
+      return false;
     }
   }
 }

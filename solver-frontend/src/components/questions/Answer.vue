@@ -383,7 +383,7 @@ export default {
     },
     openRequestConference(answer){
       this.$modal.show(RequesetConference,{
-        nickname : answer.nickname,
+        answer : answer,
         modal : this.$modal },{
           name: 'dynamic-modal',
           width : '600px',
