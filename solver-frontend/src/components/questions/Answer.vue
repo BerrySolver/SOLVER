@@ -387,7 +387,7 @@ export default {
         modal : this.$modal },{
           name: 'dynamic-modal',
           width : '600px',
-          height : '600px',
+          height : '650px',
           draggable: true,
       })
     }
