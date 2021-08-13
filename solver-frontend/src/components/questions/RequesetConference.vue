@@ -39,8 +39,8 @@
       </div>      
     </div>
     <div class="request-check-box">
-      <span v-if="chooseTime==''">요일과 시간을 모두 선택하세요!</span>
-      <span v-else>오늘부터 가장 가까운 {{ chooseDaysText }}요일,{{ getRequestDays }} {{chooseTime}} 맞으신가요?</span>
+      <span v-if="chooseTime==''"><br>요일과 시간을 모두 선택하세요!</span>
+      <span v-else>오늘부터 가장 가까운 날로 요청드려요!<br>{{ getRequestDays }}({{ chooseDaysText }}) {{chooseTime}} 맞으신가요?</span>
     </div>
     <div class="request-button-bar">
       <button type="button" class="btn btn-submit">신청하기</button>
@@ -99,15 +99,16 @@ export default {
     changeFirst() {
       this.isFisrt = !this.isFisrt
     },
+    // 주중, 주말 CLICK해 SWITCH
     checkWeekday () {
       this.chooseTime ='';
       this.isWeekday = true
     },
-    // 주중, 주말 CLICK해 SWITCH
     checkWeekend () {
       this.chooseTime ='';
       this.isWeekday = false
     },
+    // 주중, 주말에서 선택한 시간인 경우 (CSS 변동)
     chooseWdt(time) {
       this.chooseTime = time;
       this.getDays();
@@ -174,24 +175,22 @@ export default {
     getRequestDays : function(){
       var d = new Date();
       this.requestDay = "";
-      console.log(this.today, " ", this.chooseDays);
+      
       if (this.today <= this.chooseDays){
-        console.log("이번주 중에 가능!");
         d.setDate(d.getDate() + (this.chooseDays - this.today));
         this.requestDay = d.toLocaleDateString();
       }else{
-        console.log("다음주에 가능");
         d.setDate(d.getDate() + ((6 - this.today)+(this.chooseDays+1)));
         this.requestDay = d.toLocaleDateString();
       }
 
-      // regDt에 맞게 형태 변화
+      // regDt에 맞게 형태 변화, 요일 업데이트
       this.requestDay = this.requestDay.replaceAll(" ", "").replaceAll(".", "-").replace(/-$/, '');
-      console.log(this.requestDay);
+      this.getDays();
 
       // 화면 출력용 형태
       var printDay = this.requestDay;
-      return printDay.replace("-", "년").replace("-", "월") + "일";
+      return printDay.replace("-", "년 ").replace("-", "월 ")+"일";
     }
   }
 }
@@ -259,7 +258,7 @@ export default {
 
   .request-button-bar{
     text-align: center;
-    margin-top: 30px;
+    margin-top: 60px;
   }
 
   .request-button-bar > button {
