@@ -7,10 +7,13 @@
             <div>{{ question.mainCategory }} > {{ question.subCategory }}</div>
             <div v-if="checkNickname()" class="question-buttons">
               <div class="question-modify-btn" @click="modifyQuestion()">
-                수정하기
+                <img src="@/assets/edit-button.png" width="20px">
               </div>
               <div class="question-delete-btn" @click="deleteQuestionCheck()">
-                삭제하기
+                <img
+                  style="width: 12px;"
+                  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
+                />
               </div>
             </div>
           </div>
@@ -354,52 +357,44 @@ iframe {
 
 .question-buttons {
   display: flex;
+  align-items: center;
+  margin-right: 90px;
 }
 
 .question-buttons div {
   display: flex;
-
-  width: 70px;
+  width: 20px;
 }
 
 .question-modify-btn {
-  background-color: #658dc6;
+  /* background-color: #658dc6; */
   border-radius: 6px;
   color: white;
   cursor: pointer;
   float: left;
   height: 30px;
   font-size: 15px;
-  width: 70px;
+  width: 20px;
+  margin-right: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .question-delete-btn {
-  background-color: #b5c7d3;
+  /* background-color: #b5c7d3; */
   border-radius: 6px;
   color: white;
   cursor: pointer;
   float: left;
-  height: 30px;
-  font-size: 15px;
-  width: 70px;
-  margin-left: 10px;
+  top: 20px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .question-modify-btn:hover {
-  color: white;
-  background: #0f4c81;
-  transition: 0.4s;
-}
-
-.question-delete-btn:hover {
-  color: white;
-  background: #84898c;
-  transition: 0.4s;
+  filter: brightness(40%);
 }
 </style>
