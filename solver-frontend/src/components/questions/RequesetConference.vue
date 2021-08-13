@@ -1,0 +1,301 @@
+<template>
+  <div class="request-modal solver-font">
+    <h3 class="request-title">화상 요청</h3>
+    <hr>
+    <b>{{this.nickname}}</b>님에게 화상 요청하시겠어요?<br>
+    <br>
+    <div class="request-day-select-button">
+      <button class="day-button" :class="{'first-button':isFisrt}" @click="[checkWeekday(), changeFirst()]">평일</button>
+      <button class="day-button" :class="{'first-button':!isFisrt}" @click="[checkWeekend(), changeFirst()]">주말</button>
+    </div>
+    <div class="days-content-table">
+      <div v-if="isWeekday">
+        <div class="days-margin">
+          <div class="days-radio-button" v-for="(weekday, index) in weekdayDay" :key="index">
+            <input :value="weekday.value" :name="weekday" type="radio" v-bind:id="'weekday'+weekday.value" v-model="chooseDays">
+            <label v-bind:for="'weekday'+weekday.value">{{weekday.days}}</label>
+          </div>
+        </div>
+        <span v-for="(time,index) in timeTable" v-bind:key="time">
+        <button @click="chooseWdt(time)" v-bind:class="{'selected-button': isInWdt(time), 'final-button': finalWdt(time)}" :disabled="isInWdt(time) == false" class="none-selected-button">
+          {{ time }}
+        </button>
+        <div v-if="(index+1)%6 == 0"></div>
+        </span>
+      </div>
+      <div v-if="!isWeekday">
+        <div class="days-margin">
+          <div class="days-radio-button" v-for="(weekend, index) in weekendDay" :key="index">
+            <input :value="weekend.value" :name="weekend" type="radio" v-bind:id="'weekend'+weekend.value" v-model="chooseDays">
+            <label v-bind:for="'weekend'+weekend.value">{{weekend.days}}</label>
+          </div>
+        </div>
+        <span v-for="(time,index) in timeTable" v-bind:key="time">
+          <button @click="chooseWkt(time)" v-bind:class="{'selected-button': isInWkt(time), 'final-button': finalWkt(time)}" :disabled="isInWkt(time) == false"  class="none-selected-button">
+            {{ time }}
+          </button>
+          <div v-if="(index+1)%6 == 0"></div>
+        </span>
+      </div>      
+    </div>
+    <div class="request-check-box">
+      <span v-if="chooseTime==''">요일과 시간을 모두 선택하세요!</span>
+      <span v-else>오늘부터 가장 가까운 {{ chooseDaysText }}요일,{{ getRequestDays }} {{chooseTime}} 맞으신가요?</span>
+    </div>
+    <div class="request-button-bar">
+      <button type="button" class="btn btn-submit">신청하기</button>
+      <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소하기</button>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+import API from "@/API.js";
+
+export default {
+  data:function(){
+    return {
+      isWeekday: true,
+      isFisrt: true,
+      weekdayTime: [],
+      weekendTime: [],
+      chooseTime: '',
+      chooseDays: 0,
+      chooseDaysText:'',
+      timeTable:[
+        "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
+        "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30",
+        "08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30",
+        "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
+        "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
+        "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
+      ], 
+      weekdayDay: [
+        {days: "월", value: 0},
+        {days: "화", value: 1},
+        {days: "수", value: 2},
+        {days: "목", value: 3},
+        {days: "금", value: 4},
+      ],
+      weekendDay: [
+        {days: "토", value: 5},
+        {days: "일", value: 6}
+      ],
+      today: 0,
+      requestDay: "",
+    }
+  }, props : [
+      'nickname',
+  ], methods : {
+    // 프로필 기본정보 SETTING
+    profileSetting(nickname) {
+        axios.get(API.URL + `profiles/${nickname}/info`)
+        .then((res) => {
+        console.log(res.data);
+        })
+        .catch((err) => console.log(err))
+    },
+    changeFirst() {
+      this.isFisrt = !this.isFisrt
+    },
+    checkWeekday () {
+      this.chooseTime ='';
+      this.isWeekday = true
+    },
+    // 주중, 주말 CLICK해 SWITCH
+    checkWeekend () {
+      this.chooseTime ='';
+      this.isWeekday = false
+    },
+    chooseWdt(time) {
+      this.chooseTime = time;
+      this.getDays();
+    },
+    chooseWkt(time){
+      this.chooseTime = time;
+      this.getDays();
+    },
+    finalWdt(time){
+      if (this.chooseTime==time) {
+        return true
+      } else
+      return false
+    },
+    finalWkt(time){
+      if (this.chooseTime==time) {
+        return true
+      } else
+      return false
+    },
+    // 수정X용 : 기존에 PROP으로 받아온 TIME데이터에 속하는 TIME인지 CHECK
+    isInWdt(time) {
+      if (this.weekdayTime.includes(time)) {
+        return true
+      } else
+      return false
+    },
+    isInWkt(time) {
+      if (this.weekendTime.includes(time)) {
+        return true
+      } else
+      return false
+    },      
+    getDays(){
+      if(this.isWeekday){
+        this.weekdayDay.forEach(w => {
+          if(w.value==this.chooseDays){
+            this.chooseDaysText = w.days;
+          }
+        });
+      }else{
+        this.weekendDay.forEach(w => {
+          if(w.value==this.chooseDays)
+            this.chooseDaysText = w.days;
+        });
+      }
+    },
+    resetData(){
+      this.chooseTime ='';
+    }
+  }, 
+  created: function(){
+    axios.get(API.URL + `profiles/${this.nickname}/info`)
+    .then((res) => {
+      this.weekdayTime = res.data.weekdayTime.split('|');
+      this.weekendTime = res.data.weekendTime.split('|');
+    })
+    .catch((err) => console.log(err))
+
+    var d = new Date();
+    // Date 상으로는 일월화수목금토 순으로 0~6으로 배치, 서비스에 맞게 변동
+    this.today = d.getDay() - 1 < 0 ? 6 : d.getDay() - 1;
+  }, computed: {
+    getRequestDays : function(){
+    }
+  }
+}
+</script>
+
+<style>
+  .btn-submit, .btn-outline-cancel{
+      padding: 6px 10px;
+      width: 100px;
+  }
+
+  .btn-submit {
+      background: #658DC6;
+      color:white;
+  }
+
+  .btn-outline-cancel{
+      border: 1px solid #658DC6;
+      color: #658DC6;
+  }
+
+  .day-button {
+    background-color: transparent;
+    border: solid 1px #658DC6;
+    width: 120px;
+  }
+
+  .day-button:hover {
+    background-color: #658DC6;
+    border-color: #658DC6;
+    color: #F1F2F2;
+  }
+  .day-button:active {
+    background-color: #658DC6;
+    border-color: #658DC6;
+    color: #F1F2F2;
+  }
+  .day-button:focus, .day-button:active:focus {
+    background-color: #658DC6;
+    border-color: #658DC6;
+    color: #F1F2F2;
+  }
+
+  .days-content-table{
+    text-align: center;
+    margin: 10px;
+  }
+
+  .days-radio-button{
+    display: inline;
+  }
+
+  .days-radio-button > input{
+    margin-left: 10px;
+  }
+
+  .days-radio-button > label{
+    margin-right: 10px;
+    margin-left: 5px ;
+  }
+
+  .days-margin {
+    margin: 15px 0px;
+  }
+
+  .request-button-bar{
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .request-button-bar > button {
+    margin: 0px 10px;
+  }
+
+  .request-check-box{
+    margin-top:20px;
+    height: 20px;
+    text-align: center;
+  }
+
+  .request-day-select-button{
+    text-align: center;
+  }
+
+  .request-day-select-button > button{
+    margin: 0px 3px;
+  }
+
+  .request-modal{
+     padding: 40px 50px;
+  }
+
+  .request-title{
+    color: #0F4C81;
+  }  
+
+  .none-selected-button {
+    background-color: transparent;
+    border: transparent;
+    color: #84898C;
+    font-size: 16px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    width: 65px;
+  }
+
+  .selected-button {
+    background-color: #b9b9b93d;
+    /* border: transparent; */
+    color: #0F4C81;
+    font-size: 16px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    width: 65px;  
+  }
+
+  .final-button {
+    background-color: #0F4C81;
+    /* border: transparent; */
+    color: white;
+    font-size: 16px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    width: 65px;  
+  }
+
+</style>
