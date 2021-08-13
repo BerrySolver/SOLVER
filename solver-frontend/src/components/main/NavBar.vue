@@ -31,7 +31,7 @@
             <li class="nav-item" v-if="!checkLogin()">
               <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
             </li>
-            <li class="nav-item" v-if="checkLogin()" @click="profileClick">
+            <li class="nav-item" v-if="checkLogin()">
               <RouterLink :to="`/my-profile/${userNickname}`" class="nav-router">마이프로필</RouterLink>
             </li>
             <li class="nav-item" v-if="checkLogin()">
@@ -64,11 +64,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['logout', 'profileSetting']),
-    profileClick() {
-      console.log('유저 닉네임', this.userNickname)
-      this.profileSetting(this.userNickname);
-    },
+    ...mapActions(['logout']),
     checkLogin() {
       return localStorage.getItem("solverToken") != null;
     },
