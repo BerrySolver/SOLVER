@@ -1,5 +1,7 @@
 package com.solver.db.entity.user;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,6 +28,8 @@ public class Message extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="receiveUserId")
 	private User receiveUser;
+	
+	private String questionId;
 	
 	@JsonBackReference
 	@ManyToOne
