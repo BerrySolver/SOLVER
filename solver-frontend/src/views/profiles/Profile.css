@@ -178,6 +178,12 @@
   height: 100%;
 }
 
+.profile-link {
+  color: #84898C;
+  font-size: 16px;
+  text-decoration: none;
+}
+
 .small-box {
   background-color: #658DC6;
   height: 3px;
