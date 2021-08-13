@@ -20,5 +20,4 @@ module.exports = {
     'element-plus'
   ],
   lintOnSave: false,
-  outputDir: '../solver-backend/src/main/resources/dist'
 }
