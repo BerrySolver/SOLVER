@@ -83,7 +83,7 @@
 <script>
 import API from "@/API.js";
 import axios from "axios";
-import { mapActions } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Solvers',
@@ -107,7 +107,6 @@ export default {
       isLoaded: false,
     }
   }, methods:{
-    ...mapActions(['profileSetting']),
     setQuery(){
       this.setSolverList();
     }, selectSort(event){
@@ -128,13 +127,18 @@ export default {
       console.log("Sub : " + this.subCategoryCode);
       this.setSolverList();
     }, goUserProfile(nickname){
-        this.profileSetting(nickname)
-        this.$router.push({
-          name: 'Profile',
-          params: {
-            nickname: nickname
-          }
-        });
+        if (nickname !== this.userNickname) {
+          this.$router.push({
+            name: 'Profile',
+            params: {
+              nickname: nickname
+            }
+          });
+        } else {
+          this.$router.push({
+            path: `/my-profile/${this.userNickname}`
+          })
+        }
     }, setSolverList(){
       axios({
         url: API.URL + API.ROUTES.getSolverList,
@@ -189,6 +193,11 @@ export default {
     });
     this.setSolverList();
   },
+  computed: {
+    ...mapState({
+      userNickname: state => state.auth.userNickname,
+    }),
+  }
 }
 </script>
 

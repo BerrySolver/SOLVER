@@ -48,14 +48,15 @@ public class ProfileController {
         @ApiResponse(code = 200, message = "정보를 가져오기 성공"),
         @ApiResponse(code = 409, message = "정보를 가져오기 실패")
     })
-	public ResponseEntity<? extends BaseResponse> getProfileInfo(@PathVariable String nickname)
+	public ResponseEntity<? extends BaseResponse> getProfileInfo(
+			@PathVariable String nickname,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		ProfileRes profileRes = null;
-		
-		System.out.println(nickname);
-		
+		String token = accessToken.split(" ")[1];
+				
 		try {
-			profileRes = profileService.getProfileInfo(nickname);
+			profileRes = profileService.getProfileInfo(token, nickname);
 		}
 		catch(NoSuchElementException e) {
 			return ResponseEntity.status(409).body(ProfileRes.of(409, "정보를 가져오는데 실패하였습니다"));

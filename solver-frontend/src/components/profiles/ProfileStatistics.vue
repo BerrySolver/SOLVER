@@ -81,20 +81,14 @@
 <script>
 import axios from 'axios'
 import API from "@/API.js"
-import {mapState} from 'vuex'
 
 export default {
   name: 'ProfileStatistics',
-  props: ['nickname', 'tabNum'],
+  props: ['nickname', 'tabNum', 'userProfileInfo'],
   data() {
     return {
       userStatistics: {},
     }
-  },
-  computed: {
-    ...mapState({
-      userProfileInfo: state => state.profiles.userProfileInfo,
-    })
   },
   created() {
     axios({
