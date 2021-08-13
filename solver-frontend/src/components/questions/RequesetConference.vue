@@ -207,9 +207,20 @@ export default {
       color:white;
   }
 
+  .btn-submit:hover {
+      background: #0F4C81;
+      color:white;
+  }
+
   .btn-outline-cancel{
       border: 1px solid #658DC6;
       color: #658DC6;
+  }
+
+  .btn-outline-cancel:hover {
+      border: 1px solid #0F4C81;
+      color: #0F4C81;
+      background: #e9e9e9;
   }
 
   .day-button {
