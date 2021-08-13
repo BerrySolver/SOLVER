@@ -290,7 +290,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'myAnswersSetting', 'profileSetting',]),
+    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'myAnswersSetting']),
     // 프로필 수정 요청 CLICK
     editRequest() {
       this.isEdit = !this.isEdit
@@ -478,13 +478,18 @@ export default {
     }
     this.myAnswersSetting(myAnswersTabInfo)
     this.isLoginUser()
-    this.editInfo.selfIntro = this.userProfileInfo.introduction
-    this.editInfo.selfUrl = this. userProfileInfo.linkText
-    this.editedCategory = this.userProfileInfo.favoriteFieldCodeList
+    this.profileSetting(this.userNickname)
   },
   // 재렌더링 안될 때를 대비해서
   updated() {
     this.isLoginUser()
+  },
+  watch: {
+    userProfileInfo() {
+      this.editInfo.selfIntro = this.userProfileInfo.introduction
+      this.editInfo.selfUrl = this. userProfileInfo.linkText
+      this.editedCategory = this.userProfileInfo.favoriteFieldCodeList
+    }
   }
 }
 </script>

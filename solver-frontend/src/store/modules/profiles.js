@@ -31,7 +31,6 @@ const mutations = {
 const actions = {
   // 답변목록 TAB(1)
   myAnswersSetting({commit}, myAnswersInfo) {
-    console.log('날 불렀어요')
     axios({
       url: API.URL + `profiles/${myAnswersInfo.userNickname}/tab`,
       method: "get",
@@ -41,7 +40,6 @@ const actions = {
       }
     })
     .then((res) => {
-      console.log('///', res.data)
       commit('SET_MY_ANSWERS', res.data)
     })
     .catch((err) => console.log(err))
@@ -82,7 +80,6 @@ const actions = {
   profileSetting({commit}, nickname) {
     axios.get(API.URL + `profiles/${nickname}/info`)
     .then((res) => {
-      console.log(res.data)
       commit('SET_USER_PROFILE', res.data)
     })
     .catch((err) => console.log(err))
