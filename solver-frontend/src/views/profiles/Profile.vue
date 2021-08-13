@@ -29,7 +29,7 @@
             </div>
             <div v-if="isEdit" @keyup.enter="[editRequest(), editSelfIntro(editInfo.selfIntro)]">
               한줄 소개 
-              <span><input v-model="editInfo.selfIntro" class="intro-input m-left-1" type="text"></span>
+              <span><input v-model="editInfo.selfIntro" class="intro-input m-left-1" type="text" :maxlength="maxUrl"></span>
               <button
               v-if="isLogin"
               @click="[editRequest(), editSelfIntro(editInfo.selfIntro)]"
@@ -281,6 +281,7 @@ export default {
       isNaN: false,
       mainCtgIndex: -1,
       mainCtgs: [],
+      maxUrl: 30,
       subCtgs: [],
       selectedTab: 0,
       tabs: [

@@ -29,7 +29,17 @@
             </div>
             <div v-if="isEdit" @keyup.enter="[editRequest(), editSelfIntro(editInfo.selfIntro)]">
               한줄 소개 
-              <span><input v-model="editInfo.selfIntro" class="intro-input m-left-1" type="text"></span>
+
+              <span>
+                <input
+                v-model="editInfo.selfIntro"
+                class="intro-input m-left-1"
+                type="text"
+                :maxlength="maxIntro"
+                @input="inputLengthCheck($event)">
+                <span>{{ editInfo.selfIntro.length }} / 30</span>
+              </span>
+
               <button
               v-if="isLogin"
               @click="[editRequest(), editSelfIntro(editInfo.selfIntro)]"
@@ -281,6 +291,7 @@ export default {
       isNaN: false,
       mainCtgIndex: -1,
       mainCtgs: [],
+      maxIntro: 30,
       subCtgs: [],
       selectedTab: 0,
       tabs: [
@@ -416,6 +427,15 @@ export default {
       return false }
     },
 
+    // 자기소개 30글자까지만
+    // inputLengthCheck(event) {
+    //   if(event.target.value.length > 30) {
+    //     alert('최대 30글자까지 입력가능합니다.')
+    //   } else {
+    //     this.currentIntroLength = event.target.value.length
+    //   }
+    // },
+
     // 로그인 유저인지 CHECK
     isLoginUser() {
       if (this.userNickname === this.$route.params.nickname) {
@@ -492,12 +512,6 @@ export default {
       this.editInfo.selfUrl = this. userProfileInfo.linkText
       this.editedCategory = this.userProfileInfo.favoriteFieldCodeList
     },
-    editInfo() {
-      if (this.editInfo.selfUrl.length > 10) {
-        alert('10자 까지 입력 가능합니다.')
-        return this.editInfo.selfUrl.splice(0,9)
-      }
-    }
   }
 }
 </script>

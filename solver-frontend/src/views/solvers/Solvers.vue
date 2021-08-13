@@ -393,9 +393,9 @@ export default {
   .solver-user-card {
     border: 3px solid #658DC6;
     border-width: 5px 0px 1px 0px ;
-    width: 260px;
+    width: 270px;
     height: 300px;
-    margin: 0px 15px 0px 15px;
+    margin: 0px 10px 0px 10px;
     background-color: white;
     border-radius: 2px;
     position: relative;
