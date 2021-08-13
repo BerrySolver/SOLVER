@@ -172,7 +172,11 @@ export default {
     }
   }, 
   created: function(){
-    axios.get(API.URL + `profiles/${this.answer.nickname}/info`)
+    axios({
+        url: API.URL + `profiles/${this.answer.nickname}/info`,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken}
+    })
     .then((res) => {
       this.weekdayTime = res.data.weekdayTime.split('|');
       this.weekendTime = res.data.weekendTime.split('|');
