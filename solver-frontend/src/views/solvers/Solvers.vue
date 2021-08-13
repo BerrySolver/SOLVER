@@ -408,12 +408,13 @@ export default {
   }
 
   span.detail-category{
-    border-radius: 10px;
+    border-radius: 4px;
     padding-left: 2px;
     padding-right: 2px;
     margin-bottom: 2px;
     margin-right: 3px;
-    background-color: #dfdfdf;
+    color: #A58D7F;
+    /* background-color: #658DC6; */
     display: inline-block;
     font-size:13px;
   }

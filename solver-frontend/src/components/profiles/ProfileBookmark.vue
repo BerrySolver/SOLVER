@@ -8,7 +8,7 @@
       v-for="question in myBookmarkQuestions.bookmarkQuestionList"
       :key="question.id"
       class="my-bookmark-title">
-      <span @click="clickQuestion(question.id)">- {{ question.title }} [ {{ question.answerCount }} ]</span>
+      <div @click="clickQuestion(question.id)">- {{ question.title }} [ {{ question.answerCount }} ]</div>
     </div>
   </div>
 </template>
@@ -57,12 +57,14 @@ export default {
   margin: 10px;
 }
 
-.my-bookmark-title span{
-  padding-bottom: 3px;
+.my-bookmark-title div{
+  padding: 3px;
+  max-width: 800px;
 }
 
-.my-bookmark-title span:hover {
-  border-bottom: 2px solid #658DC6;
+.my-bookmark-title div:hover {
+  background-color: #658DC6;
+  color: white;
   cursor: pointer;
 }
 </style>
