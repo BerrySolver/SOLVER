@@ -49,6 +49,15 @@ public class ProfileRes extends BaseResponse{
 	@ApiModelProperty(name="화상 회의 시간")
 	private String weekdayTime;
 	
+	@ApiModelProperty(name="팔로워")
+	private int followers;
+	
+	@ApiModelProperty(name="팔로잉")
+	private int followings;
+	
+	@ApiModelProperty(name="팔로우 여부")
+	private boolean isFollowing;
+	
 	public static ProfileRes of(int i, String string, ProfileRes userProfileRes) {
 		ProfileRes res = userProfileRes;
 		res.setStatusCode(i);

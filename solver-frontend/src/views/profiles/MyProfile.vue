@@ -76,7 +76,7 @@
             <div style="display:flex; align-items:center;">
               <span class="subheading">주 활동분야</span>
               <span
-                v-for="(field, index) in fields"
+                v-for="(field, index) in userProfileInfo.favoriteFieldNameList"
                 :key="'F'+ index"
                 class="interval">
                 {{ field }}
@@ -128,6 +128,13 @@
           
           <!-- profile-info의 last child(right) -->
           <div>
+            <div class="follow-info">
+              <span class="subheading">팔로워</span>
+              <span class="interval point-color-1">{{followers}}</span>
+              <span class="subheading">팔로잉</span>
+              <span class="interval point-color-1">{{userProfileInfo.followings}}</span>
+            </div>
+            <br>
             <div class="berry-point">
               <!-- ingroup의 first child -->
               <div class="subheading">베리 포인트</div>
@@ -136,7 +143,9 @@
                 <span>누적</span>
                 <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
                 <span v-if="isLogin">잔여</span>
-                <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span><br>
+                <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span>
+                <span v-if="isLogin"><button class="point-button" style="margin-right: 10px;">내역</button></span>
+                <span v-if="isLogin"><button class="point-button">사용</button></span>
               </div>
             </div>
             <br>
@@ -144,7 +153,7 @@
               <span class="subheading">베리 점수</span>
               <!-- 소수점 보여주고 싶은데 NaN 인 사람들에게 오류가 발생 -->
               <!-- <span class="interval point-color-1">{{ userProfileInfo.evaluationScore.toFixed(1) }} 점</span> -->
-              <span class="interval point-color-1">{{ userProfileInfo.evaluationScore }} 점</span>
+              <span v-if="isLoaded" class="interval point-color-1">{{ userProfileInfo.evaluationScore.toFixed(1) }} 점</span>
               <span>/&nbsp;&nbsp;&nbsp;10 점</span>
             </div>
 
@@ -207,7 +216,8 @@
 
       <!-- calendar section -->
       <div>
-        <ProfileTimetable 
+        <ProfileTimetable
+        v-if="isLoaded" 
         :weekdayTime="userProfileInfo.weekdayTime"
         :weekendTime="userProfileInfo.weekendTime"/>
       </div>
@@ -224,7 +234,7 @@
 
         <!-- SOLVE 기록 TAB -->
         <div v-if="0 == selectedTab">
-          <ProfileStatistics :tabNum="selectedTab" :nickname="$route.params.nickname" class="m-top-3"/>
+          <ProfileStatistics :tabNum="selectedTab" :nickname="$route.params.nickname" :userProfileInfo="userProfileInfo" class="m-top-3"/>
         </div>
 
         <!-- 답변 목록 TAB -->
@@ -284,6 +294,7 @@ export default {
         selfUrl: '',
       },
       editedCategory: [],
+      followers: '',
       isEdit: false,
       isFirst: true,
       isCategoryEdit: false,
@@ -300,10 +311,25 @@ export default {
         {tabNum: 2, tabName: '질문 목록'},
         {tabNum: 3, tabName: '북마크 목록'},
       ],
+      userProfileInfo: {},
+      isLoaded: false,
     }
   },
   methods: {
-    ...mapActions(['profileSetting', 'statisticSetting', 'myQuestionsSetting', 'myAnswersSetting']),
+    ...mapActions(['statisticSetting', 'myQuestionsSetting', 'myAnswersSetting']),
+    profileSetting() {
+      axios({
+        url: API.URL + `profiles/${this.$route.params.nickname}/info`,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken}
+      })
+      .then((res) => {
+        console.log(res.data)
+        this.userProfileInfo = res.data
+        this.userProfileInfo.favoriteFieldNameList.sort()
+      })
+      .catch((err) => console.log(err))
+    },
     // 프로필 수정 요청 CLICK
     editRequest() {
       this.isEdit = !this.isEdit
@@ -325,7 +351,7 @@ export default {
       })
       .then(() => {
         // 실시간 업데이트를 위해
-        this.profileSetting(this.userNickname)
+        this.profileSetting()
         })
       .catch((err) => console.log(err))
     },
@@ -347,7 +373,7 @@ export default {
       })
       .then(() => {
         // 실시간 업데이트를 위해
-        this.profileSetting(this.userNickname)
+        this.profileSetting()
         })
       .catch((err) => console.log(err))
     },
@@ -378,7 +404,6 @@ export default {
       })
       .then((res) => {
         this.mainCtgs = res.data;
-        console.log(this.mainCtgs)
       })
       .catch((err) => console.log(err))
     },
@@ -413,7 +438,7 @@ export default {
         }
       })
       .then(() => {
-        this.profileSetting(this.userNickname)
+        this.profileSetting()
         this.isCategoryEdit = false
       })
       .catch((err) => console.log(err))
@@ -461,13 +486,7 @@ export default {
       accessToken: state => state.auth.accessToken,
       categoryList: state => state.auth.categoryList,
       userNickname: state => state.auth.userNickname,
-      userProfileInfo: state => state.profiles.userProfileInfo,
     }),
-    fields() {
-      const favoriteFieldNameList = this.userProfileInfo.favoriteFieldNameList
-      favoriteFieldNameList.sort()
-      return favoriteFieldNameList
-    },
     groups() {
       return this.userProfileInfo.groupNameList
     },
@@ -483,6 +502,7 @@ export default {
     }
   },
   created() {
+    this.profileSetting()
     const solveTabInfo = {
       userNickname: this.$route.params.nickname,
       tabnum: 0,
@@ -500,17 +520,16 @@ export default {
     }
     this.myAnswersSetting(myAnswersTabInfo)
     this.isLoginUser()
-    this.profileSetting(this.userNickname)
-  },
-  // 재렌더링 안될 때를 대비해서
-  updated() {
-    this.isLoginUser()
+    setTimeout(() => {
+      this.isLoaded = true
+    }, 300)
   },
   watch: {
     userProfileInfo() {
       this.editInfo.selfIntro = this.userProfileInfo.introduction
       this.editInfo.selfUrl = this. userProfileInfo.linkText
       this.editedCategory = this.userProfileInfo.favoriteFieldCodeList
+      this.followers = this.userProfileInfo.followers
     },
   }
 }

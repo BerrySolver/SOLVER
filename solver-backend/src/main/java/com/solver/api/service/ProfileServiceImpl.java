@@ -26,6 +26,7 @@ import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.conference.ConferenceLog;
 import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.question.BookmarkQuestion;
+import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.FavoriteUser;
 import com.solver.db.entity.user.PointLog;
@@ -93,7 +94,7 @@ public class ProfileServiceImpl implements ProfileService{
 	 * 관심분야는 sub category 기준인가 - o
 	 * */
 	@Override
-	public ProfileRes getProfileInfo(String nickname) {
+	public ProfileRes getProfileInfo(String token, String nickname) {
 		Optional<User> user = userRepository.findByNickname(nickname);
 		
 		List<PointLog> pointList = user.get().getPointLog();
@@ -157,6 +158,25 @@ public class ProfileServiceImpl implements ProfileService{
 		if (Double.isNaN(evaluationScore)) {
 			evaluationScore = 0;
 		}
+		
+		/* 내가 이 유저 팔로우 여부 */
+		boolean isFollowing = false;
+		if (!token.equals("null")) {
+			TokenResponse tokenResponse = new TokenResponse();
+			tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+	
+			Long kakaoId = tokenResponse.getKakaoId();
+			
+			Optional<User> me = userRepository.findByKakaoId(kakaoId);
+			
+			for (FavoriteUser favoriteUser : user.get().getFavoriteUser()) {
+				if (favoriteUser.getFollowingUser().getId().equals(me.get().getId())) {
+					isFollowing =  true;
+					break;
+				}
+			}
+		}
+		
 		profileRes.setEvaluationScore(evaluationScore);
 		profileRes.setFavoriteFieldCodeList(favoriteFieldCodeList);
 		profileRes.setFavoriteFieldNameList(favoriteFieldNameList);
@@ -170,6 +190,10 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		profileRes.setWeekdayTime(user.get().getUserCalendar().getWeekdayTime());
 		profileRes.setWeekendTime(user.get().getUserCalendar().getWeekendTime());
+		
+		profileRes.setFollowers(user.get().getFavoriteUser().size());
+		profileRes.setFollowings(user.get().getFavoriteFollowingUser().size());
+		profileRes.setFollowing(isFollowing);
 		/* response 데이터 저장 끝 */
 		
 		return profileRes;
@@ -371,10 +395,10 @@ public class ProfileServiceImpl implements ProfileService{
 			return 0;
 		}
 
-		User followingUserInfo = userRepository.findByNickname(nickname).orElse(null);
+		User followedUserInfo = userRepository.findByNickname(nickname).orElse(null);
 		
 		//없는 유저인 경우
-		if (followingUserInfo == null) {
+		if (followedUserInfo == null) {
 			return 0;
 		}
 
@@ -388,14 +412,14 @@ public class ProfileServiceImpl implements ProfileService{
 		}
 
 		//이미 팔로우 한 유저인 경우
-		if (favoriteUserRepository.findByUserIdAndFollowingUserId(myUserInfo.getId(), followingUserInfo.getId()).orElse(null) != null) {
+		if (favoriteUserRepository.findByUserIdAndFollowingUserId(followedUserInfo.getId(), myUserInfo.getId()).orElse(null) != null) {
 			return 2;
 		}
 
 		
 		FavoriteUser favoriteUser = new FavoriteUser();
-		favoriteUser.setFollowingUser(followingUserInfo);
-		favoriteUser.setUser(myUserInfo);
+		favoriteUser.setFollowingUser(myUserInfo);
+		favoriteUser.setUser(followedUserInfo);
 		favoriteUser.setId(id);
 
 		favoriteUserRepository.save(favoriteUser);
@@ -425,14 +449,14 @@ public class ProfileServiceImpl implements ProfileService{
 			return 0;
 		}
 
-		User followingUserInfo = userRepository.findByNickname(nickname).orElse(null);
+		User followedUserInfo = userRepository.findByNickname(nickname).orElse(null);
 		
 		//없는 유저인 경우
-		if (followingUserInfo == null) {
+		if (followedUserInfo == null) {
 			return 0;
 		}
 		
-		FavoriteUser favoriteUser = favoriteUserRepository.findByUserIdAndFollowingUserId(myUserInfo.getId(), followingUserInfo.getId()).orElse(null);
+		FavoriteUser favoriteUser = favoriteUserRepository.findByUserIdAndFollowingUserId(followedUserInfo.getId(), myUserInfo.getId()).orElse(null);
 
 		//팔로우 하지 않은 유저인 경우
 		if (favoriteUser == null) {
