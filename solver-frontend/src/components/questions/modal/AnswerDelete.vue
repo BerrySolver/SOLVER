@@ -13,8 +13,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import { mapActions } from 'vuex'
-// import { mapState } from "vuex";
+import { mapActions, mapState } from 'vuex'
 
 export default {
   data:function(){
@@ -29,7 +28,7 @@ export default {
         url: API.URL + `answers/${this.answer.answerId}`,
         method: "delete",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("solverToken"),
+          Authorization: "Bearer " + this.accessToken,
         },
       })
       .then((res) => {
@@ -41,6 +40,11 @@ export default {
       });
       this.$emit('close');
     }
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+    }),
   }
 }
 </script>
