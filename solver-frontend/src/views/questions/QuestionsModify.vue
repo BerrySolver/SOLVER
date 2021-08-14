@@ -247,7 +247,7 @@ export default {
       return r;
     },
     questionModify() {
-      if (this.getAccessToken == null || this.getAccessToken == "") {
+      if (this.getAccessToken == null) {
         console.log("로그인 안 된 상태");
         return;
       }

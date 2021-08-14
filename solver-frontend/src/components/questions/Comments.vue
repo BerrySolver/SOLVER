@@ -35,7 +35,6 @@ export default {
     return {
       commentList: [],
       now: new Date(),
-      userNickname: localStorage.getItem("solverNickname")
     }
   },
   methods: {
@@ -87,6 +86,7 @@ export default {
   computed: {
     ...mapState({
       commentCreateTrigger: (state) => state.questions.commentCreateTrigger,
+      userNickname: state => state.auth.userNickname,
     })
   },
   watch: {

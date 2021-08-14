@@ -395,7 +395,7 @@ export default {
         });
     },
     goQuestionCreate: function() {
-      if (localStorage.getItem("solverToken") == null) {
+      if (this.accessToken == null) {
         //여기에 나중에 모달 or 메시지
         return;
       }
@@ -452,6 +452,7 @@ export default {
   computed: {
     ...mapState({
       query: (state) => state.questions.query,
+      accessToken: state => state.auth.accessToken,
     }),
     typeWatch: function() {
       return this.request.type;

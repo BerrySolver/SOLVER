@@ -52,6 +52,7 @@ export default {
   name: "Navbar",
   computed: {
     ...mapState({
+      accessToken: state => state.auth.accessToken,
       userNickname: (state) => state.auth.userNickname,
     }),
     ...mapGetters(["isLoggedIn"]),
@@ -66,7 +67,7 @@ export default {
   methods: {
     ...mapActions(['logout']),
     checkLogin() {
-      return localStorage.getItem("solverToken") != null;
+      return this.accessToken != null;
     },
     clickLogout() {
       this.logout();
