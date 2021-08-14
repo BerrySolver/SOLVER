@@ -102,6 +102,7 @@ import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { mapState } from "vuex";
 import RequesetConference from './modal/RequesetConference.vue';
+import AnswerDelete from './modal/AnswerDelete.vue';
 
 Vue.use(CKEditor);
 
@@ -165,6 +166,7 @@ export default {
   components: {
     Comments,
     CommentsCreate,
+    AnswerDelete,
   },
   data() {
     return {
@@ -175,7 +177,7 @@ export default {
       commentListOpen: [],
       isTrue: true,
       now: new Date(),
-      CKEditor: "",
+      CKEditor: ""
     };
   },
   methods: {
@@ -373,12 +375,13 @@ export default {
         });
     },
     deleteAnswerCheck(answer){
-      const $this =this;
-      alertify.confirm("답변삭제", "정말 삭제하시겠습니까?",
-      function(){
-        $this.deleteAnswer(answer);
-      }, function(){
-        
+      this.$modal.show(AnswerDelete,{
+        answer : answer,
+        modal : this.$modal },{
+          name: 'dynamic-modal',
+          width : '600px',
+          height : '250px',
+          draggable: false,
       });
     },
     openRequestConference(answer){
@@ -389,8 +392,9 @@ export default {
           width : '600px',
           height : '650px',
           draggable: false,
-      })
-    }
+        }
+      );
+    },
   },
   mounted() {
     this.nickname = localStorage.getItem("solverNickname");
@@ -419,7 +423,7 @@ export default {
     },
     answerChangeTrigger: function() {
       this.getAnswerList();
-    },
+    }
   },
 };
 </script>
