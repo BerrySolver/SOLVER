@@ -13,7 +13,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   data:function(){
@@ -29,7 +29,7 @@ export default {
       axios({
         url: API.URL + `comments/${this.commentId}`,
         method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken")},
+        headers: { Authorization: "Bearer " + this.accessToken},
       })
       .then(() => {
         this.triggerCommentReload();
@@ -39,6 +39,11 @@ export default {
       });
       this.$emit('close');
     }
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+    }),
   }
 }
 </script>

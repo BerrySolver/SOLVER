@@ -321,6 +321,11 @@ export default {
     margin: 15px 0px;
   }
 
+  .first-button {
+    background-color: #658DC6;
+    color: #F1F2F2;
+  }
+
   .request-button-bar{
     text-align: center;
     margin-top: 60px;
@@ -354,7 +359,11 @@ export default {
   }
 
   .request-day-select-button > button{
-    margin: 0px 3px;
+    margin: 0px;
+  }
+
+  .request-day-select-button > button:last-child{
+    margin: -1px;
   }
 
   .request-modal{
