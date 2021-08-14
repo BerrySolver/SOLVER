@@ -392,7 +392,7 @@ public class UserServiceImpl implements UserService {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
-					return o2.getPoint() - o1.getPoint();
+					return o1.getPoint() - o2.getPoint();
 				}
 
 			});
@@ -401,7 +401,7 @@ public class UserServiceImpl implements UserService {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
-					return (int) o2.getEvaluationScore() - (int) o1.getEvaluationScore();
+					return (int) o1.getEvaluationScore() - (int) o2.getEvaluationScore();
 				}
 
 			});
@@ -410,7 +410,7 @@ public class UserServiceImpl implements UserService {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
-					return (int) o2.getFollower() - (int) o1.getFollower();
+					return (int) o1.getFollower() - (int) o2.getFollower();
 				}
 
 			});
