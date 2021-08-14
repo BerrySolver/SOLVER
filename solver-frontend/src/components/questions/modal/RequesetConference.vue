@@ -76,6 +76,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
+import {mapState} from 'vuex'
 
 export default {
   data:function(){
@@ -205,7 +206,7 @@ export default {
         url: API.URL + `profiles/${this.answer.nickname}/info`,
         method: "get",
         headers: { Authorization: "Bearer " + this.accessToken}
-    })
+      })
     .then((res) => {
       this.weekdayTime = res.data.weekdayTime.split('|');
       this.weekendTime = res.data.weekendTime.split('|');
@@ -216,6 +217,9 @@ export default {
     // Date 상으로는 일월화수목금토 순으로 0~6으로 배치, 서비스에 맞게 변동
     this.today = d.getDay() - 1 < 0 ? 6 : d.getDay() - 1;
   }, computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+    }),
     getRequestDays : function(){
       var d = new Date();
       this.requestDay = "";
