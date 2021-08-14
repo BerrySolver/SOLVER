@@ -1,5 +1,7 @@
 package com.solver.api.service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -11,11 +13,16 @@ import org.springframework.stereotype.Service;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
+import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
+import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.question.FavoriteQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserRepository;
 
 @Service
@@ -32,6 +39,12 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 
 	@Autowired
 	KakaoUtil kakaoUtil;
+	
+	@Autowired
+	PointCodeRepository pointCodeRepository;;
+	
+	@Autowired
+	PointLogRepository pointLogRepository;
 	
 	// 좋아요 확인
 	@Override
@@ -94,11 +107,24 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 			return null;
 		}
 
+		// 포인트 배당
+		PointLog pointLog = new PointLog();
+		PointCode pointCode = null;
+		
+		pointCode = pointCodeRepository.findByPointCode("006");	
+		pointLog.setId(RandomIdUtil.makeRandomId(13));
+		pointLog.setRegDt(new Date(System.currentTimeMillis()));
+		pointLog.setPointCode(pointCode);
+		pointLog.setUser(question.getUser());		
+		
+		pointLogRepository.save(pointLog);
+		
+		// 좋아요 등록
 		FavoriteQuestion favoriteQuestion = new FavoriteQuestion();
 		favoriteQuestion.setQuestion(question);
 		favoriteQuestion.setUser(user);
 		favoriteQuestion.setId(id);
-
+		
 		return favoriteQuestionRepository.save(favoriteQuestion);
 	}
 	
