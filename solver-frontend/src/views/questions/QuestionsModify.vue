@@ -247,7 +247,7 @@ export default {
       return r;
     },
     questionModify() {
-      if (this.getAccessToken == null || this.getAccessToken == "") {
+      if (!this.isLoggedIn) {
         console.log("로그인 안 된 상태");
         return;
       }
@@ -370,7 +370,7 @@ export default {
     ...mapState({
       query: (state) => state.questions.query,
     }),
-    ...mapGetters(["getQuestion", "getAccessToken"]),
+    ...mapGetters(["getQuestion", "getAccessToken", "isLoggedIn"]),
     typeWatch: function() {
       return this.request.type;
     },

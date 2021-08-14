@@ -6,13 +6,13 @@ const state = {
   categoryList: [],
   possibleDay: [],
   possibleTime: [],
-  accessToken: "",
+  accessToken: null,
   isFirst: false,
   userNickname: "",
 };
 
 const getters = {
-  isLoggedIn: (state) => state.accessToken,
+  isLoggedIn: (state) => state.accessToken == null ? false : true,
   isFirst: (state) => state.isFirst,
   getAccessToken: (state) => state.accessToken,
   getUserNickname: (state) => state.userNickname,
@@ -66,7 +66,6 @@ const actions = {
       headers: { Authorization: "Bearer " + token },
     })
       .then((res) => {
-        localStorage.setItem("solverToken", token);
         //닉네임을 찾고서 값이 없으면 회원가입으로, 있으면 isFirst 수정
         if (res.data == "") {
           router.push({ path: "/auth/signup1" });
@@ -76,12 +75,12 @@ const actions = {
           //   nickname: res.data,
           // };
           // localStorage.setItem("userInfo", JSON.stringify(info));
-          localStorage.setItem("solverNickname", res.data);
           commit("SET_USER_NICKNAME", res.data);
           // commit("SET_ACCESS_TOKEN", token);
 
           // const info2 = JSON.parse(localStorage.getItem("userInfo"));
-          router.push({ path: "/" });
+          router.go(-2)
+          // router.push({ path: "/" });
         }
       })
       .catch((e) => {
@@ -102,15 +101,15 @@ const actions = {
         console.log();
       });
   },
-  logout({ commit }) {
+  logout({ state, commit }) {
     axios({
       url: API.URL + API.ROUTES.logout,
       method: "get",
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      headers: { Authorization: "Bearer " + state.accessToken },
     })
       .then(() => {
         localStorage.removeItem("solverToken");
-        commit("SET_ACCESS_TOKEN", "");
+        commit("SET_ACCESS_TOKEN", null);
         commit("SET_USER_NICKNAME", "");
         router.push({ path: "/#" });
       })

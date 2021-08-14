@@ -22,6 +22,7 @@
                   color="#0F4C81"
                   class="selectMainCategory"
                   v-model="request.mainCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setMainCategory"
                 >
@@ -38,6 +39,7 @@
                   color="#0F4C81"
                   class="selectSubCategory"
                   v-model="request.subCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setSubCategory"
                 >
@@ -54,6 +56,7 @@
                   color="#0F4C81"
                   class="selectDifficulty"
                   v-model="request.difficulty"
+                  icon-pack=false
                   width="285px"
                   @change="setDifficulty"
                 >
@@ -195,7 +198,6 @@ export default {
   },
   methods: {
     ...mapActions(["setStateQuery", "goQuestionDetail"]),
-    ...mapGetters(["getAccessToken"]),
     setMainCategory: function() {
       const idx = this.request.mainCategoryIndex;
       this.subCategories = this.categories[idx].category;
@@ -247,10 +249,7 @@ export default {
       return r;
     },
     questionInsert() {
-      if (
-        localStorage.getItem("solverToken") == null ||
-        localStorage.getItem("solverToken") == ""
-      ) {
+      if (!this.isLoggedIn) {
         console.log("로그인 안 된 상태");
         return;
       }
@@ -265,7 +264,7 @@ export default {
           subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
           difficulty: this.request.difficulty,
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           console.log(res);
@@ -349,7 +348,9 @@ export default {
   computed: {
     ...mapState({
       query: (state) => state.questions.query,
+      accessToken: state => state.auth.accessToken,
     }),
+    ...mapGetters(["isLoggedIn"]),
     typeWatch: function() {
       return this.request.type;
     },

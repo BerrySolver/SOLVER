@@ -75,8 +75,13 @@
       </div>
     </div>
     <hr style="color: #e0e0e0; opacity: 0.8;" />
-    <Answer />
-    <AnswerCreate :questionId="$route.params.questionId" />
+    <Answer :questionNickname="question.nickname" />
+    <AnswerCreate v-if="isLoggedIn" :questionId="$route.params.questionId" />
+    <div v-else class="nonlogin-answer" @click="$router.push({name: 'Login'})">
+      <div class="nonlogin-answer-content">
+        <span>로그인하고 여러분의 지식을 공유해보세요!</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -85,8 +90,9 @@ import axios from "axios";
 import API from "@/API.js";
 import Answer from "@/components/questions/Answer";
 import AnswerCreate from "@/components/questions/AnswerCreate";
+import LoginModal from "@/components/main/LoginModal"
 import router from "@/router";
-import { mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 import QuestionDelete from './QuestionDeleteModal.vue';
 
 export default {
@@ -109,12 +115,12 @@ export default {
   methods: {
     ...mapActions(["setStateQuestionId", "setStateQuestion", "setStateContent"]),
     changeLike: function() {
-      if (localStorage.getItem("solverToken") != null) {
+      if (this.isLoggedIn) {
         if (this.isLiked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
             method: "delete",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isLiked = !this.isLiked;
@@ -127,7 +133,7 @@ export default {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
             method: "post",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isLiked = !this.isLiked;
@@ -137,15 +143,23 @@ export default {
               console.log(err);
             });
         }
+      } else {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
       }
     },
     changeBookmark: function() {
-      if (localStorage.getItem("solverToken") != null) {
+      if (this.isLoggedIn) {
         if (this.isBookmarked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
             method: "delete",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isBookmarked = !this.isBookmarked;
@@ -158,7 +172,7 @@ export default {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
             method: "post",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isBookmarked = !this.isBookmarked;
@@ -168,6 +182,14 @@ export default {
               console.log(err);
             });
         }
+      } else {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
       }
     },
     humanize: function(now, date) {
@@ -187,7 +209,7 @@ export default {
     },
     modifyUrl(url) {
       if (url == null) {
-        console.log("null");
+        // console.log("null");
         return "";
       }
 
@@ -204,7 +226,7 @@ export default {
       axios({
         url: API.URL + `questions/${this.$route.params.questionId}`,
         method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           router.push({ path: "/questions" });
@@ -233,16 +255,17 @@ export default {
       });
     },
     checkNickname() {
-      if (this.question.nickname == localStorage.getItem("solverNickname")) return true;
+      if (this.question.nickname == this.userNickname) return true;
 
       return false;
     },
   },
   created() {
+    console.log("Bearer " + this.accessToken)
     axios({
       url: API.URL + `questions/${this.$route.params.questionId}/info`,
       method: "get",
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      headers: { Authorization: "Bearer " + this.accessToken },
     })
       .then((res) => {
         this.question = res.data;
@@ -257,6 +280,13 @@ export default {
         console.log(err);
       });
   },
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname,
+    }),
+    ...mapGetters(["isLoggedIn"])
+  }
 };
 </script>
 
@@ -265,6 +295,38 @@ iframe {
   width: 800px;
   height: 450px;
 }
+
+.nonlogin-answer {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0 100px 0;
+}
+
+.nonlogin-answer-content {
+  align-items: center;
+  border: 1px solid #658dc6;
+  border-radius: 20px;
+  color: #658dc6;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+  font-weight: 700;
+  height: 200px;
+  justify-content: center;
+  transition: 0.2s;
+  width: 900px;
+}
+
+.nonlogin-answer-content:hover {
+  /* background-color: #0f4c81; */
+  background-color: #658dc6;
+  color: white;
+  transform: scale(1.02);
+}
+
+/* .nonlogin-answer-content span {
+  color: #658dc6
+} */
 
 .question-count-button {
   cursor: pointer;

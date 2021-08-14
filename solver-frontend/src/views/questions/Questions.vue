@@ -104,6 +104,7 @@
                 color="#0F4C81"
                 class="selectDifficulty"
                 v-model="request.difficulty"
+                icon-pack=false
                 width="150px"
                 @change="setDifficulty"
               >
@@ -261,7 +262,8 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
+import LoginModal from "@/components/main/LoginModal"
 
 export default {
   name: "Questions",
@@ -395,8 +397,14 @@ export default {
         });
     },
     goQuestionCreate: function() {
-      if (localStorage.getItem("solverToken") == null) {
-        //여기에 나중에 모달 or 메시지
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
         return;
       }
 
@@ -452,7 +460,9 @@ export default {
   computed: {
     ...mapState({
       query: (state) => state.questions.query,
+      accessToken: state => state.auth.accessToken,
     }),
+    ...mapGetters(['isLoggedIn']),
     typeWatch: function() {
       return this.request.type;
     },
