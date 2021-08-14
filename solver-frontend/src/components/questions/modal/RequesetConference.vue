@@ -44,8 +44,8 @@
         <span v-else>오늘부터 가장 가까운 날로 요청드려요!<br>{{ getRequestDays }}({{ chooseDaysText }}) {{chooseTime}} 맞으신가요?</span>
       </div>
       <div class="request-button-bar">
-        <button type="button" class="btn btn-submit" @click="requestCallBtn" :disabled="isSelectAll">신청하기</button>
-        <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소하기</button>
+        <button type="button" class="btn btn-submit" @click="requestCallBtn" :disabled="isSelectAll">신청</button>
+        <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소</button>
       </div>
     </div>
     <div v-if="!isRequest && isResultSuccess">

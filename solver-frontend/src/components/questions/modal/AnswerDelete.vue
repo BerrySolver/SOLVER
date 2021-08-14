@@ -4,8 +4,8 @@
     <hr>
     <p>정말 답변을 삭제하시겠습니까?</p>
     <div class="answer-delete-button-bar">
-      <button type="button" class="btn btn-submit" @click="deleteAnswer()">삭제하기</button>
-      <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소하기</button>
+      <button type="button" class="btn btn-submit" @click="deleteAnswer()">삭제</button>
+      <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소</button>
     </div>
   </div>
 </template>
