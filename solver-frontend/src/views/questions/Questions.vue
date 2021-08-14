@@ -104,6 +104,7 @@
                 color="#0F4C81"
                 class="selectDifficulty"
                 v-model="request.difficulty"
+                icon-pack=false
                 width="150px"
                 @change="setDifficulty"
               >

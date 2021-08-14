@@ -79,7 +79,7 @@
     <AnswerCreate v-if="isLoggedIn" :questionId="$route.params.questionId" />
     <div v-else class="nonlogin-answer" @click="$router.push({name: 'Login'})">
       <div class="nonlogin-answer-content">
-        <span><span class="nonlogin-answer-content-login">로그인</span>하고 여러분의 지식을 공유해보세요!</span>
+        <span>로그인하고 여러분의 지식을 공유해보세요!</span>
       </div>
     </div>
   </div>
@@ -318,17 +318,10 @@ iframe {
 }
 
 .nonlogin-answer-content:hover {
-  background-color: #0f4c81;
+  /* background-color: #0f4c81; */
+  background-color: #658dc6;
   color: white;
   transform: scale(1.02);
-}
-
-.nonlogin-answer-content:hover .nonlogin-answer-content-login{
-  color: white;
-}
-
-.nonlogin-answer-content-login {
-  color: #0f4c81;
 }
 
 /* .nonlogin-answer-content span {
