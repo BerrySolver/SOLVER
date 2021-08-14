@@ -1,50 +1,74 @@
 <template>
   <div class="request-modal solver-font">
-    <h3 class="request-title">화상 요청</h3>
-    <hr>
-    <b>{{this.answer.nickname}}</b>님에게 화상 요청하시겠어요?<br>
-    <br>
-    <div class="request-day-select-button">
-      <button class="day-button" :class="{'first-button':isFisrt}" @click="[checkWeekday(), changeFirst()]">평일</button>
-      <button class="day-button" :class="{'first-button':!isFisrt}" @click="[checkWeekend(), changeFirst()]">주말</button>
-    </div>
-    <div class="days-content-table">
-      <div v-if="isWeekday">
-        <div class="days-margin">
-          <div class="days-radio-button" v-for="(weekday, index) in weekdayDay" :key="index">
-            <input :value="weekday.value" :name="weekday" type="radio" v-bind:id="'weekday'+weekday.value" v-model="chooseDays">
-            <label v-bind:for="'weekday'+weekday.value">{{weekday.days}}</label>
-          </div>
-        </div>
-        <span v-for="(time,index) in timeTable" v-bind:key="time">
-        <button @click="chooseWdt(time)" v-bind:class="{'selected-button': isInWdt(time), 'final-button': finalWdt(time)}" :disabled="isInWdt(time) == false" class="none-selected-button">
-          {{ time }}
-        </button>
-        <div v-if="(index+1)%6 == 0"></div>
-        </span>
+    <div v-if="isRequest">
+      <h3 class="request-title">화상 요청</h3>
+      <hr>
+      <b>{{this.answer.nickname}}</b>님에게 화상 요청하시겠어요?<br>
+      <br>
+      <div class="request-day-select-button">
+        <button class="day-button" :class="{'first-button':isFisrt}" @click="[checkWeekday(), changeFirst()]">평일</button>
+        <button class="day-button" :class="{'first-button':!isFisrt}" @click="[checkWeekend(), changeFirst()]">주말</button>
       </div>
-      <div v-if="!isWeekday">
-        <div class="days-margin">
-          <div class="days-radio-button" v-for="(weekend, index) in weekendDay" :key="index">
-            <input :value="weekend.value" :name="weekend" type="radio" v-bind:id="'weekend'+weekend.value" v-model="chooseDays">
-            <label v-bind:for="'weekend'+weekend.value">{{weekend.days}}</label>
+      <div class="days-content-table">
+        <div v-if="isWeekday">
+          <div class="days-margin">
+            <div class="days-radio-button" v-for="(weekday, index) in weekdayDay" :key="index">
+              <input :value="weekday.value" :name="weekday" type="radio" v-bind:id="'weekday'+weekday.value" v-model="chooseDays">
+              <label v-bind:for="'weekday'+weekday.value">{{weekday.days}}</label>
+            </div>
           </div>
-        </div>
-        <span v-for="(time,index) in timeTable" v-bind:key="time">
-          <button @click="chooseWkt(time)" v-bind:class="{'selected-button': isInWkt(time), 'final-button': finalWkt(time)}" :disabled="isInWkt(time) == false"  class="none-selected-button">
+          <span v-for="(time,index) in timeTable" v-bind:key="time">
+          <button @click="chooseWdt(time)" v-bind:class="{'selected-button': isInWdt(time), 'final-button': finalWdt(time)}" :disabled="isInWdt(time) == false" class="none-selected-button">
             {{ time }}
           </button>
           <div v-if="(index+1)%6 == 0"></div>
-        </span>
-      </div>      
+          </span>
+        </div>
+        <div v-if="!isWeekday">
+          <div class="days-margin">
+            <div class="days-radio-button" v-for="(weekend, index) in weekendDay" :key="index">
+              <input :value="weekend.value" :name="weekend" type="radio" v-bind:id="'weekend'+weekend.value" v-model="chooseDays">
+              <label v-bind:for="'weekend'+weekend.value">{{weekend.days}}</label>
+            </div>
+          </div>
+          <span v-for="(time,index) in timeTable" v-bind:key="time">
+            <button @click="chooseWkt(time)" v-bind:class="{'selected-button': isInWkt(time), 'final-button': finalWkt(time)}" :disabled="isInWkt(time) == false"  class="none-selected-button">
+              {{ time }}
+            </button>
+            <div v-if="(index+1)%6 == 0"></div>
+          </span>
+        </div>      
+      </div>
+      <div class="request-check-box">
+        <span v-if="chooseTime==''"><br>요일과 시간을 모두 선택하세요!</span>
+        <span v-else>오늘부터 가장 가까운 날로 요청드려요!<br>{{ getRequestDays }}({{ chooseDaysText }}) {{chooseTime}} 맞으신가요?</span>
+      </div>
+      <div class="request-button-bar">
+        <button type="button" class="btn btn-submit" @click="requestCallBtn" :disabled="isSelectAll">신청하기</button>
+        <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소하기</button>
+      </div>
     </div>
-    <div class="request-check-box">
-      <span v-if="chooseTime==''"><br>요일과 시간을 모두 선택하세요!</span>
-      <span v-else>오늘부터 가장 가까운 날로 요청드려요!<br>{{ getRequestDays }}({{ chooseDaysText }}) {{chooseTime}} 맞으신가요?</span>
+    <div v-if="!isRequest && isResultSuccess">
+      <h3 class="request-title">화상 신청 성공</h3>
+      <hr>
+      <div style="text-align:center;">
+        <img src="@/assets/berry-success.png" alt="" style="width:350px;">
+        <br>
+        <p>화상요청에 성공했어요!<br><b><span style="request-title">{{answer.nickname}}</span></b>님이 확인 후 승인/거절하실꺼에요!</p>
+        <br>
+        <button @click="$emit('close')" class="btn request-check-button">닫기</button>
+      </div>
     </div>
-    <div class="request-button-bar">
-      <button type="button" class="btn btn-submit" @click="requestCallBtn" :disabled="isSelectAll">신청하기</button>
-      <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소하기</button>
+    <div v-if="!isRequest && isResultFail">
+      <h3 class="request-title">신청 실패</h3>
+      <hr>
+      <div style="text-align:center;">
+        <img src="@/assets/berry-fail.png" alt="" style="width:350px;">
+        <br>
+        <p>화상요청에 실패했어요!<br>잠시 후 다시 신청해주시거나 고객센터에 리포트 보내주세요!</p>
+        <br>
+        <button @click="$emit('close')" class="btn request-check-button">닫기</button>
+      </div>
     </div>
   </div>
 </template>
@@ -56,6 +80,9 @@ import API from "@/API.js";
 export default {
   data:function(){
     return {
+      isRequest: true,
+      isResultSuccess: false,
+      isResultFail: false,
       isWeekday: true,
       isFisrt: true,
       weekdayTime: [],
@@ -152,8 +179,6 @@ export default {
       this.chooseTime ='';
     },
     requestCallBtn(){
-      console.log(this.requestDay +" "+ this.chooseTime);
-      console.log(this.answer);
       axios({
         url: API.URL + `messages/regist`,
         method: 'POST',
@@ -165,9 +190,13 @@ export default {
         },
         headers: { Authorization: "Bearer " + this.getAccessToken },
       }).then((res)=>{
-        console.log(res);        
+        console.log(res);
+        this.isRequest = false;
+        this.isResultSuccess = true;
       }).catch((res)=>{
         console.log(res);
+        this.isRequest = false;
+        this.isResultFail = true;
       });
     }
   }, 
@@ -295,6 +324,19 @@ export default {
 
   .request-button-bar > button {
     margin: 0px 10px;
+  }
+
+  .request-check-button {
+    text-align: center;
+    margin: 0px 10px;
+    width: 250px;
+    background: #658DC6;
+    color:white;
+  }
+
+  .request-check-button:hover {
+    background: #0F4C81;
+    color:white;
   }
 
   .request-check-box{
