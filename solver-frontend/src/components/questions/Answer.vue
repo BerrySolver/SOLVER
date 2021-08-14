@@ -101,7 +101,7 @@ import CommentsCreate from "@/components/questions/CommentsCreate";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { mapState } from "vuex";
-import RequesetConference from './RequesetConference.vue';
+import RequesetConference from './modal/RequesetConference.vue';
 
 Vue.use(CKEditor);
 
@@ -388,7 +388,7 @@ export default {
           name: 'dynamic-modal',
           width : '600px',
           height : '650px',
-          draggable: true,
+          draggable: false,
       })
     }
   },
