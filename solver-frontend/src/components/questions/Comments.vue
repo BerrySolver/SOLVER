@@ -24,7 +24,7 @@
 import axios from 'axios'
 import API from '@/API.js'
 import { mapState, mapActions } from 'vuex'
-
+import CommentDelete from './modal/CommentDelete.vue';
 
 export default {
   name: 'Comment',
@@ -54,20 +54,6 @@ export default {
         console.log(err);
       });
     },
-    deleteComment: function (commentId) {
-      axios({
-        url: API.URL + `comments/${commentId}`,
-        method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken")},
-      })
-      .then(() => {
-        this.getCommentList()
-        this.triggerCommentReload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }, 
     humanize: function (now, date) {
       const moment = require('moment')
       const dateData = new Date(date)
@@ -84,13 +70,15 @@ export default {
       return r
     },
     deleteCheck:function(commentId){
-      const $this =this;
-      alertify.confirm("댓글삭제", "정말 삭제하시겠습니까?",
-      function(){
-        $this.deleteComment(commentId);
-      }, function(){
-        
-      });
+      this.$modal.show(CommentDelete,{
+        commentId : commentId,
+        modal : this.$modal },{
+          name: 'dynamic-modal',
+          width : '600px',
+          height : '250px',
+          draggable: false,
+      })
+      this.getCommentList();
     },
   },
   created() {
