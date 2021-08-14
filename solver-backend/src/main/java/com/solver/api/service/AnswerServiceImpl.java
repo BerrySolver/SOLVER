@@ -15,9 +15,14 @@ import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.code.Code;
+import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
+import com.solver.db.repository.code.CodeRepository;
+import com.solver.db.repository.code.PointCodeRepository;
+import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserRepository;
 
 @Service
@@ -31,6 +36,12 @@ public class AnswerServiceImpl implements AnswerService{
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
+	
+	@Autowired
+	PointCodeRepository pointCodeRepository;;
+	
+	@Autowired
+	PointLogRepository pointLogRepository;
 
 	@Override
 	public void createAnswer(String accessToken, AnswerCreatePostReq answerCreatePostReq, String questionId, HttpServletResponse response) {
@@ -74,6 +85,23 @@ public class AnswerServiceImpl implements AnswerService{
 		answer.setUser(user);
 		
 		answerRepository.save(answer);
+		
+		// 포인트 배당
+		List<Answer> list = answerRepository.findByQuestionIdOrderByRegDtAsc(questionId);
+		PointLog pointLog = new PointLog();
+		PointCode pointCode = null;
+		
+		if (list.size() == 1) { // 첫 답변일 때
+			pointCode = pointCodeRepository.findByPointCode("002");			
+		} else { // 이후 답변일 때
+			pointCode = pointCodeRepository.findByPointCode("000");	
+		}
+		pointLog.setId(RandomIdUtil.makeRandomId(13));
+		pointLog.setRegDt(new Date(System.currentTimeMillis()));
+		pointLog.setPointCode(pointCode);
+		pointLog.setUser(user);		
+		
+		pointLogRepository.save(pointLog);
 	}
 
 	@Override
