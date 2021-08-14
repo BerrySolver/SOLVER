@@ -166,7 +166,6 @@ export default {
   components: {
     Comments,
     CommentsCreate,
-    AnswerDelete,
   },
   data() {
     return {
@@ -190,9 +189,9 @@ export default {
         url: API.URL + `answers/list/${this.$route.params.questionId}`,
         method: "get",
         params: {
-          nickname: localStorage.getItem("solverNickname"),
+          nickname: this.userNickname
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           console.log(res);
@@ -222,7 +221,7 @@ export default {
       return r;
     },
     checkNickname(nickname) {
-      if (localStorage.getItem("solverNickname") == nickname) return true;
+      if (this.userNickname == nickname) return true;
 
       return false;
     },
@@ -234,7 +233,7 @@ export default {
       }
     },
     addFavoriteAnswer(answer, idx) {
-      const accessToken = localStorage.getItem("solverToken");
+      const accessToken = this.accessToken
       if (accessToken == null) {
         console.log("예외처리");
         return;
@@ -245,7 +244,7 @@ export default {
       axios({
         url: API.URL + "answers/" + answerId + "/recommend",
         method: "post",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           this.answerList[idx].myFavoriteAnswer = !this.answerList[idx].myFavoriteAnswer;
@@ -257,7 +256,7 @@ export default {
         });
     },
     removeFavoriteAnswer(answer, idx) {
-      const accessToken = localStorage.getItem("solverToken");
+      const accessToken = this.accessToken
       if (accessToken == null) {
         console.log("예외처리");
         return;
@@ -268,7 +267,7 @@ export default {
       axios({
         url: API.URL + "answers/" + answerId + "/recommend",
         method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           this.answerList[idx].myFavoriteAnswer = !this.answerList[idx].myFavoriteAnswer;
@@ -343,7 +342,7 @@ export default {
         },
         headers: {
           "Access-Control-Allow-Methods": "GET,PUT,POST,PATCH,DELETE",
-          Authorization: "Bearer " + localStorage.getItem("solverToken"),
+          Authorization: "Bearer " + this.accessToken
         },
       })
         .then((res) => {
@@ -363,7 +362,7 @@ export default {
         url: API.URL + `answers/${answer.answerId}`,
         method: "delete",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("solverToken"),
+          Authorization: "Bearer " + this.accessToken
         },
       })
         .then((res) => {
@@ -397,7 +396,7 @@ export default {
     },
   },
   mounted() {
-    this.nickname = localStorage.getItem("solverNickname");
+    this.nickname = this.userNickname
   },
   created() {
     this.getAnswerList();
@@ -406,6 +405,8 @@ export default {
     ...mapState({
       commentDeleteTrigger: (state) => state.questions.commentDeleteTrigger,
       answerChangeTrigger: (state) => state.questions.answerChangeTrigger,
+      accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname,
     }),
   },
   watch: {

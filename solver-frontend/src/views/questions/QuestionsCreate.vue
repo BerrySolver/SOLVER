@@ -247,10 +247,7 @@ export default {
       return r;
     },
     questionInsert() {
-      if (
-        localStorage.getItem("solverToken") == null ||
-        localStorage.getItem("solverToken") == ""
-      ) {
+      if (this.accessToken == null) {
         console.log("로그인 안 된 상태");
         return;
       }
@@ -265,7 +262,7 @@ export default {
           subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
           difficulty: this.request.difficulty,
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           console.log(res);
@@ -349,6 +346,7 @@ export default {
   computed: {
     ...mapState({
       query: (state) => state.questions.query,
+      accessToken: state => state.auth.accessToken,
     }),
     typeWatch: function() {
       return this.request.type;

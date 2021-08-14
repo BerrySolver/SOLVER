@@ -86,7 +86,7 @@ import API from "@/API.js";
 import Answer from "@/components/questions/Answer";
 import AnswerCreate from "@/components/questions/AnswerCreate";
 import router from "@/router";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 import QuestionDelete from './QuestionDeleteModal.vue';
 
 export default {
@@ -109,12 +109,12 @@ export default {
   methods: {
     ...mapActions(["setStateQuestionId", "setStateQuestion", "setStateContent"]),
     changeLike: function() {
-      if (localStorage.getItem("solverToken") != null) {
+      if (this.accessToken != null) {
         if (this.isLiked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
             method: "delete",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isLiked = !this.isLiked;
@@ -127,7 +127,7 @@ export default {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
             method: "post",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isLiked = !this.isLiked;
@@ -140,12 +140,12 @@ export default {
       }
     },
     changeBookmark: function() {
-      if (localStorage.getItem("solverToken") != null) {
+      if (this.accessToken != null) {
         if (this.isBookmarked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
             method: "delete",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isBookmarked = !this.isBookmarked;
@@ -158,7 +158,7 @@ export default {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
             method: "post",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isBookmarked = !this.isBookmarked;
@@ -187,7 +187,7 @@ export default {
     },
     modifyUrl(url) {
       if (url == null) {
-        console.log("null");
+        // console.log("null");
         return "";
       }
 
@@ -204,7 +204,7 @@ export default {
       axios({
         url: API.URL + `questions/${this.$route.params.questionId}`,
         method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           router.push({ path: "/questions" });
@@ -233,16 +233,17 @@ export default {
       });
     },
     checkNickname() {
-      if (this.question.nickname == localStorage.getItem("solverNickname")) return true;
+      if (this.question.nickname == this.userNickname) return true;
 
       return false;
     },
   },
   created() {
+    console.log("Bearer " + this.accessToken)
     axios({
       url: API.URL + `questions/${this.$route.params.questionId}/info`,
       method: "get",
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      headers: { Authorization: "Bearer " + this.accessToken },
     })
       .then((res) => {
         this.question = res.data;
@@ -257,6 +258,12 @@ export default {
         console.log(err);
       });
   },
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname,
+    }),
+  }
 };
 </script>
 

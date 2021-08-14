@@ -14,6 +14,7 @@
 import axios from "axios";
 import API from "@/API.js";
 import router from "@/router";
+import {mapState} from 'vuex'
 
 export default {
   data:function(){
@@ -26,7 +27,7 @@ export default {
       axios({
         url: API.URL + `questions/${this.question}`,
         method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
       .then((res) => {
         router.push({ path: "/questions" });
@@ -37,6 +38,11 @@ export default {
       });
       this.$emit('close');
     }
+  },
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+    }),
   }
 }
 </script>
