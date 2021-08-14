@@ -20,6 +20,11 @@ export default {
 
     // 프로필
     editProfile: "profiles",
-    editProfileCalendar: "profiles/time-table"
+    editProfileCalendar: "profiles/time-table",
+
+    // 알림
+    notificationsAlarm: "notifications",
+    notificationSentMessage: "messages/forwardings",
+    notificationReceivedMessage : "messages/receptions",
   },
 };
