@@ -28,13 +28,13 @@
             </li>
             </div>
             <div class="d-flex justify-content-center">
-            <li class="nav-item" v-if="!checkLogin()">
+            <li class="nav-item" v-if="!isLoggedIn">
               <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
             </li>
-            <li class="nav-item" v-if="checkLogin()">
+            <li class="nav-item" v-if="isLoggedIn">
               <RouterLink :to="`/my-profile/${userNickname}`" class="nav-router">마이프로필</RouterLink>
             </li>
-            <li class="nav-item" v-if="checkLogin()">
+            <li class="nav-item" v-if="isLoggedIn">
               <a @click="clickLogout()" class="nav-logout">로그아웃</a>
             </li>
             </div>
@@ -66,9 +66,6 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
-    checkLogin() {
-      return this.accessToken != null;
-    },
     clickLogout() {
       this.logout();
     },

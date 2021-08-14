@@ -195,7 +195,6 @@ export default {
   },
   methods: {
     ...mapActions(["setStateQuery", "goQuestionDetail"]),
-    ...mapGetters(["getAccessToken"]),
     setMainCategory: function() {
       const idx = this.request.mainCategoryIndex;
       this.subCategories = this.categories[idx].category;
@@ -247,7 +246,7 @@ export default {
       return r;
     },
     questionInsert() {
-      if (this.accessToken == null) {
+      if (!this.isLoggedIn) {
         console.log("로그인 안 된 상태");
         return;
       }
@@ -348,6 +347,7 @@ export default {
       query: (state) => state.questions.query,
       accessToken: state => state.auth.accessToken,
     }),
+    ...mapGetters(["isLoggedIn"]),
     typeWatch: function() {
       return this.request.type;
     },
