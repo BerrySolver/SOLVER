@@ -86,7 +86,8 @@ import API from "@/API.js";
 import Answer from "@/components/questions/Answer";
 import AnswerCreate from "@/components/questions/AnswerCreate";
 import router from "@/router";
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
+import QuestionDelete from './QuestionDeleteModal.vue';
 
 export default {
   name: "QuestionsDetail",
@@ -214,13 +215,15 @@ export default {
         });
     },
     deleteQuestionCheck(){
-      const $this =this;
-      alertify.confirm("질문삭제", "정말 삭제하시겠습니까?",
-      function(){
-        $this.deleteQuestion();
-      }, function(){
-        
-      });
+      this.$modal.show(QuestionDelete,{
+        question : this.$route.params.questionId,
+        modal : this.$modal },{
+          name: 'dynamic-modal',
+          width : '600px',
+          height : '250px',
+          draggable: false,
+        }
+      );
     },
     modifyQuestion() {
       this.setStateQuestion(this.question);
