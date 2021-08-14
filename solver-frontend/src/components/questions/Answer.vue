@@ -76,7 +76,7 @@
             <CommentsCreate v-if="isLoggedIn" v-show="commentListOpen[idx]" :answerId="answer.answerId" />
             <div v-else v-show="commentListOpen[idx]" class="nonlogin-comment" @click="$router.push({name: 'Login'})">
               <div class="nonlogin-comment-content">
-                <span><span class="nonlogin-comment-content-login">로그인</span>하고 댓글을 남겨보세요!</span>
+                <span>로그인하고 댓글을 남겨보세요!</span>
               </div>
             </div>
           </div>
@@ -619,16 +619,8 @@ export default {
 }
 
 .nonlogin-comment-content:hover {
-  background-color: #0f4c81;
+  background-color: #658dc6;
   color: white;
   transform: scale(1.02);
-}
-
-.nonlogin-comment-content:hover .nonlogin-comment-content-login{
-  color: white;
-}
-
-.nonlogin-comment-content-login {
-  color: #0f4c81;
 }
 </style>
