@@ -52,6 +52,9 @@
 
 <script>
 import kurentoUtils from "kurento-utils";
+import axios from "axios";
+import API from "@/API.js";
+import { mapState, mapGetters } from "vuex";
 
 function clStart() {
   console.log(isMySharing);
@@ -113,9 +116,8 @@ function stopSharing() {
   // videoPlayer.srcObject = null;
 }
 
-console.log("startShgare");
-
 var ws = new WebSocket("wss://localhost:8443/groupcall");
+// var ws = new WebSocket("wss://i5a507.p.ssafy.io:8443/groupcall");
 var participants = {};
 var name;
 var room;
@@ -172,7 +174,7 @@ function register() {
   name = document.getElementById("name").value;
   room = document.getElementById("roomName").value;
 
-  myName = name;
+  // myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
   document.getElementById("join").style.display = "none";
@@ -453,101 +455,6 @@ function sendMessage(message) {
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
 
-/**
- * Creates a video element for a new participant
- *
- * @param {String} name - the name of the new participant, to be used as tag
- *                        name of the video element.
- *                        The tag of the new element will be 'video<name>'
- * @return
- */
-function ScreenParticipant(scName) {
-  this.screenName = scName;
-  console.log(screenName);
-  var container = document.createElement("div");
-  container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
-  container.id = scName;
-  // var span = document.createElement("span");
-  var video = document.createElement("video");
-  video.id = "video-screen";
-
-  // var rtcPeer;
-
-  container.appendChild(video);
-  container.appendChild(span);
-  container.onclick = switchContainerClass;
-  document.getElementById("participants").appendChild(container);
-
-  // span.appendChild(document.createTextNode("screen"));
-
-  video.autoplay = true;
-  video.controls = false;
-
-  this.getElement = function() {
-    return container;
-  };
-
-  this.getVideoElement = function() {
-    return video;
-  };
-
-  function switchContainerClass() {
-    if (container.className === PARTICIPANT_CLASS) {
-      var elements = Array.prototype.slice.call(
-        document.getElementsByClassName(PARTICIPANT_MAIN_CLASS)
-      );
-      elements.forEach(function(item) {
-        item.className = PARTICIPANT_CLASS;
-      });
-
-      container.className = PARTICIPANT_MAIN_CLASS;
-    } else {
-      container.className = PARTICIPANT_CLASS;
-    }
-  }
-
-  function isPresentMainParticipant() {
-    return document.getElementsByClassName(PARTICIPANT_MAIN_CLASS).length != 0;
-  }
-
-  this.offerToReceiveVideo = function(error, offerSdp, wp) {
-    console.log(wp);
-    if (error) {
-      console.error(error);
-      return console.error("sdp offer error");
-    }
-    console.log("Invoking SDP offer callback function");
-    var msg = {
-      id: "receiveVideoFrom",
-      sender: screenName,
-      sdpOffer: offerSdp,
-      room: room,
-      screen: screenName,
-    };
-    sendMessage(msg);
-  };
-
-  this.onIceCandidate = function(candidate, wp) {
-    console.log(wp);
-    // console.log("Local candidate" + JSON.stringify(candidate));
-
-    var message = {
-      id: "onIceCandidate",
-      candidate: candidate,
-      name: name,
-    };
-    sendMessage(message);
-  };
-
-  Object.defineProperty(this, "rtcPeer", { writable: true });
-
-  this.dispose = function() {
-    console.log("Disposing participant " + this.name);
-    this.rtcPeer.dispose();
-    container.parentNode.removeChild(container);
-  };
-}
-
 function Participant(name) {
   this.name = name;
   console.log("this.name : " + this.name);
@@ -681,6 +588,10 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      accessToken: (state) => state.auth.accessToken,
+    }),
+    ...mapGetters(["getUserNickname"]),
     myShare() {
       return isMySharing == true;
     },
@@ -689,11 +600,67 @@ export default {
     },
   },
   methods: {
+    insertConferenceLog() {
+      axios({
+        //conference id 값은 테스트용
+        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+        method: "post",
+        data: {
+          type: "030",
+        },
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then((res) => {
+          console.log(res);
+          this.goQuestionDetail(res.data.questionId);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    entranceConferenceLog() {
+      axios({
+        //conference id 값은 테스트용
+        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+        method: "post",
+        data: {
+          type: "030",
+        },
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    exitConferenceLog() {
+      axios({
+        //conference id 값은 테스트용
+        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+        method: "post",
+        data: {
+          type: "031",
+        },
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then((res) => {
+          console.log(res);
+          this.$router.push({
+            path: "/#",
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     clickRegister() {
       register();
     },
     clickLeaveRoom() {
       leaveRoom();
+      this.exitConferenceLog();
     },
     clickSt() {
       if (isSharing) return;
@@ -723,6 +690,12 @@ export default {
     isMySharing() {
       return isMySharing;
     },
+  },
+  mounted() {
+    myName = this.getUserNickname;
+    name = this.getUserNickname;
+
+    this.entranceConferenceLog();
   },
 };
 </script>

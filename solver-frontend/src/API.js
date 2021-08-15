@@ -20,6 +20,9 @@ export default {
 
     // 프로필
     editProfile: "profiles",
-    editProfileCalendar: "profiles/time-table"
+    editProfileCalendar: "profiles/time-table",
+
+    //화상회의
+    conferenceLog: "conferences",
   },
 };
