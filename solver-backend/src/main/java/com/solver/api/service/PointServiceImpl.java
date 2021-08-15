@@ -1,6 +1,8 @@
 package com.solver.api.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +52,13 @@ public class PointServiceImpl implements PointLogService {
 			log.setCode(pointCode.getCode().getCode());
 			list.add(log);
 		}
+		
+		Collections.sort(list, new Comparator<PointLogRes>() {
+			@Override
+			public int compare(PointLogRes o1, PointLogRes o2) {
+				return o2.getRedDt().compareTo(o1.getRedDt());
+			}
+		});
 		
 		return list;
 	}
