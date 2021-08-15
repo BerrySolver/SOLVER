@@ -661,13 +661,13 @@ export default {
 .info1 {
   color: #0f4c81;
   font-weight: 700;
-  font-size: 19px;
+  font-size: 21px;
 }
 
 .info2 {
   color: #0f4c81;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .list-group-category:hover {
