@@ -8,7 +8,13 @@
           <img class="point-img" v-if="point.value == 30 && point.code ==='080'" src="@/assets/plus-30.png" alt="">
           <img class="point-img" v-if="point.value == 50 && point.code ==='080'" src="@/assets/plus-50.png" alt="">
           <img class="point-img" v-if="point.value == 100 && point.code ==='080'" src="@/assets/plus-100.png" alt="">
-          <img class="point-img" v-if="point.value == 100 && point.code ==='081'" src="@/assets/minus-100.png" alt=""> &nbsp;
+          <img class="point-img" v-if="point.value == 100 && point.code ==='081'" src="@/assets/minus-100.png" alt=""> 
+          <img class="point-img" v-if="point.value == 200 && point.code ==='081'" src="@/assets/minus-200.png" alt=""> 
+          <img class="point-img" v-if="point.value == 300 && point.code ==='081'" src="@/assets/minus-300.png" alt=""> 
+          <img class="point-img" v-if="point.value == 400 && point.code ==='081'" src="@/assets/minus-400.png" alt=""> 
+          <img class="point-img" v-if="point.value == 500 && point.code ==='081'" src="@/assets/minus-500.png" alt=""> 
+          <img class="point-img" v-if="point.value == 600 && point.code ==='081'" src="@/assets/minus-600.png" alt=""> 
+          <img class="point-img" v-if="point.value == 700 && point.code ==='081'" src="@/assets/minus-700.png" alt=""> &nbsp;
           <span class="point-text" v-if="point.pointCode === '000'"> 새로운 답변을 등록했어요! </span>
           <span class="point-text" v-if="point.pointCode === '001'"> 새로운 화상 답변을 등록했어요! </span>
           <span class="point-text" v-if="point.pointCode === '002'"> 귀중한 첫 답변을 등록했어요! </span>
@@ -19,8 +25,15 @@
           <span class="point-text" v-if="point.pointCode === '007'"> 나의 답변이 추천받았어요! </span>
           <span class="point-text" v-if="point.pointCode === '008'"> 나의 질문이 북마크되었어요! </span>
           <span class="point-text" v-if="point.pointCode === '100'"> 질문이 신고 받았어요... </span>
-          <span class="point-text" v-if="point.pointCode === '101'"> 답변이 신고 받았어요! </span>
-          <span class="point-text" v-if="point.pointCode === '102'"> 댓글이 신고 받았어요! </span>
+          <span class="point-text" v-if="point.pointCode === '101'"> 답변이 신고 받았어요... </span>
+          <span class="point-text" v-if="point.pointCode === '102'"> 댓글이 신고 받았어요... </span>
+          <span class="point-text" v-if="point.pointCode === '103'"> 1일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '104'"> 2일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '105'"> 3일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '106'"> 4일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '107'"> 5일 홍보 신청을 했어요!</span>
+          <span class="point-text" v-if="point.pointCode === '108'"> 6일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '109'"> 7일 홍보 신청을 했어요!</span>
           <span class="point-time">&nbsp; {{point.redDt}}</span>
       </div>
     </div>
