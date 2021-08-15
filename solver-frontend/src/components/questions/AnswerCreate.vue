@@ -94,7 +94,9 @@ export default {
     ...mapActions(["triggerAnswerReload"]),
     answerCreate: function() {
       const content = this.CKEditor.getData();
-      console.log(content);
+      if (content == "") {
+        return
+      }
       axios({
         url: API.URL + `answers/${this.questionId}`,
         method: "post",

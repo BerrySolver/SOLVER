@@ -108,7 +108,6 @@ const actions = {
       headers: { Authorization: "Bearer " + state.accessToken },
     })
       .then(() => {
-        localStorage.removeItem("solverToken");
         commit("SET_ACCESS_TOKEN", null);
         commit("SET_USER_NICKNAME", "");
         router.push({ path: "/#" });
