@@ -21,7 +21,7 @@
           <span class="point-text" v-if="point.pointCode === '100'"> 질문이 신고 받았어요... </span>
           <span class="point-text" v-if="point.pointCode === '101'"> 답변이 신고 받았어요! </span>
           <span class="point-text" v-if="point.pointCode === '102'"> 댓글이 신고 받았어요! </span>
-          <span class="point-time">&nbsp; {{point.redDt.slice(0,10)}} {{point.redDt.slice(11,16)}}</span>
+          <span class="point-time">&nbsp; {{point.redDt}}</span>
       </div>
     </div>
     <button class="btn point-log-button" @click="$emit('close')">확인완료</button>
@@ -31,6 +31,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
+import {mapState} from 'vuex'
 
 export default {
   data:function(){
@@ -42,16 +43,36 @@ export default {
     
   ], methods : {
 
+  }, 
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+    }),
   }, created(){
     this.nickname = this.$store.getters.getUserNickname;
     axios({
       url: API.URL + `points/${this.nickname}`,
       method: "get",
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken")},
+      headers: { Authorization: "Bearer " + this.accessToken},
     })
     .then((res) => {
       this.pointList = res.data.list;
-      console.log(this.pointList);
+      
+      this.pointList.forEach(p=>{
+        var date = new Date(p.redDt);
+        
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        month = month >= 10 ? month : '0' + month
+        let day = date.getDate()
+        day = day >= 10 ? day : '0' + day
+        let hour = date.getHours()
+        hour = hour >= 10 ? hour : '0' + hour
+        let min = date.getMinutes()     
+        let result = year + '-' + month + '-' + day + ' ' + hour + ':' + min;
+
+        p.redDt = result;
+      })
     })
     .catch((err) => {
       console.log(err);
