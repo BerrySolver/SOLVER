@@ -14,14 +14,18 @@ import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.Notification;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
+import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.question.FavoriteQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.user.NotificationRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserRepository;
 
@@ -45,6 +49,12 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 	
 	@Autowired
 	PointLogRepository pointLogRepository;
+
+	@Autowired
+	NotificationRepository notificationRepository;
+
+	@Autowired
+	CodeRepository codeRepository;
 	
 	// 좋아요 확인
 	@Override
@@ -106,6 +116,17 @@ public class FavoriteQuestionServiceImpl implements FavoriteQuestionService{
 		if (favoriteQuestionRepository.findByUserIdAndQuestionId(user.getId(), question.getId()).orElse(null) != null) {
 			return null;
 		}
+		
+		// 알림 등록 : 질문에 좋아요를 하면 질문자에게 알림이 갑니다.
+		Notification notification = new Notification();
+		notification.setId(RandomIdUtil.makeRandomId(13));
+		notification.setQuestion(question);
+		
+		Code notiCode = codeRepository.findByCode("062");
+		notification.setCode(notiCode);
+		notification.setUser(question.getUser());
+		
+		notificationRepository.save(notification);
 
 		// 포인트 배당
 		PointLog pointLog = new PointLog();
