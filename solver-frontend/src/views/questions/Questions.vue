@@ -17,10 +17,10 @@
         <div class="question-category">
           <div><span class="info1">TODAY</span></div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">질문: </span> {{todayQuestions}}개
+            <span class="info2">질문: </span><span><span id="todayQuestions"></span>개</span>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">답변: </span> {{todayAnswers}}개
+            <span class="info2">답변: </span><span><span id="todayAnswers"></span>개</span>
           </div>
           <div class="question-category-items">
             <vs-collapse open-hover>
@@ -265,6 +265,29 @@ import API from "@/API.js";
 import { mapState, mapGetters, mapActions } from "vuex";
 import LoginModal from "@/components/main/LoginModal"
 
+function numberCounter(target_frame, target_number) {
+  this.count = 0; this.diff = 0;
+  this.target_count = parseInt(target_number);
+  this.target_frame = document.getElementById(target_frame);
+  this.timer = null;
+  this.counter();
+}
+
+numberCounter.prototype.counter = function() {
+  var self = this;
+  this.diff = this.target_count - this.count;
+  if(this.diff > 0) {
+      self.count += Math.ceil(this.diff / 5);
+  }
+  
+  this.target_frame.innerHTML = this.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  if(this.count < this.target_count) {
+      this.timer = setTimeout(function() { self.counter(); }, 40);
+  } else {
+      clearTimeout(this.timer);
+  }
+}
+
 export default {
   name: "Questions",
   components: {},
@@ -368,6 +391,8 @@ export default {
       })
         .then((res) => {
           this.questionList = res.data.questionFormList;
+          new numberCounter("todayQuestions", res.data.todayQuestions);
+          new numberCounter("todayAnswers", res.data.todayAnswers);
           this.todayQuestions = res.data.todayQuestions;
           this.todayAnswers = res.data.todayAnswers;
           this.totalListItemCount = res.data.totalCount;
@@ -636,13 +661,13 @@ export default {
 .info1 {
   color: #0f4c81;
   font-weight: 700;
-  font-size: 19px;
+  font-size: 21px;
 }
 
 .info2 {
   color: #0f4c81;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .list-group-category:hover {
