@@ -162,6 +162,12 @@ export default {
       .catch((err) => console.log(err))
     },
 
+    // 기본알림 → 질문 상세로 이동
+    fromNotiToQuestion(questionId) {
+      this.goQuestionDetail(questionId)
+      location.reload()
+    },
+
     getVideoNotifications() {
       axios({
         url: API.URL + API.ROUTES.notificationReceivedMessage,
