@@ -38,50 +38,66 @@
               <a @click="clickLogout()" class="nav-logout">로그아웃</a>
             </li>
 
-            <!-- notification-alarm -->
-            <li class="nav-item dropdown" data-bs-auto-close="outside" v-if="checkLogin()">
-              <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="outside" data-bs-auto-close="false">
+            <!-- notification for 기본 알람 -->
+            <li class="nav-item dropdown" v-if="isLoggedIn">
+              
+              <!-- notification [NAVBAR 삽입 로고] -->
+              <span class="dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                 <img class="notification-img" src="@/assets/notification-alarm.png">
               </span>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuClickableInside">
-                <li class="dropdown-item">
+
+              <!-- notification [dropdown TAB] -->
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li class="dropdown-item" aria-labelledby="dropdownMenuClickableInside">
                   <div class="dropdown-tabs">
-                    <span @click="getBasicNotification" class="dropdown-tab interval m-right-3">알림</span>
-                    <span @click="getSentMessage" class="dropdown-tab interval">보낸 메세지</span>
-                    <span @click="getReceivedMessage" class="dropdown-tab interval m-left-3">받은 메세지</span>                      
+                    <div><img src="@/assets/logo-white.png" width="20px"></div>
+                    <div class="dropdown-tab">알림</div>         
                   </div>
                 </li>
-
-                <!-- notificatiion [기본 알림] -->
+                
+                <!-- notificatiion [구분선] -->
                 <li><hr class="line"></li>
-                <li v-if="isSelectedTab['tab0']">
-                  <div v-for="(notification, index) in notificationList" :key="'n' + index">
-                    <div class="notification-content">{{ notification.content }} </div>
+
+                <!-- notificatiion [dropdown 알림 Items] -->
+                <li class="notification-scroll">
+                  <div
+                    v-for="(notification, index) in notificationList"
+                    :key="'n' + index"
+                    class="notification-item-set">
+
                     <hr class="line">
+
+                    <div class="notification-title">'{{ notification.title }}'</div>
+                    
+                    <div class="notification-explanation">
+                      <span>라는 글에 새로운 답변이 달렸습니다.</span> 
+                      <button @click="fromNotiToQuestion( notification.questionId )" class="notification-togo-btn">이동</button>
+                    </div>
                   </div>
                 </li>
 
-                <!-- notification [보낸 메세지] -->
-                <li v-if="isSelectedTab['tab1']">
-                  <div>{{ sentMessage }}</div>
-                </li>
-
-                <!-- notification [받은 메세지] -->
-                 <li v-if="isSelectedTab['tab2']">
-                  <div>{{ receivedMessage }}</div>
-                </li>               
               </ul>
             </li>
 
             <!-- notification-video -->
-            <li class="nav-item dropdown interval" v-if="checkLogin()">
-              <span class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            <li class="nav-item dropdown interval" data-bs-auto-close="outside" v-if="isLoggedIn">
+              <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="outside" data-bs-auto-close="false">
                 <img class="notification-img" src="@/assets/notification-video.png">
               </span>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
-                <li><span class="dropdown-item" href="#">Action</span></li>
+
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuClickableInside">
+                <li class="dropdown-item">
+                  <div class="dropdown-tabs">
+                    <div><img src="@/assets/logo-white.png" width="20px"></div>
+                    <div class="dropdown-tab">화상알림</div>         
+                  </div>
+                </li>
+
                 <li><hr class="line"></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
+
+                <li>
+                  <a class="dropdown-item" href="#">Another action</a>
+                </li>
               </ul>
             </li>
 
@@ -102,14 +118,8 @@ export default {
   name: "Navbar",
   data() {
     return {
-      isSelectedTab: {
-        'tab0': false,
-        'tab1': false,
-        'tab2': false,
-      },
-      notificationList : [],
-      sentMessage: [],
-      receivedMessage: [],
+      notificationList: [],
+      notificationQuestionId: [],
     }
   },
   computed: {
@@ -127,19 +137,13 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout', 'goQuestionDetail']),
     clickLogout() {
       this.logout();
     },
 
     // 기본알림 AXIOS GET
-    getBasicNotification() {
-      console.log('바로 왔냐')
-      // 탭 전환
-      this.isSelectedTab['tab0'] = true
-      this.isSelectedTab['tab1'] = false
-      this.isSelectedTab['tab2'] = false
-
+    getNotifications() {
       axios({
         url: API.URL + API.ROUTES.notificationsAlarm,
         method: "GET",
@@ -147,65 +151,63 @@ export default {
       })
       .then((res) => {
         this.notificationList = res.data.notificationList
-    })
+        
+        // 7개가 넘어가면 자르기
+        if (this.notificationList.length > 7) {
+          const notificationArr = this.notificationList.splice(7, this.notificationList.length)
+          return notificationArr
+        } 
+
+      })
       .catch((err) => console.log(err))
     },
 
-    // 보낸 메세지 AXIOS GET
-    getSentMessage() {
-      // 탭 전환
-      this.isSelectedTab['tab0'] = false
-      this.isSelectedTab['tab1'] = true
-      this.isSelectedTab['tab2'] = false
-
-      axios({
-        url: API.URL + API.ROUTES.notificationSentMessage,
-        method: "GET",
-        headers: { Authorization: 'Bearer ' + this.accessToken },
-      })
-      .then ((res) => 
-      this.sentMessage = res.data.messageList)
-      .catch ((err) => console.log(err))
-    },
-
-    // 받은 메세지 AXIOS GET
-    getReceivedMessage() {
-      // 탭 전환
-      this.isSelectedTab['tab0'] = false
-      this.isSelectedTab['tab1'] = false
-      this.isSelectedTab['tab2'] = true
-
+    getVideoNotifications() {
       axios({
         url: API.URL + API.ROUTES.notificationReceivedMessage,
         method: "GET",
-        headers: { Authorization: 'Bearer ' + this.accessToken },
+        headers: { Authorization: "Bearer " + this.accessToken}
       })
-      .then ((res) =>
-      this.receivedMessage = res.data.messageList)
+      .then ((res) => {
+        console.log(res.data)
+        })
       .catch ((err) => console.log(err))
-    },
+    }
   },
   created() {
-    this.getBasicNotification()
-  },
+    this.getNotifications()
+    this.getVideoNotifications()
+  }
 };
 </script>
 
 
 <style>
+
+.dropdown-toggle::after {
+  display: none;
+}
+
 .dropdown-item:hover {
   background-color: transparent;
 }
 
-.dropdown-tab:hover {
+.dropdown-menu {
+  padding: 0;
+}
+
+.dropdown-tab {
   color: #0F4C81;
   font-weight: 600;
 }
 
 .dropdown-tabs {
   color: #84898c;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 400;
+  padding-top: 5px;
+  text-align: center;
+  width: 280px;
 }
 
 .navbar {
@@ -244,10 +246,39 @@ export default {
   cursor: pointer;
 }
 
-.notification-content {
+.notification-explanation {
   color: #84898c;
+  display: flex;
   font-size: 14px;
-  padding: 3px 0px 3px 15px;
+  justify-content: space-between;
+  padding: 0px 15px 10px 17px;
+}
+
+.notification-item-set:hover {
+  background-color: #b5c7d333;
+  /* border-left: 5px solid #658dc6; */
+}
+
+.notification-scroll {
+  height: 500px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.notification-title {
+  color: #0F4C81;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 15px 15px 0px 17px;
+}
+
+.notification-togo-btn {
+  background-color: transparent;
+  border: transparent;
+  color: #658dc6;
+  font-size: 14px;
+  padding: 1px;
+  transform: skew(-0.001deg);
 }
 
 .notification-img {

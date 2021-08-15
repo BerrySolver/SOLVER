@@ -24,7 +24,6 @@ export default {
 
     // 알림
     notificationsAlarm: "notifications",
-    notificationSentMessage: "messages/forwardings",
     notificationReceivedMessage : "messages/receptions",
   },
 };
