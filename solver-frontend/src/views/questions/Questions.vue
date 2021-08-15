@@ -17,10 +17,10 @@
         <div class="question-category">
           <div><span class="info1">TODAY</span></div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">질문: </span> 000개
+            <span class="info2">질문: </span><span><span id="todayQuestions"></span>개</span>
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">답변: </span> 000개
+            <span class="info2">답변: </span><span><span id="todayAnswers"></span>개</span>
           </div>
           <div class="question-category-items">
             <vs-collapse open-hover>
@@ -104,6 +104,7 @@
                 color="#0F4C81"
                 class="selectDifficulty"
                 v-model="request.difficulty"
+                icon-pack=false
                 width="150px"
                 @change="setDifficulty"
               >
@@ -148,15 +149,22 @@
                     question.difficulty
                   }}</span>
                 </div>
-                <div>
+                <div style="display: flex;">
                   <span
                     class="question-list-item-title"
                     style="font-size: 20px; font-weight: 700; margin-left: 10px;"
                     >{{ question.title }}
-                    <img v-if="question.isImage" style="width:25px" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDk1LjMwNCw2MS4yMTdIMTYuNjk2QzcuNDc1LDYxLjIxNywwLDY4LjY5MywwLDc3LjkxM3YzNTYuMTc0YzAsOS4yMiw3LjQ3NSwxNi42OTYsMTYuNjk2LDE2LjY5Nmg0NzguNjA5DQoJCQljOS4yMiwwLDE2LjY5Ni03LjQ3NSwxNi42OTYtMTYuNjk2Vjc3LjkxM0M1MTIsNjguNjkzLDUwNC41MjUsNjEuMjE3LDQ5NS4zMDQsNjEuMjE3eiBNNDc4LjYwOSw0MTcuMzkxSDMzLjM5MVYzNzAuNDMNCgkJCWw5My4yNjItOTguODY5bDc3Ljk1Niw4Mi42NDZjNi41OSw2Ljk4NSwxNy43MDYsNi45NzksMjQuMjksMEwzODUuNDM2LDE4OC4yNmw5My4xNzMsOTguNzY5VjQxNy4zOTF6IE00NzguNjA5LDIzOC4zNjgNCgkJCWwtODEuMDI5LTg1Ljg5NmMtNi41OS02Ljk4NS0xNy43MDUtNi45NzktMjQuMjksMEwyMTYuNzU1LDMxOC40MThsLTc3Ljk1Ni04Mi42NDZjLTYuNTktNi45ODUtMTcuNzA2LTYuOTc5LTI0LjI5LDANCgkJCWwtODEuMTE3LDg1Ljk5NFY5NC42MDloNDQ1LjIxN1YyMzguMzY4eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjE2Ljc1NCwxMzMuODEyYy0yNy43MjEsMC01MC4yNzUsMjIuNTU0LTUwLjI3NSw1MC4yNzRjMCwyNy43MjEsMjIuNTU0LDUwLjI3NSw1MC4yNzUsNTAuMjc1DQoJCQljMjcuNzIxLDAsNTAuMjc0LTIyLjU1NCw1MC4yNzQtNTAuMjc1QzI2Ny4wMjgsMTU2LjM2NiwyNDQuNDc0LDEzMy44MTIsMjE2Ljc1NCwxMzMuODEyeiBNMjE2Ljc1NCwyMDAuOTcNCgkJCWMtOS4zMSwwLTE2Ljg4NC03LjU3NC0xNi44ODQtMTYuODg0YzAtOS4zMDksNy41NzQtMTYuODgzLDE2Ljg4NC0xNi44ODNzMTYuODgzLDcuNTc0LDE2Ljg4MywxNi44ODMNCgkJCUMyMzMuNjM3LDE5My4zOTYsMjI2LjA2MiwyMDAuOTcsMjE2Ljc1NCwyMDAuOTd6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" />
-                    <img v-if="question.isVideo" style="width:25px;margin-left:4px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ2MS41MDEgNDYxLjUwMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDYxLjUwMSA0NjEuNTAxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8Zz4NCgkJPGc+DQoJCQk8cGF0aCBkPSJNNDI4LjYzNiw0Mi4yNUgzMi44NjVDMTQuNzQzLDQyLjI1LDAsNTYuOTkzLDAsNzUuMTE1djMxMS4yNzFjMCwxOC4xMjIsMTQuNzQzLDMyLjg2NSwzMi44NjUsMzIuODY1aDM5NS43NzENCgkJCQljMTguMTIyLDAsMzIuODY1LTE0Ljc0MywzMi44NjUtMzIuODY1Vjc1LjExNUM0NjEuNSw1Ni45OTMsNDQ2Ljc1Nyw0Mi4yNSw0MjguNjM2LDQyLjI1eiBNNDMxLjUwMSwzODYuMzg1TDQzMS41MDEsMzg2LjM4NQ0KCQkJCWMtMC4wMDEsMS41OC0xLjI4NiwyLjg2NS0yLjg2NiwyLjg2NUgzMi44NjVjLTEuNTgsMC0yLjg2NS0xLjI4NS0yLjg2NS0yLjg2NVY3NS4xMTVjMC0xLjU4LDEuMjg1LTIuODY1LDIuODY1LTIuODY1aDM5NS43NzENCgkJCQljMS41OCwwLDIuODY1LDEuMjg1LDIuODY1LDIuODY1VjM4Ni4zODV6Ii8+DQoJCQk8cGF0aCBkPSJNMjk2Ljc2NywyMTguNDY5bC0xMTQuODA5LTgwLjUxMWMtNC41ODEtMy4yMTMtMTAuNTctMy42MDktMTUuNTM0LTEuMDI2Yy00Ljk2NCwyLjU4Mi04LjA3OSw3LjcxMi04LjA3OSwxMy4zMDh2MTYxLjAyMw0KCQkJCWMwLDUuNTk1LDMuMTE0LDEwLjcyNiw4LjA3OSwxMy4zMDhjNC45OTEsMi41OTYsMTAuOTc3LDIuMTY5LDE1LjUzNC0xLjAyNmwxMTQuODA5LTgwLjUxMmM0LjAwNC0yLjgwOCw2LjM4OC03LjM5MSw2LjM4OC0xMi4yODENCgkJCQlTMzAwLjc3MSwyMjEuMjc3LDI5Ni43NjcsMjE4LjQ2OXogTTE4OC4zNDYsMjgyLjQyMlYxNzkuMDc5bDczLjY4NCw1MS42NzFMMTg4LjM0NiwyODIuNDIyeiIvPg0KCQk8L2c+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" />
-                    </span
-                  >
+                  </span>
+                  <img 
+                    v-if="question.isImage" 
+                    style="width:15px; margin-left:5px;" 
+                    src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNDk1LjMwNCw2MS4yMTdIMTYuNjk2QzcuNDc1LDYxLjIxNywwLDY4LjY5MywwLDc3LjkxM3YzNTYuMTc0YzAsOS4yMiw3LjQ3NSwxNi42OTYsMTYuNjk2LDE2LjY5Nmg0NzguNjA5DQoJCQljOS4yMiwwLDE2LjY5Ni03LjQ3NSwxNi42OTYtMTYuNjk2Vjc3LjkxM0M1MTIsNjguNjkzLDUwNC41MjUsNjEuMjE3LDQ5NS4zMDQsNjEuMjE3eiBNNDc4LjYwOSw0MTcuMzkxSDMzLjM5MVYzNzAuNDMNCgkJCWw5My4yNjItOTguODY5bDc3Ljk1Niw4Mi42NDZjNi41OSw2Ljk4NSwxNy43MDYsNi45NzksMjQuMjksMEwzODUuNDM2LDE4OC4yNmw5My4xNzMsOTguNzY5VjQxNy4zOTF6IE00NzguNjA5LDIzOC4zNjgNCgkJCWwtODEuMDI5LTg1Ljg5NmMtNi41OS02Ljk4NS0xNy43MDUtNi45NzktMjQuMjksMEwyMTYuNzU1LDMxOC40MThsLTc3Ljk1Ni04Mi42NDZjLTYuNTktNi45ODUtMTcuNzA2LTYuOTc5LTI0LjI5LDANCgkJCWwtODEuMTE3LDg1Ljk5NFY5NC42MDloNDQ1LjIxN1YyMzguMzY4eiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjE2Ljc1NCwxMzMuODEyYy0yNy43MjEsMC01MC4yNzUsMjIuNTU0LTUwLjI3NSw1MC4yNzRjMCwyNy43MjEsMjIuNTU0LDUwLjI3NSw1MC4yNzUsNTAuMjc1DQoJCQljMjcuNzIxLDAsNTAuMjc0LTIyLjU1NCw1MC4yNzQtNTAuMjc1QzI2Ny4wMjgsMTU2LjM2NiwyNDQuNDc0LDEzMy44MTIsMjE2Ljc1NCwxMzMuODEyeiBNMjE2Ljc1NCwyMDAuOTcNCgkJCWMtOS4zMSwwLTE2Ljg4NC03LjU3NC0xNi44ODQtMTYuODg0YzAtOS4zMDksNy41NzQtMTYuODgzLDE2Ljg4NC0xNi44ODNzMTYuODgzLDcuNTc0LDE2Ljg4MywxNi44ODMNCgkJCUMyMzMuNjM3LDE5My4zOTYsMjI2LjA2MiwyMDAuOTcsMjE2Ljc1NCwyMDAuOTd6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" 
+                  />
+                  <img 
+                    v-if="question.isVideo" 
+                    style="width:15px; margin-left:5px;" 
+                    src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDQ2MS41MDEgNDYxLjUwMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDYxLjUwMSA0NjEuNTAxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8Zz4NCgkJPGc+DQoJCQk8cGF0aCBkPSJNNDI4LjYzNiw0Mi4yNUgzMi44NjVDMTQuNzQzLDQyLjI1LDAsNTYuOTkzLDAsNzUuMTE1djMxMS4yNzFjMCwxOC4xMjIsMTQuNzQzLDMyLjg2NSwzMi44NjUsMzIuODY1aDM5NS43NzENCgkJCQljMTguMTIyLDAsMzIuODY1LTE0Ljc0MywzMi44NjUtMzIuODY1Vjc1LjExNUM0NjEuNSw1Ni45OTMsNDQ2Ljc1Nyw0Mi4yNSw0MjguNjM2LDQyLjI1eiBNNDMxLjUwMSwzODYuMzg1TDQzMS41MDEsMzg2LjM4NQ0KCQkJCWMtMC4wMDEsMS41OC0xLjI4NiwyLjg2NS0yLjg2NiwyLjg2NUgzMi44NjVjLTEuNTgsMC0yLjg2NS0xLjI4NS0yLjg2NS0yLjg2NVY3NS4xMTVjMC0xLjU4LDEuMjg1LTIuODY1LDIuODY1LTIuODY1aDM5NS43NzENCgkJCQljMS41OCwwLDIuODY1LDEuMjg1LDIuODY1LDIuODY1VjM4Ni4zODV6Ii8+DQoJCQk8cGF0aCBkPSJNMjk2Ljc2NywyMTguNDY5bC0xMTQuODA5LTgwLjUxMWMtNC41ODEtMy4yMTMtMTAuNTctMy42MDktMTUuNTM0LTEuMDI2Yy00Ljk2NCwyLjU4Mi04LjA3OSw3LjcxMi04LjA3OSwxMy4zMDh2MTYxLjAyMw0KCQkJCWMwLDUuNTk1LDMuMTE0LDEwLjcyNiw4LjA3OSwxMy4zMDhjNC45OTEsMi41OTYsMTAuOTc3LDIuMTY5LDE1LjUzNC0xLjAyNmwxMTQuODA5LTgwLjUxMmM0LjAwNC0yLjgwOCw2LjM4OC03LjM5MSw2LjM4OC0xMi4yODENCgkJCQlTMzAwLjc3MSwyMjEuMjc3LDI5Ni43NjcsMjE4LjQ2OXogTTE4OC4zNDYsMjgyLjQyMlYxNzkuMDc5bDczLjY4NCw1MS42NzFMMTg4LjM0NiwyODIuNDIyeiIvPg0KCQk8L2c+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" 
+                  />
                 </div>
               </div>
               <div class="d-flex">
@@ -180,6 +188,12 @@
                   <span class="material-icons"
                     ><img
                       style="width:15px;"
+                      src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTExLjk5OSA1MTEuOTk5IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTEuOTk5IDUxMS45OTk7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNNTA4Ljc0NSwyNDYuMDQxYy00LjU3NC02LjI1Ny0xMTMuNTU3LTE1My4yMDYtMjUyLjc0OC0xNTMuMjA2UzcuODE4LDIzOS43ODQsMy4yNDksMjQ2LjAzNQ0KCQkJYy00LjMzMiw1LjkzNi00LjMzMiwxMy45ODcsMCwxOS45MjNjNC41NjksNi4yNTcsMTEzLjU1NywxNTMuMjA2LDI1Mi43NDgsMTUzLjIwNnMyNDguMTc0LTE0Ni45NSwyNTIuNzQ4LTE1My4yMDENCgkJCUM1MTMuMDgzLDI2MC4wMjgsNTEzLjA4MywyNTEuOTcxLDUwOC43NDUsMjQ2LjA0MXogTTI1NS45OTcsMzg1LjQwNmMtMTAyLjUyOSwwLTE5MS4zMy05Ny41MzMtMjE3LjYxNy0xMjkuNDE4DQoJCQljMjYuMjUzLTMxLjkxMywxMTQuODY4LTEyOS4zOTUsMjE3LjYxNy0xMjkuMzk1YzEwMi41MjQsMCwxOTEuMzE5LDk3LjUxNiwyMTcuNjE3LDEyOS40MTgNCgkJCUM0NDcuMzYxLDI4Ny45MjMsMzU4Ljc0NiwzODUuNDA2LDI1NS45OTcsMzg1LjQwNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCgk8Zz4NCgkJPHBhdGggZD0iTTI1NS45OTcsMTU0LjcyNWMtNTUuODQyLDAtMTAxLjI3NSw0NS40MzMtMTAxLjI3NSwxMDEuMjc1czQ1LjQzMywxMDEuMjc1LDEwMS4yNzUsMTAxLjI3NQ0KCQkJczEwMS4yNzUtNDUuNDMzLDEwMS4yNzUtMTAxLjI3NVMzMTEuODM5LDE1NC43MjUsMjU1Ljk5NywxNTQuNzI1eiBNMjU1Ljk5NywzMjMuNTE2Yy0zNy4yMywwLTY3LjUxNi0zMC4yODctNjcuNTE2LTY3LjUxNg0KCQkJczMwLjI4Ny02Ny41MTYsNjcuNTE2LTY3LjUxNnM2Ny41MTYsMzAuMjg3LDY3LjUxNiw2Ny41MTZTMjkzLjIyNywzMjMuNTE2LDI1NS45OTcsMzIzLjUxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==" />
+                  </span>
+                  <span class="count">{{ question.readCount }}</span>
+                  <span class="material-icons"
+                    ><img
+                      style="width:15px;"
                       src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTEuMDcyIDUxMS4wNzIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTExLjA3MiA1MTEuMDcyIiB3aWR0aD0iNTEyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIGlkPSJTcGVlY2hfQnViYmxlXzQ4XyI+PGc+PHBhdGggZD0ibTc0LjM5IDQ4MC41MzZoLTM2LjIxM2wyNS42MDctMjUuNjA3YzEzLjgwNy0xMy44MDcgMjIuNDI5LTMxLjc2NSAyNC43NDctNTEuMjQ2LTM2LjAyOS0yMy42NDQtNjIuMzc1LTU0Ljc1MS03Ni40NzgtOTAuNDI1LTE0LjA5My0zNS42NDctMTUuODY0LTc0Ljg4OC01LjEyMS0xMTMuNDgyIDEyLjg5LTQ2LjMwOSA0My4xMjMtODguNTE4IDg1LjEyOC0xMTguODUzIDQ1LjY0Ni0zMi45NjMgMTAyLjQ3LTUwLjM4NyAxNjQuMzMtNTAuMzg3IDc3LjkyNyAwIDE0My42MTEgMjIuMzg5IDE4OS45NDggNjQuNzQ1IDQxLjc0NCAzOC4xNTkgNjQuNzM0IDg5LjYzIDY0LjczNCAxNDQuOTMzIDAgMjYuODY4LTUuNDcxIDUzLjAxMS0xNi4yNiA3Ny43MDMtMTEuMTY1IDI1LjU1MS0yNy41MTQgNDguMzAyLTQ4LjU5MyA2Ny42MTktNDYuMzk5IDQyLjUyMy0xMTIuMDQyIDY1LTE4OS44MyA2NS0yOC44NzcgMC01OS4wMS0zLjg1NS04NS45MTMtMTAuOTI5LTI1LjQ2NSAyNi4xMjMtNTkuOTcyIDQwLjkyOS05Ni4wODYgNDAuOTI5em0xODItNDIwYy0xMjQuMDM5IDAtMjAwLjE1IDczLjk3My0yMjAuNTU3IDE0Ny4yODUtMTkuMjg0IDY5LjI4IDkuMTQzIDEzNC43NDMgNzYuMDQzIDE3NS4xMTVsNy40NzUgNC41MTEtLjIzIDguNzI3Yy0uNDU2IDE3LjI3NC00LjU3NCAzMy45MTItMTEuOTQ1IDQ4Ljk1MiAxNy45NDktNi4wNzMgMzQuMjM2LTE3LjA4MyA0Ni45OS0zMi4xNTFsNi4zNDItNy40OTMgOS40MDUgMi44MTNjMjYuMzkzIDcuODk0IDU3LjEwNCAxMi4yNDEgODYuNDc3IDEyLjI0MSAxNTQuMzcyIDAgMjI0LjY4Mi05My40NzMgMjI0LjY4Mi0xODAuMzIyIDAtNDYuNzc2LTE5LjUyNC05MC4zODQtNTQuOTc2LTEyMi43OS00MC43MTMtMzcuMjE2LTk5LjM5Ny01Ni44ODgtMTY5LjcwNi01Ni44ODh6Ii8+PC9nPjwvZz48L3N2Zz4="
                   /></span>
                   <span class="count">{{ question.answerCount }}</span>
@@ -198,7 +212,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="questionList.length === 0" class="question-list-item">
+            <div v-if="questionList.length === 0 && isLoaded" class="question-list-item">
               <span>저쪽 신사분께 첫 질문을 남겨보시겠어요?</span>
             </div>
           </div>
@@ -248,7 +262,31 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
+import LoginModal from "@/components/main/LoginModal"
+
+function numberCounter(target_frame, target_number) {
+  this.count = 0; this.diff = 0;
+  this.target_count = parseInt(target_number);
+  this.target_frame = document.getElementById(target_frame);
+  this.timer = null;
+  this.counter();
+}
+
+numberCounter.prototype.counter = function() {
+  var self = this;
+  this.diff = this.target_count - this.count;
+  if(this.diff > 0) {
+      self.count += Math.ceil(this.diff / 5);
+  }
+  
+  this.target_frame.innerHTML = this.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  if(this.count < this.target_count) {
+      this.timer = setTimeout(function() { self.counter(); }, 40);
+  } else {
+      clearTimeout(this.timer);
+  }
+}
 
 export default {
   name: "Questions",
@@ -281,6 +319,9 @@ export default {
       pageLinkCount: 10,
       currentPageIndex: 1,
       totalListItemCount: 10,
+      isLoaded: false,
+      todayQuestions: "",
+      todayAnswers: ""
     };
   },
   methods: {
@@ -350,25 +391,24 @@ export default {
       })
         .then((res) => {
           this.questionList = res.data.questionFormList;
+          new numberCounter("todayQuestions", res.data.todayQuestions);
+          new numberCounter("todayAnswers", res.data.todayAnswers);
+          this.todayQuestions = res.data.todayQuestions;
+          this.todayAnswers = res.data.todayAnswers;
           this.totalListItemCount = res.data.totalCount;
-          // console.log(this.questionList);
-          // console.log(this.totalCount);
-          this.questionList.forEach(e=>{
+          this.questionList.forEach((e) => {
             var isImage = false;
             var isVideo = false;
-            while(e.content.indexOf("<figure") != -1){
-              if(e.content.indexOf("<figure class=\"image\">")!=-1){
+            while (e.content.indexOf("<figure") != -1) {
+              if (e.content.indexOf('<figure class="image">') != -1) {
                 isImage = true;
               }
-              if(e.content.indexOf("<figure class=\"media\">")!=-1){
+              if (e.content.indexOf('<figure class="media">') != -1) {
                 isVideo = true;
               }
-              // console.log("전 - ", e.content);
-              // console.log(e.content.indexOf("<figure"), e.content.indexOf("</figure>"));
-              // console.log("앞", e.content.slice(0, e.content.indexOf("<figure")));
-              // console.log("미디어", e.content.slice(e.content.indexOf("<figure"), e.content.indexOf("</figure>")+9));
-              // console.log("뒤", e.content.slice(e.content.indexOf("</figure>")+9));
-              e.content = e.content.slice(0, e.content.indexOf("<figure")) + e.content.slice(e.content.indexOf("</figure>")+9);
+              e.content =
+                e.content.slice(0, e.content.indexOf("<figure")) +
+                e.content.slice(e.content.indexOf("</figure>") + 9);
             }
             e.isImage = isImage;
             e.isVideo = isVideo;
@@ -379,6 +419,17 @@ export default {
         });
     },
     goQuestionCreate: function() {
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
+        return;
+      }
+
       this.$router.push({
         name: "QuestionsCreate",
       });
@@ -399,7 +450,6 @@ export default {
       return r;
     },
     paginationChanged(pageIndex) {
-      // console.log("movePage : pageIndex : " + pageIndex);
       this.request.offset = pageIndex - 1;
       this.currentPageIndex = pageIndex;
       this.getQuestionList();
@@ -420,6 +470,9 @@ export default {
         this.categories = res.data;
         this.getQuestionList();
         this.setStateQuery(null);
+        setTimeout(() => {
+          this.isLoaded = true
+        }, 1000)
       })
       .catch((err) => {
         console.log(err);
@@ -428,7 +481,9 @@ export default {
   computed: {
     ...mapState({
       query: (state) => state.questions.query,
+      accessToken: state => state.auth.accessToken,
     }),
+    ...mapGetters(['isLoggedIn']),
     typeWatch: function() {
       return this.request.type;
     },
@@ -606,13 +661,13 @@ export default {
 .info1 {
   color: #0f4c81;
   font-weight: 700;
-  font-size: 19px;
+  font-size: 21px;
 }
 
 .info2 {
   color: #0f4c81;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .list-group-category:hover {
@@ -733,7 +788,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
-  width: 850px;
+  max-width: 800px;
   text-align: left;
 }
 

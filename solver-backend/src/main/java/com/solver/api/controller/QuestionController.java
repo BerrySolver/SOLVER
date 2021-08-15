@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
+import com.solver.api.response.QuestionCreateRes;
 import com.solver.api.response.QuestionListRes;
 import com.solver.api.response.QuestionMeRes;
 import com.solver.api.response.QuestionRes;
@@ -34,9 +35,11 @@ import com.solver.api.service.QuestionService;
 import com.solver.api.service.UserService;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.BaseResponse;
+import com.solver.common.model.TokenResponse;
 import com.solver.db.entity.conference.ConferenceReservation;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -109,7 +112,11 @@ public class QuestionController {
 			return ResponseEntity.status(400).body(QuestionRes.of(400, "질문 생성에 실패했습니다."));
 		}
 		
-		return ResponseEntity.status(201).body(QuestionRes.of(201, "질문을 성공적으로 생성했습니다."));
+		QuestionCreateRes questionCreateRes = new QuestionCreateRes();
+		questionCreateRes.setStatusCode(200);
+		questionCreateRes.setQuestionId(question.getId());
+		
+		return ResponseEntity.status(201).body(questionCreateRes);
 	}
 	
 	// 질문 상세조회 API
@@ -120,19 +127,25 @@ public class QuestionController {
         @ApiResponse(code = 404, message = "존재하지 않는 질문입니다.")
     })
 	public ResponseEntity<? extends BaseResponse> getQuestionDetail(
-			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId)
+			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		Optional<Question> question = questionService.getById(questionId);
+		System.out.println(accessToken);
+		String token = accessToken.split(" ")[1];
+	
 		if (question == null) {
 			return ResponseEntity.status(404).body(QuestionRes.of(404, "존재하지 않는 질문입니다."));
 		}
-		System.out.println(question.get().getAnswer());
 		
-		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get()));
+		boolean isLiked = favoriteQuestionService.checkFavoriteQuestion(token, question.get());
+		boolean isBookmarked = bookmarkService.checkBookmarkQuestion(token, question.get());
+				
+		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get(), isLiked, isBookmarked));
 	}
 	
 	// 질문 수정 API
-	@PatchMapping("/{questionId}")
+	@PostMapping("/{questionId}")
 	@ApiOperation(value = "질문 수정", notes = "질문 수정 API") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "질문을 성공적으로 수정했습니다."),

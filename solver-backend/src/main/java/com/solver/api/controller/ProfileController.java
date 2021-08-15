@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,14 +49,15 @@ public class ProfileController {
         @ApiResponse(code = 200, message = "정보를 가져오기 성공"),
         @ApiResponse(code = 409, message = "정보를 가져오기 실패")
     })
-	public ResponseEntity<? extends BaseResponse> getProfileInfo(@PathVariable String nickname)
+	public ResponseEntity<? extends BaseResponse> getProfileInfo(
+			@PathVariable String nickname,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		ProfileRes profileRes = null;
-		
-		System.out.println(nickname);
-		
+		String token = accessToken.split(" ")[1];
+				
 		try {
-			profileRes = profileService.getProfileInfo(nickname);
+			profileRes = profileService.getProfileInfo(token, nickname);
 		}
 		catch(NoSuchElementException e) {
 			return ResponseEntity.status(409).body(ProfileRes.of(409, "정보를 가져오는데 실패하였습니다"));
@@ -66,7 +68,7 @@ public class ProfileController {
 	}
 	
 	/* 유저 프로필 정보 수정 */
-	@PatchMapping()
+	@PutMapping()
 	@ApiOperation(value = "회원 프로필 정보 수정(시간제외)", notes = "회원 마이페이지 기본 정보 수정") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "프로필 정보 수정 성공"),
@@ -83,7 +85,7 @@ public class ProfileController {
 	}
 	
 	/* 유저 화상 회의 테이블 정보 수정 */
-	@PatchMapping("/time-table")
+	@PutMapping("/time-table")
 	@ApiOperation(value = "회원 화상 회의 테이블 정보 수정", notes = "회원 화상 회의 테이블 정보 수정") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "화상 회의 테이블 정보 수정"),

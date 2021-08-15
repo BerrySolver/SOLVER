@@ -6,15 +6,16 @@ const state = {
   categoryList: [],
   possibleDay: [],
   possibleTime: [],
-  accessToken: "",
+  accessToken: null,
   isFirst: false,
   userNickname: "",
 };
 
 const getters = {
-  isLoggedIn: (state) => state.accessToken,
+  isLoggedIn: (state) => state.accessToken == null ? false : true,
   isFirst: (state) => state.isFirst,
   getAccessToken: (state) => state.accessToken,
+  getUserNickname: (state) => state.userNickname,
 };
 
 const mutations = {
@@ -44,10 +45,11 @@ const actions = {
       url: API.URL + API.ROUTES.signup,
       method: "post",
       data: credentials,
-      headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+      headers: { Authorization: "Bearer " + this.getters.isLoggedIn },
     })
       .then((res) => {
         console.log(res);
+        commit("SET_USER_NICKNAME", credentials.nickname);
         router.push({ path: "/" });
       })
       .catch(() => {
@@ -56,7 +58,7 @@ const actions = {
   },
   tokenLogin({ commit }, token) {
     commit("SET_ACCESS_TOKEN", token);
-    localStorage.setItem("accessToken", token);
+    // this.state.accessToken = token;
     //토큰으로 닉네임을 찾아오기
     axios({
       url: API.URL + API.ROUTES.getNickname,
@@ -68,23 +70,30 @@ const actions = {
         if (res.data == "") {
           router.push({ path: "/auth/signup1" });
         } else {
+          // const info = {
+          //   solverToken: token,
+          //   nickname: res.data,
+          // };
+          // localStorage.setItem("userInfo", JSON.stringify(info));
           commit("SET_USER_NICKNAME", res.data);
-          router.push({ path: "/" });
+          // commit("SET_ACCESS_TOKEN", token);
+
+          // const info2 = JSON.parse(localStorage.getItem("userInfo"));
+          // router.go(-2)
+          router.push({ path: "/" })
         }
       })
-      .catch(() => {
-        console.log();
+      .catch((e) => {
+        console.log(e);
       });
   },
   login({ commit }) {
     axios({
       url: API.URL + API.ROUTES.login,
       method: "get",
-      headers: { Authorization: "Bearer " },
+      headers: { Authorization: "Bearer" },
     })
       .then((res) => {
-        // console.log(res);
-        localStorage.setItem("accessToken", res.data.accessToken);
         commit("SET_ACCESS_TOKEN", res.data.accessToken);
         router.push({ path: "/" });
       })
@@ -92,16 +101,16 @@ const actions = {
         console.log();
       });
   },
-  logout({ commit }) {
+  logout({ state, commit }) {
     axios({
       url: API.URL + API.ROUTES.logout,
       method: "get",
-      headers: { Authorization: "Bearer " + this.getters.getAccessToken },
+      headers: { Authorization: "Bearer " + state.accessToken },
     })
       .then(() => {
-        localStorage.removeItem("accessToken");
-        commit("SET_ACCESS_TOKEN", "");
-        router.push({ path: "/" });
+        commit("SET_ACCESS_TOKEN", null);
+        commit("SET_USER_NICKNAME", "");
+        router.push({ path: "/#" });
       })
       .catch(() => {
         console.log();

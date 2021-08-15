@@ -1,5 +1,6 @@
 package com.solver.api.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.User;
+import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.question.QuestionRepository;
@@ -45,6 +47,9 @@ public class QuestionServiceImpl implements QuestionService{
 	CategoryRepository categoryRepository;
 	
 	@Autowired
+	AnswerRepository answerRepository;
+	
+	@Autowired
 	KakaoUtil kakaoUtil;
 
 	// 질문 목록 조회
@@ -63,11 +68,27 @@ public class QuestionServiceImpl implements QuestionService{
 		
 		int totalCount = questionList.size();
 		
+		// 오늘 질문, 답변 개수 구하기
+		Calendar calStart = Calendar.getInstance();
+		calStart.set(Calendar.HOUR_OF_DAY, 0);
+		calStart.set(Calendar.MINUTE, 0);
+		calStart.set(Calendar.SECOND, 0);
+		Date todayStart = new Date(calStart.getTimeInMillis());
+		Calendar calEnd = Calendar.getInstance();
+		calEnd.set(Calendar.HOUR_OF_DAY, 23);
+		calEnd.set(Calendar.MINUTE, 59);
+		calEnd.set(Calendar.SECOND, 59);
+		Date todayEnd = new Date(calEnd.getTimeInMillis());
+		
+		
+		int todayQuestions = questionRepository.findByRegDtBetween(todayStart, todayEnd).size();
+		int todayAnswers = answerRepository.findByRegDtBetween(todayStart, todayEnd).size();
+
 		int listLimit = limit > questionList.size() - (offset*limit) ? questionList.size(): limit*(offset+1);
 		
 		questionList = questionList.subList(offset*limit, listLimit);
 		
-		return QuestionListRes.of(200, "질문 목록을 성공적으로 조회했습니다.", questionList, totalCount);
+		return QuestionListRes.of(200, "질문 목록을 성공적으로 조회했습니다.", questionList, totalCount, todayQuestions, todayAnswers);
 	}
 	
 	// 질문 생성
@@ -131,6 +152,10 @@ public class QuestionServiceImpl implements QuestionService{
 		if (question.orElse(null) == null) {
 			return null;
 		}
+
+		Question q = question.get();
+		q.setReadCount(q.getReadCount()+1);
+		questionRepository.save(q);
 		
 		return question;
 	}

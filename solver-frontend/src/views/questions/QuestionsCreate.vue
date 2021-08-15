@@ -22,6 +22,7 @@
                   color="#0F4C81"
                   class="selectMainCategory"
                   v-model="request.mainCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setMainCategory"
                 >
@@ -38,6 +39,7 @@
                   color="#0F4C81"
                   class="selectSubCategory"
                   v-model="request.subCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setSubCategory"
                 >
@@ -54,6 +56,7 @@
                   color="#0F4C81"
                   class="selectDifficulty"
                   v-model="request.difficulty"
+                  icon-pack=false
                   width="285px"
                   @change="setDifficulty"
                 >
@@ -75,6 +78,7 @@
                     type="text"
                     v-model="request.title"
                     placeholder="제목을 입력해주세요"
+                    @change="checkValid"
                   />
                 </div>
               </div>
@@ -84,9 +88,10 @@
             <div id="divEditorInsert"></div>
             <div class="row btn-group">
               <div class="question-create-btn1 col-5" @click="questionInsert">
-                글쓰기
+                <span v-if="isValid">등록</span>
+                <span v-if="!isValid">입력을 완료해주세요!</span>
               </div>
-              <div class="question-cancel-btn1 col-5">
+              <div class="question-cancel-btn1 col-5" @click="clickCancle">
                 취소
               </div>
             </div>
@@ -101,10 +106,10 @@
 import Vue from "vue";
 import axios from "axios";
 import API from "@/API.js";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import auth from "@/store/modules/auth.js";
+import LoginModal from "@/components/main/LoginModal"
 
 Vue.use(CKEditor);
 
@@ -170,6 +175,7 @@ export default {
       CKEditor: "",
       categories: [],
       subCategories: [],
+      isValid: false,
       request: {
         title: "",
         curCategory: "전체",
@@ -179,12 +185,13 @@ export default {
         subCategoryIndex: 0,
         subCategory: null,
         query: null,
-        difficulty: 1,
+        difficulty: 0,
         type: null,
         mode: "releaseDesc",
       },
       questionList: [],
       difficultyOptions: [
+        { text: "난이도 선택", value: 0},
         { text: "난이도 상", value: 3 },
         { text: "난이도 중", value: 2 },
         { text: "난이도 하", value: 1 },
@@ -195,41 +202,23 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["setStateQuery"]),
+    ...mapActions(["setStateQuery", "goQuestionDetail"]),
     setMainCategory: function() {
       const idx = this.request.mainCategoryIndex;
       this.subCategories = this.categories[idx].category;
+      this.subCategories.unshift({subCategoryCode: '000', subCategoryName: '소분류 선택'})
       this.request.mainCategoryCode = this.categories[idx].code;
       this.request.mainCategoryName = this.categories[idx].codeName;
-      console.log(this.request.mainCategoryCode);
-      console.log(this.request.mainCategoryName);
+      this.checkValid()
     },
     setSubCategory: function() {
       const idx = this.request.subCategoryIndex;
       this.subCategory = this.subCategories[idx].subCategoryCode;
-      console.log(this.subCategory);
+      this.checkValid()
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
-    },
-    setType: function(typeNum) {
-      if (typeNum === 1) {
-        this.request.type = "040";
-      } else if (typeNum == 2) {
-        this.request.type = "041";
-      } else {
-        this.request.type = null;
-      }
-      this.request.mode = "releaseDesc";
-    },
-    setMode: function(modeNum) {
-      if (modeNum === 1) {
-        this.request.mode = "answerDesc";
-      } else if (modeNum == 2) {
-        this.request.mode = "likeDesc";
-      } else {
-        this.request.mode = "releaseDesc";
-      }
+      this.checkValid()
     },
     humanize: function(now, date) {
       const moment = require("moment");
@@ -246,16 +235,34 @@ export default {
       }
       return r;
     },
+    checkValid: function () {
+      if (
+        this.CKEditor.getData() == "" ||
+        this.request.title == "" ||
+        this.request.mainCategoryIndex == 0 ||
+        this.request.subCategoryIndex == 0 ||
+        this.request.difficulty == 0
+      ) {
+        this.isValid = false
+      } else {
+        this.isValid = true
+      }
+    },
     questionInsert() {
-      // const formData = {
-      // "title": this.request.title,
-      // "content": this.CKEditor.getData(),
-      // "mainCategory": this.categories[this.request.mainCategoryIndex].code,
-      // "SubCategory": this.subCategories[this.request.subCategoryIndex].subCategoryCode,
-      // "difficulty": this.request.difficulty,
-      // };
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        })
+        return
+      }
 
-      auth.state.accessToken = "E9BoCaA7JUkwIUrt_CHaAvU-E-WVG0B3b2z02go9dVoAAAF7L10guw";
+      if (!this.isValid) {
+        return
+      }
 
       axios({
         url: API.URL + API.ROUTES.createQuestion,
@@ -267,10 +274,11 @@ export default {
           subCategory: this.subCategories[this.request.subCategoryIndex].subCategoryCode,
           difficulty: this.request.difficulty,
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("accessToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           console.log(res);
+          this.goQuestionDetail(res.data.questionId);
         })
         .catch((e) => {
           console.log(e);
@@ -292,6 +300,9 @@ export default {
       //     console.log(error);
       //   });
     },
+    clickCancle() {
+      this.$router.go(-1);
+    },
   },
   created: function() {
     if (this.query != null) {
@@ -302,8 +313,8 @@ export default {
       method: "get",
     })
       .then((res) => {
-        console.log(res);
         this.categories = res.data;
+        this.categories.unshift({category: [{subCategoryCode: '000', subCategoryName: '소분류 선택'}], code: '000', codeName: '대분류 선택'})
         this.subCategories = res.data[0].category;
       })
       .catch((err) => {
@@ -313,26 +324,35 @@ export default {
   mounted() {
     ClassicEditor.create(document.querySelector("#divEditorInsert"), {
       extraPlugins: [MyCustomUploadAdapterPlugin],
-        toolbar: {
-          items: [
-            'heading', '|',
-            'bold', 'italic', '|',
-            'link', '|',
-            'bulletedList', 'numberedList', '|',
-            'ckfinder', '|',
-            'undo', 'redo'
+      toolbar: {
+        items: [
+          "heading",
+          "|",
+          "bold",
+          "italic",
+          "|",
+          "link",
+          "|",
+          "bulletedList",
+          "numberedList",
+          "|",
+          "ckfinder",
+          "|",
+          "undo",
+          "redo",
         ],
-      }
+      },
     })
       .then((editor) => {
         this.CKEditor = editor;
+        this.CKEditor.model.document.on('change:data', () => {
+          this.checkValid()
+        })
       })
       .catch((err) => {
         console.error(err.stack);
       });
 
-    // bootstrap modal show event hook
-    // InsertModal 이 보일 때 초기화
     let $this = this;
     this.$el.addEventListener("show.bs.modal", function() {
       $this.initUI();
@@ -341,45 +361,9 @@ export default {
   computed: {
     ...mapState({
       query: (state) => state.questions.query,
+      accessToken: state => state.auth.accessToken,
     }),
-    typeWatch: function() {
-      return this.request.type;
-    },
-    modeWatch: function() {
-      return this.request.mode;
-    },
-  },
-  watch: {
-    typeWatch: function() {
-      if (this.typeWatch == "040") {
-        this.typeColor[0] = "#89848C";
-        this.typeColor[1] = "#0F4C81";
-        this.typeColor[2] = "#89848C";
-      } else if (this.typeWatch == "041") {
-        this.typeColor[0] = "#89848C";
-        this.typeColor[1] = "#89848C";
-        this.typeColor[2] = "#0F4C81";
-      } else {
-        this.typeColor[0] = "#0F4C81";
-        this.typeColor[1] = "#89848C";
-        this.typeColor[2] = "#89848C";
-      }
-    },
-    modeWatch: function() {
-      if (this.modeWatch == "answerDesc") {
-        this.modeColor[0] = "#89848C";
-        this.modeColor[1] = "#0F4C81";
-        this.modeColor[2] = "#89848C";
-      } else if (this.modeWatch == "likeDesc") {
-        this.modeColor[0] = "#89848C";
-        this.modeColor[1] = "#89848C";
-        this.modeColor[2] = "#0F4C81";
-      } else {
-        this.modeColor[0] = "#0F4C81";
-        this.modeColor[1] = "#89848C";
-        this.modeColor[2] = "#89848C";
-      }
-    },
+    ...mapGetters(["isLoggedIn"]),
   },
 };
 </script>
@@ -571,7 +555,8 @@ export default {
   justify-content: space-between;
 }
 
-.ck.ck-editor__editable {
+.question-main .ck.ck-editor__editable {
+  width: 896px;
   height: 600px;
   margin-bottom: 30px;
 }

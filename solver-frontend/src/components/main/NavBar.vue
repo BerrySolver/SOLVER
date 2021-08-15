@@ -1,15 +1,12 @@
 <template>
-  <nav v-if="needHide" class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <!-- <a href="/">SOLVER</a> -->
+  <nav v-if="needHide" class="navbar navbar-expand navbar-light">
+    <div class="container-fluid navbar-body">
       <RouterLink :to="{ name: 'Main' }" class="nav-logo">
-        <img src="@/assets/logo.png" alt="logo" height="40px" />SOLVER
+        <img src="@/assets/logo.png" alt="logo" height="40px" /><span style="font-size: 17px; vertical-align: middle;">SOLVER</span>
       </RouterLink>
       <button
         class="navbar-toggler"
         type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
         aria-controls="navbarNav"
         aria-expanded="false"
         aria-label="Toggle navigation"
@@ -17,87 +14,97 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-lg-0">
-          <li class="nav-item">
-            <RouterLink :to="{ name: 'Questions' }" class="nav-router">질문/답변</RouterLink>
-          </li>
-          <li class="nav-item">
-            <RouterLink :to="{ name: 'Groups' }" class="nav-router">모임</RouterLink>
-          </li>
-          <li class="nav-item">
-            <RouterLink :to="{ name: 'Solvers' }" class="nav-router">솔버</RouterLink>
-          </li>
-          <li class="nav-item" v-if="!isLoggedIn">
-            <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
-          </li>
-          <li class="nav-item" v-if="!isLoggedIn">
-            <RouterLink :to="{ name: 'Signup1' }" class="nav-router">회원가입</RouterLink>
-          </li>
-          <li class="nav-item" v-if="isLoggedIn">
-            <RouterLink :to="`/profiles/${userNickname}`" class="nav-router" @click="profileClick">프로필</RouterLink>
-          </li>
-          <li class="nav-item" v-if="isLoggedIn">
-            <a @click="logout" class="nav-logout">로그아웃</a>
-          </li>
-        </ul>
+        <div class="navbar-nav" style="width: 100%;">
+          <div class="d-flex justify-content-between" style="width: 100%;">
+            <div class="d-flex justify-content-center">
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'Questions' }" class="nav-router">질문/답변</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'Groups' }" class="nav-router">모임</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'Solvers' }" class="nav-router">솔버</RouterLink>
+            </li>
+            </div>
+            <div class="d-flex justify-content-center">
+            <li class="nav-item" v-if="!isLoggedIn">
+              <RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
+            </li>
+            <li class="nav-item" v-if="isLoggedIn">
+              <RouterLink :to="`/my-profile/${userNickname}`" class="nav-router">마이프로필</RouterLink>
+            </li>
+            <li class="nav-item" v-if="isLoggedIn">
+              <a @click="clickLogout()" class="nav-logout">로그아웃</a>
+            </li>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex'
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "Navbar",
   computed: {
     ...mapState({
-      userNickname: state => state.auth.userNickname,
+      accessToken: state => state.auth.accessToken,
+      userNickname: (state) => state.auth.userNickname,
     }),
-    ...mapGetters([
-      'isLoggedIn',
-    ]),
+    ...mapGetters(["isLoggedIn"]),
     needHide() {
-      return !(this.$route.name === 'Signup1' || this.$route.name === 'Signup2' || this.$route.name === 'Login');
+      return !(
+        this.$route.name === "Signup1" ||
+        this.$route.name === "Signup2" ||
+        this.$route.name === "Login"
+      );
     },
   },
-  methods:{
-    ...mapActions([
-      'logout',
-    ]),
-    profileClick() {
-      this.profileSetting(this.userNickname)
-    }
+  methods: {
+    ...mapActions(['logout']),
+    clickLogout() {
+      this.logout();
+    },
   },
 };
 </script>
 
 <style>
 .navbar {
+  background-color: white;
+  border-bottom: 1px solid #658dc671;
   align-items: center;
-  font-family: 'NanumSquare', sans-serif;
+  font-family: "NanumSquare", sans-serif;
   font-size: 15px;
-  height: 6vh;
+  height: 56px;
   position: fixed;
   width: 100%;
   z-index: 100;
 }
 
+.navbar-body {
+  width: 1190px;
+}
+
 .nav-logo {
-  color: #658DC6;
+  color: #658dc6;
   font-weight: 600;
   margin-right: 20px;
   text-decoration: none;
 }
 
 .nav-router {
-  color: #84898C;
+  color: #84898c;
   margin-right: 20px;
   text-decoration: none;
 }
 
 .nav-logout {
-  color: #84898C;
+  color: #84898c;
   margin-right: 20px;
   text-decoration: none;
   cursor: pointer;

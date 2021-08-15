@@ -1,14 +1,35 @@
 <template>
-	<nav class="links" style="--items: 5;">
-    <RouterLink :to="{ name: 'Questions' }" class="nav-router">질문/답변</RouterLink>
-		<RouterLink :to="{ name: 'Solvers' }" class="nav-router">솔버</RouterLink>
-    <RouterLink :to="{ name: 'Main' }" class="nav-router">
-      <img src="@/assets/logo.png" alt="" width="50px">
-    </RouterLink>
-		<RouterLink :to="{ name: 'Profile' }" class="nav-router">프로필</RouterLink>
-		<RouterLink :to="{ name: 'Login' }" class="nav-router">로그인</RouterLink>
-		<span class="line"></span>
-	</nav>
+	<div class="navbar">
+        <div class="container-fluid">
+            <div>
+                <div>
+
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                        <a href="#" class="navbar-brand">GROUP.COM</a>
+                    </div>
+
+                    <div class="navbar-collapse collapse" id="mobile_menu">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">Home</a></li>
+                            <li><a href="#">Welcome</a></li>
+                            <li><a href="#">Services</a></li>
+                            <li><a href="#">Gallery</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav">
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+                            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-log-in"></span> Login / Sign Up <span class="caret"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -28,7 +49,7 @@ export default {
 </script>
 
 <style>
-.navbar {
+/* .navbar {
   align-items: center;
   font-family: 'NanumSquare', sans-serif;
   font-size: 15px;
@@ -36,7 +57,7 @@ export default {
   position: fixed;
   width: 100%;
   z-index: 100;
-}
+} */
 
 /* Appearance */
 .links {

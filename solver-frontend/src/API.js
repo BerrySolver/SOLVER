@@ -16,9 +16,16 @@ export default {
 
     // 솔버리스트
     getSolverList: "solver",
-
     createQuestion: "questions",
+
     // 프로필
     editProfile: "profiles",
+    editProfileCalendar: "profiles/time-table",
+
+    // 솔버 결제
+    paySolver: "points/pay",
+    
+    //화상회의
+    conferenceLog: "conferences",
   },
 };

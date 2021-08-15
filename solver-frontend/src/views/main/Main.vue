@@ -39,7 +39,6 @@
     <div class="popular-question">
       <div class="popular-question-contents">
         <div class="semi-title">
-          <div>현재</div>
           <span>인기 질문</span>
         </div>
         <!-- 인기질문 -->
@@ -69,7 +68,7 @@
                   style="width:15px;"
                   src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDUxMS45OTkgNTExLjk5OSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgY2xhc3M9IiI+PGc+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8Zz4KCQk8cGF0aCBkPSJNNTA4Ljc0NSwyNDYuMDQxYy00LjU3NC02LjI1Ny0xMTMuNTU3LTE1My4yMDYtMjUyLjc0OC0xNTMuMjA2UzcuODE4LDIzOS43ODQsMy4yNDksMjQ2LjAzNSAgICBjLTQuMzMyLDUuOTM2LTQuMzMyLDEzLjk4NywwLDE5LjkyM2M0LjU2OSw2LjI1NywxMTMuNTU3LDE1My4yMDYsMjUyLjc0OCwxNTMuMjA2czI0OC4xNzQtMTQ2Ljk1LDI1Mi43NDgtMTUzLjIwMSAgICBDNTEzLjA4MywyNjAuMDI4LDUxMy4wODMsMjUxLjk3MSw1MDguNzQ1LDI0Ni4wNDF6IE0yNTUuOTk3LDM4NS40MDZjLTEwMi41MjksMC0xOTEuMzMtOTcuNTMzLTIxNy42MTctMTI5LjQxOCAgICBjMjYuMjUzLTMxLjkxMywxMTQuODY4LTEyOS4zOTUsMjE3LjYxNy0xMjkuMzk1YzEwMi41MjQsMCwxOTEuMzE5LDk3LjUxNiwyMTcuNjE3LDEyOS40MTggICAgQzQ0Ny4zNjEsMjg3LjkyMywzNTguNzQ2LDM4NS40MDYsMjU1Ljk5NywzODUuNDA2eiIgZmlsbD0iIzg0ODk4YyIgZGF0YS1vcmlnaW5hbD0iIzAwMDAwMCIgc3R5bGU9IiI+PC9wYXRoPgoJPC9nPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8Zz4KCQk8cGF0aCBkPSJNMjU1Ljk5NywxNTQuNzI1Yy01NS44NDIsMC0xMDEuMjc1LDQ1LjQzMy0xMDEuMjc1LDEwMS4yNzVzNDUuNDMzLDEwMS4yNzUsMTAxLjI3NSwxMDEuMjc1ICAgIHMxMDEuMjc1LTQ1LjQzMywxMDEuMjc1LTEwMS4yNzVTMzExLjgzOSwxNTQuNzI1LDI1NS45OTcsMTU0LjcyNXogTTI1NS45OTcsMzIzLjUxNmMtMzcuMjMsMC02Ny41MTYtMzAuMjg3LTY3LjUxNi02Ny41MTYgICAgczMwLjI4Ny02Ny41MTYsNjcuNTE2LTY3LjUxNnM2Ny41MTYsMzAuMjg3LDY3LjUxNiw2Ny41MTZTMjkzLjIyNywzMjMuNTE2LDI1NS45OTcsMzIzLjUxNnoiIGZpbGw9IiM4NDg5OGMiIGRhdGEtb3JpZ2luYWw9IiMwMDAwMDAiIHN0eWxlPSIiPjwvcGF0aD4KCTwvZz4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8L2c+PC9zdmc+"
                 />
-                &nbsp;&nbsp;{{ question.bookMarkCount }} &nbsp;&nbsp;
+                &nbsp;&nbsp;{{ question.readCount }} &nbsp;&nbsp;
               </p>
             </div>
           </div>
@@ -77,7 +76,6 @@
       </div>
     </div>
 
-    <!-- 3번째 메인 페이지(이달의 솔버) -->
     <div class="month-solver">
       <br />
       <div class="month-solver-text">
@@ -85,80 +83,27 @@
         <p class="solver-title">이달의 SOLVER</p>
       </div>
 
-      <div class="row">
-        <!-- 왼쪽 여백용 col-2 -->
-        <div class="col-2"></div>
-
-        <!-- 중앙 카드용 col-8 -->
-        <div class="row solver-row">
-          <div class="col-2"></div>
-          <div class="col-2">
-            <div class="solver-card-rank">01</div>
+      <div class="solver-line-1">
+        <div class="solver-row">
+          <div style="float: left; margin-right: 140px;" v-for="(mul, idx) in solverLine1" :key="idx">
+            <div class="solver-card-rank">0{{idx+1}}</div>
             <div class="solver-card-content">
               <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
               <p class="solver-intro">1등 닉네임</p>
             </div>
           </div>
-          <div class="col-2">
-            <div class="solver-card-rank">02</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">2등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">03</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">3등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">04</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">4등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-3"></div>
         </div>
-
-        <div class="row solver-row">
-          <div class="col-3"></div>
-          <div class="col-2">
-            <div class="solver-card-rank">05</div>
+      </div>
+      <div class="solver-line-2">
+        <div class="solver-row">
+          <div style="float: left; margin-left: 100px;" v-for="(mul, idx) in solverLine2" :key="idx">
+            <div class="solver-card-rank">0{{idx+5}}</div>
             <div class="solver-card-content">
               <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">5등 닉네임</p>
+              <p class="solver-intro">1등 닉네임</p>
             </div>
           </div>
-          <div class="col-2">
-            <div class="solver-card-rank">06</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">6등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">07</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">7등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-2">
-            <div class="solver-card-rank">08</div>
-            <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">8등 닉네임</p>
-            </div>
-          </div>
-          <div class="col-1"></div>
         </div>
-
-        <!-- 오른쪽 여백용 col-2 -->
-        <div class="col-2"></div>
-        <br />
       </div>
     </div>
 
@@ -282,6 +227,8 @@ export default {
     return {
       mainQuestion: [],
       query: null,
+      solverLine1: [0, 0, 0, 0],
+      solverLine2: [0, 0, 0, 0]
     };
   },
   methods: {

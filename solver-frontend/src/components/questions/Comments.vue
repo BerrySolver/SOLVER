@@ -13,6 +13,9 @@
       <div class="comment-body">
         {{comment.content}}
       </div>
+      <div v-if="comment.nickname === userNickname" class="comment-delete" @click="deleteCheck(comment.id)"> <!--@click="deleteComment(comment.id)"-->
+        <img style="width: 8px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K" />
+      </div>
     </div>
   </div>
 </template>
@@ -20,8 +23,8 @@
 <script>
 import axios from 'axios'
 import API from '@/API.js'
-import { mapState } from 'vuex'
-
+import { mapState, mapActions } from 'vuex'
+import CommentDelete from './modal/CommentDelete.vue';
 
 export default {
   name: 'Comment',
@@ -35,6 +38,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'triggerCommentReload'
+    ]),
     getCommentList: function () {
       axios({
         url: API.URL + `comments/list/${this.answerId}`,
@@ -62,6 +68,17 @@ export default {
       }
       return r
     },
+    deleteCheck:function(commentId){
+      this.$modal.show(CommentDelete,{
+        commentId : commentId,
+        modal : this.$modal },{
+          name: 'dynamic-modal',
+          width : '600px',
+          height : '250px',
+          draggable: false,
+      })
+      this.getCommentList();
+    },
   },
   created() {
     this.getCommentList()
@@ -69,6 +86,7 @@ export default {
   computed: {
     ...mapState({
       commentCreateTrigger: (state) => state.questions.commentCreateTrigger,
+      userNickname: state => state.auth.userNickname,
     })
   },
   watch: {
@@ -84,7 +102,17 @@ export default {
     font-size: 15px;
     text-align: left;
     margin-left: 160px;
-    width: 650px;
+    width: 600px;
+  }
+
+  .comment-delete {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    height: 10px;
+    margin-left: 800px;
+    position: absolute;
+    top: 17px;
   }
 
   .comment-list{
@@ -101,6 +129,7 @@ export default {
     border-top: 1px solid #e0e0e0;
     min-height: 70px;
     padding: 15px 20px 20px 20px;
+    position: relative;
   }
 
   .comment-item-header {

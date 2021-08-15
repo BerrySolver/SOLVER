@@ -1,38 +1,86 @@
 <template>
   <div>
-    <div class="calendar-title">
-      화상시간 캘린더
+    <div class="calendar">
+      <span class="calendar-title interval">
+        화상시간 캘린더
+      </span>
+      <span v-if="!isCalendarEdit">
+        <img v-if="isLogin" src="@/assets/edit-button.png" @click="timeEditRequest" class="calendar-edit-button">
+      </span>
+      <span v-if="isCalendarEdit" class="goback" @click="timeEditRequest">
+        ←
+      </span>
     </div>
     <div class="m-top-3">
-      <button class="day-button" @click="onClickWeekday()">평일</button>
-      <button class="day-button" @click="onClickWeekend()">주말</button>
+      <button class="day-button" :class="{'first-button':isFisrt}" @click="[checkWeekday(), changeFirst()]">평일</button>
+      <button class="day-button" :class="{'first-button':!isFisrt}" @click="[checkWeekend(), changeFirst()]">주말</button>
     </div>
     <br>
-    <div v-if="isWeekday">
-      <span v-for="time in timeTable" v-bind:key="time">
-        <button :class = "[{'on-time-button': isInWdt(time)}, {'off-time-button': !isInWdt(time)}]">
-          {{ time }}
-        </button>
-      </span>
+
+    <!-- 수정 X 용 캘린더 -->
+    <div v-if="!isCalendarEdit">
+      <div v-if="isWeekday">
+        <span v-for="(time,index) in timeTable" v-bind:key="time">
+          <button v-bind:class="{'selected-button': isInWdt(time)}" class="none-selected-button">
+            {{ time }}
+          </button>
+          <div v-if="(index+1)%4 == 0"></div>
+        </span>
+      </div>
+      <div v-if="!isWeekday">
+        <span v-for="(time,index) in timeTable" v-bind:key="time">
+          <button v-bind:class="{'selected-button': isInWkt(time)}" class="none-selected-button">
+            {{ time }}
+          </button>
+          <div v-if="(index+1)%4 == 0"></div>
+        </span>
+      </div>      
     </div>
-    <div v-if="!isWeekday">
-      <span v-for="time in timeTable" v-bind:key="time">
-        <button :class = "[{'on-time-button': isInWkt(time)}, {'off-time-button': !isInWkt(time)}]">
-          {{ time }}
-        </button>
-      </span>
+
+    <!-- 수정용 캘린더 -->
+    <div v-if="isCalendarEdit">
+
+      <div v-if="isWeekday">
+        <span v-for="(time, index) in timeTable" v-bind:key="time">
+          <button v-bind:class="{'none-selected-button': !isEditedWDTime(time)}" class="edit-selected-button" @click="selectWdt(time)">
+            {{ time }}
+          </button>
+          <div v-if="(index+1)%4 == 0"></div>
+        </span>
+      </div>
+
+      <div v-if="!isWeekday">
+        <span v-for="(time,index) in timeTable" v-bind:key="time">
+          <button v-bind:class="{'none-selected-button': !isEditedWKTime(time)}" class="edit-selected-button" @click="selectWkt(time)">
+            {{ time }}
+          </button>
+          <div v-if="(index+1)%4 == 0"></div>
+        </span>
+      </div>
+      
+      <br>
+      <button @click="editComplete" class="time-edit-complete">수정 완료</button>      
+    
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import API from "@/API.js"
+import { mapState } from 'vuex'
+
 export default {
   name: 'ProfileTimetable',
   props: ['weekdayTime', 'weekendTime'],
   data() {
     return {
+      isCalendarEdit: false,
+      isFisrt: true,
+      isLogin: false,
       isWeekday: true,
-      isWeekend: false,
+      editedWeekday: [],
+      editedWeekend: [],
       timeTable:[
         "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
         "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30",
@@ -40,16 +88,70 @@ export default {
         "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
         "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
         "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
-      ],
+      ]
     }
   },
   methods: {
-    onClickWeekday() {
+    changeFirst() {
+      this.isFisrt = !this.isFisrt
+    },
+    checkWeekday () {
       this.isWeekday = true
     },
-    onClickWeekend() {
+    // 주중, 주말 CLICK해 SWITCH
+    checkWeekend () {
       this.isWeekday = false
     },
+
+    // 수정용: EDIT TIME을 전부 담은 후 AXIOS로 서버에 요청 보낼 때
+    editComplete() {
+      var str_weekday = "";
+      var str_weekend = "";
+
+      this.editedWeekday.forEach(element => {
+        str_weekday += element + '|'
+      });
+
+      this.editedWeekend.forEach(element => {
+        str_weekend += element + '|'
+      })
+      console.log(str_weekday)
+      axios({
+        url: API.URL + API.ROUTES.editProfileCalendar,
+        method: "put",
+        headers: { Authorization: "Bearer " + this.accessToken},
+        data: {
+          'weekdayTime': str_weekday,
+          'weekendTime': str_weekend,
+        }       
+      })
+      .then(() => {
+        this.isCalendarEdit = false
+      })
+      .catch((err) => console.log(err))
+    },
+
+    // 수정용 : 현재 수정한 TIME 데이터에 속하는 TIME인지 CHECK
+    isEditedWDTime(time) {
+      this.editedWeekday = this.splitWeekdayTime
+      this.editedWeekend = this.splitWeekendTime
+      if (this.editedWeekday.includes(time)){
+        return true
+      } else {
+        return false
+      }
+    },
+    isEditedWKTime(time) {
+      this.editedWeekday = this.splitWeekdayTime
+      this.editedWeekend = this.splitWeekendTime
+      if (this.editedWeekend.includes(time)){
+        return true
+      } else {
+        return false
+      }      
+    },
+
+    // 수정X용 : 기존에 PROP으로 받아온 TIME데이터에 속하는 TIME인지 CHECK
     isInWdt(time) {
       if (this.splitWeekdayTime.includes(time)) {
         return true
@@ -61,32 +163,80 @@ export default {
         return true
       } else
       return false
+    },
+
+    // 수정용: TIME을 클릭할 때마다 EDIT할 TIME이 담긴 LIST를 수정
+    selectWdt(time) {
+      if(this.editedWeekday.includes(time)) {
+        const wdt_idx = this.editedWeekday.indexOf(time);
+        this.editedWeekday.splice(wdt_idx, 1);
+      } else {
+        this.editedWeekday.push(time)
+      }
+    },
+    selectWkt(time) {
+      if(this.editedWeekend.includes(time)) {
+        const wdt_idx = this.editedWeekend.indexOf(time);
+        this.editedWeekend.splice(wdt_idx, 1);
+      } else {
+        this.editedWeekend.push(time)
+      }
+    },
+
+    // 캘린더 수정여부 CLICK
+    timeEditRequest() {
+      this.isCalendarEdit = !this.isCalendarEdit
+    },
+
+    // 로그인 유저인지 CHECK
+    isLoginUser() {
+      if (this.userNickname === this.$route.params.nickname) {
+        this.isLogin = true
+      } else {
+        this.isLogin = false
+      }
     }
   },
   computed: {
+  ...mapState({
+    userNickname: state => state.auth.userNickname,
+    accessToken: state => state.auth.accessToken,
+    }),
+
+    // string으로 받아온 PROP 데이터를 LIST로 변환해 CHECK용으로 사용
     splitWeekdayTime(){
       const str_weekday = this.weekdayTime
       const split_weekday = str_weekday.split('|')
+      split_weekday.pop()
       return split_weekday
     },
     splitWeekendTime(){
       const str_weekend = this.weekendTime
       const split_weekend = str_weekend.split('|')
+      split_weekend.pop()
       return split_weekend      
     },
   },
+
+  created() {
+    this.isLoginUser()
+  },
+  // 재렌더링 안될 때를 대비해서
+  updated() {
+    this.isLoginUser()
+  }
 }
 </script>
 
-<style>
-.calendar-title {
-  color: #658DC6;
+<style scoped>
+.calendar-edit-button {
+  cursor: pointer;
+  width: 20px;
 }
 
 .day-button {
   background-color: transparent;
   border: solid 1px #658DC6;
-  transition: background-color .5s;
   width: 120px;
 }
 
@@ -99,37 +249,67 @@ export default {
   background-color: #658DC6;
   border-color: #658DC6;
   color: #F1F2F2;
-  box-shadow: none;
 }
 .day-button:focus, .day-button:active:focus {
   background-color: #658DC6;
   border-color: #658DC6;
   color: #F1F2F2;
-  outline: 5px auto #658DC6;
 }
 
-.off-time-button {
-  background-color: transparent;
+.edit-selected-button {
+  background-color: #0F4C81;
   border: transparent;
-  color: #B5C7D3;
-  font-size: 15px;
+  color: white;
+  font-size: 16px;
   margin-top: 1px;
   margin-bottom: 1px;
-  opacity: 50%;
   width: 65px;
 }
 
-.on-time-button {
+.first-button {
+  background-color: #658DC6;
+  color: #F1F2F2;
+}
+
+.goback {
+  border: solid 1px #658DC6;
+  padding: 0px 2px 0px 2px;
+  cursor: pointer;
+}
+
+.goback:hover {
+  background-color: #658DC6;
+  color: white;
+}
+
+.none-selected-button {
   background-color: transparent;
+  border: transparent;
+  color: #84898C;
+  font-size: 16px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  width: 65px;
+}
+
+.selected-button {
+  background-color: #658dc63d;
   border: transparent;
   color: #0F4C81;
-  font-size: 15px;
+  font-size: 16px;
   margin-top: 1px;
   margin-bottom: 1px;
-  text-decoration: overline underline;
-  text-decoration-color: #B5C7D3;
-  text-decoration-thickness: 3px;
-  width: 65px;
+  width: 65px;  
 }
 
+.time-edit-complete {
+  background-color: transparent;
+  border: solid 1px #658DC6;
+  width: 240px;
+}
+
+.time-edit-complete:hover {
+  background-color: #0F4C81;
+  color: white;
+}
 </style>

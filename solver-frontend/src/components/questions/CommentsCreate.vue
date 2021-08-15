@@ -48,6 +48,7 @@ export default {
         })
         .then(() => {
           this.triggerCommentReload()
+          this.inputValue = ''
         })
         .catch((err) => {
           console.log(err);
@@ -58,7 +59,7 @@ export default {
   computed: {
     ...mapState({
       accessToken: state => state.auth.accessToken,
-    })
+    }),
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="solver-bg">
     <div class="solver-header">
       <div class="solver-banner">
         <img src="@/assets/logo-white-2.png" alt="white-logo">
@@ -38,32 +38,43 @@
     </div>
     <div style="min-height:500px;">
       <!-- 실제 리스트 -->
-      <div class="solver-body"  v-for="(solvers, idx1) in solverList" :key="idx1">
+      <div class="solver-body" v-for="(solvers, idx1) in solverList" :key="idx1">
         <div class="solver-body-contents">
           <div class="solver-list">
             <div class="solver-user-card" v-for="(solverData, idx2) in solvers" :key="idx2" @click="goUserProfile(solverData.nickname)">
-              <img class="user-level-badge" src="@/assets/berry-1.png" alt="">
+              <img class="user-level-badge" src="@/assets/berry-1.png" v-if="parseInt(solverData.point) < 100" alt="">
+              <img class="user-level-badge" src="@/assets/berry-2.png" v-if="parseInt(solverData.point) >= 100 && parseInt(solverData.point) < 200" alt="">
+              <img class="user-level-badge" src="@/assets/berry-3.png" v-if="parseInt(solverData.point) >= 200 && parseInt(solverData.point) < 300" alt="">
+              <img class="user-level-badge" src="@/assets/berry-4.png" v-if="parseInt(solverData.point) >= 300 && parseInt(solverData.point) < 400" alt="">
+              <img class="user-level-badge" src="@/assets/berry-5.png" v-if="parseInt(solverData.point) >= 400 " alt="">
               <div class="solver-user-col1">
-                <img class="user-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"/>
+                <img class="user-image" src="@/assets/logo.png"/>
               </div>   
-              <div class="solver-user-col2 detail-text">
-                <h5>{{solverData.nickname}}</h5>
-                <span class="detail-category" v-for="(field, idx3) in solverData.favoriteFieldNameList" :key="idx3">{{field}}</span>
+              <div class="detail-nickname">
+                <div>{{solverData.nickname}}</div>
               </div>     
-              <div class="solver-user-row detail-text">
-                {{solverData.introduction}}
+              <div class="detail-text box-for-intro">
+                <div class="box-for-intro">
+                 {{solverData.introduction}}
+                </div>
+              </div>
+              <div class="box-for-category">
+                <span class="detail-category" v-for="(field, idx3) in solverData.favoriteFieldNameList" :key="idx3">{{field}}</span>  
               </div>      
               <div class="solver-user-row">
-                <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxnPg0KCQkJPHBhdGggZD0iTTQ5MiwxMjcuNWgtMTh2LTE4YzAtMTEuMDQ2LTguOTU0LTIwLTIwLTIwYy0xMS4wNDYsMC0yMCw4Ljk1NC0yMCwyMHYxOGgtMThjLTExLjA0NiwwLTIwLDguOTU0LTIwLDIwczguOTU0LDIwLDIwLDIwDQoJCQkJaDE4djE4YzAsMTEuMDQ2LDguOTU0LDIwLDIwLDIwYzExLjA0NiwwLDIwLTguOTU0LDIwLTIwdi0xOGgxOGMxMS4wNDYsMCwyMC04Ljk1NCwyMC0yMFM1MDMuMDQ2LDEyNy41LDQ5MiwxMjcuNXoiLz4NCgkJCTxwYXRoIGQ9Ik0zMTUuNDA5LDI0OS4yMzFDMzQ1Ljg1NCwyMjUuNzExLDM2NS41LDE4OC44NiwzNjUuNSwxNDcuNUMzNjUuNSw3Ni42NDUsMzA3Ljg1NSwxOSwyMzcsMTlTMTA4LjUsNzYuNjQ1LDEwOC41LDE0Ny41DQoJCQkJYzAsNDEuMzU5LDE5LjY0Niw3OC4yMTEsNTAuMDkxLDEwMS43MzFDNjguMjkzLDI4MC43OTMsMCwzNjcuNDI3LDAsNDczYzAsMTEuMDQ2LDguOTU0LDIwLDIwLDIwaDQzNGMxMS4wNDYsMCwyMC04Ljk1NCwyMC0yMA0KCQkJCUM0NzQsMzY3LjQwMSw0MDUuNjU2LDI4MC43NzUsMzE1LjQwOSwyNDkuMjMxeiBNMTQ4LjUsMTQ3LjVjMC00OC43OTksMzkuNzAxLTg4LjUsODguNS04OC41czg4LjUsMzkuNzAxLDg4LjUsODguNQ0KCQkJCVMyODUuNzk5LDIzNiwyMzcsMjM2UzE0OC41LDE5Ni4yOTksMTQ4LjUsMTQ3LjV6IE00MS4wMDgsNDUzQzUxLjA2MSwzNTMuNzMsMTM1LjEyMywyNzYsMjM3LDI3NnMxODUuOTM5LDc3LjczLDE5NS45OTIsMTc3DQoJCQkJSDQxLjAwOHoiLz4NCgkJPC9nPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K" />
+                <img src="@/assets/icon-follow.png" />
                 {{solverData.follower}} &nbsp;&nbsp;
-                <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMzc1Ljk0IDM3NS45NCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzc1Ljk0IDM3NS45NDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik0zMjAuNTM1LDE0Ljg2NWMtNDcuOTgzLTI3LjkxMy0xMDkuNDIzLTE1LjUyMi0xNDIuOTIzLDI4LjgyYy0yLjI3MywzLjAxMS0xLjY3OCw3LjI5MSwxLjMzLDkuNTY0DQoJCQljMy4wMTQsMi4yNyw3LjI4NywxLjY3MSw5LjU2NC0xLjMyOWMyOS4zNDYtMzguODQsODMuMTU3LTQ5LjY5NiwxMjUuMTY0LTI1LjI1NGM0Ni4xOTksMjYuODgzLDYyLjA4LDg2LjY0OCwzNS4zOTYsMTMzLjIyMQ0KCQkJYy03Ljk1LDEzLjg4LTE5LjI0NCwyNS42NTYtMzIuNjYsMzQuMDUzYy0zLjE5OCwyLTQuMTY4LDYuMjE0LTIuMTY3LDkuNDA3YzEuMjk3LDIuMDcsMy41MjEsMy4yMDcsNS43OTQsMy4yMDcNCgkJCWMxLjIzNywwLDIuNDktMC4zMzYsMy42MTMtMS4wNDNjMTUuMzIxLTkuNTg2LDI4LjIwNi0yMy4wMTgsMzcuMjY3LTM4Ljg0QzM5MS4zMTIsMTEzLjYxMSwzNzMuMTk3LDQ1LjUwOSwzMjAuNTM1LDE0Ljg2NXoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCgk8Zz4NCgkJPHBhdGggZD0iTTE4NC4wNTQsNDMuNzM5Yy0yOC4zMTctMTYuMzk5LTYxLjMxLTIwLjc2My05Mi45MDQtMTIuM2MtMzEuNjUzLDguNDg0LTU4LjEwMywyOC44MjQtNzQuNDg0LDU3LjI3NA0KCQkJYy0zMy43NzMsNTguNjYzLTEzLjY1MywxMzMuOTQ2LDQ0Ljg0NiwxNjcuODJjMTguNzgsMTAuODc3LDM5LjY3NywxNi40OSw2MS4wNjYsMTYuNDljNC4wNSwwLDguMTItMC4yMDMsMTIuMTk5LTAuNjA2DQoJCQljMy43NS0wLjM3NCw2LjQ5LTMuNzE3LDYuMTE3LTcuNDdjLTAuMzc0LTMuNzUtMy43LTYuNTMzLTcuNDctNi4xMTdjLTIyLjcyOSwyLjI1Ni00NS4yMjMtMi42MjEtNjUuMDY3LTE0LjExMQ0KCQkJYy01Mi0zMC4xMTEtNjkuODgxLTk3LjAzOS0zOS44NTQtMTQ5LjE5M0M0My4wNiw3MC4yNCw2Ni41NjIsNTIuMTYzLDk0LjY4Niw0NC42M2MyOC4wNTktNy41MjUsNTcuMzczLTMuNjQ0LDgyLjUyOSwxMC45MjMNCgkJCWMzNi45MzIsMjEuMzg2LDU4LjEwOSw2Mi43MjcsNTMuOTQzLDEwNS4zMmMtMC4zNjcsMy43NSwyLjM3Nyw3LjA5LDYuMTMsNy40NTZjMy43MzksMC4zODYsNy4wOTMtMi4zODEsNy40NTYtNi4xMw0KCQkJQzI0OS40MzIsMTE0LjI5OSwyMjUuNjA4LDY3Ljc5OSwxODQuMDU0LDQzLjczOXoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCgk8Zz4NCgkJPHBhdGggZD0iTTEyNS40NDcsMTU0LjI4NWwtMTkuMjgtMjEuNjQ0bDUuODc2LTI4LjM4N2MwLjYwMS0yLjg4My0wLjcyLTUuODIzLTMuMjctNy4yOTZjLTIuNTQ2LTEuNDY5LTUuNzU3LTEuMTQ5LTcuOTUzLDAuODE4DQoJCQlsLTIxLjY0NCwxOS4yODRsLTI4LjM4Ny01Ljg3NmMtMi45MDYtMC42MDQtNS44MjcsMC43MjQtNy4yOTYsMy4yN2MtMS40NjksMi41NS0xLjE0Miw1Ljc1NywwLjgxOCw3Ljk1M2wxOS4yOCwyMS42NDQNCgkJCWwtNS44NzYsMjguMzg0Yy0wLjU5NCwyLjg4MywwLjcyNCw1LjgyMywzLjI3Myw3LjI5NmMxLjA2MywwLjYxMywyLjIzOSwwLjkxMywzLjQxMywwLjkxM2MxLjYzNywwLDMuMjYtMC41ODcsNC41NC0xLjczMQ0KCQkJbDIxLjY0MS0xOS4yOGwyOC4zODcsNS44NzZjMi45LDAuNjAxLDUuODI3LTAuNzI3LDcuMjk2LTMuMjdDMTI3LjczNCwxNTkuNjg4LDEyNy40MDcsMTU2LjQ4MSwxMjUuNDQ3LDE1NC4yODV6IE04OS45OSwxNDUuNTY5DQoJCQljLTIuMTE1LTAuNDQtNC4zMTQsMC4xNTQtNS45MjQsMS41ODdsLTguNzk2LDcuODM0bDIuMzg2LTExLjUzNGMwLjQ0LTIuMTE1LTAuMTUtNC4zMTEtMS41ODctNS45MjRsLTcuODM3LTguNzk2bDExLjU0MSwyLjM4Ng0KCQkJYzIuMTI2LDAuNDU2LDQuMzE4LTAuMTUsNS45MjQtMS41ODdsOC43OTYtNy44MzdsLTIuMzg2LDExLjUzN2MtMC40NCwyLjExNSwwLjE1LDQuMzExLDEuNTg3LDUuOTI0bDcuODM3LDguNzk2TDg5Ljk5LDE0NS41Njl6Ig0KCQkJLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCgk8Zz4NCgkJPHBhdGggZD0iTTMxOC4yMzYsMTE2Ljc3MmwtMTMuMDI3LTI1Ljg5N2wxMy4wMjctMjUuODk3YzEuMzIzLTIuNjMsMC44MTEtNS44MTMtMS4yNzMtNy44OTNjLTIuMDgtMi4wNzctNS4yNTctMi41OTktNy44OTMtMS4yNzMNCgkJCWwtMjUuODk3LDEzLjAyN2wtMjUuODk3LTEzLjAyN2MtMi42My0xLjMyNi01LjgxMy0wLjgwNC03Ljg5MywxLjI3M2MtMi4wODQsMi4wOC0yLjU5Miw1LjI2My0xLjI3Myw3Ljg5M2wxMy4wMjQsMjUuODk3DQoJCQlsLTEzLjAyNCwyNS44OTdjLTEuMzIxLDIuNjMtMC44MTEsNS44MTMsMS4yNzMsNy44OTNjMS4zMTEsMS4zMTEsMy4wNTcsMiw0LjgzLDJjMS4wMzksMCwyLjA4OS0wLjIzNywzLjA2My0wLjcyN2wyNS44OTctMTMuMDI3DQoJCQlsMjUuODk3LDEzLjAyN2MyLjYzNywxLjMyMyw1LjgxMywwLjgwNyw3Ljg5My0xLjI3M0MzMTkuMDQ2LDEyMi41ODUsMzE5LjU1OCwxMTkuNDAyLDMxOC4yMzYsMTE2Ljc3MnogTTI5MS40NjgsOTMuOTQyDQoJCQlsNS4yOTQsMTAuNTIzbC0xMC41MjMtNS4yOTRjLTEuOTI3LTAuOTY2LTQuMjA3LTAuOTY2LTYuMTM0LDBsLTEwLjUyNyw1LjI5N2w1LjI5NC0xMC41MjdjMC45NjktMS45MywwLjk2OS00LjIwMywwLTYuMTM0DQoJCQlsLTUuMjk0LTEwLjUyN2wxMC41MjcsNS4yOTdjMS45MjcsMC45NjYsNC4yMDcsMC45NjYsNi4xMzQsMGwxMC41MjMtNS4yOTRsLTUuMjk0LDEwLjUyMw0KCQkJQzI5MC40OTksODkuNzM5LDI5MC40OTksOTIuMDEyLDI5MS40NjgsOTMuOTQyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjM5Ljg2MiwxNTcuNDg2Yy01OS44NDgsMC0xMDguNTM0LDQ5LTEwOC41MzQsMTA5LjIyN1MxODAuMDE2LDM3NS45NCwyMzkuODYyLDM3NS45NA0KCQkJYzU5Ljg0NiwwLDEwOC41MzQtNDksMTA4LjUzNC0xMDkuMjI3UzI5OS43MSwxNTcuNDg2LDIzOS44NjIsMTU3LjQ4NnogTTIzOS44NjIsMzYyLjI4NmMtNTIuMzE4LDAtOTQuODgtNDIuODczLTk0Ljg4LTk1LjU3Mw0KCQkJYzAtNTIuNyw0Mi41NjQtOTUuNTczLDk0Ljg4LTk1LjU3M2M1Mi4zMTYsMCw5NC44OCw0Mi44NzMsOTQuODgsOTUuNTczQzMzNC43NDMsMzE5LjQxMywyOTIuMTgsMzYyLjI4NiwyMzkuODYyLDM2Mi4yODZ6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik0yNTYuNzk2LDI2MC4xMzJsLTEzLjAyNy0yNS44OTdsMTMuMDI3LTI1Ljg5N2MxLjMyMy0yLjYzLDAuODExLTUuODEzLTEuMjczLTcuODkzYy0yLjA3Ny0yLjA3Ny01LjI2LTIuNTk2LTcuODkzLTEuMjczDQoJCQlsLTI1Ljg5NywxMy4wMjdsLTI1Ljg5Ny0xMy4wMjdjLTIuNjMzLTEuMzIzLTUuODE2LTAuODA0LTcuODkzLDEuMjczYy0yLjA4NCwyLjA4LTIuNTkyLDUuMjYzLTEuMjczLDcuODkzbDEzLjAyNCwyNS44OTcNCgkJCWwtMTMuMDI0LDI1Ljg5N2MtMS4zMjEsMi42My0wLjgxMSw1LjgxMywxLjI3Myw3Ljg5M2MxLjMxMSwxLjMxMSwzLjA1NywyLDQuODMsMmMxLjAzOSwwLDIuMDg5LTAuMjM3LDMuMDYzLTAuNzI3bDI1Ljg5Ny0xMy4wMjcNCgkJCWwyNS44OTcsMTMuMDI3YzIuNjMzLDEuMzI2LDUuODE2LDAuODA0LDcuODkzLTEuMjczQzI1Ny42MDYsMjY1Ljk0NSwyNTguMTE4LDI2Mi43NjIsMjU2Ljc5NiwyNjAuMTMyeiBNMjMwLjAyOCwyMzcuMzAyDQoJCQlsNS4yOTQsMTAuNTIzbC0xMC41MjMtNS4yOTRjLTEuOTI3LTAuOTY2LTQuMjA3LTAuOTY2LTYuMTM0LDBsLTEwLjUyNyw1LjI5N2w1LjI5NC0xMC41MjdjMC45NjktMS45MywwLjk2OS00LjIwMywwLTYuMTM0DQoJCQlsLTUuMjk0LTEwLjUyN2wxMC41MjcsNS4yOThjMS45MjcsMC45NjYsNC4yMDcsMC45NjYsNi4xMzQsMGwxMC41MjMtNS4yOTRsLTUuMjk0LDEwLjUyMw0KCQkJQzIyOS4wNTksMjMzLjA5OSwyMjkuMDU5LDIzNS4zNzIsMjMwLjAyOCwyMzcuMzAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K" />
+                <img src="@/assets/icon-blueberry.png" />
                 {{solverData.point}} &nbsp;&nbsp; 
-                <img src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTQyMSAzMGMtMTguMDUzIDAtMTA3LjE3MyAwLTEyMi41NyAwLTYuMTkxLTE3LjQ2MS0yMi44NzMtMzAtNDIuNDMtMzAtMTkuNTU2IDAtMzYuMjM5IDEyLjUzOS00Mi40MyAzMC0xNS4zOTUgMC0xMDQuNTM2IDAtMTIyLjU3IDAtOC4yODQgMC0xNSA2LjcxNi0xNSAxNXY0NTJjMCA4LjI4NCA2LjcxNiAxNSAxNSAxNWgzMzBjOC4yODQgMCAxNS02LjcxNiAxNS0xNXYtNDUyYzAtOC4yODQtNi43MTYtMTUtMTUtMTV6bS0xOTUgMzBjOC4yODQgMCAxNS02LjcxNiAxNS0xNSAwLTguMjcxIDYuNzI5LTE1IDE1LTE1czE1IDYuNzI5IDE1IDE1YzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMTV2MTVjMCA1LjI1OC45MTUgMTAuMzA1IDIuNTggMTVoLTk1LjE2YzEuNjY1LTQuNjk1IDIuNTgtOS43NDIgMi41OC0xNXYtMTV6bTE4MCA0MjJoLTMwMHYtNDIyaDc1djE1YzAgOC4yNzEtNi43MjkgMTUtMTUgMTUtOC4yODQgMC0xNSA2LjcxNi0xNSAxNXM2LjcxNiAxNSAxNSAxNWgxODBjOC4yODQgMCAxNS02LjcxNiAxNS0xNXMtNi43MTYtMTUtMTUtMTVjLTguMjcxIDAtMTUtNi43MjktMTUtMTV2LTE1aDc1eiIvPjxwYXRoIGQ9Im0yNzEgMjExYy04LjI4NCAwLTE1IDYuNzE2LTE1IDE1czYuNzE2IDE1IDE1IDE1aDkwYzguMjg0IDAgMTUtNi43MTYgMTUtMTVzLTYuNzE2LTE1LTE1LTE1eiIvPjxwYXRoIGQ9Im0yMTguMzk0IDE2Ny4zOTMtMzcuMzk0IDM3LjM5NC0xMy4zOTQtMTMuMzk0Yy01Ljg1Ny01Ljg1OC0xNS4zNTUtNS44NTgtMjEuMjEzIDBzLTUuODU4IDE1LjM1NSAwIDIxLjIxM2wyNCAyNGMyLjkyOSAyLjkzIDYuNzY4IDQuMzk0IDEwLjYwNyA0LjM5NHM3LjY3OC0xLjQ2NCAxMC42MDYtNC4zOTNsNDgtNDhjNS44NTgtNS44NTggNS44NTgtMTUuMzU1IDAtMjEuMjEzLTUuODU3LTUuODU5LTE1LjM1NS01Ljg1OS0yMS4yMTItLjAwMXoiLz48cGF0aCBkPSJtMzYxIDMwMWgtOTBjLTguMjg0IDAtMTUgNi43MTYtMTUgMTVzNi43MTYgMTUgMTUgMTVoOTBjOC4yODQgMCAxNS02LjcxNiAxNS0xNXMtNi43MTYtMTUtMTUtMTV6Ii8+PHBhdGggZD0ibTIxOC4zOTQgMjU3LjM5My0zNy4zOTQgMzcuMzk0LTEzLjM5NC0xMy4zOTRjLTUuODU3LTUuODU4LTE1LjM1NS01Ljg1OC0yMS4yMTMgMHMtNS44NTggMTUuMzU1IDAgMjEuMjEzbDI0IDI0YzIuOTI5IDIuOTMgNi43NjggNC4zOTQgMTAuNjA3IDQuMzk0czcuNjc4LTEuNDY0IDEwLjYwNi00LjM5M2w0OC00OGM1Ljg1OC01Ljg1OCA1Ljg1OC0xNS4zNTUgMC0yMS4yMTMtNS44NTctNS44NTktMTUuMzU1LTUuODU5LTIxLjIxMi0uMDAxeiIvPjxwYXRoIGQ9Im0zNjEgMzkxaC05MGMtOC4yODQgMC0xNSA2LjcxNi0xNSAxNXM2LjcxNiAxNSAxNSAxNWg5MGM4LjI4NCAwIDE1LTYuNzE2IDE1LTE1cy02LjcxNi0xNS0xNS0xNXoiLz48cGF0aCBkPSJtMjE4LjM5NCAzNDcuMzkzLTM3LjM5NCAzNy4zOTQtMTMuMzk0LTEzLjM5M2MtNS44NTctNS44NTgtMTUuMzU1LTUuODU4LTIxLjIxMyAwcy01Ljg1OCAxNS4zNTUgMCAyMS4yMTNsMjQgMjRjMi45MjkgMi45MjkgNi43NjggNC4zOTMgMTAuNjA3IDQuMzkzczcuNjc4LTEuNDY0IDEwLjYwNi00LjM5NGw0OC00OGM1Ljg1OC01Ljg1OCA1Ljg1OC0xNS4zNTUgMC0yMS4yMTMtNS44NTctNS44NTgtMTUuMzU1LTUuODU4LTIxLjIxMiAweiIvPjwvZz48L3N2Zz4=" />
+                <img src="@/assets/icon-evaluation.png" />
                 {{isNaN(solverData.evaluationScore) ? 0 : parseFloat(solverData.evaluationScore).toFixed(2)}} <span>/10</span>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="solver-body" v-if="solverCnt == 0 && isLoaded">
+        <img style="width:600px;" src="@/assets/no-solver.png">
       </div>
     </div>
   </div>
@@ -72,6 +83,7 @@
 <script>
 import API from "@/API.js";
 import axios from "axios";
+import { mapState } from 'vuex';
 
 export default {
   name: 'Solvers',
@@ -79,7 +91,7 @@ export default {
     return {
       sortOptions: [
         {text:'팔로워 순', value:"follwerDesc"},
-        {text:'베리 평점 순', value:"pointDesc"},
+        {text:'베리 점수 순', value:"pointDesc"},
         {text:'베리 포인트 순', value:"evaluationDesc"},
       ],
       Category: [],
@@ -90,9 +102,11 @@ export default {
       mainCategoryCode: "",
       subCategoryCode: "",
       // 실질 List
-      solverList: []
+      solverList: [],
+      solverCnt: 0,
+      isLoaded: false,
     }
-  }, methods:{ 
+  }, methods:{
     setQuery(){
       this.setSolverList();
     }, selectSort(event){
@@ -113,12 +127,18 @@ export default {
       console.log("Sub : " + this.subCategoryCode);
       this.setSolverList();
     }, goUserProfile(nickname){
-        this.$router.push({
-          name: 'Profile',
-          params: {
-            nickname: nickname
-          }
-        });
+        if (nickname !== this.userNickname) {
+          this.$router.push({
+            name: 'Profile',
+            params: {
+              nickname: nickname
+            }
+          });
+        } else {
+          this.$router.push({
+            path: `/my-profile/${this.userNickname}`
+          })
+        }
     }, setSolverList(){
       axios({
         url: API.URL + API.ROUTES.getSolverList,
@@ -134,16 +154,23 @@ export default {
         this.solverList = [];
         var tempList = [];
         var n = 4; // 행에 몇개를 보일 것인지 확인
+        var len = 0;
         for (var i in res.data.list){
           if (i % n == 0)
             tempList = [];
           tempList.push(res.data.list[i]);
-          if (i % n == n-1)
+          if (i % n == n-1){
             this.solverList.push(tempList);
+            len += tempList.length;
+          }
         }
 
-        if(tempList.length < n)
+        if(tempList.length < n){
           this.solverList.push(tempList);
+          len += tempList.length;
+        }
+
+        this.solverCnt = len;
       })
       .catch(()=>{
         console.log();
@@ -157,22 +184,50 @@ export default {
     })
     .then((res) => {
       this.Category = res.data;
+      setTimeout(() => {
+        this.isLoaded = true
+      }, 1000)
     })
     .catch(() => {
       console.log();
     });
     this.setSolverList();
   },
+  computed: {
+    ...mapState({
+      userNickname: state => state.auth.userNickname,
+    }),
+  }
 }
 </script>
 
 <style>
-  .detail-text {
-    text-align: left;
+  .box-for-intro {
+    margin-top: 4px;
+    height: 40px;
+    padding: 0px 2px 0px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* display: inline-block; */
   }
 
-  .detail-text > h5 {
-    margin-top:5px;
+  .box-for-category {
+    height: 20px;
+    padding: 0px 1px 0px 5px;
+  }
+
+  .detail-text {
+    color: #658DC6;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .detail-nickname {
+    color: #0F4C81;
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 700;
   }
 
   .form-select{
@@ -181,15 +236,18 @@ export default {
   }
 
   img.user-image {
-    width:110px;
-    height:110px;
+    width:100px;
+    height:100px;
+    opacity: 60%;
+    border: 1px solid #658dc673;
+    border-radius: 100%;
   }
 
   img.user-level-badge{
     position: absolute;
-    width: 50px;
-    left:-5px;
-    top:-5px;
+    width: 60px;
+    left: 70px;
+    top: 0px;
   }
 
   .search-col{
@@ -326,6 +384,10 @@ export default {
     width: 1190px;
   }
 
+  .solver-bg {
+    background-color: #f7f7f7;
+  }
+
   .solver-header {
     background-color: #658DC6;
     display: flex;
@@ -338,61 +400,51 @@ export default {
   }
 
   .solver-user-card {
+    border: 3px solid #658DC6;
+    border-width: 5px 0px 1px 0px ;
     width: 270px;
-    height: 210px;
+    height: 300px;
     margin: 0px 10px 0px 10px;
-    /* background-color: #658DC6; */
-    border: 1px solid #b5c7d3;
+    background-color: white;
+    border-radius: 2px;
     position: relative;
   }
 
   .solver-user-card:hover {
-    border: 1px solid white;
-    background-color: #f3f3f3;
+    /* border: 1px solid white; */
+    background-color: #ecf4ff;
     transition: color 0.2s;
     cursor: pointer;
   }
 
   .solver-user-col1 {
-    width: 110px;
-    height: 110px;
-    margin: 10px 0px 10px 12px;
-    float: left;
-    /* background-color: #84898C; */
+    margin: auto;
+    margin-top: 20px;
   }
 
-  .solver-user-col2 {
-    width: 120px;
-    height: 110px;
-    margin: 10px 0px 10px 12px;
-    float: left;
-    /* background-color: #84898C; */
-  }
 
   .solver-user-row{
-    width: 240px;
+    position: absolute;
+    bottom: 10px;
     height: 20px;
-    margin: 7px 12px;
-    float: left;
-    /* background-color: #84898C; */
+    width: 100%;
+    color: #B5C7D3;
   }
 
   .solver-user-row > img {
     width: 15px;
   }
 
-  .solver-user-row > span {
-    color: #cccccc;
-  }
 
   span.detail-category{
-    border-radius: 10px;
+    border: 1px solid #658DC6;
     padding-left: 2px;
     padding-right: 2px;
     margin-bottom: 2px;
     margin-right: 3px;
-    background-color: #dfdfdf;
+    color: #0F4C81;
+    /* background-color: #658DC6; */
     display: inline-block;
-    font-size:13px;
+    font-size:14px;
   }
 </style>

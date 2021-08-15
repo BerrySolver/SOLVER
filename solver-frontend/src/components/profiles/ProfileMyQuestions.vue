@@ -10,32 +10,44 @@
       v-for="question in myQuestions.myQuestionList"
       :key="question.id"
       class="my-question-title">
-      - {{ question.title }} [ {{ question.answerCount }} ]
+      <div @click="clickQuestion(question.id)">- {{ question.title }} [ {{ question.answerCount }} ]</div>
     </div>
   </div>
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import axios from 'axios'
+import API from "@/API.js"
+import {mapActions} from 'vuex'
 
 export default {
   name: 'ProfileMyQuestions',
-  props: ['myQuestionsTab'],
-  methods: {
-    ...mapActions(['myQuestionsSetting'])
+  props: ['nickname', 'tabNum'],
+  data() {
+    return {
+          myQuestions: {},
+    }
   },
-  computed: {
-  ...mapState({
-    userNickname: state => state.auth.userNickname,
-    myQuestions: state => state.profiles.myQuestions,
-    }),
+  methods: {
+    ...mapActions(['goQuestionDetail']),
+    clickQuestion(questionId) {
+      this.goQuestionDetail(questionId)
+    }
   },
   created() {
-    const myQuestionsTabInfo = {
-      userNickname: this.userNickname,
-      tabnum: this.myQuestionsTab,
-    }
-    this.myQuestionsSetting(myQuestionsTabInfo)
+    axios({
+      url: API.URL + `profiles/${this.nickname}/tab`,
+      method: "get",
+      params: {
+        tabNum: this.tabNum,
+      }
+    })
+    .then((res) => {
+      this.myQuestions = res.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 }
 </script>
@@ -46,8 +58,14 @@ export default {
   margin: 10px;
 }
 
-.my-question-title:hover {
-  background-color: #0F4C81;
+.my-question-title div{
+  padding: 3px;
+  max-width: 800px;
+}
+
+.my-question-title div:hover {
+  background-color: #658DC6;
   color: white;
+  cursor: pointer;
 }
 </style>
