@@ -13,6 +13,7 @@
           <p class="submit">
             <input @click="clickRegister()" type="submit" name="commit" value="Join!" />
           </p>
+          <button @click="testClick()">test</button>
         </form>
       </div>
       <div id="room" style="display: none;">
@@ -33,6 +34,7 @@
 import kurentoUtils from "kurento-utils";
 
 function clStart() {
+  console.log(isMySharing);
   startSharing();
 }
 function clStop(e) {
@@ -60,7 +62,8 @@ async function startSharing() {
   try {
     screenName = name;
     var message = {
-      id: "joinRoom",
+      id: "startShare",
+      // id: "joinRoom",
       name: name,
       // name: name,
       room: room,
@@ -77,6 +80,8 @@ function stopSharing() {
     id: "stopShare",
     name: myName,
   });
+
+  name = myName;
 
   participants["scree&" + myName].dispose();
   // isScreenSharingState
@@ -96,6 +101,8 @@ var name;
 var room;
 var screenName;
 var myName;
+var isSharing = false;
+var isMySharing = false;
 
 ws.onmessage = function(message) {
   var parsedMessage = JSON.parse(message.data);
@@ -358,6 +365,10 @@ function receiveVideo(sender) {
     return;
   }
 
+  // if(sender.startsWith("scree&") ){
+  //   data
+  // }
+
   var options = {
     remoteVideo: video,
     onicecandidate: participant.onIceCandidate.bind(participant),
@@ -597,11 +608,23 @@ function Participant(name) {
   };
 }
 
+function test() {
+  console.log(data.isSharing);
+}
+
 export default {
   data: function() {
     return {
       searchInputData: "",
     };
+  },
+  computed: {
+    myShare() {
+      return isMySharing == true;
+    },
+    screenShare() {
+      return isSharing == true;
+    },
   },
   methods: {
     clickRegister() {
@@ -611,10 +634,25 @@ export default {
       leaveRoom();
     },
     clickSt() {
+      if (isSharing) return;
+      isMySharing = true;
+      isSharing = true;
       clStart();
     },
     clickSp() {
+      if (!isMySharing) return;
+      isMySharing = false;
+      isSharing = false;
       clStop();
+    },
+    testClick() {
+      test();
+    },
+    isSharing() {
+      return isSharing;
+    },
+    isMySharing() {
+      return isMySharing;
     },
   },
 };
