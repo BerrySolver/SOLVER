@@ -23,6 +23,9 @@ export default {
     editProfileCalendar: "profiles/time-table",
 
     // 솔버 결제
-    paySolver: "points/pay"
+    paySolver: "points/pay",
+    
+    //화상회의
+    conferenceLog: "conferences",
   },
 };
