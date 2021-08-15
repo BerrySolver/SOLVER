@@ -17,10 +17,10 @@
         <div class="question-category">
           <div><span class="info1">TODAY</span></div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">질문: </span> 000개
+            <span class="info2">질문: </span> {{todayQuestions}}개
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">답변: </span> 000개
+            <span class="info2">답변: </span> {{todayAnswers}}개
           </div>
           <div class="question-category-items">
             <vs-collapse open-hover>
@@ -297,6 +297,8 @@ export default {
       currentPageIndex: 1,
       totalListItemCount: 10,
       isLoaded: false,
+      todayQuestions: "",
+      todayAnswers: ""
     };
   },
   methods: {
@@ -366,9 +368,9 @@ export default {
       })
         .then((res) => {
           this.questionList = res.data.questionFormList;
+          this.todayQuestions = res.data.todayQuestions;
+          this.todayAnswers = res.data.todayAnswers;
           this.totalListItemCount = res.data.totalCount;
-          // console.log(this.questionList);
-          // console.log(this.totalCount);
           this.questionList.forEach((e) => {
             var isImage = false;
             var isVideo = false;
@@ -379,11 +381,6 @@ export default {
               if (e.content.indexOf('<figure class="media">') != -1) {
                 isVideo = true;
               }
-              // console.log("전 - ", e.content);
-              // console.log(e.content.indexOf("<figure"), e.content.indexOf("</figure>"));
-              // console.log("앞", e.content.slice(0, e.content.indexOf("<figure")));
-              // console.log("미디어", e.content.slice(e.content.indexOf("<figure"), e.content.indexOf("</figure>")+9));
-              // console.log("뒤", e.content.slice(e.content.indexOf("</figure>")+9));
               e.content =
                 e.content.slice(0, e.content.indexOf("<figure")) +
                 e.content.slice(e.content.indexOf("</figure>") + 9);
@@ -428,7 +425,6 @@ export default {
       return r;
     },
     paginationChanged(pageIndex) {
-      // console.log("movePage : pageIndex : " + pageIndex);
       this.request.offset = pageIndex - 1;
       this.currentPageIndex = pageIndex;
       this.getQuestionList();
