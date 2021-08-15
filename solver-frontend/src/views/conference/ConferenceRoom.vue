@@ -13,7 +13,6 @@
           <p class="submit">
             <input @click="clickRegister()" type="submit" name="commit" value="Join!" />
           </p>
-          <button @click="testClick()">test</button>
         </form>
       </div>
       <div id="room" style="display: none;">
@@ -23,13 +22,30 @@
           <div id="video2"></div>
         </div>
         <div id="screens"></div>
-        <input type="button" id="button-leave" @click="clickLeaveRoom()" value="Leave room" />
       </div>
-      <p>
-        <button id="start" @click="clickSt()">Start Sharing</button>
-        <button id="stop" @click="clickSp()">Stop Sharing</button>
-      </p>
-      <video id="video2" width="800" height="680" autoplay></video>
+      <div class="screen-buttons">
+        <div id="start" v-if="checkScreen()" class="screen-start-button" @click="clickSt()">
+          <img
+            style="width:23px; margin: 10px 0 3px 0;"
+            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+          />
+        </div>
+        <div id="stop" v-if="isMyScreen" class="screen-stop-button" @click="clickSp()">
+          <img
+            style="width:23px; margin: 10px 0 3px 0;"
+            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+          />
+        </div>
+        <div class="conference-finish-btn" @click="clickLeaveRoom()">
+          <img
+            style="width: 12px;"
+            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
+          />
+        </div>
+      </div>
+      <!-- <div>
+        <input type="button" id="button-leave" @click="clickLeaveRoom()" value="Leave room" />
+      </div> -->
     </div>
   </div>
 </template>
@@ -87,7 +103,7 @@ function stopSharing() {
 
   name = myName;
 
-  participants["scree&" + myName].dispose();
+  // participants["scree&" + myName].dispose();
   // isScreenSharingState
   // document.getElementById("join").style.display = "block";
   // document.getElementById("room").style.display = "none";
@@ -174,11 +190,6 @@ function onNewParticipant(request) {
   receiveVideo(request.name);
 }
 
-function onNewScreenShare(request) {
-  screenName = request.name;
-  receiveScreenVideo(request);
-}
-
 function receiveVideoResponse(result) {
   console.log(result.name);
   participants[result.name].rtcPeer.processAnswer(result.sdpAnswer, function(error) {
@@ -215,7 +226,7 @@ function onExistingParticipants(msg) {
     audio: true,
     video: {
       mandatory: {
-        maxWidth: 1900,
+        maxWidth: 1800,
         maxHeight: 1080,
         maxFrameRate: 60,
       },
@@ -241,6 +252,7 @@ function onExistingParticipants(msg) {
   if (name.startsWith("scree&")) {
     // alert("!@!@");
     // var participant = new ScreenParticipant(screenName);
+    isSharing = true;
     var participant = new Participant(name);
     console.log(participant);
     participants[name] = participant;
@@ -268,7 +280,7 @@ function onExistingParticipants(msg) {
         audio: true,
         video: {
           mandatory: {
-            maxWidth: 1900,
+            maxWidth: 1800,
             maxHeight: 1080,
             maxFrameRate: 60,
           },
@@ -345,7 +357,7 @@ function receiveVideo(sender) {
       audio: true,
       video: {
         mandatory: {
-          maxWidth: 1900,
+          maxWidth: 1800,
           maxHeight: 1080,
           maxFrameRate: 60,
         },
@@ -416,6 +428,7 @@ function receiveScreenVideo(request) {
 
 function onParticipantLeft(request) {
   console.log("Participant " + request.name + " left");
+  if (request.name.startsWith("scree&")) isSharing = false;
   var participant = participants[request.name];
   participant.dispose();
   delete participants[request.name];
@@ -552,6 +565,7 @@ function Participant(name) {
   // container.onclick = switchContainerClass;
 
   if (name.startsWith("scree&")) {
+    isSharing = true;
     this.name = name;
     console.log("this.name : " + this.name);
     var container = document.createElement("div");
@@ -561,6 +575,7 @@ function Participant(name) {
     var video = document.createElement("video");
     // var video = document.getElementById("screen");
     video.id = "screen";
+    // video.style.borderRadius = "5%";
 
     // var rtcPeer;
 
@@ -583,6 +598,7 @@ function Participant(name) {
     video.id = "video-" + name;
     video.style.width = "800px";
     video.style.height = "600px";
+    // video.style.borderRadius = "5%";
 
     // var rtcPeer;
 
@@ -661,6 +677,7 @@ export default {
   data: function() {
     return {
       searchInputData: "",
+      isMyScreen: false,
     };
   },
   computed: {
@@ -680,18 +697,25 @@ export default {
     },
     clickSt() {
       if (isSharing) return;
+      // if (participantsCount < 2) return;
+      this.isMyScreen = true;
       isMySharing = true;
       isSharing = true;
       clStart();
     },
     clickSp() {
       if (!isMySharing) return;
+      this.isMyScreen = false;
       isMySharing = false;
       isSharing = false;
       clStop();
     },
-    testClick() {
-      test();
+    checkScreen() {
+      if (isSharing && !this.isMyScreen) return false;
+
+      if (this.isMyScreen) return false;
+
+      if (!isSharing) return true;
     },
     isSharing() {
       return isSharing;
@@ -1046,8 +1070,79 @@ a.hovertext:focus:after {
   opacity: 1;
 }
 
+#screens {
+  margin-top: 20px;
+}
+
 #participants {
+  margin-top: 50px;
   display: flex;
   justify-content: space-between;
+}
+
+.screen-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  align-items: center;
+}
+
+.conference-finish-btn {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 70%;
+  float: left;
+  height: 45px;
+  margin-right: 7px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.conference-finish-btn:hover {
+  background-color: #84898c;
+  cursor: pointer;
+  filter: brightness(115%);
+}
+
+.screen-start-button {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 70%;
+  float: left;
+  height: 45px;
+  margin-right: 7px;
+  width: 45px;
+}
+
+.screen-stop-button {
+  background-color: #658dc6;
+  filter: brightness(105%);
+  border: 1px solid #e0e0e0;
+  border-radius: 70%;
+  float: left;
+  height: 45px;
+  margin-right: 7px;
+  width: 45px;
+}
+
+.screen-start-button:hover {
+  background-color: #658dc6;
+  cursor: pointer;
+  filter: brightness(115%);
+}
+
+.screen-stop-button:hover {
+  cursor: pointer;
+  filter: brightness(115%);
+}
+</style>
+
+<style scoped>
+#wrapper {
+  background-color: #b5c7d3;
+  min-height: 1900px;
 }
 </style>
