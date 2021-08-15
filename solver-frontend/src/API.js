@@ -20,6 +20,9 @@ export default {
 
     // 프로필
     editProfile: "profiles",
-    editProfileCalendar: "profiles/time-table"
+    editProfileCalendar: "profiles/time-table",
+
+    // 솔버 결제
+    paySolver: "points/pay"
   },
 };
