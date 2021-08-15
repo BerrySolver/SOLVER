@@ -42,7 +42,7 @@ public class AnswerServiceImpl implements AnswerService{
 	KakaoUtil kakaoUtil;
 	
 	@Autowired
-	PointCodeRepository pointCodeRepository;;
+	PointCodeRepository pointCodeRepository;
 	
 	@Autowired
 	PointLogRepository pointLogRepository;

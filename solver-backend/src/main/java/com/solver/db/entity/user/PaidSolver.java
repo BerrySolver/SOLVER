@@ -9,17 +9,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 
+import com.solver.db.entity.BaseEntity;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-public class PaidSolver implements Serializable{
-	@EmbeddedId
-	PaidSolverId paidSolverId;
+public class PaidSolver extends BaseEntity{
 	
-	@MapsId("paidSolverId")
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;
