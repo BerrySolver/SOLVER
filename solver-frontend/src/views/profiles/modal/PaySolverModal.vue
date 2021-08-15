@@ -245,10 +245,6 @@ export default {
     padding: 10px 0px;
   }
 
-  .pay-table {
-    /* background: #f3f3f3; */
-  }
-
   .pay-result{
     margin: 0px 100px;
   }
