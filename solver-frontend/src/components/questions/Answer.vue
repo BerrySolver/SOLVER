@@ -18,6 +18,12 @@
               <div style="color: #84898C; font-size: 13px;">{{ humanize(now, answer.regDt) }}</div>
             </div>
             <div class="answer-buttons">
+              <div v-if="questionNickname == nickname" class="answer-button" @click="openRequestConference(answer)">
+                <img
+                  style="width:23px; margin: 10px 0 3px 0;"
+                  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+                />
+              </div>
               <div class="answer-button" @click="clickFavorite(answer, idx)">
                 <img
                   v-if="!answer.myFavoriteAnswer"
@@ -31,19 +37,13 @@
                 />
                 <div style="font-size: 13px;">{{ answer.likeCount }}</div>
               </div>
-              <div class="answer-button">
-                <img
-                  style="width:23px; margin: 10px 0 3px 0;"
-                  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
-                />
-              </div>
               <div
                 v-if="answer.nickname == nickname"
                 class="answer-delete"
                 @click="deleteAnswerCheck(answer)"
               >
                 <img
-                  style="width: 15px;"
+                  style="width: 8px;"
                   src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
                 />
               </div>
@@ -56,7 +56,7 @@
               class="answer-modify-btn"
               @click="clickModifyBtn(answer, idx)"
             >
-              수정하기
+              <img src="@/assets/edit-button.png" width="20px">
             </div>
           </div>
           <div class="answer-comment-area">
@@ -73,7 +73,12 @@
             </div>
             <span v-show="isTrue"></span>
             <Comments v-show="commentListOpen[idx]" :answerId="answer.answerId" />
-            <CommentsCreate v-show="commentListOpen[idx]" :answerId="answer.answerId" />
+            <CommentsCreate v-if="isLoggedIn" v-show="commentListOpen[idx]" :answerId="answer.answerId" />
+            <div v-else v-show="commentListOpen[idx]" class="nonlogin-comment" @click="$router.push({name: 'Login'})">
+              <div class="nonlogin-comment-content">
+                <span>로그인하고 댓글을 남겨보세요!</span>
+              </div>
+            </div>
           </div>
           <div :id="`answerModifyEditorInsert` + idx"></div>
           <div>
@@ -99,7 +104,10 @@ import Comments from "@/components/questions/Comments";
 import CommentsCreate from "@/components/questions/CommentsCreate";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
+import RequesetConference from './modal/RequesetConference.vue';
+import AnswerDelete from './modal/AnswerDelete.vue';
+import LoginModal from "@/components/main/LoginModal"
 
 Vue.use(CKEditor);
 
@@ -173,8 +181,11 @@ export default {
       commentListOpen: [],
       isTrue: true,
       now: new Date(),
-      CKEditor: "",
+      CKEditor: ""
     };
+  },
+  props: {
+    questionNickname: String,
   },
   methods: {
     openComment: function(idx) {
@@ -186,9 +197,9 @@ export default {
         url: API.URL + `answers/list/${this.$route.params.questionId}`,
         method: "get",
         params: {
-          nickname: localStorage.getItem("solverNickname"),
+          nickname: this.userNickname
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           console.log(res);
@@ -218,7 +229,7 @@ export default {
       return r;
     },
     checkNickname(nickname) {
-      if (localStorage.getItem("solverNickname") == nickname) return true;
+      if (this.userNickname == nickname) return true;
 
       return false;
     },
@@ -230,9 +241,14 @@ export default {
       }
     },
     addFavoriteAnswer(answer, idx) {
-      const accessToken = localStorage.getItem("solverToken");
-      if (accessToken == null) {
-        console.log("예외처리");
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
         return;
       }
 
@@ -241,7 +257,7 @@ export default {
       axios({
         url: API.URL + "answers/" + answerId + "/recommend",
         method: "post",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           this.answerList[idx].myFavoriteAnswer = !this.answerList[idx].myFavoriteAnswer;
@@ -253,9 +269,14 @@ export default {
         });
     },
     removeFavoriteAnswer(answer, idx) {
-      const accessToken = localStorage.getItem("solverToken");
-      if (accessToken == null) {
-        console.log("예외처리");
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
         return;
       }
 
@@ -264,7 +285,7 @@ export default {
       axios({
         url: API.URL + "answers/" + answerId + "/recommend",
         method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           this.answerList[idx].myFavoriteAnswer = !this.answerList[idx].myFavoriteAnswer;
@@ -339,7 +360,7 @@ export default {
         },
         headers: {
           "Access-Control-Allow-Methods": "GET,PUT,POST,PATCH,DELETE",
-          Authorization: "Bearer " + localStorage.getItem("solverToken"),
+          Authorization: "Bearer " + this.accessToken
         },
       })
         .then((res) => {
@@ -359,7 +380,7 @@ export default {
         url: API.URL + `answers/${answer.answerId}`,
         method: "delete",
         headers: {
-          Authorization: "Bearer " + localStorage.getItem("solverToken"),
+          Authorization: "Bearer " + this.accessToken
         },
       })
         .then((res) => {
@@ -371,17 +392,29 @@ export default {
         });
     },
     deleteAnswerCheck(answer){
-      const $this =this;
-      alertify.confirm("답변삭제", "정말 삭제하시겠습니까?",
-      function(){
-        $this.deleteAnswer(answer);
-      }, function(){
-        
+      this.$modal.show(AnswerDelete,{
+        answer : answer,
+        modal : this.$modal },{
+          name: 'dynamic-modal',
+          width : '600px',
+          height : '250px',
+          draggable: false,
       });
-    }
+    },
+    openRequestConference(answer){
+      this.$modal.show(RequesetConference,{
+        answer : answer,
+        modal : this.$modal },{
+          name: 'dynamic-modal',
+          width : '600px',
+          height : '650px',
+          draggable: false,
+        }
+      );
+    },
   },
   mounted() {
-    this.nickname = localStorage.getItem("solverNickname");
+    this.nickname = this.userNickname
   },
   created() {
     this.getAnswerList();
@@ -390,7 +423,10 @@ export default {
     ...mapState({
       commentDeleteTrigger: (state) => state.questions.commentDeleteTrigger,
       answerChangeTrigger: (state) => state.questions.answerChangeTrigger,
+      accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname,
     }),
+    ...mapGetters(['isLoggedIn'])
   },
   watch: {
     commentDeleteTrigger: function() {
@@ -407,7 +443,7 @@ export default {
     },
     answerChangeTrigger: function() {
       this.getAnswerList();
-    },
+    }
   },
 };
 </script>
@@ -430,7 +466,7 @@ export default {
 
 .answer-buttons {
   display: flex;
-  margin-left: 580px;
+  margin-left: auto;
   align-items: center;
 }
 
@@ -469,7 +505,7 @@ export default {
   text-align: left;
 }
 .answer-info div {
-  width: 50px;
+  width: 60px;
 }
 
 .answer-item {
@@ -503,16 +539,15 @@ export default {
 }
 
 .answer-modify-btn {
-  background-color: #658dc6;
   border-radius: 6px;
   color: white;
   cursor: pointer;
   float: left;
-  height: 30px;
+  height: 25px;
   margin-right: 10px;
   font-size: 15px;
-  width: 70px;
-  margin-left: 820px;
+  width: 25px;
+  margin-left: 835px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -527,9 +562,7 @@ export default {
 }
 
 .answer-modify-btn:hover {
-  color: white;
-  background: #0f4c81;
-  transition: 0.4s;
+  filter: brightness(40%);
 }
 
 .answer-list .ck.ck-editor {
@@ -560,7 +593,34 @@ export default {
   cursor: pointer;
   display: flex;
   height: 10px;
-  margin-left: 20px;
+  margin-left: 10px;
   top: 17px;
+}
+
+.nonlogin-comment {
+  display: flex;
+  justify-content: center;
+  margin: 0px 0 50px 0;
+}
+
+.nonlogin-comment-content {
+  align-items: center;
+  border: 1px solid #658dc6;
+  border-radius: 20px;
+  color: #658dc6;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+  font-weight: 700;
+  height: 100px;
+  justify-content: center;
+  transition: 0.2s;
+  width: 800px;
+}
+
+.nonlogin-comment-content:hover {
+  background-color: #658dc6;
+  color: white;
+  transform: scale(1.02);
 }
 </style>

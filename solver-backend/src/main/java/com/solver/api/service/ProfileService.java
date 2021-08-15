@@ -8,7 +8,7 @@ import com.solver.api.response.ProfileRes;
 import com.solver.api.response.ProfileTabRes;
 
 public interface ProfileService {
-	ProfileRes getProfileInfo(String nickname);
+	ProfileRes getProfileInfo(String token, String nickname);
 
 	void updateProfile(ProfileUpdatePatchReq profileUpdatePatchReq, String accessToken, HttpServletResponse response);
 

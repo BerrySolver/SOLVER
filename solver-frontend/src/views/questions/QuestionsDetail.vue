@@ -7,10 +7,13 @@
             <div>{{ question.mainCategory }} > {{ question.subCategory }}</div>
             <div v-if="checkNickname()" class="question-buttons">
               <div class="question-modify-btn" @click="modifyQuestion()">
-                수정하기
+                <img src="@/assets/edit-button.png" width="20px">
               </div>
-              <div class="question-delete-btn" @click="deleteQuestion()">
-                삭제하기
+              <div class="question-delete-btn" @click="deleteQuestionCheck()">
+                <img
+                  style="width: 12px;"
+                  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
+                />
               </div>
             </div>
           </div>
@@ -72,8 +75,13 @@
       </div>
     </div>
     <hr style="color: #e0e0e0; opacity: 0.8;" />
-    <Answer />
-    <AnswerCreate :questionId="$route.params.questionId" />
+    <Answer :questionNickname="question.nickname" />
+    <AnswerCreate v-if="isLoggedIn" :questionId="$route.params.questionId" />
+    <div v-else class="nonlogin-answer" @click="$router.push({name: 'Login'})">
+      <div class="nonlogin-answer-content">
+        <span>로그인하고 여러분의 지식을 공유해보세요!</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -82,8 +90,10 @@ import axios from "axios";
 import API from "@/API.js";
 import Answer from "@/components/questions/Answer";
 import AnswerCreate from "@/components/questions/AnswerCreate";
+import LoginModal from "@/components/main/LoginModal"
 import router from "@/router";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
+import QuestionDelete from './QuestionDeleteModal.vue';
 
 export default {
   name: "QuestionsDetail",
@@ -105,12 +115,12 @@ export default {
   methods: {
     ...mapActions(["setStateQuestionId", "setStateQuestion", "setStateContent"]),
     changeLike: function() {
-      if (localStorage.getItem("solverToken") != null) {
+      if (this.isLoggedIn) {
         if (this.isLiked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
             method: "delete",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isLiked = !this.isLiked;
@@ -123,7 +133,7 @@ export default {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/recommend`,
             method: "post",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isLiked = !this.isLiked;
@@ -133,15 +143,23 @@ export default {
               console.log(err);
             });
         }
+      } else {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
       }
     },
     changeBookmark: function() {
-      if (localStorage.getItem("solverToken") != null) {
+      if (this.isLoggedIn) {
         if (this.isBookmarked) {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
             method: "delete",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isBookmarked = !this.isBookmarked;
@@ -154,7 +172,7 @@ export default {
           axios({
             url: API.URL + `questions/${this.$route.params.questionId}/bookmark`,
             method: "post",
-            headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+            headers: { Authorization: "Bearer " + this.accessToken },
           })
             .then(() => {
               this.isBookmarked = !this.isBookmarked;
@@ -164,6 +182,14 @@ export default {
               console.log(err);
             });
         }
+      } else {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
       }
     },
     humanize: function(now, date) {
@@ -183,7 +209,7 @@ export default {
     },
     modifyUrl(url) {
       if (url == null) {
-        console.log("null");
+        // console.log("null");
         return "";
       }
 
@@ -200,7 +226,7 @@ export default {
       axios({
         url: API.URL + `questions/${this.$route.params.questionId}`,
         method: "delete",
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           router.push({ path: "/questions" });
@@ -210,6 +236,17 @@ export default {
           console.log(err);
         });
     },
+    deleteQuestionCheck(){
+      this.$modal.show(QuestionDelete,{
+        question : this.$route.params.questionId,
+        modal : this.$modal },{
+          name: 'dynamic-modal',
+          width : '600px',
+          height : '250px',
+          draggable: false,
+        }
+      );
+    },
     modifyQuestion() {
       this.setStateQuestion(this.question);
       this.setStateQuestionId(this.$route.params.questionId);
@@ -218,16 +255,17 @@ export default {
       });
     },
     checkNickname() {
-      if (this.question.nickname == localStorage.getItem("solverNickname")) return true;
+      if (this.question.nickname == this.userNickname) return true;
 
       return false;
     },
   },
   created() {
+    console.log("Bearer " + this.accessToken)
     axios({
       url: API.URL + `questions/${this.$route.params.questionId}/info`,
       method: "get",
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+      headers: { Authorization: "Bearer " + this.accessToken },
     })
       .then((res) => {
         this.question = res.data;
@@ -242,6 +280,13 @@ export default {
         console.log(err);
       });
   },
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname,
+    }),
+    ...mapGetters(["isLoggedIn"])
+  }
 };
 </script>
 
@@ -250,6 +295,38 @@ iframe {
   width: 800px;
   height: 450px;
 }
+
+.nonlogin-answer {
+  display: flex;
+  justify-content: center;
+  margin: 50px 0 100px 0;
+}
+
+.nonlogin-answer-content {
+  align-items: center;
+  border: 1px solid #658dc6;
+  border-radius: 20px;
+  color: #658dc6;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+  font-weight: 700;
+  height: 200px;
+  justify-content: center;
+  transition: 0.2s;
+  width: 900px;
+}
+
+.nonlogin-answer-content:hover {
+  /* background-color: #0f4c81; */
+  background-color: #658dc6;
+  color: white;
+  transform: scale(1.02);
+}
+
+/* .nonlogin-answer-content span {
+  color: #658dc6
+} */
 
 .question-count-button {
   cursor: pointer;
@@ -345,52 +422,44 @@ iframe {
 
 .question-buttons {
   display: flex;
+  align-items: center;
+  margin-right: 90px;
 }
 
 .question-buttons div {
   display: flex;
-
-  width: 70px;
+  width: 20px;
 }
 
 .question-modify-btn {
-  background-color: #658dc6;
+  /* background-color: #658dc6; */
   border-radius: 6px;
   color: white;
   cursor: pointer;
   float: left;
   height: 30px;
   font-size: 15px;
-  width: 70px;
+  width: 20px;
+  margin-right: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .question-delete-btn {
-  background-color: #b5c7d3;
+  /* background-color: #b5c7d3; */
   border-radius: 6px;
   color: white;
   cursor: pointer;
   float: left;
-  height: 30px;
-  font-size: 15px;
-  width: 70px;
-  margin-left: 10px;
+  top: 20px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .question-modify-btn:hover {
-  color: white;
-  background: #0f4c81;
-  transition: 0.4s;
-}
-
-.question-delete-btn:hover {
-  color: white;
-  background: #84898c;
-  transition: 0.4s;
+  filter: brightness(40%);
 }
 </style>

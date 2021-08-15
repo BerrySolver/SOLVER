@@ -39,31 +39,39 @@
       <!-- statistics-info의 lastchild(right) -->
       <div>
         <!-- 솔버 등급 -->
-        <div style="display:flex; align-items:center; ">
+        <div style="display:flex; align-items:center;">
           <div class="small-box"></div>
           <span class="subheading interval">솔버 등급</span>
         </div>
         <div v-if="userProfileInfo.remainingPoint < 100">
-          <img src="@/assets/berry-1.png" width="300px">
-          <div class="point-color-1">새싹베리</div> 
+          <div class="content-center">
+            <img src="@/assets/berry-1-gif.gif" width="300px">
+            <div class="point-color-1">새싹베리 등급</div> 
+          </div>          
         </div>
         <div v-if="100 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 200">
-          <div>
-            <img src="@/assets/berry-2.png" width="300px">
-            <div class="point-color-1">베이비베리</div> 
+          <div class="content-center">
+            <img src="@/assets/berry-2-gif.gif" width="300px">
+            <div class="point-color-1">베이비베리 등급</div> 
           </div>
         </div>    
         <div v-if="200 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 300">
-          <img src="@/assets/berry-3.png" width="300px">
-          <div class="point-color-1 content-center">전교1등베리</div> 
+          <div class="content-center">
+            <img src="@/assets/berry-3-gif.gif" width="300px">
+            <div class="point-color-1">전교1등베리 등급</div> 
+          </div>
         </div>
         <div v-if="300 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 400">
-          <img src="@/assets/berry-4.png" width="300px">
-          <div class="point-color-1">척척박사베리</div> 
-        </div>         
+          <div class="content-center">
+            <img src="@/assets/berry-4-gif.gif" width="300px">
+            <div class="point-color-1">척척박사베리 등급</div> 
+          </div>
+        </div>     
         <div v-if="400 <= userProfileInfo.remainingPoint">
-          <img src="@/assets/berry-5.png" width="300px">
-          <div class="point-color-1">베리킹</div> 
+          <div class="content-center">
+            <img src="@/assets/berry-5-gif.gif" width="300px">
+            <div class="point-color-1">베리킹 등급</div> 
+          </div>    
         </div>             
       </div>
     </div>
@@ -71,20 +79,32 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import axios from 'axios'
+import API from "@/API.js"
 
 export default {
   name: 'ProfileStatistics',
-  methods: {
-    ...mapActions(['statisticSetting']),
+  props: ['nickname', 'tabNum', 'userProfileInfo'],
+  data() {
+    return {
+      userStatistics: {},
+    }
   },
-  computed: {
-    ...mapState({
-      userNickname: state => state.auth.userNickname,
-      userStatistics: state => state.profiles.userStatistics,
-      userProfileInfo: state => state.profiles.userProfileInfo,
+  created() {
+    axios({
+      url: API.URL + `profiles/${this.nickname}/tab`,
+      method: "get",
+      params: {
+        tabNum: this.tabNum,
+      }
     })
-  },
+    .then((res) => {
+      this.userStatistics = res.data
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
 }
 </script>
 
@@ -105,7 +125,9 @@ export default {
 }
 
 .content-center {
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .statistics-info {

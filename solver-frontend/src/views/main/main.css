@@ -198,27 +198,55 @@
   width: 100px;
 }
 
-.solver-card-content {
-  color: white;
-  margin-top: 50px;
-  position: relative;
-  z-index: 2;
-}
-
-.solver-card-rank {
-  color: white;
-  font-size: 50px;
-  font-weight: 700;
-  margin-left: 40px;
-  position: absolute;
-  opacity: 50%;
-  z-index: 1;
-}
-
 .solver-intro {
   color: white;
   font-size: 16px;
   font-weight: 200;
+}
+
+.solver-line-1 {
+  display: flex;
+  justify-content: center;
+}
+
+.solver-line-1 .solver-card-content {
+  color: white;
+  margin-left: 20px;
+  position: relative;
+  width: 100px;
+  z-index: 2;
+}
+
+.solver-line-1 .solver-card-rank {
+  color: white;
+  font-size: 50px;
+  font-weight: 700;
+  opacity: 50%;
+  width: 50px;
+  z-index: 1;
+}
+
+.solver-line-2 {
+  display: flex;
+  justify-content: center;
+}
+
+.solver-line-2 .solver-card-content {
+  color: white;
+  margin-left: 60px;
+  position: relative;
+  width: 100px;
+  z-index: 2;
+}
+
+.solver-line-2 .solver-card-rank {
+  color: white;
+  font-size: 50px;
+  font-weight: 700;
+  margin-left: 40px;
+  opacity: 50%;
+  width: 50px;
+  z-index: 1;
 }
 
 .solver-title {
@@ -229,7 +257,7 @@
 }
 
 .solver-row {
-  margin-top: 50px;
+  margin-top: 35px;
 }
 
 .title {

@@ -13,5 +13,14 @@ import lombok.Setter;
 @Setter
 @ApiModel("NotificationListRes")
 public class NotificationListRes extends BaseResponse{
-	List<Notification> notificationList;
+	List<NotificationRes> notificationList;
+
+	public static NotificationListRes of(Integer statusCode, String message, List<NotificationRes> notificationRes) {
+		NotificationListRes res = new NotificationListRes();
+		res.setNotificationList(notificationRes);
+		res.setStatusCode(statusCode);
+		res.setMessage(message);		
+
+		return res;
+	}
 }

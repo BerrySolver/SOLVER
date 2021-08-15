@@ -1,5 +1,6 @@
 package com.solver.api.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.response.NotificationListRes;
+import com.solver.api.response.NotificationRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.db.entity.code.Code;
@@ -29,7 +31,7 @@ public class NotificationServiceImpl implements NotificationService{
 	NotificationRepository notificationRepository;
 
 	@Override
-	public NotificationListRes getAllNotificationList(String accessToken, HttpServletResponse response) {
+	public List<NotificationRes> getAllNotificationList(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
 		
 		TokenResponse tokenResponse = new TokenResponse();
@@ -40,61 +42,26 @@ public class NotificationServiceImpl implements NotificationService{
 			response.setHeader("Authorization", tokenResponse.getAccessToken());
 		}
 
-		Long kakaoId = tokenResponse.getKakaoId();
-		
+		Long kakaoId = tokenResponse.getKakaoId();		
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 		
-		NotificationListRes notificationListRes = new NotificationListRes(); 
+		List<NotificationRes> list = new ArrayList<NotificationRes>();
 		
 		if(user == null) {
-			notificationListRes.setMessage("전체 알림 목록 조회 실패");
-			notificationListRes.setStatusCode(409);
-			return notificationListRes;
+			return list;
 		}
 		
-		List<Notification> notificationList = notificationRepository.findByUserId(user.getId());
-		notificationListRes.setMessage("전체 알림 목록 조회 성공");
-		notificationListRes.setStatusCode(200);
-		notificationListRes.setNotificationList(notificationList);
+		List<Notification> notification = notificationRepository.findByUserId(user.getId());
 		
-		return notificationListRes;
+		for (Notification notifi : notification) {
+			NotificationRes notificationRes = new NotificationRes();
+			notificationRes.setQuestionId(notifi.getQuestion().getId());
+			notificationRes.setCode(notifi.getCode().getCode());
+			notificationRes.setTitle(notifi.getQuestion().getTitle());
+			list.add(notificationRes);
+		}
+		
+		return list;
 	}
-
-	@Override
-	public NotificationListRes getVideoNotificationList(String accessToken, HttpServletResponse response) {
-		String token = accessToken.split(" ")[1];
-		
-		TokenResponse tokenResponse = new TokenResponse();
-		
-		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
-		
-		if(tokenResponse.getAccessToken() != null) {
-			response.setHeader("Authorization", tokenResponse.getAccessToken());
-		}
-
-		Long kakaoId = tokenResponse.getKakaoId();
-		
-		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
-		
-		NotificationListRes notificationListRes = new NotificationListRes(); 
-		
-		if(user == null) {
-			notificationListRes.setMessage("화상 알림 목록 조회 실패");
-			notificationListRes.setStatusCode(409);
-			return notificationListRes;
-		}
-		
-		Code code = new Code();
-		
-		code.setCode("061");
-		
-		List<Notification> notificationList = notificationRepository.findByUserIdAndCode(user.getId(), code);
-		notificationListRes.setMessage("화상 알림 목록 조회 성공");
-		notificationListRes.setStatusCode(200);
-		notificationListRes.setNotificationList(notificationList);
-		
-		return notificationListRes;
-	}
-	
 	
 }

@@ -19,6 +19,7 @@ import QuestionsModify from "@/views/questions/QuestionsModify.vue";
 
 import Solvers from "@/views/solvers/Solvers.vue";
 
+import MyProfile from "@/views/profiles/MyProfile.vue";
 import Profile from "@/views/profiles/Profile.vue";
 
 import Notifications from "@/views/notifications/Notifications.vue";
@@ -65,6 +66,7 @@ const routes = [
   { path: "/solvers", name: "Solvers", component: Solvers },
 
   // profile
+  { path: "/my-profile/:nickname", name: "MyProfile", component: MyProfile },
   { path: "/profiles/:nickname", name: "Profile", component: Profile },
 
   // reports

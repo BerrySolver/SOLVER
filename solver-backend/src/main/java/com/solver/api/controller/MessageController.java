@@ -6,16 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.solver.api.request.MessageConferenceCreatePostReq;
+import com.solver.api.request.QuestionPostReq;
 import com.solver.api.response.MessageListRes;
 import com.solver.api.service.MessageService;
 import com.solver.common.model.BaseResponse;
+import com.solver.db.repository.user.MessageRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
@@ -60,5 +66,23 @@ public class MessageController {
 		MessageListRes messageListRes = messageService.getReceiveMessageList(accessToken, response);
 		
 		return ResponseEntity.status(messageListRes.getStatusCode()).body(messageListRes);
+	}
+	
+
+	@PostMapping("/regist")
+	@ApiOperation(value = "받은 메시지 목록", notes = "받은 메시지 목록 조회") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "받은 메시지 목록 조회 성공"),
+        @ApiResponse(code = 409, message = "받은 메시지 목록 조회 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> setMessage(
+			HttpServletResponse response, 
+			@RequestBody @ApiParam(value="요청 정보", required=true) MessageConferenceCreatePostReq messagePostReq,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken
+			)
+	{
+		messageService.insertMessage(messagePostReq);
+		
+		return ResponseEntity.status(200).body(BaseResponse.of(200, "요청성공"));
 	}
 }

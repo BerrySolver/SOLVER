@@ -21,7 +21,7 @@ import axios from "axios";
 import API from "@/API.js";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 Vue.use(CKEditor);
 
@@ -87,23 +87,23 @@ export default {
   },
   data() {
     return {
-      accessToken: "",
       CKEditor: "",
-      userNickname: localStorage.getItem("solverNickname"),
     };
   },
   methods: {
     ...mapActions(["triggerAnswerReload"]),
     answerCreate: function() {
       const content = this.CKEditor.getData();
-      console.log(content);
+      if (content == "") {
+        return
+      }
       axios({
         url: API.URL + `answers/${this.questionId}`,
         method: "post",
         data: {
           content: content,
         },
-        headers: { Authorization: "Bearer " + localStorage.getItem("solverToken") },
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then(() => {
           this.triggerAnswerReload();
@@ -114,8 +114,11 @@ export default {
         });
     },
   },
-  created() {
-    this.accessToken = localStorage.getItem("solverToken");
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname,
+    }),
   },
   mounted() {
     ClassicEditor.create(document.querySelector("#answerEditorInsert"), {

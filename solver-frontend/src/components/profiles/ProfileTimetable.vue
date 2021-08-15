@@ -5,15 +5,15 @@
         화상시간 캘린더
       </span>
       <span v-if="!isCalendarEdit">
-        <img src="@/assets/edit-button.png" @click="timeEditRequest" class="calendar-edit-button">
+        <img v-if="isLogin" src="@/assets/edit-button.png" @click="timeEditRequest" class="calendar-edit-button">
       </span>
       <span v-if="isCalendarEdit" class="goback" @click="timeEditRequest">
         ←
       </span>
     </div>
     <div class="m-top-3">
-      <button class="first-setting day-button" @click="checkWeekday()">평일</button>
-      <button class="day-button" @click="checkWeekend()">주말</button>
+      <button class="day-button" :class="{'first-button':isFisrt}" @click="[checkWeekday(), changeFirst()]">평일</button>
+      <button class="day-button" :class="{'first-button':!isFisrt}" @click="[checkWeekend(), changeFirst()]">주말</button>
     </div>
     <br>
 
@@ -68,7 +68,7 @@
 <script>
 import axios from 'axios'
 import API from "@/API.js"
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ProfileTimetable',
@@ -76,6 +76,8 @@ export default {
   data() {
     return {
       isCalendarEdit: false,
+      isFisrt: true,
+      isLogin: false,
       isWeekday: true,
       editedWeekday: [],
       editedWeekend: [],
@@ -86,11 +88,13 @@ export default {
         "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
         "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
         "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
-      ],
+      ]
     }
   },
   methods: {
-    ...mapActions(['profileSetting']),
+    changeFirst() {
+      this.isFisrt = !this.isFisrt
+    },
     checkWeekday () {
       this.isWeekday = true
     },
@@ -114,15 +118,14 @@ export default {
       console.log(str_weekday)
       axios({
         url: API.URL + API.ROUTES.editProfileCalendar,
-        method: "patch",
+        method: "put",
         headers: { Authorization: "Bearer " + this.accessToken},
         data: {
           'weekdayTime': str_weekday,
           'weekendTime': str_weekend,
         }       
       })
-      .then((res) => {
-        this.profileSetting(this.userNickname)
+      .then(() => {
         this.isCalendarEdit = false
       })
       .catch((err) => console.log(err))
@@ -130,6 +133,8 @@ export default {
 
     // 수정용 : 현재 수정한 TIME 데이터에 속하는 TIME인지 CHECK
     isEditedWDTime(time) {
+      this.editedWeekday = this.splitWeekdayTime
+      this.editedWeekend = this.splitWeekendTime
       if (this.editedWeekday.includes(time)){
         return true
       } else {
@@ -137,6 +142,8 @@ export default {
       }
     },
     isEditedWKTime(time) {
+      this.editedWeekday = this.splitWeekdayTime
+      this.editedWeekend = this.splitWeekendTime
       if (this.editedWeekend.includes(time)){
         return true
       } else {
@@ -165,7 +172,6 @@ export default {
         this.editedWeekday.splice(wdt_idx, 1);
       } else {
         this.editedWeekday.push(time)
-        console.log(this.editedWeekday)
       }
     },
     selectWkt(time) {
@@ -174,7 +180,6 @@ export default {
         this.editedWeekend.splice(wdt_idx, 1);
       } else {
         this.editedWeekend.push(time)
-        console.log(this.editedWeekend)
       }
     },
 
@@ -182,6 +187,15 @@ export default {
     timeEditRequest() {
       this.isCalendarEdit = !this.isCalendarEdit
     },
+
+    // 로그인 유저인지 CHECK
+    isLoginUser() {
+      if (this.userNickname === this.$route.params.nickname) {
+        this.isLogin = true
+      } else {
+        this.isLogin = false
+      }
+    }
   },
   computed: {
   ...mapState({
@@ -203,6 +217,14 @@ export default {
       return split_weekend      
     },
   },
+
+  created() {
+    this.isLoginUser()
+  },
+  // 재렌더링 안될 때를 대비해서
+  updated() {
+    this.isLoginUser()
+  }
 }
 </script>
 
@@ -242,6 +264,11 @@ export default {
   margin-top: 1px;
   margin-bottom: 1px;
   width: 65px;
+}
+
+.first-button {
+  background-color: #658DC6;
+  color: #F1F2F2;
 }
 
 .goback {
