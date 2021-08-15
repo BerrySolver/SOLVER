@@ -12,10 +12,10 @@
         <div class="nickname">
           <div style="display: flex; align-items: center;">
             {{ userProfileInfo.nickname }}
-            <button v-if="!isFollowing && isLoaded" class="follow-button" @click="follow">
+            <button v-if="isLoggedIn && !isFollowing && isLoaded" class="follow-button" @click="follow">
               팔로우
             </button>
-            <button v-if="isFollowing && isLoaded" class="follow-button-delete" @click="unfollow">
+            <button v-if="isLoggedIn && isFollowing && isLoaded" class="follow-button-delete" @click="unfollow">
               언팔로우
             </button>
           </div>
@@ -208,7 +208,7 @@
 <script>
 import axios from 'axios'
 import API from "@/API.js"
-import {mapActions, mapState} from 'vuex'
+import {mapState, mapGetters, mapActions} from 'vuex'
 
 import ProfileTimetable from "@/components/profiles/ProfileTimetable"
 import ProfileStatistics from "@/components/profiles/ProfileStatistics"
@@ -323,6 +323,7 @@ export default {
       categoryList: state => state.auth.categoryList,
       userNickname: state => state.auth.userNickname,
     }),
+    ...mapGetters(['isLoggedIn']),
     groups() {
       return this.userProfileInfo.groupNameList
     },

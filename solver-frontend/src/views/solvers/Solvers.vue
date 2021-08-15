@@ -91,7 +91,7 @@ export default {
     return {
       sortOptions: [
         {text:'팔로워 순', value:"follwerDesc"},
-        {text:'베리 평점 순', value:"pointDesc"},
+        {text:'베리 점수 순', value:"pointDesc"},
         {text:'베리 포인트 순', value:"evaluationDesc"},
       ],
       Category: [],

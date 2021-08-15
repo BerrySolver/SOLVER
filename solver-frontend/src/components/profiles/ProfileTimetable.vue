@@ -118,7 +118,7 @@ export default {
       console.log(str_weekday)
       axios({
         url: API.URL + API.ROUTES.editProfileCalendar,
-        method: "patch",
+        method: "put",
         headers: { Authorization: "Bearer " + this.accessToken},
         data: {
           'weekdayTime': str_weekday,

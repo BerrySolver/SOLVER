@@ -12,15 +12,19 @@ import org.springframework.stereotype.Service;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
+import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.question.BookmarkQuestion;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.Notification;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
+import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.question.BookmarkQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.user.NotificationRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserRepository;
 
@@ -44,6 +48,12 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 	
 	@Autowired
 	PointLogRepository pointLogRepository;
+
+	@Autowired
+	NotificationRepository notificationRepository;
+
+	@Autowired
+	CodeRepository codeRepository;
 	
 	// 북마크 확인
 	@Override
@@ -99,6 +109,17 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 			if(bookmarkQuestionRepository.findById(id).orElse(null) == null)
 				break;
 		}
+		
+		// 알림 배당 : 질문에 북마크를 하면 질문자에게 알림이 갑니다.
+		Notification notification = new Notification();
+		notification.setId(RandomIdUtil.makeRandomId(13));
+		notification.setQuestion(question);
+		
+		Code notiCode = codeRepository.findByCode("064");
+		notification.setCode(notiCode);
+		notification.setUser(question.getUser());
+		
+		notificationRepository.save(notification);
 
 		// 포인트 배당
 		PointLog pointLog = new PointLog();

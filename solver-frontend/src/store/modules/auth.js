@@ -12,7 +12,7 @@ const state = {
 };
 
 const getters = {
-  isLoggedIn: (state) => state.accessToken,
+  isLoggedIn: (state) => state.accessToken == null ? false : true,
   isFirst: (state) => state.isFirst,
   getAccessToken: (state) => state.accessToken,
   getUserNickname: (state) => state.userNickname,
@@ -79,7 +79,8 @@ const actions = {
           // commit("SET_ACCESS_TOKEN", token);
 
           // const info2 = JSON.parse(localStorage.getItem("userInfo"));
-          router.push({ path: "/" });
+          router.go(-2)
+          // router.push({ path: "/" });
         }
       })
       .catch((e) => {
@@ -107,7 +108,6 @@ const actions = {
       headers: { Authorization: "Bearer " + state.accessToken },
     })
       .then(() => {
-        localStorage.removeItem("solverToken");
         commit("SET_ACCESS_TOKEN", null);
         commit("SET_USER_NICKNAME", "");
         router.push({ path: "/#" });

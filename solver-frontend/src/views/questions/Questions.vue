@@ -17,10 +17,10 @@
         <div class="question-category">
           <div><span class="info1">TODAY</span></div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">질문: </span> 000개
+            <span class="info2">질문: </span> {{todayQuestions}}개
           </div>
           <div style="display: flex; justify-content: space-between;">
-            <span class="info2">답변: </span> 000개
+            <span class="info2">답변: </span> {{todayAnswers}}개
           </div>
           <div class="question-category-items">
             <vs-collapse open-hover>
@@ -104,6 +104,7 @@
                 color="#0F4C81"
                 class="selectDifficulty"
                 v-model="request.difficulty"
+                icon-pack=false
                 width="150px"
                 @change="setDifficulty"
               >
@@ -261,7 +262,8 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
+import LoginModal from "@/components/main/LoginModal"
 
 export default {
   name: "Questions",
@@ -295,6 +297,8 @@ export default {
       currentPageIndex: 1,
       totalListItemCount: 10,
       isLoaded: false,
+      todayQuestions: "",
+      todayAnswers: ""
     };
   },
   methods: {
@@ -364,9 +368,9 @@ export default {
       })
         .then((res) => {
           this.questionList = res.data.questionFormList;
+          this.todayQuestions = res.data.todayQuestions;
+          this.todayAnswers = res.data.todayAnswers;
           this.totalListItemCount = res.data.totalCount;
-          // console.log(this.questionList);
-          // console.log(this.totalCount);
           this.questionList.forEach((e) => {
             var isImage = false;
             var isVideo = false;
@@ -377,11 +381,6 @@ export default {
               if (e.content.indexOf('<figure class="media">') != -1) {
                 isVideo = true;
               }
-              // console.log("전 - ", e.content);
-              // console.log(e.content.indexOf("<figure"), e.content.indexOf("</figure>"));
-              // console.log("앞", e.content.slice(0, e.content.indexOf("<figure")));
-              // console.log("미디어", e.content.slice(e.content.indexOf("<figure"), e.content.indexOf("</figure>")+9));
-              // console.log("뒤", e.content.slice(e.content.indexOf("</figure>")+9));
               e.content =
                 e.content.slice(0, e.content.indexOf("<figure")) +
                 e.content.slice(e.content.indexOf("</figure>") + 9);
@@ -395,8 +394,14 @@ export default {
         });
     },
     goQuestionCreate: function() {
-      if (this.accessToken == null) {
-        //여기에 나중에 모달 or 메시지
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
         return;
       }
 
@@ -420,7 +425,6 @@ export default {
       return r;
     },
     paginationChanged(pageIndex) {
-      // console.log("movePage : pageIndex : " + pageIndex);
       this.request.offset = pageIndex - 1;
       this.currentPageIndex = pageIndex;
       this.getQuestionList();
@@ -454,6 +458,7 @@ export default {
       query: (state) => state.questions.query,
       accessToken: state => state.auth.accessToken,
     }),
+    ...mapGetters(['isLoggedIn']),
     typeWatch: function() {
       return this.request.type;
     },

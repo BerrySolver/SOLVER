@@ -18,6 +18,12 @@
               <div style="color: #84898C; font-size: 13px;">{{ humanize(now, answer.regDt) }}</div>
             </div>
             <div class="answer-buttons">
+              <div v-if="questionNickname == nickname" class="answer-button" @click="openRequestConference(answer)">
+                <img
+                  style="width:23px; margin: 10px 0 3px 0;"
+                  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+                />
+              </div>
               <div class="answer-button" @click="clickFavorite(answer, idx)">
                 <img
                   v-if="!answer.myFavoriteAnswer"
@@ -30,13 +36,6 @@
                   src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnN2Z2pzPSJodHRwOi8vc3ZnanMuY29tL3N2Z2pzIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDM5MS44MzcgMzkxLjgzNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+Cgk8cGF0aCBzdHlsZT0iIiBkPSJNMjg1LjI1NywzNS41MjhjNTguNzQzLDAuMjg2LDEwNi4yOTQsNDcuODM2LDEwNi41OCwxMDYuNTggICBjMCwxMDcuNjI0LTE5NS45MTgsMjE0LjIwNC0xOTUuOTE4LDIxNC4yMDRTMCwyNDguMTY1LDAsMTQyLjEwOGMwLTU4Ljg2Miw0Ny43MTctMTA2LjU4LDEwNi41OC0xMDYuNThsMCwwICAgYzM2LjAzMi0wLjI4MSw2OS43MTgsMTcuODQyLDg5LjMzOSw0OC4wNjVDMjE1LjY3NCw1My41MTcsMjQ5LjI3MywzNS40NDEsMjg1LjI1NywzNS41Mjh6IiBmaWxsPSIjZjViODk1IiBkYXRhLW9yaWdpbmFsPSIjZDc0NDNlIj48L3BhdGg+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPGcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPC9nPgo8ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8L2c+CjxnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjwvZz4KPC9nPjwvc3ZnPg=="
                 />
                 <div style="font-size: 13px;">{{ answer.likeCount }}</div>
-              </div>
-              <div class="answer-button">
-                <img
-                  style="width:23px; margin: 10px 0 3px 0;"
-                  src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
-                  @click="openRequestConference(answer)"
-                />
               </div>
               <div
                 v-if="answer.nickname == nickname"
@@ -74,7 +73,12 @@
             </div>
             <span v-show="isTrue"></span>
             <Comments v-show="commentListOpen[idx]" :answerId="answer.answerId" />
-            <CommentsCreate v-show="commentListOpen[idx]" :answerId="answer.answerId" />
+            <CommentsCreate v-if="isLoggedIn" v-show="commentListOpen[idx]" :answerId="answer.answerId" />
+            <div v-else v-show="commentListOpen[idx]" class="nonlogin-comment" @click="$router.push({name: 'Login'})">
+              <div class="nonlogin-comment-content">
+                <span>로그인하고 댓글을 남겨보세요!</span>
+              </div>
+            </div>
           </div>
           <div :id="`answerModifyEditorInsert` + idx"></div>
           <div>
@@ -100,9 +104,10 @@ import Comments from "@/components/questions/Comments";
 import CommentsCreate from "@/components/questions/CommentsCreate";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import RequesetConference from './modal/RequesetConference.vue';
 import AnswerDelete from './modal/AnswerDelete.vue';
+import LoginModal from "@/components/main/LoginModal"
 
 Vue.use(CKEditor);
 
@@ -179,6 +184,9 @@ export default {
       CKEditor: ""
     };
   },
+  props: {
+    questionNickname: String,
+  },
   methods: {
     openComment: function(idx) {
       this.commentListOpen[idx] = !this.commentListOpen[idx];
@@ -233,9 +241,14 @@ export default {
       }
     },
     addFavoriteAnswer(answer, idx) {
-      const accessToken = this.accessToken
-      if (accessToken == null) {
-        console.log("예외처리");
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
         return;
       }
 
@@ -256,9 +269,14 @@ export default {
         });
     },
     removeFavoriteAnswer(answer, idx) {
-      const accessToken = this.accessToken
-      if (accessToken == null) {
-        console.log("예외처리");
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
         return;
       }
 
@@ -408,6 +426,7 @@ export default {
       accessToken: state => state.auth.accessToken,
       userNickname: state => state.auth.userNickname,
     }),
+    ...mapGetters(['isLoggedIn'])
   },
   watch: {
     commentDeleteTrigger: function() {
@@ -447,7 +466,7 @@ export default {
 
 .answer-buttons {
   display: flex;
-  margin-left: 580px;
+  margin-left: auto;
   align-items: center;
 }
 
@@ -576,5 +595,32 @@ export default {
   height: 10px;
   margin-left: 10px;
   top: 17px;
+}
+
+.nonlogin-comment {
+  display: flex;
+  justify-content: center;
+  margin: 0px 0 50px 0;
+}
+
+.nonlogin-comment-content {
+  align-items: center;
+  border: 1px solid #658dc6;
+  border-radius: 20px;
+  color: #658dc6;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+  font-weight: 700;
+  height: 100px;
+  justify-content: center;
+  transition: 0.2s;
+  width: 800px;
+}
+
+.nonlogin-comment-content:hover {
+  background-color: #658dc6;
+  color: white;
+  transform: scale(1.02);
 }
 </style>
