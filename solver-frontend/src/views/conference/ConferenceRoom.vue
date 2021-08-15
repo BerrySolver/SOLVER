@@ -18,7 +18,11 @@
       </div>
       <div id="room" style="display: none;">
         <h2 id="room-header"></h2>
-        <div id="participants"></div>
+        <div id="participants">
+          <div id="video1"></div>
+          <div id="video2"></div>
+        </div>
+        <div id="screens"></div>
         <input type="button" id="button-leave" @click="clickLeaveRoom()" value="Leave room" />
       </div>
       <p>
@@ -103,6 +107,7 @@ var screenName;
 var myName;
 var isSharing = false;
 var isMySharing = false;
+var participantsCount = 1;
 
 ws.onmessage = function(message) {
   var parsedMessage = JSON.parse(message.data);
@@ -210,8 +215,8 @@ function onExistingParticipants(msg) {
     audio: true,
     video: {
       mandatory: {
-        maxWidth: 800,
-        maxHeight: 600,
+        maxWidth: 1900,
+        maxHeight: 1080,
         maxFrameRate: 60,
       },
     },
@@ -263,8 +268,8 @@ function onExistingParticipants(msg) {
         audio: true,
         video: {
           mandatory: {
-            maxWidth: 800,
-            maxHeight: 600,
+            maxWidth: 1900,
+            maxHeight: 1080,
             maxFrameRate: 60,
           },
         },
@@ -340,8 +345,8 @@ function receiveVideo(sender) {
       audio: true,
       video: {
         mandatory: {
-          maxWidth: 800,
-          maxHeight: 600,
+          maxWidth: 1900,
+          maxHeight: 1080,
           maxFrameRate: 60,
         },
       },
@@ -449,7 +454,7 @@ function ScreenParticipant(scName) {
   var container = document.createElement("div");
   container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
   container.id = scName;
-  var span = document.createElement("span");
+  // var span = document.createElement("span");
   var video = document.createElement("video");
   video.id = "video-screen";
 
@@ -460,7 +465,7 @@ function ScreenParticipant(scName) {
   container.onclick = switchContainerClass;
   document.getElementById("participants").appendChild(container);
 
-  span.appendChild(document.createTextNode("screen"));
+  // span.appendChild(document.createTextNode("screen"));
 
   video.autoplay = true;
   video.controls = false;
@@ -533,24 +538,64 @@ function ScreenParticipant(scName) {
 function Participant(name) {
   this.name = name;
   console.log("this.name : " + this.name);
-  var container = document.createElement("div");
-  container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
-  container.id = name;
-  var span = document.createElement("span");
-  var video = document.createElement("video");
-  video.id = "video-" + name;
+  // var container = document.createElement("div");
+  // container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+  // container.id = name;
+  // var span = document.createElement("span");
+  // var video = document.createElement("video");
+  // video.id = "video-" + name;
 
-  // var rtcPeer;
+  // // var rtcPeer;
 
-  container.appendChild(video);
-  container.appendChild(span);
-  container.onclick = switchContainerClass;
-  document.getElementById("participants").appendChild(container);
+  // container.appendChild(video);
+  // container.appendChild(span);
+  // container.onclick = switchContainerClass;
 
-  span.appendChild(document.createTextNode(name));
+  if (name.startsWith("scree&")) {
+    this.name = name;
+    console.log("this.name : " + this.name);
+    var container = document.createElement("div");
+    container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+    container.id = name;
+    // var span = document.createElement("span");
+    var video = document.createElement("video");
+    // var video = document.getElementById("screen");
+    video.id = "screen";
 
-  video.autoplay = true;
-  video.controls = false;
+    // var rtcPeer;
+
+    container.appendChild(video);
+    // container.appendChild(span);
+    container.onclick = switchContainerClass;
+    document.getElementById("screens").appendChild(container);
+    // span.appendChild(document.createTextNode(name));
+
+    video.autoplay = true;
+    video.controls = false;
+  } else {
+    this.name = name;
+    console.log("this.name : " + this.name);
+    var container = document.createElement("div");
+    container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+    container.id = name;
+    // var span = document.createElement("span");
+    var video = document.createElement("video");
+    video.id = "video-" + name;
+    video.style.width = "800px";
+    video.style.height = "600px";
+
+    // var rtcPeer;
+
+    container.appendChild(video);
+    // container.appendChild(span);
+    container.onclick = switchContainerClass;
+    // document.getElementById("participants").appendChild(container);
+    document.getElementById("video" + participantsCount).appendChild(container);
+    // span.appendChild(document.createTextNode(name));
+    participantsCount++;
+    video.autoplay = true;
+    video.controls = false;
+  }
 
   this.getElement = function() {
     return container;
@@ -999,5 +1044,10 @@ a.hovertext:after {
 a.hovertext:hover:after,
 a.hovertext:focus:after {
   opacity: 1;
+}
+
+#participants {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

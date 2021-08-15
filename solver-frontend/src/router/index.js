@@ -29,6 +29,8 @@ import MessageReceptions from "@/views/notifications/MessageReceptions.vue";
 
 import Reports from "@/views/reports/Reports.vue";
 
+import Conference from "@/views/conference/ConferenceRoom.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -67,6 +69,9 @@ const routes = [
 
   // reports
   { path: "/reports", name: "Reports", component: Reports },
+
+  // conference
+  { path: "/conference", name: "Conference", component: Conference },
 ];
 
 const router = new VueRouter({
