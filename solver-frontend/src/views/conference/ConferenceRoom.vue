@@ -32,8 +32,7 @@
 <script>
 import kurentoUtils from "kurento-utils";
 
-function clStart(e) {
-  console.log(e);
+function clStart() {
   startSharing();
 }
 function clStop(e) {
@@ -46,13 +45,24 @@ function clStop(e) {
 // };
 
 async function startSharing() {
+  // sendMessage({
+  //   id: "leaveRoom",
+  // });
+
+  // for (var key in participants) {
+  //   if (participants[key] != null) participants[key].dispose();
+
+  //   participants[key] = null;
+  // }
+  // participants[name].dispose();
+  if (!name.startsWith("scree&")) name = "scree&" + name;
+  console.log("--------------------------");
   try {
-    // navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
-    //   const videoPlayer = document.getElementById("video2");
-    //   videoPlayer.srcObject = stream;
+    screenName = name;
     var message = {
-      id: "share",
-      name: name + "share",
+      id: "joinRoom",
+      name: name,
+      // name: name,
       room: room,
     };
     sendMessage(message);
@@ -65,9 +75,10 @@ async function startSharing() {
 function stopSharing() {
   sendMessage({
     id: "stopShare",
+    name: myName,
   });
 
-  participants["isScreenSharingState"].dispose();
+  participants["scree&" + myName].dispose();
   // isScreenSharingState
   // document.getElementById("join").style.display = "block";
   // document.getElementById("room").style.display = "none";
@@ -83,6 +94,8 @@ var ws = new WebSocket("wss://localhost:8443/groupcall");
 var participants = {};
 var name;
 var room;
+var screenName;
+var myName;
 
 ws.onmessage = function(message) {
   var parsedMessage = JSON.parse(message.data);
@@ -101,6 +114,9 @@ ws.onmessage = function(message) {
     case "receiveVideoAnswer":
       receiveVideoResponse(parsedMessage);
       break;
+    case "receiveScreenVideoAnswer":
+      receiveScreenVideoResponse(parsedMessage);
+      break;
     case "iceCandidate":
       participants[parsedMessage.name].rtcPeer.addIceCandidate(parsedMessage.candidate, function(
         error
@@ -115,6 +131,7 @@ ws.onmessage = function(message) {
       onExistingParticipants(parsedMessage);
       break;
     case "screenSharingStart":
+      // onNewScreenShare(parsedMessage);
       onNewParticipant(parsedMessage);
       break;
     default:
@@ -126,6 +143,8 @@ ws.onmessage = function(message) {
 function register() {
   name = document.getElementById("name").value;
   room = document.getElementById("roomName").value;
+
+  myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
   document.getElementById("join").style.display = "none";
@@ -143,9 +162,24 @@ function onNewParticipant(request) {
   receiveVideo(request.name);
 }
 
+function onNewScreenShare(request) {
+  screenName = request.name;
+  receiveScreenVideo(request);
+}
+
 function receiveVideoResponse(result) {
-  console.log(participants[result.name]);
+  console.log(result.name);
   participants[result.name].rtcPeer.processAnswer(result.sdpAnswer, function(error) {
+    console.log(result);
+    if (error) {
+      return console.error(error);
+    }
+  });
+}
+
+function receiveScreenVideoResponse(result) {
+  console.log(participants[room]);
+  participants[room].rtcPeer.processAnswer(result.sdpAnswer, function(error) {
     console.log(result);
     if (error) {
       return console.error(error);
@@ -169,8 +203,8 @@ function onExistingParticipants(msg) {
     audio: true,
     video: {
       mandatory: {
-        maxWidth: 1920,
-        maxHeight: 1080,
+        maxWidth: 800,
+        maxHeight: 600,
         maxFrameRate: 60,
       },
     },
@@ -192,28 +226,47 @@ function onExistingParticipants(msg) {
 
   var options = {};
 
-  if (msg.id == "myScreenSharingStart") {
-    alert("!@!@");
-    var participant = new Participant("isScreenSharingState");
-    participants["isScreenSharingState"] = participant;
+  if (name.startsWith("scree&")) {
+    // alert("!@!@");
+    // var participant = new ScreenParticipant(screenName);
+    var participant = new Participant(name);
+    console.log(participant);
+    participants[name] = participant;
     var video = participant.getVideoElement();
+    var audio = "";
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      audio = new MediaRecorder(stream);
+    });
+    console.log(audio);
     options = {
       localVideo: video,
       mediaConstraints: constraints,
+      audioStreams: audio,
       onicecandidate: participant.onIceCandidate.bind(participant),
       sendSource: "screen",
     };
   } else {
     var participant = new Participant(name);
+    console.log(participant);
     participants[name] = participant;
     var video = participant.getVideoElement();
     options = {
       localVideo: video,
-      mediaConstraints: constraints,
+      mediaConstraints: {
+        audio: true,
+        video: {
+          mandatory: {
+            maxWidth: 800,
+            maxHeight: 600,
+            maxFrameRate: 60,
+          },
+        },
+      },
       onicecandidate: participant.onIceCandidate.bind(participant),
+      // sendSource: "screen",
     };
   }
-
+  console.log("sendOnly");
   stop(100000000);
   participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
     if (error) {
@@ -222,6 +275,27 @@ function onExistingParticipants(msg) {
     }
     this.generateOffer(participant.offerToReceiveVideo.bind(participant));
   });
+
+  // var participant = new Participant(name + "1");
+  // console.log(participant);
+  // participants[name] = participant;
+  // var video = participant.getVideoElement();
+  // options = {
+  //   localVideo: video,
+  //   mediaConstraints: constraints,
+  //   onicecandidate: participant.onIceCandidate.bind(participant),
+  //   // sendSource: "screen",
+  // };
+
+  // participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
+  //   if (error) {
+  //     console.log(error);
+  //     return console.error(error);
+  //   }
+  //   this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+  // });
+
+  console.log(msg.data);
 
   msg.data.forEach(receiveVideo);
 }
@@ -243,11 +317,46 @@ function leaveRoom() {
 }
 
 function receiveVideo(sender) {
+  // if (request.id == "screenSharngStart") sender = "isScreenSharingState";
   console.log("sender: " + sender);
-  if (participants[sender] != null) return;
+  //영상인 경우가 겹침
+  // if (participants[sender] != null) return;
   var participant = new Participant(sender);
+  console.log(participant);
   participants[sender] = participant;
   var video = participant.getVideoElement();
+
+  console.log(sender.includes(myName));
+
+  if (sender.startsWith("scree&") && sender.includes(myName)) {
+    var constraints = {
+      audio: true,
+      video: {
+        mandatory: {
+          maxWidth: 800,
+          maxHeight: 600,
+          maxFrameRate: 60,
+        },
+      },
+    };
+
+    var options = {
+      localVideo: video,
+      mediaConstraints: constraints,
+      onicecandidate: participant.onIceCandidate.bind(participant),
+      sendSource: "screen",
+    };
+
+    participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
+      if (error) {
+        console.log(error);
+        return console.error(error);
+      }
+      this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+    });
+
+    return;
+  }
 
   var options = {
     remoteVideo: video,
@@ -262,6 +371,33 @@ function receiveVideo(sender) {
   });
 }
 
+function receiveScreenVideo(request) {
+  // if (request.id == "screenSharngStart") sender = "isScreenSharingState";
+  console.log("Screen sender: " + request.name);
+  //영상인 경우가 겹침
+  // if (participants[sender] != null) return;
+  console.log(screenName);
+  var participant = new ScreenParticipant(screenName);
+  console.log(participant);
+  participants[room] = participant;
+  var video = participant.getVideoElement();
+
+  var options = {
+    remoteVideo: video,
+    onicecandidate: participant.onIceCandidate.bind(participant),
+  };
+
+  console.log(options);
+
+  participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function(error) {
+    if (error) {
+      return console.error(error);
+    }
+    console.log("screen gener");
+    this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+  });
+}
+
 function onParticipantLeft(request) {
   console.log("Participant " + request.name + " left");
   var participant = participants[request.name];
@@ -271,6 +407,7 @@ function onParticipantLeft(request) {
 
 function sendMessage(message) {
   console.log(ws);
+  // alert("send");
   // if (ws.readyState == 3) {
   //   ws.close();
   //   ws = new WebSocket("wss://localhost:8443/groupcall");
@@ -295,8 +432,96 @@ const PARTICIPANT_CLASS = "participant";
  *                        The tag of the new element will be 'video<name>'
  * @return
  */
+function ScreenParticipant(scName) {
+  this.screenName = scName;
+  console.log(screenName);
+  var container = document.createElement("div");
+  container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+  container.id = scName;
+  var span = document.createElement("span");
+  var video = document.createElement("video");
+  video.id = "video-screen";
+
+  // var rtcPeer;
+
+  container.appendChild(video);
+  container.appendChild(span);
+  container.onclick = switchContainerClass;
+  document.getElementById("participants").appendChild(container);
+
+  span.appendChild(document.createTextNode("screen"));
+
+  video.autoplay = true;
+  video.controls = false;
+
+  this.getElement = function() {
+    return container;
+  };
+
+  this.getVideoElement = function() {
+    return video;
+  };
+
+  function switchContainerClass() {
+    if (container.className === PARTICIPANT_CLASS) {
+      var elements = Array.prototype.slice.call(
+        document.getElementsByClassName(PARTICIPANT_MAIN_CLASS)
+      );
+      elements.forEach(function(item) {
+        item.className = PARTICIPANT_CLASS;
+      });
+
+      container.className = PARTICIPANT_MAIN_CLASS;
+    } else {
+      container.className = PARTICIPANT_CLASS;
+    }
+  }
+
+  function isPresentMainParticipant() {
+    return document.getElementsByClassName(PARTICIPANT_MAIN_CLASS).length != 0;
+  }
+
+  this.offerToReceiveVideo = function(error, offerSdp, wp) {
+    console.log(wp);
+    if (error) {
+      console.error(error);
+      return console.error("sdp offer error");
+    }
+    console.log("Invoking SDP offer callback function");
+    var msg = {
+      id: "receiveVideoFrom",
+      sender: screenName,
+      sdpOffer: offerSdp,
+      room: room,
+      screen: screenName,
+    };
+    sendMessage(msg);
+  };
+
+  this.onIceCandidate = function(candidate, wp) {
+    console.log(wp);
+    // console.log("Local candidate" + JSON.stringify(candidate));
+
+    var message = {
+      id: "onIceCandidate",
+      candidate: candidate,
+      name: name,
+    };
+    sendMessage(message);
+  };
+
+  Object.defineProperty(this, "rtcPeer", { writable: true });
+
+  this.dispose = function() {
+    console.log("Disposing participant " + this.name);
+    this.rtcPeer.dispose();
+    container.parentNode.removeChild(container);
+  };
+}
+
 function Participant(name) {
   this.name = name;
+  console.log("this.name : " + this.name);
   var container = document.createElement("div");
   container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
   container.id = name;
@@ -347,7 +572,7 @@ function Participant(name) {
     console.log(wp);
     if (error) return console.error("sdp offer error");
     console.log("Invoking SDP offer callback function");
-    var msg = { id: "receiveVideoFrom", sender: name, sdpOffer: offerSdp };
+    var msg = { id: "receiveVideoFrom", sender: name, sdpOffer: offerSdp, room: room };
     sendMessage(msg);
   };
 
