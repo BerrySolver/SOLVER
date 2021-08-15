@@ -35,8 +35,8 @@
                 v-model="editInfo.selfIntro"
                 class="intro-input m-left-1"
                 type="text"
-                :maxlength="maxIntro"
-                @input="inputLengthCheck($event)">
+                :maxlength="maxIntro">
+                <!-- @input="inputLengthCheck($event)"> -->
                 <span>{{ editInfo.selfIntro.length }} / 30</span>
               </span>
 
@@ -340,7 +340,7 @@ export default {
       console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
-        method: "patch",
+        method: "put",
         headers: { Authorization: "Bearer " + this.accessToken},
         data: {
           nickname: this.userNickname,
@@ -362,7 +362,7 @@ export default {
       console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
-        method: "patch",
+        method: "put",
         headers: { Authorization: "Bearer " + this.accessToken},
         data: {
           nickname: this.userNickname,
@@ -428,7 +428,7 @@ export default {
     postEditCategory() {
       axios({
         url: API.URL + API.ROUTES.editProfile,
-        method: "patch",
+        method: "put",
         headers: { Authorization: "Bearer " + this.accessToken},
         data: {
           nickname: this.userNickname,
