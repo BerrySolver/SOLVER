@@ -2,6 +2,7 @@ package com.solver.api.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,11 +18,14 @@ import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.question.Question;
+import com.solver.db.entity.user.Notification;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.PointCodeRepository;
+import com.solver.db.repository.question.QuestionRepository;
+import com.solver.db.repository.user.NotificationRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserRepository;
 
@@ -42,6 +46,15 @@ public class AnswerServiceImpl implements AnswerService{
 	
 	@Autowired
 	PointLogRepository pointLogRepository;
+
+	@Autowired
+	NotificationRepository notificationRepository;
+
+	@Autowired
+	CodeRepository codeRepository;
+
+	@Autowired
+	QuestionRepository questionRepository;
 
 	@Override
 	public void createAnswer(String accessToken, AnswerCreatePostReq answerCreatePostReq, String questionId, HttpServletResponse response) {
@@ -102,6 +115,19 @@ public class AnswerServiceImpl implements AnswerService{
 		pointLog.setUser(user);		
 		
 		pointLogRepository.save(pointLog);
+		
+		// 알림 배당 : 답변을 남긴 질문자에게 알림을 배당함
+		Notification notification = new Notification();
+		notification.setId(RandomIdUtil.makeRandomId(13));
+		notification.setQuestion(question);
+		
+		Code notiCode = codeRepository.findByCode("060");
+		notification.setCode(notiCode);
+		
+		Optional<Question> q = questionRepository.findById(questionId);
+		notification.setUser(q.get().getUser());
+		
+		notificationRepository.save(notification);
 	}
 
 	@Override
