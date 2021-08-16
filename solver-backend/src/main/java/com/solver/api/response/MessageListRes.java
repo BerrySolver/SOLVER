@@ -13,6 +13,14 @@ import lombok.Setter;
 @Setter
 @ApiModel("MessageListRes")
 public class MessageListRes extends BaseResponse{
-	private List<Message> messageList;
+	private List<MessageRes> messageList;
 
+	public static MessageListRes of(Integer statusCode, String message, List<MessageRes> messageList) {
+		MessageListRes res = new MessageListRes();
+		res.setMessageList(messageList);
+		res.setStatusCode(statusCode);
+		res.setMessage(message);		
+
+		return res;
+	}
 }
