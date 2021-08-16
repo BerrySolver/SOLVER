@@ -201,13 +201,10 @@ export default {
       this.subCategories = this.categories[idx].category;
       this.request.mainCategoryCode = this.categories[idx].code;
       this.request.mainCategoryName = this.categories[idx].codeName;
-      console.log(this.request.mainCategoryCode);
-      console.log(this.request.mainCategoryName);
     },
     setSubCategory: function() {
       const idx = this.request.subCategoryIndex;
       this.subCategory = this.subCategories[idx].subCategoryCode;
-      console.log(this.subCategory);
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
@@ -248,7 +245,6 @@ export default {
     },
     questionModify() {
       if (!this.isLoggedIn) {
-        console.log("로그인 안 된 상태");
         return;
       }
 
@@ -264,29 +260,12 @@ export default {
         },
         headers: { Authorization: "Bearer " + this.getAccessToken },
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.goQuestionDetail(Question.state.questionId);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
-
-      // axios
-      //   .post("/notices", formData, { headers: { "Content-Type": "multipart/form-data" } })
-      //   .then(({ data }) => {
-      //     console.log("InsertModalVue: data : ");
-      //     console.log(data);
-      //     if (data.result == "login") {
-      //       this.$router.push("/login");
-      //     } else {
-      //       this.$router.push("/notice");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("InsertModalVue: error ");
-      //     console.log(error);
-      //   });
     },
     clickCancle() {
       this.$router.go(-1);
@@ -301,14 +280,11 @@ export default {
       method: "get",
     })
       .then((res) => {
-        console.log(res);
         this.categories = res.data;
-        // this.subCategories = res.data[0].category;
 
         for (var idx = 0; idx < this.categories.length; idx++) {
           if (this.categories[idx].codeName == Question.state.question.mainCategory) {
             this.request.mainCategoryIndex = idx;
-            // this.subCategories = res.data[idx].category;
             break;
           }
         }
@@ -328,7 +304,6 @@ export default {
       });
   },
   mounted() {
-    console.log(this.getQuestion);
     this.request.difficulty = Question.state.question.difficulty;
     this.request.title = Question.state.question.title;
 

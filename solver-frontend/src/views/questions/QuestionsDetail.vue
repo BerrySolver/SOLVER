@@ -209,7 +209,6 @@ export default {
     },
     modifyUrl(url) {
       if (url == null) {
-        // console.log("null");
         return "";
       }
 
@@ -228,9 +227,8 @@ export default {
         method: "delete",
         headers: { Authorization: "Bearer " + this.accessToken },
       })
-        .then((res) => {
+        .then(() => {
           router.push({ path: "/questions" });
-          console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -261,7 +259,6 @@ export default {
     },
   },
   created() {
-    console.log("Bearer " + this.accessToken)
     axios({
       url: API.URL + `questions/${this.$route.params.questionId}/info`,
       method: "get",
@@ -274,7 +271,6 @@ export default {
         this.bookmarkCount = res.data.bookmarkCount;
         this.isLiked = res.data.liked;
         this.isBookmarked = res.data.bookmarked;
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);

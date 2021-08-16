@@ -277,28 +277,11 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
-          console.log(res);
           this.goQuestionDetail(res.data.questionId);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
-
-      // axios
-      //   .post("/notices", formData, { headers: { "Content-Type": "multipart/form-data" } })
-      //   .then(({ data }) => {
-      //     console.log("InsertModalVue: data : ");
-      //     console.log(data);
-      //     if (data.result == "login") {
-      //       this.$router.push("/login");
-      //     } else {
-      //       this.$router.push("/notice");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("InsertModalVue: error ");
-      //     console.log(error);
-      //   });
     },
     clickCancle() {
       this.$router.go(-1);

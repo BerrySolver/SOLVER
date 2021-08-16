@@ -326,7 +326,6 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken}
       })
       .then((res) => {
-        console.log(res.data)
         this.userProfileInfo = res.data
         this.userProfileInfo.favoriteFieldNameList.sort()
       })
@@ -338,7 +337,6 @@ export default {
     },
     // 프로필 자기소개 수정
     editSelfIntro(selfIntro) {
-      console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
         method: "put",
@@ -360,7 +358,6 @@ export default {
 
     // 프로필 URL 수정 - AXIOS
     editSelfUrl(selfUrl) {
-      console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
         method: "put",
@@ -475,10 +472,8 @@ export default {
     // NULL 값 허용 X
     isItNaN(x) {
       if(isNaN(x)) {
-        console.log(x, 'Nan 이다')
         this.isNaN = true
       } else {
-        console.log(x, '아니야')
         this.isNaN = false
       }
     },

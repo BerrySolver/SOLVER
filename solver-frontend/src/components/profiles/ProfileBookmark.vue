@@ -41,7 +41,6 @@ export default {
       }
     })
     .then((res) => {
-      console.log(res.data)
       this.myBookmarkQuestions = res.data
     })
     .catch((err) => {
