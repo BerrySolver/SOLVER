@@ -124,7 +124,6 @@ export default {
       }
 
       if(this.selectedCode.length == 3){
-        console.log("최대 3개 까지만 선택");
         return;
       }
 
@@ -229,8 +228,8 @@ export default {
     .then((res) => {
       this.Category = res.data;
     })
-    .catch(() => {
-      console.log();
+    .catch((err) => {
+      console.log(err)
     });
   },
   mounted() {

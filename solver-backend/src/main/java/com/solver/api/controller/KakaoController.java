@@ -63,13 +63,7 @@ public class KakaoController {
 			e.printStackTrace();
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-		}
-    	
-    	System.out.println("카카오 엑세스 토큰 : "+oauthToken.getAccess_token());
-    	System.out.println("카카오 엑세스 토큰 만료시간: "+oauthToken.getExpires_in());
-    	System.out.println("카카오 리프레시 토큰 : "+oauthToken.getRefresh_token());
-    	System.out.println("카카오 리프레시 토큰 만료시간: "+oauthToken.getRefresh_token_expires_in());
-    	
+		} 	
     	
     	//HttpHeader 오브젝트
     	RestTemplate rt2 = new RestTemplate();
@@ -94,8 +88,6 @@ public class KakaoController {
     	JSONObject jsonObject = (JSONObject) jsonParser.parse(response2.getBody());
     	
     	Long id = (Long) jsonObject.get("id");
-    	
-    	System.out.println(id);
     	
 //		/* 로그아웃 */
 //    	//HttpHeader 오브젝트

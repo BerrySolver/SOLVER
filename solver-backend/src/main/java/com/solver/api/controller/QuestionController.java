@@ -131,7 +131,6 @@ public class QuestionController {
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
 		Optional<Question> question = questionService.getById(questionId);
-		System.out.println(accessToken);
 		String token = accessToken.split(" ")[1];
 	
 		if (question == null) {

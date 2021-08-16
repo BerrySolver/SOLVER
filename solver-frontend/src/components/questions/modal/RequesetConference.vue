@@ -190,12 +190,10 @@ export default {
           type: "072"
         },
         headers: { Authorization: "Bearer " + this.getAccessToken },
-      }).then((res)=>{
-        console.log(res);
+      }).then(()=>{
         this.isRequest = false;
         this.isResultSuccess = true;
-      }).catch((res)=>{
-        console.log(res);
+      }).catch(()=>{
         this.isRequest = false;
         this.isResultFail = true;
       });

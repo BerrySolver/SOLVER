@@ -264,7 +264,6 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken}
       })
       .then((res) => {
-        console.log(res.data)
         this.userProfileInfo = res.data
         this.userProfileInfo.favoriteFieldNameList.sort()
       })
@@ -285,10 +284,8 @@ export default {
     // NULL 값 허용 X
     isItNaN(x) {
       if(isNaN(x)) {
-        console.log(x, 'Nan 이다')
         this.isNaN = true
       } else {
-        console.log(x, '아니야')
         this.isNaN = false
       }
     },

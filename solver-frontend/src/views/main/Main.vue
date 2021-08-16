@@ -245,13 +245,12 @@ export default {
       },
     })
       .then((res) => {
-        console.log(res);
         for (var i = 0; i < 6; i++) {
           this.mainQuestion.push(res.data.questionFormList[i]);
         }
       })
-      .catch(() => {
-        console.log();
+      .catch((err) => {
+        console.log(err)
       });
   },
 };

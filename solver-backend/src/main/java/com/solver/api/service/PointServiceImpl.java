@@ -77,8 +77,7 @@ public class PointServiceImpl implements PointLogService {
 	public void payPoint(PaySolverReq paySolverReq) throws ParseException {
 		
 		Optional<User> user = userRepository.findByNickname(paySolverReq.getUserNick());
-		System.out.println(user.get().getId());
-
+		
 		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		Date to1 = transFormat.parse(paySolverReq.getStartRegDt());

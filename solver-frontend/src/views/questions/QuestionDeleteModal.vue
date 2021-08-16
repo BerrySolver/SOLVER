@@ -29,9 +29,8 @@ export default {
         method: "delete",
         headers: { Authorization: "Bearer " + this.accessToken },
       })
-      .then((res) => {
+      .then(() => {
         router.push({ path: "/questions" });
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
