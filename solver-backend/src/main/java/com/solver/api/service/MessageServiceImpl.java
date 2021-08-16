@@ -110,9 +110,7 @@ public class MessageServiceImpl implements MessageService{
 	}
 
 	@Override
-	public void insertMessage(MessageConferenceCreatePostReq messagePostReq) {
-		//System.out.println(messagePostReq.getAnswerId());
-		
+	public void insertMessage(MessageConferenceCreatePostReq messagePostReq) {		
 		Optional<Answer> answer = answerRepository.findById(messagePostReq.getAnswerId());
 		
 		if (answer.orElse(null) != null) {
