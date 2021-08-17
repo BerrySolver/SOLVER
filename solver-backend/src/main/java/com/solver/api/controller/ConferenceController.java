@@ -1,17 +1,12 @@
 package com.solver.api.controller;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.Base64.Decoder;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -150,7 +145,7 @@ public class ConferenceController {
 	@PostMapping(value="/record/{questionId}")
 	@ApiOperation(value = "화상 회의 종료", notes = "화상 회의를 닫는다") 
     @ApiResponses({
-        @ApiResponse(code = 204, message = "화상 회의 종료 성공"),
+        @ApiResponse(code = 201, message = "영상 저장 완료"),
         @ApiResponse(code = 409, message = "화상 회의 종료 실패")
     })
 	public ResponseEntity<? extends BaseResponse> recordConference(
@@ -160,55 +155,10 @@ public class ConferenceController {
 			@RequestBody ConferenceRecordPostReq conferenceRecordPostReq
 			) throws IOException, ParseException 
 	{
-//		int flag = conferenceService.deleteConference(accessToken, conferenceId, response);
-//		
-//		if(flag != 3) {
-//			return ResponseEntity.status(409).body(BaseResponse.of(409, "화상 회의 종료 실패"));
-//		}
 		
-//		System.out.println(videoFile);
-//		
-//		for (byte b : videoFile) {
-//			System.out.println(b);
-//		}
-//		
-//		System.out.println(videoFile.length);
-//		
-//		int lByteArraySize = videoFile.length;
-//
-//
-//
-//	    try{
-//
-//	        File lOutFile = new File(uploadPath+File.separator+"test.webm");
-//
-//	        FileOutputStream lFileOutputStream = new FileOutputStream(lOutFile);
-//
-//	        lFileOutputStream.write(videoFile);
-//
-//	        lFileOutputStream.close();
-//
-//	    }catch(Throwable e){
-//
-//	       System.out.println("!@!@@!@!@");
-//
-//	    }
+		System.out.println(accessToken);
+		conferenceService.recordConference(accessToken, questionId, response, conferenceRecordPostReq);
 		
-//		String str = new ClassPathResource("/static/").getPath();
-		
-		UUID uuid = UUID.randomUUID();
-		
-		String videoFile = conferenceRecordPostReq.getVideoFile();
-		
-		String saveFilename = uuid+".mp4";
-		
-    	
-        Decoder decoder = Base64.getDecoder();
-        byte[] decodedByte = decoder.decode(videoFile);
-        FileOutputStream fos = new FileOutputStream(uploadPath+File.separator+saveFilename);
-        fos.write(decodedByte);
-        fos.close();
-		
-		return ResponseEntity.status(204).body(BaseResponse.of(204, "화상 회의 종료 성공"));
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 종료 성공"));
 	}
 }

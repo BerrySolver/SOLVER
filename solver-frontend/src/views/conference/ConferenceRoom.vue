@@ -47,6 +47,7 @@
         <input type="button" id="button-leave" @click="clickLeaveRoom()" value="Leave room" />
       </div> -->
     </div>
+    <button id="stopBtn" @click="clickStop()">Stop</button>
   </div>
 </template>
 
@@ -55,6 +56,7 @@ import kurentoUtils from "kurento-utils";
 import axios from "axios";
 import API from "@/API.js";
 import { mapState, mapGetters } from "vuex";
+import ConferenceEvaluateModal from "./ConferenceEvaluateModal.vue";
 
 function clStart() {
   console.log(isMySharing);
@@ -590,6 +592,10 @@ export default {
     return {
       searchInputData: "",
       isMyScreen: false,
+      recoder: null,
+      blobs: [],
+      blob: null,
+      desktopStream: null,
     };
   },
   computed: {
@@ -664,7 +670,9 @@ export default {
       register();
     },
     clickLeaveRoom() {
-      leaveRoom();
+      // leaveRoom();
+      this.conferenceEvaluate();
+      this.recoder.stop();
       this.exitConferenceLog();
     },
     clickSt() {
@@ -695,12 +703,161 @@ export default {
     isMySharing() {
       return isMySharing;
     },
+    conferenceEvaluate() {
+      this.$modal.show(
+        ConferenceEvaluateModal,
+        {
+          // answerId: this.$route.params.questionId,
+          answerId: "answerID",
+          modal: this.$modal,
+        },
+        {
+          name: "dynamic-modal",
+          width: "600px",
+          height: "250px",
+          draggable: false,
+        }
+      );
+    },
+    async startAnswerRecord() {
+      const voiceStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true }); // 오디오스트림 생성
+
+      const desktopStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true,
+      });
+
+      const tracks = [
+        ...desktopStream.getVideoTracks(),
+        ...this.mergeAudioStreams(desktopStream, voiceStream),
+      ];
+
+      const stream = new MediaStream(tracks);
+
+      const recoder = new MediaRecorder(stream, {
+        mimeType: "",
+      });
+      this.recoder = recoder; // mediathis.recoderorder객체 생성
+      this.recoder.ondataavailable = (e) => this.blobs.push(e.data);
+      this.recoder.onstop = async () => {
+        this.blob = new Blob(this.blobs, { type: "video/mp4" });
+        // let url = window.URL.createObjectURL(blob);
+        // this.blob = blob;
+        console.log(this.blob);
+        this.recordVideo();
+      };
+      console.log(this.recoder);
+      this.recoder.start(); // 녹화 시작
+    },
+    clickStop() {
+      this.recoder.stop();
+    },
+    recordVideo() {
+      var reader = new window.FileReader();
+      var base64data;
+      const $this = this;
+      console.log(this.blob);
+      reader.readAsDataURL(this.blob);
+      console.log(this.accessToken);
+      reader.onloadend = function() {
+        base64data = reader.result;
+        base64data = base64data.split(",")[1];
+        // base64data = reader.result;
+        $this.axiosVideo(base64data);
+      };
+    },
+    axiosVideo(base64data) {
+      axios({
+        url: API.URL + `conferences/record/aOa1yOS9cGdSX`,
+        method: "post",
+        headers: {
+          Authorization: "Bearer " + this.accessToken,
+        },
+        data: {
+          videoFile: base64data,
+        },
+      })
+        .then(() => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    stopAnswerRecord() {
+      var reader = new window.FileReader();
+      var base64data;
+      console.log(this.blob);
+      reader.readAsDataURL(this.blob);
+      reader.onloadend = function() {
+        base64data = reader.result;
+        console.log(base64data);
+        base64data = base64data.split(",")[1];
+        // base64data = reader.result;
+        console.log(base64data);
+        axios({
+          url: API.URL + `conferences/record/12234456`,
+          method: "post",
+          headers: {
+            Authorization: "Bearer " + "testToken",
+          },
+          data: {
+            videoFile: base64data,
+          },
+        })
+          .then(() => {})
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+    },
+    mergeAudioStreams(desktopStream, voiceStream) {
+      // 비디오, 오디오스트림 연결
+      const context = new AudioContext();
+      const destination = context.createMediaStreamDestination();
+      let hasDesktop = false;
+      let hasVoice = false;
+      if (desktopStream && desktopStream.getAudioTracks().length > 0) {
+        const source1 = context.createMediaStreamSource(desktopStream);
+        const desktopGain = context.createGain();
+        desktopGain.gain.value = 0.7;
+        source1.connect(desktopGain).connect(destination);
+        hasDesktop = true;
+      }
+
+      if (voiceStream && voiceStream.getAudioTracks().length > 0) {
+        const source2 = context.createMediaStreamSource(voiceStream);
+        const voiceGain = context.createGain();
+        voiceGain.gain.value = 0.7;
+        source2.connect(voiceGain).connect(destination);
+        hasVoice = true;
+      }
+
+      return hasDesktop || hasVoice ? destination.stream.getAudioTracks() : [];
+    },
   },
   mounted() {
     myName = this.getUserNickname;
     name = this.getUserNickname;
 
     this.entranceConferenceLog();
+
+    // const desktopStream = navigator.mediaDevices.getDisplayMedia({
+    //   video: true,
+    //   audio: true,
+    // });
+
+    // this.desktopStream = desktopStream;
+
+    // console.log(desktopStream);
+
+    // this.desktopStream = navigator.mediaDevices
+    //   .getDisplayMedia({
+    //     video: true,
+    //     audio: true,
+    //   })
+    //   .then(() => {
+    //     console.log(this.desktopStream);
+    this.startAnswerRecord();
+    //   });
   },
 };
 </script>

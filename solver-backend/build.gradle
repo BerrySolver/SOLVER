@@ -34,6 +34,11 @@ dependencies {
     implementation 'com.querydsl:querydsl-jpa'
 
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+	
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws', version: '2.2.1.RELEASE', ext: 'pom'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.39'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-core', version: '1.12.39'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.39'
 }
 
 test {
