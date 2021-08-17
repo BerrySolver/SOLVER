@@ -21,6 +21,7 @@
   font-weight: 400;
   padding-top: 5px;
   text-align: center;
+  transform: skew(-0.1deg);
   width: 300px;
 }
 
@@ -72,10 +73,11 @@
   font-size: 14px;
   justify-content: space-between;
   padding: 0px 5px 0px 17px;
+  transform: skew(-0.1deg);
 }
 
 .notification-highlight {
-    display: inline;
+  display: inline;
   box-shadow: inset 0 -10px 0 #f2d6ae7e; 
 }
 
@@ -99,6 +101,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transform: skew(-0.1deg);
 }
 
 .notification-togo-btn {
@@ -158,6 +161,7 @@
   font-weight: 400;
   padding-top: 5px;
   text-align: center;
+  transform: skew(-0.1deg);
   width: 300px;
 }
 
@@ -169,6 +173,7 @@
 
 .video-notification-title {
   padding: 15px 0px 0px 15px;
+  transform: skew(-0.1deg);
 }
 
 .video-yes-button {
@@ -201,4 +206,9 @@
 .video-notification-item-set:hover {
   background-color: #c2e6ff33;
   cursor: pointer;
+}
+
+.video-notification-highlight {
+  display: inline;
+  box-shadow: inset 0 -10px 0 #f5b89554; 
 }
