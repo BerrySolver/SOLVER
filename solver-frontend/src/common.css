@@ -32,16 +32,30 @@
   display: inline-block;
 }
 
-.m-left-5 {
-  margin-left: 60px;
-}
-
 .m-left-1 {
   margin-left: 10px;
 }
 
+.m-left-3 {
+  margin-left: 30px;
+}
+
+.m-left-5 {
+  margin-left: 60px;
+}
+
+.m-right-3 {
+  margin-right: 30px;
+}
+
 .m-top-3 {
   margin-top: 20px;
+}
+
+.line {
+  background-color: #B5C7D3;
+  height: 0.1px;
+  margin: 0;
 }
 
 .point-color-1 {

@@ -31,7 +31,7 @@
           </div>
           <!-- answer-statistics의 lastchild(right) -->
           <div class="text-left">
-            <div v-for="cateName in userProfileInfo.favoriteFieldNameList" :key="cateName">{{ cateName }}</div>
+            <ProfilePieChart v-if="isLoaded && Object.keys(this.userStatistics.answerStatistics).length > 0" :dataset="chartDataset" :options="chartOptions"/>
           </div>
         </div>
       </div>
@@ -80,14 +80,28 @@
 
 <script>
 import axios from 'axios'
+import ProfilePieChart from '@/components/profiles/ProfilePieChart'
 import API from "@/API.js"
 
 export default {
   name: 'ProfileStatistics',
+  components: {
+    ProfilePieChart,    
+  },
   props: ['nickname', 'tabNum', 'userProfileInfo'],
   data() {
     return {
       userStatistics: {},
+      chartDataset: {},
+      chartOptions: {
+        hoverBorderWidth: 20,
+        legend: {
+          display: true,
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+      isLoaded: false,
     }
   },
   created() {
@@ -100,6 +114,29 @@ export default {
     })
     .then((res) => {
       this.userStatistics = res.data
+      console.log(this.userStatistics.answerStatistics)
+      const backgroundColor = []
+      for (let i = 0; i < Object.keys(this.userStatistics.answerStatistics).length; i++) {
+        let color = this.$randomColor()
+        while (color in backgroundColor) {
+          color = this.$randomColor()
+        }
+        backgroundColor.push(color)
+      }
+      console.log(backgroundColor)
+      this.chartDataset = {
+        labels: Object.keys(this.userStatistics.answerStatistics),
+        datasets: [
+          {
+            label: "카테고리",
+            data: Object.values(this.userStatistics.answerStatistics),
+            backgroundColor: backgroundColor
+          }
+        ]
+      }
+      setTimeout(() => {
+        this.isLoaded = true
+      }, 300)
     })
     .catch((err) => {
       console.log(err)
