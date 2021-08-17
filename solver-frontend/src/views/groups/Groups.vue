@@ -237,7 +237,7 @@ export default {
   .group-list {
     display: flex;
     flex-flow: row wrap;
-    justify-content: start;
+    justify-content: flex-start;
     margin: 15px 0px 0px 0px;
   }
 
