@@ -455,6 +455,9 @@ public class UserServiceImpl implements UserService {
 		List<PaidSolver> paidSolvers = paidSolverRepository.findByStartTimeBeforeAndEndTimeAfter(date, date);
 		List<PaySolverRes> list = new ArrayList<PaySolverRes>();
 		
+		if(paidSolvers.size() == 0)
+			return list;
+		
 		// paidSolver 리스트 생성
 		for (PaidSolver paidSolver : paidSolvers) {
 			PaySolverRes res = new PaySolverRes();
