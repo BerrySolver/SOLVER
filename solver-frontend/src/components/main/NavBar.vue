@@ -63,16 +63,22 @@
                   <div
                     v-for="(notification, index) in notificationList"
                     :key="'n' + index"
+                    @click="fromNotiToQuestion( notification.questionId )"
                     class="notification-item-set">
 
-                    <hr class="line">
 
                     <div class="notification-title">'{{ notification.title }}'</div>
                     
                     <div class="notification-explanation">
-                      <span>라는 글에 새로운 답변이 달렸습니다.</span> 
-                      <button @click="fromNotiToQuestion( notification.questionId )" class="notification-togo-btn">이동</button>
+                      <span v-if="notification.code == 60">라는 글에 새로운 <span class="notification-highlight">답변</span>이 달렸습니다.</span> 
+                      <span v-if="notification.code == 61">라는 글에 새로운 <span class="notification-highlight">댓글</span>이 달렸습니다.</span> 
+                      <span v-if="notification.code == 62">라는 글에 <span class="notification-highlight">좋아요</span>가 달렸습니다.</span> 
+                      <span v-if="notification.code == 63">에 대한 답변에 <span class="notification-highlight">좋아요</span>가 달렸습니다.</span> 
+                      <span v-if="notification.code == 64">라는 글이 <span class="notification-highlight">북마크</span>되었습니다.</span> 
+                      <span class="notification-dateTime">{{ humanize(now, notification.regDt) }}</span>
                     </div>
+
+                    <hr class="notification-line">
                   </div>
                 </li>
 
@@ -139,6 +145,7 @@ export default {
       notificationList: [],
       notificationQuestionId: [],
       notificationVideoMsgList : [],
+      now: new Date(),
     }
   },
   computed: {
@@ -157,8 +164,26 @@ export default {
   },
   methods: {
     ...mapActions(['logout', 'goQuestionDetail']),
+    // 로그아웃
     clickLogout() {
       this.logout();
+    },
+
+    // 시간 humanize
+    humanize: function(now, date) {
+      const moment = require("moment");
+      const dateData = new Date(date);
+      let r = now - dateData;
+      if (parseInt(r) > 43200000) {
+        r = moment(dateData).format("YY-MM-DD\u00A0\u00A0HH:MM");
+      } else if (parseInt(r) >= 3600000) {
+        r = parseInt(parseInt(r) / 3600000).toString() + "시간 전";
+      } else if (parseInt(r) >= 60000) {
+        r = parseInt(parseInt(r) / 60000).toString() + "분 전";
+      } else {
+        r = "방금 전";
+      }
+      return r;
     },
 
     // 기본알림 AXIOS GET
@@ -169,9 +194,11 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken},
       })
       .then((res) => {
+        console.log(res.data)
         this.notificationList = res.data.notificationList
+        this.notificationType = res.data.notificationList.code
         
-        // 7개가 넘어가면 자르기
+        // 20개가 넘어가면 자르기
         if (this.notificationList.length > 20) {
           const notificationArr = this.notificationList.splice(20, this.notificationList.length)
           return notificationArr
@@ -184,7 +211,6 @@ export default {
     // 기본알림 → 질문 상세로 이동
     fromNotiToQuestion(questionId) {
       this.goQuestionDetail(questionId)
-      // location.reload()
     },
 
     // 화상알림 AXIOS GET
@@ -195,6 +221,7 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken}
       })
       .then ((res) => {
+        console.log(res.data)
         this.notificationVideoMsgList = res.data.messageList
         })
       .catch ((err) => console.log(err))
@@ -203,120 +230,11 @@ export default {
   created() {
     this.getNotifications()
     this.getVideoNotifications()
-  }
+  },
 };
 </script>
 
 
 <style>
-
-.dropdown-toggle::after {
-  display: none;
-}
-
-.dropdown-item:hover {
-  background-color: transparent;
-}
-
-.dropdown-menu {
-  padding: 0;
-}
-
-.dropdown-tab {
-  color: #0F4C81;
-  font-weight: 600;
-}
-
-.dropdown-tabs {
-  color: #84898c;
-  font-size: 16px;
-  font-weight: 400;
-  padding-top: 5px;
-  text-align: center;
-  width: 280px;
-}
-
-.navbar {
-  background-color: white;
-  border-bottom: 1px solid #658dc671;
-  align-items: center;
-  font-family: "NanumSquare", sans-serif;
-  font-size: 15px;
-  height: 56px;
-  position: fixed;
-  width: 100%;
-  z-index: 100;
-}
-
-.navbar-body {
-  width: 1190px;
-}
-
-.nav-logo {
-  color: #658dc6;
-  font-weight: 600;
-  margin-right: 20px;
-  text-decoration: none;
-}
-
-.nav-router {
-  color: #84898c;
-  margin-right: 20px;
-  text-decoration: none;
-}
-
-.nav-logout {
-  color: #84898c;
-  margin-right: 20px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.notification-explanation {
-  color: #84898c;
-  display: flex;
-  font-size: 14px;
-  justify-content: space-between;
-  padding: 0px 15px 10px 17px;
-}
-
-.notification-item-set:hover {
-  background-color: #b5c7d333;
-  /* border-left: 5px solid #658dc6; */
-}
-
-.notification-scroll {
-  height: 500px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
-.notification-title {
-  color: #0F4C81;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 15px 15px 0px 17px;
-}
-
-.notification-togo-btn {
-  background-color: transparent;
-  border: transparent;
-  color: #658dc6;
-  font-size: 14px;
-  padding: 1px;
-  transform: skew(-0.001deg);
-}
-
-.notification-img {
-  background-color: #b5c7d3;
-  border: 1px solid #b5c7d3;
-  border-radius: 20%;
-  height: 23px;
-  padding: 3px 3px 2px 2px;
-  width: 23px;
-}
-
-.notification-img:hover {
-  background-color: #658dc6;
-}
+@import "./NavBar.css";
 </style>

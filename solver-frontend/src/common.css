@@ -52,6 +52,12 @@
   margin-top: 20px;
 }
 
+.line {
+  background-color: #B5C7D3;
+  height: 0.1px;
+  margin: 0;
+}
+
 .point-color-1 {
   color: #A58D7F;
 }
