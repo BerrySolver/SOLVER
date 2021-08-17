@@ -82,17 +82,34 @@ function clStop(e) {
   stopSharing();
 }
 
-async function startSharing() {
-  if (!name.startsWith("scree&")) name = "scree&" + name;
+// window.onbeforeunload = function() {
+//   ws.close();
+// };
 
+async function startSharing() {
+  // sendMessage({
+  //   id: "leaveRoom",
+  // });
+
+  // for (var key in participants) {
+  //   if (participants[key] != null) participants[key].dispose();
+
+  //   participants[key] = null;
+  // }
+  // participants[name].dispose();
+  if (!name.startsWith("scree&")) name = "scree&" + name;
+  console.log("--------------------------");
   try {
     screenName = name;
     var message = {
       id: "startShare",
+      // id: "joinRoom",
       name: name,
+      // name: name,
       room: room,
     };
     sendMessage(message);
+    // });
   } catch (error) {
     console.log(error);
   }
@@ -105,6 +122,15 @@ function stopSharing() {
   });
 
   name = myName;
+
+  // participants["scree&" + myName].dispose();
+  // isScreenSharingState
+  // document.getElementById("join").style.display = "block";
+  // document.getElementById("room").style.display = "none";
+  // const videoPlayer = document.getElementById("video2");
+  // let tracks = videoPlayer.srcObject.getTracks();
+  // tracks.forEach((track) => track.stop());
+  // videoPlayer.srcObject = null;
 }
 
 var ws = new WebSocket("wss://localhost:8443/groupcall");
@@ -152,10 +178,12 @@ ws.onmessage = function(message) {
       onExistingParticipants(parsedMessage);
       break;
     case "screenSharingStart":
+      // onNewScreenShare(parsedMessage);
       onNewParticipant(parsedMessage);
       break;
     default:
       console.error("Unrecognized message", parsedMessage);
+    // alert("!");
   }
 };
 
@@ -164,7 +192,7 @@ function register() {
   room = document.getElementById("roomName").value;
 
   //나중에 지울 부분
-  // myName = name;
+  myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
   document.getElementById("join").style.display = "none";
@@ -202,6 +230,17 @@ function receiveScreenVideoResponse(result) {
   });
 }
 
+// function callResponse(message) {
+//   if (message.response != "accepted") {
+//     console.info("Call not accepted by peer. Closing call");
+//     stop();
+//   } else {
+//     webRtcPeer.processAnswer(message.sdpAnswer, function(error) {
+//       if (error) return console.error(error);
+//     });
+//   }
+// }
+
 function onExistingParticipants(msg) {
   var constraints = {
     audio: true,
@@ -223,9 +262,16 @@ function onExistingParticipants(msg) {
   console.log(participants[name]);
   console.log(name + " registered in room " + room);
 
+  // navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
+  //   console.log(stream);
+  //   video.srcObject = stream;
+  // });
+
   var options = {};
 
   if (name.startsWith("scree&")) {
+    // alert("!@!@");
+    // var participant = new ScreenParticipant(screenName);
     isSharing = true;
     var participant = new Participant(name);
     console.log(participant);
@@ -274,6 +320,25 @@ function onExistingParticipants(msg) {
     this.generateOffer(participant.offerToReceiveVideo.bind(participant));
   });
 
+  // var participant = new Participant(name + "1");
+  // console.log(participant);
+  // participants[name] = participant;
+  // var video = participant.getVideoElement();
+  // options = {
+  //   localVideo: video,
+  //   mediaConstraints: constraints,
+  //   onicecandidate: participant.onIceCandidate.bind(participant),
+  //   // sendSource: "screen",
+  // };
+
+  // participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
+  //   if (error) {
+  //     console.log(error);
+  //     return console.error(error);
+  //   }
+  //   this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+  // });
+
   console.log(msg.data);
 
   msg.data.forEach(receiveVideo);
@@ -291,10 +356,15 @@ function leaveRoom() {
 
   document.getElementById("join").style.display = "block";
   document.getElementById("room").style.display = "none";
+
+  // ws.close();
 }
 
 function receiveVideo(sender) {
+  // if (request.id == "screenSharngStart") sender = "isScreenSharingState";
   console.log("sender: " + sender);
+  //영상인 경우가 겹침
+  // if (participants[sender] != null) return;
   var participant = new Participant(sender);
   console.log(participant);
   participants[sender] = participant;
@@ -332,6 +402,10 @@ function receiveVideo(sender) {
     return;
   }
 
+  // if(sender.startsWith("scree&") ){
+  //   data
+  // }
+
   var options = {
     remoteVideo: video,
     onicecandidate: participant.onIceCandidate.bind(participant),
@@ -345,6 +419,33 @@ function receiveVideo(sender) {
   });
 }
 
+function receiveScreenVideo(request) {
+  // if (request.id == "screenSharngStart") sender = "isScreenSharingState";
+  console.log("Screen sender: " + request.name);
+  //영상인 경우가 겹침
+  // if (participants[sender] != null) return;
+  console.log(screenName);
+  var participant = new ScreenParticipant(screenName);
+  console.log(participant);
+  participants[room] = participant;
+  var video = participant.getVideoElement();
+
+  var options = {
+    remoteVideo: video,
+    onicecandidate: participant.onIceCandidate.bind(participant),
+  };
+
+  console.log(options);
+
+  participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function(error) {
+    if (error) {
+      return console.error(error);
+    }
+    console.log("screen gener");
+    this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+  });
+}
+
 function onParticipantLeft(request) {
   console.log("Participant " + request.name + " left");
   if (request.name.startsWith("scree&")) isSharing = false;
@@ -354,6 +455,16 @@ function onParticipantLeft(request) {
 }
 
 function sendMessage(message) {
+  console.log(ws);
+  // alert("send");
+  // if (ws.readyState == 3) {
+  //   ws.close();
+  //   ws = new WebSocket("wss://localhost:8443/groupcall");
+  //   while (ws.readyState != 1) {}
+  //   console.log("!@!@!@!@!@@@#@$@$@$");
+  //   ws.readyState == 1;
+  // }
+  // console.log(ws);
   var jsonMessage = JSON.stringify(message);
   console.log("Sending message: " + jsonMessage);
   ws.send(jsonMessage);
@@ -365,41 +476,68 @@ const PARTICIPANT_CLASS = "participant";
 function Participant(name) {
   this.name = name;
   console.log("this.name : " + this.name);
+  // var container = document.createElement("div");
+  // container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+  // container.id = name;
+  // var span = document.createElement("span");
+  // var video = document.createElement("video");
+  // video.id = "video-" + name;
+
+  // // var rtcPeer;
+
+  // container.appendChild(video);
+  // container.appendChild(span);
+  // container.onclick = switchContainerClass;
 
   if (name.startsWith("scree&")) {
     isSharing = true;
     this.name = name;
-
+    console.log("this.name : " + this.name);
     var container = document.createElement("div");
     container.className = PARTICIPANT_CLASS;
+    // container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
     container.id = name;
-
+    // var span = document.createElement("span");
     var video = document.createElement("video");
+    // var video = document.getElementById("screen");
+    // video.id = "screen";
     video.id = "video-" + name;
     video.style.width = "300px";
+    // video.style.borderRadius = "5%";
+
+    // var rtcPeer;
 
     container.appendChild(video);
+    // container.appendChild(span);
     container.onclick = switchContainerClass;
-
     document.getElementById("participants").appendChild(container);
+    // document.getElementById("screens").appendChild(container);
+    // span.appendChild(document.createTextNode(name));
 
     video.autoplay = true;
     video.controls = false;
   } else {
     this.name = name;
-
+    console.log("this.name : " + this.name);
     var container = document.createElement("div");
+    // container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
     container.className = PARTICIPANT_CLASS;
     container.id = name;
-
+    // var span = document.createElement("span");
     var video = document.createElement("video");
     video.id = "video-" + name;
     video.style.width = "300px";
+    // video.style.height = "600px";
+    // video.style.borderRadius = "5%";
+
+    // var rtcPeer;
 
     container.appendChild(video);
+    // container.appendChild(span);
     container.onclick = switchContainerClass;
     document.getElementById("participants").appendChild(container);
-
+    // document.getElementById("video" + participantsCount).appendChild(container);
+    // span.appendChild(document.createTextNode(name));
     participantsCount++;
     video.autoplay = true;
     video.controls = false;
@@ -413,7 +551,32 @@ function Participant(name) {
     return video;
   };
 
+  // function switchContainerClass() {
+  //   const mainDiv = document.getElementById("mainVideo");
+  //   // const cloneDiv = container.cloneNode();
+  //   mainDiv.appendChild(container);
+
+  //   if (container.className === PARTICIPANT_CLASS) {
+  //     var elements = Array.prototype.slice.call(
+  //       document.getElementsByClassName(PARTICIPANT_MAIN_CLASS)
+  //     );
+  //     elements.forEach(function(item) {
+  //       item.className = PARTICIPANT_CLASS;
+  //     });
+  //     video.style.width = "1600px";
+  //     // video.style.height = "1080px";
+
+  //     container.className = PARTICIPANT_MAIN_CLASS;
+  //   } else {
+  //     container.className = PARTICIPANT_CLASS;
+  //     video.style.width = "300px";
+  //     // video.style.height = "600px";
+  //   }
+  // }
   function switchContainerClass() {
+    // const mainDiv = document.getElementById("mainVideo");
+    // mainDiv.appendChild(container);
+
     if (container.className === PARTICIPANT_CLASS) {
       const mainDiv = document.getElementById("mainVideo");
       const childDiv = mainDiv.firstChild;
@@ -427,6 +590,13 @@ function Participant(name) {
       container.className = PARTICIPANT_MAIN_CLASS;
       mainDiv.appendChild(container);
       video.style.width = "1600px";
+      // video.style.height = "1080px";
+    } else {
+      // const mainDiv = document.getElementById("mainVideo");
+      // container.className = PARTICIPANT_CLASS;
+      // mainDiv.appendChild(container);
+      // video.style.width = "300px";
+      // video.style.height = "600px";
     }
   }
 
@@ -610,6 +780,8 @@ export default {
       this.recoder.ondataavailable = (e) => this.blobs.push(e.data);
       this.recoder.onstop = async () => {
         this.blob = new Blob(this.blobs, { type: "video/mp4" });
+        // let url = window.URL.createObjectURL(blob);
+        // this.blob = blob;
         console.log(this.blob);
         this.recordVideo();
       };
@@ -630,6 +802,7 @@ export default {
       reader.onloadend = function() {
         base64data = reader.result;
         base64data = base64data.split(",")[1];
+        // base64data = reader.result;
         $this.axiosVideo(base64data);
       };
     },
@@ -687,9 +860,130 @@ export default {
 </script>
 
 <style scoped>
+body {
+  font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
+  color: #404040;
+  background: #0ca3d2;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  border: 1px solid #c0c0c0;
+  margin: 0 0.1em 0 0;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1em;
+  width: 1.25em;
+  height: 1.25em;
+  background: #fff;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ededed), to(#fbfbfb));
+  -webkit-appearance: none;
+  -webkit-box-shadow: 1px 1px 1px #fff;
+  -webkit-border-radius: 0.25em;
+  vertical-align: text-top;
+  display: inline-block;
+}
+
+input[type="radio"] {
+  -webkit-border-radius: 2em; /* Make radios round */
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✔";
+  display: block;
+  text-align: center;
+  font-size: 16px;
+  height: 16px;
+  line-height: 18px;
+}
+
+input[type="radio"]:checked::after {
+  content: "●";
+  display: block;
+  height: 16px;
+  line-height: 15px;
+  font-size: 20px;
+  text-align: center;
+}
+
+select {
+  border: 1px solid #d0d0d0;
+  background: url(http://www.quilor.com/i/select.png) no-repeat right center,
+    -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fbfbfb), to(#ededed));
+  background: -moz-linear-gradient(19% 75% 90deg, #ededed, #fbfbfb);
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: #444;
+}
+
 .container {
   margin: 50px auto;
   width: 640px;
+}
+
+.join {
+  position: relative;
+  margin: 0 auto;
+  padding: 20px 20px 20px;
+  width: 310px;
+  background: white;
+  border-radius: 3px;
+  -webkit-box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  /*Transition*/
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+
+.join:before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.join h1 {
+  margin: -20px -20px 21px;
+  line-height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+  color: #555;
+  text-align: center;
+  text-shadow: 0 1px white;
+  background: #f3f3f3;
+  border-bottom: 1px solid #cfcfcf;
+  border-radius: 3px 3px 0 0;
+  background-image: -webkit-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -moz-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: -o-linear-gradient(top, whiteffd, #eef2f5);
+  background-image: linear-gradient(to bottom, whiteffd, #eef2f5);
+  -webkit-box-shadow: 0 1px whitesmoke;
+  box-shadow: 0 1px whitesmoke;
+}
+
+.join p {
+  margin: 20px 0 0;
+}
+
+.join p:first-child {
+  margin-top: 0;
+}
+
+.join input[type="text"],
+.join input[type="password"] {
+  width: 278px;
+}
+
+.join p.submit {
+  text-align: center;
 }
 
 :-moz-placeholder {
@@ -755,9 +1049,157 @@ input[type="submit"] {
   box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
+input[type="button"]:active,
+input[type="submit"]:active {
+  background: #cde5ef;
+  border-color: #9eb9c2 #b3c0c8 #b4ccce;
+  -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.lt-ie9 input[type="text"],
+.lt-ie9 input[type="password"] {
+  line-height: 34px;
+}
+
 #room {
   width: 100%;
   text-align: center;
+}
+
+#button-leave {
+  text-align: center;
+  position: absolute;
+  bottom: 10px;
+}
+
+.participant {
+  border-radius: 4px;
+  /* border: 2px groove; */
+  margin-left: 5;
+  margin-right: 5;
+  width: 150;
+  text-align: center;
+  overflow: hide;
+  float: left;
+  padding: 5px;
+  border-radius: 10px;
+  -webkit-box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
+  /*Transition*/
+  -webkit-transition: all 0.3s linear;
+  -moz-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+}
+
+.participant:before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  bottom: -8px;
+  left: -8px;
+  z-index: -1;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.participant:hover {
+  opacity: 1;
+  background-color: 0a33b6;
+  -webkit-transition: all 0.5s linear;
+  transition: all 0.5s linear;
+}
+
+.participant video,
+.participant.main video {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.participant span {
+  color: PapayaWhip;
+}
+
+.participant.main {
+  width: 20%;
+  margin: 0 auto;
+}
+
+.participant.main video {
+  height: auto;
+}
+
+.animate {
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-duration: 0.5s;
+  -moz-animation-fill-mode: both;
+  -o-animation-duration: 0.5s;
+  -o-animation-fill-mode: both;
+  -ms-animation-duration: 0.5s;
+  -ms-animation-fill-mode: both;
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+.removed {
+  -webkit-animation: disapear 1s;
+  -webkit-animation-fill-mode: forwards;
+  animation: disapear 1s;
+  animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes disapear {
+  50% {
+    -webkit-transform: translateX(-5%);
+    transform: translateX(-5%);
+  }
+  100% {
+    -webkit-transform: translateX(200%);
+    transform: translateX(200%);
+  }
+}
+
+@keyframes disapear {
+  50% {
+    -webkit-transform: translateX(-5%);
+    transform: translateX(-5%);
+  }
+
+  100% {
+    -webkit-transform: translateX(200%);
+    transform: translateX(200%);
+  }
+}
+a.hovertext {
+  position: relative;
+  width: 500px;
+  text-decoration: none !important;
+  text-align: center;
+}
+
+a.hovertext:after {
+  content: attr(title);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 0.5em 20px;
+  width: 460px;
+  background: rgba(0, 0, 0, 0.8);
+  text-decoration: none !important;
+  color: #fff;
+  opacity: 0;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  -ms-transition: 0.5s;
+}
+
+a.hovertext:hover:after,
+a.hovertext:focus:after {
+  opacity: 1;
 }
 
 #screens {

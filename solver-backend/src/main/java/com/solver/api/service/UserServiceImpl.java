@@ -438,4 +438,15 @@ public class UserServiceImpl implements UserService {
 
 		return user.getNickname();
 	}
+
+	@Override
+	public void insertDefaultProfile(Long kakaoId, String profileUrl) {
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		if(user.getProfileUrl() == null) {
+			user.setProfileUrl(profileUrl);
+			userRepository.save(user);
+		}
+		
+	}
 }

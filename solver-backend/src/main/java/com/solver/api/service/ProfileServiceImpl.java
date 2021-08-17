@@ -311,7 +311,7 @@ public class ProfileServiceImpl implements ProfileService{
 		if(tabNum == 0) {
 			//화상 답변 인지 그냥 답변 인지 뭘로 구분?
 			List<Answer> textAnswerList = answerRepository.findTextAnswerByUserId(userId);
-			List<Answer> videoAnswerList = answerRepository.findTextAnswerByUserId(userId);
+			List<Answer> videoAnswerList = answerRepository.findVideoAnswerByUserId(userId);
 			
 			int textAnswerCount = textAnswerList.size();
 			int videoAnswerCount = videoAnswerList.size();
@@ -332,11 +332,11 @@ public class ProfileServiceImpl implements ProfileService{
 			
 			videoAnswerTime /= (1000*60);
 			
-			profileTabRes.setVideoAnswerTime(videoAnswerTime);
-			profileTabRes.setVideoAnswerCount(videoAnswerCount);
-			profileTabRes.setTextAnswerCount(textAnswerCount);
+			List<Answer> myAnswerList = new ArrayList<Answer>();
+			myAnswerList.addAll(textAnswerList);
+			myAnswerList.addAll(videoAnswerList);
 			
-			profileTabRes.setVideoAnswerTime(videoAnswerTime);
+			profileTabRes = ProfileTabRes.makeAnswerStatistics(videoAnswerTime, videoAnswerCount, textAnswerCount, myAnswerList);
 		}
 		//답변을 달은 질문 목록
 		else if(tabNum == 1) {

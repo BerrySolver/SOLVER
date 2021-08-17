@@ -11,7 +11,7 @@
         <div class="answer-item" v-for="(answer, idx) in answerList" :key="idx">
           <div class="answer-item-header">
             <div style="float: left;">
-              <img class="answer-item-profileImg" src="@/assets/profile-ex.jpg" alt="" />
+              <img class="answer-item-profileImg" :src="answer.profileUrl" alt="" />
             </div>
             <div class="answer-info">
               <div style="font-size: 18px;">{{ answer.nickname }}</div>

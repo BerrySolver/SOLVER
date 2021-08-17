@@ -1,7 +1,11 @@
 package com.solver.api.controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ConferenceLogPostReq;
+import com.solver.api.request.ConferenceRecordPostReq;
 import com.solver.api.service.ConferenceLogService;
 import com.solver.api.service.ConferenceService;
 import com.solver.common.model.BaseResponse;
@@ -36,6 +41,9 @@ public class ConferenceController {
 	
 	@Autowired
 	ConferenceLogService conferenceLogService;
+	
+	String uploadPath = "C:" + File.separator + "Users" + File.separator + "HM" 
+			+ File.separator + "downloads";
 	
 	/* 질문 화상 회의 상태 변경 
 	 * 
@@ -131,5 +139,26 @@ public class ConferenceController {
 		}
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "화상 회의 종료 성공"));
+	}
+	
+	/* 화상회의 영상 저장 */
+	@PostMapping(value="/record/{questionId}")
+	@ApiOperation(value = "화상 회의 종료", notes = "화상 회의를 닫는다") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "영상 저장 완료"),
+        @ApiResponse(code = 409, message = "화상 회의 종료 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> recordConference(
+			HttpServletResponse response, 
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String questionId,
+			@RequestBody ConferenceRecordPostReq conferenceRecordPostReq
+			) throws IOException, ParseException 
+	{
+		
+		System.out.println(accessToken);
+		conferenceService.recordConference(accessToken, questionId, response, conferenceRecordPostReq);
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 종료 성공"));
 	}
 }
