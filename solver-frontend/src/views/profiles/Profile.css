@@ -249,13 +249,6 @@
   display: inline-block;
 }
 
-.line {
-  background-color: #B5C7D3;
-  height: 0.1px;
-  margin: 0;
-}
-
-
 .tab-btn {
   border: 2px solid #B5C7D3;
   background-color: white;

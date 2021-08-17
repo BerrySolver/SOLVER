@@ -37,6 +37,101 @@
             <li class="nav-item" v-if="isLoggedIn">
               <a @click="clickLogout()" class="nav-logout">로그아웃</a>
             </li>
+
+            <!-- notification for 기본 알람 -->
+            <li class="nav-item dropdown" v-if="isLoggedIn">
+              
+              <!-- notification [NAVBAR 삽입 로고] -->
+              <span class="dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <img class="notification-img" src="@/assets/notification-alarm.png">
+              </span>
+
+              <!-- notification [dropdown TAB] -->
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li class="dropdown-item" aria-labelledby="dropdownMenuClickableInside">
+                  <div class="dropdown-tabs">
+                    <div><img src="@/assets/logo-white.png" width="20px"></div>
+                    <div class="dropdown-tab">알림</div>         
+                  </div>
+                </li>
+                
+                <!-- notificatiion [구분선] -->
+                <li><hr class="line"></li>
+
+                <!-- notificatiion [dropdown 알림 Items] -->
+                <li class="notification-scroll">
+                  <div
+                    v-for="(notification, index) in notificationList"
+                    :key="'n' + index"
+                    @click="fromNotiToQuestion( notification.questionId )"
+                    class="notification-item-set">
+
+
+                    <div class="notification-title">'{{ notification.title }}'</div>
+                    
+                    <div class="notification-explanation">
+                      <span v-if="notification.code == 60">라는 글에 새로운 <span class="notification-highlight">답변</span>이 달렸습니다.</span> 
+                      <span v-if="notification.code == 61">라는 글에 새로운 <span class="notification-highlight">댓글</span>이 달렸습니다.</span> 
+                      <span v-if="notification.code == 62">라는 글에 <span class="notification-highlight">좋아요</span>가 달렸습니다.</span> 
+                      <span v-if="notification.code == 63">에 대한 답변에 <span class="notification-highlight">좋아요</span>가 달렸습니다.</span> 
+                      <span v-if="notification.code == 64">라는 글이 <span class="notification-highlight">북마크</span>되었습니다.</span> 
+                      <span class="notification-dateTime">{{ humanize(now, notification.regDt) }}</span>
+                    </div>
+
+                    <hr class="notification-line">
+                  </div>
+                </li>
+
+              </ul>
+            </li>
+
+            <!-- notification-video -->
+            <li class="nav-item dropdown interval" v-if="isLoggedIn">
+
+              <!-- notification video [NAVBAR 삽입 로고] -->
+              <span class="dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <img class="notification-img" src="@/assets/notification-video.png">
+              </span>
+
+              <!-- notification [dropdown TAB] -->
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li class="dropdown-item" aria-labelledby="dropdownMenuClickableInside">
+                  <div class="video-dropdown-tabs">
+                    <div><img src="@/assets/logo-white.png" width="20px"></div>
+                    <div class="dropdown-tab">화상알림</div>         
+                  </div>
+                </li>
+
+                <!-- notificatiion [구분선] -->
+                <li><hr class="line"></li>
+
+                <!-- notificatiion [dropdown 알림 Items] -->
+                <li class="notification-scroll">
+                  <div
+                    v-for="(message, index) in notificationVideoMsgList"
+                    :key="'m' + index"
+                    @click="fromNotiToQuestion( message.questionId )"
+                    class="video-notification-item-set">
+
+                    <div class="video-notification-title">
+                      <span class="video-notification-datetime">{{ message.content }}</span>
+                      <span class="one">에</span>
+                    </div>
+                    
+                    <div class="notification-explanation">
+                      <span>{{ message.sendNickName }}님으로부터 화상 회의가 요청되었습니다.</span> 
+                    </div>
+
+                    <div class="video-button">
+                      <button class="video-yes-button">수락</button>
+                      <button class="video-no-button interval">거절</button>
+                    </div>
+                    <hr class="notification-line">
+                  </div>
+                </li>
+              </ul>
+            </li>
+
             </div>
           </div>
         </div>
@@ -46,13 +141,23 @@
 </template>
 
 <script>
+import API from "@/API.js"
+import axios from 'axios';
 import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "Navbar",
+  data() {
+    return {
+      notificationList: [],
+      notificationQuestionId: [],
+      notificationVideoMsgList : [],
+      now: new Date(),
+    }
+  },
   computed: {
     ...mapState({
-      accessToken: state => state.auth.accessToken,
+      accessToken: (state) => state.auth.accessToken,
       userNickname: (state) => state.auth.userNickname,
     }),
     ...mapGetters(["isLoggedIn"]),
@@ -65,48 +170,75 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout', 'goQuestionDetail']),
+    // 로그아웃
     clickLogout() {
       this.logout();
     },
+
+    // 시간 humanize
+    humanize: function(now, date) {
+      const moment = require("moment");
+      const dateData = new Date(date);
+      let r = now - dateData;
+      if (parseInt(r) > 43200000) {
+        r = moment(dateData).format("YY-MM-DD\u00A0\u00A0HH:MM");
+      } else if (parseInt(r) >= 3600000) {
+        r = parseInt(parseInt(r) / 3600000).toString() + "시간 전";
+      } else if (parseInt(r) >= 60000) {
+        r = parseInt(parseInt(r) / 60000).toString() + "분 전";
+      } else {
+        r = "방금 전";
+      }
+      return r;
+    },
+
+    // 기본알림 AXIOS GET
+    getNotifications() {
+      axios({
+        url: API.URL + API.ROUTES.notificationsAlarm,
+        method: "GET",
+        headers: { Authorization: "Bearer " + this.accessToken},
+      })
+      .then((res) => {
+        this.notificationList = res.data.notificationList
+        
+        // 만약, 알림이 20개가 넘어가면 자르기
+        if (this.notificationList.length > 20) {
+          const notificationArr = this.notificationList.splice(20, this.notificationList.length)
+          return notificationArr
+        } 
+
+      })
+      .catch((err) => console.log(err))
+    },
+
+    // 화상알림 AXIOS GET
+    getVideoNotifications() {
+      axios({
+        url: API.URL + API.ROUTES.notificationReceivedMessage,
+        method: "GET",
+        headers: { Authorization: "Bearer " + this.accessToken}
+      })
+      .then ((res) => {
+        this.notificationVideoMsgList = res.data.messageList
+        })
+      .catch ((err) => console.log(err))
+    },
+
+    // 알림 → 질문 상세로 이동
+    fromNotiToQuestion(questionId) {
+      this.goQuestionDetail(questionId)
+    },
+  },
+  created() {
+    this.getNotifications()
+    this.getVideoNotifications()
   },
 };
 </script>
 
+
 <style>
-.navbar {
-  background-color: white;
-  border-bottom: 1px solid #658dc671;
-  align-items: center;
-  font-family: "NanumSquare", sans-serif;
-  font-size: 15px;
-  height: 56px;
-  position: fixed;
-  width: 100%;
-  z-index: 100;
-}
-
-.navbar-body {
-  width: 1190px;
-}
-
-.nav-logo {
-  color: #658dc6;
-  font-weight: 600;
-  margin-right: 20px;
-  text-decoration: none;
-}
-
-.nav-router {
-  color: #84898c;
-  margin-right: 20px;
-  text-decoration: none;
-}
-
-.nav-logout {
-  color: #84898c;
-  margin-right: 20px;
-  text-decoration: none;
-  cursor: pointer;
-}
+@import "./NavBar.css";
 </style>

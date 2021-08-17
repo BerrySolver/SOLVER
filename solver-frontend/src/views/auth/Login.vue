@@ -46,7 +46,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login", "tokenLogin", "profileSetting"]),
+    ...mapActions(["login", "tokenLogin"]),
   },
   computed: {
     ...mapState({
@@ -61,9 +61,6 @@ export default {
     if (token != null) {
       this.tokenLogin(token);
     }
-  },
-  destroyed() {
-    this.profileSetting(this.userNickname);
   },
 };
 </script>
