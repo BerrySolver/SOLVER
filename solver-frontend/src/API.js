@@ -24,6 +24,7 @@ export default {
 
     // 솔버 결제
     paySolver: "points/pay",
+    getPaySolver : "solver/pay",
     
     //화상회의
     conferenceLog: "conferences",
