@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div style="min-height:500px;">
+    <div style="min-height:500px; padding-bottom: 100px;">
       <!-- 실제 리스트 -->
       <div class="solver-body" v-for="(solvers, idx1) in solverList" :key="idx1">
         <div class="solver-body-contents">
