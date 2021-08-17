@@ -21,7 +21,7 @@
   font-weight: 400;
   padding-top: 5px;
   text-align: center;
-  width: 280px;
+  width: 300px;
 }
 
 .navbar {
@@ -71,7 +71,7 @@
   display: flex;
   font-size: 14px;
   justify-content: space-between;
-  padding: 0px 15px 0px 17px;
+  padding: 0px 5px 0px 17px;
 }
 
 .notification-highlight {
@@ -92,7 +92,6 @@
 
 .notification-title {
   color: #0F4C81;
-  display: block;
   font-size: 15px;
   font-weight: 600;
   padding: 15px 15px 0px 17px;
@@ -142,4 +141,64 @@
 
 .notification-scroll::-webkit-scrollbar-track {
   background-color: rgb(245, 245, 245); 
+}
+
+.one {
+  margin-left: 3px;
+  font-size: 14px;
+}
+
+.video-button {
+  padding: 5px 0px 0px 15px;
+}
+
+.video-dropdown-tabs {
+  color: #84898c;
+  font-size: 16px;
+  font-weight: 400;
+  padding-top: 5px;
+  text-align: center;
+  width: 300px;
+}
+
+.video-notification-datetime {
+  color: #0F4C81;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.video-notification-title {
+  padding: 15px 0px 0px 15px;
+}
+
+.video-yes-button {
+  background-color: transparent;
+  border: 1px solid #658dc6;
+  color: #0F4C81;
+  font-size: 13px;
+  width: 45%;
+}
+
+.video-yes-button:hover {
+  background-color: #dae8fc;
+  color: black
+}
+
+.video-no-button {
+  background-color: transparent;
+  border: 1px solid #658dc6;
+  color: #0F4C81;
+  font-size: 13px;
+  width: 45%;
+}
+
+.video-no-button:hover {
+  background-color: #84898c31;
+  border: 1px solid #658dc6;
+  color: black
+}
+
+.video-notification-item-set:hover {
+  background-color: #c2e6ff33;
+  cursor: pointer;
 }

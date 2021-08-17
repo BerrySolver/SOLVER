@@ -96,7 +96,7 @@
               <!-- notification [dropdown TAB] -->
               <ul class="dropdown-menu dropdown-menu-end">
                 <li class="dropdown-item" aria-labelledby="dropdownMenuClickableInside">
-                  <div class="dropdown-tabs">
+                  <div class="video-dropdown-tabs">
                     <div><img src="@/assets/logo-white.png" width="20px"></div>
                     <div class="dropdown-tab">화상알림</div>         
                   </div>
@@ -110,16 +110,23 @@
                   <div
                     v-for="(message, index) in notificationVideoMsgList"
                     :key="'m' + index"
-                    class="notification-item-set">
+                    @click="fromNotiToQuestion( message.questionId )"
+                    class="video-notification-item-set">
 
-                    <hr class="line">
-
-                    <div class="notification-title">{{ message.content }}</div>
+                    <div class="video-notification-title">
+                      <span class="video-notification-datetime">{{ message.content }}</span>
+                      <span class="one">에</span>
+                    </div>
                     
                     <div class="notification-explanation">
-                      <span>에 화상 회의가 요청되었습니다.</span> 
-                      <button @click="fromNotiToQuestion( notification.questionId )" class="notification-togo-btn">이동</button>
+                      <span>{{ message.sendNickName }}님으로부터 화상 회의가 요청되었습니다.</span> 
                     </div>
+
+                    <div class="video-button">
+                      <button class="video-yes-button">수락</button>
+                      <button class="video-no-button interval">거절</button>
+                    </div>
+                    <hr class="notification-line">
                   </div>
                 </li>
               </ul>
@@ -194,11 +201,9 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken},
       })
       .then((res) => {
-        console.log(res.data)
         this.notificationList = res.data.notificationList
-        this.notificationType = res.data.notificationList.code
         
-        // 20개가 넘어가면 자르기
+        // 만약, 알림이 20개가 넘어가면 자르기
         if (this.notificationList.length > 20) {
           const notificationArr = this.notificationList.splice(20, this.notificationList.length)
           return notificationArr
@@ -206,11 +211,6 @@ export default {
 
       })
       .catch((err) => console.log(err))
-    },
-
-    // 기본알림 → 질문 상세로 이동
-    fromNotiToQuestion(questionId) {
-      this.goQuestionDetail(questionId)
     },
 
     // 화상알림 AXIOS GET
@@ -221,11 +221,15 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken}
       })
       .then ((res) => {
-        console.log(res.data)
         this.notificationVideoMsgList = res.data.messageList
         })
       .catch ((err) => console.log(err))
-    }
+    },
+
+    // 알림 → 질문 상세로 이동
+    fromNotiToQuestion(questionId) {
+      this.goQuestionDetail(questionId)
+    },
   },
   created() {
     this.getNotifications()
