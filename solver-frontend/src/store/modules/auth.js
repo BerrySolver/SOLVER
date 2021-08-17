@@ -79,8 +79,8 @@ const actions = {
           // commit("SET_ACCESS_TOKEN", token);
 
           // const info2 = JSON.parse(localStorage.getItem("userInfo"));
-          router.go(-2)
-          // router.push({ path: "/" });
+          // router.go(-2)
+          router.push({ path: "/" })
         }
       })
       .catch((e) => {

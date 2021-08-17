@@ -80,23 +80,41 @@
             </li>
 
             <!-- notification-video -->
-            <li class="nav-item dropdown interval" data-bs-auto-close="outside" v-if="isLoggedIn">
-              <span class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="outside" data-bs-auto-close="false">
+            <li class="nav-item dropdown interval" v-if="isLoggedIn">
+
+              <!-- notification video [NAVBAR 삽입 로고] -->
+              <span class="dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                 <img class="notification-img" src="@/assets/notification-video.png">
               </span>
 
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuClickableInside">
-                <li class="dropdown-item">
+              <!-- notification [dropdown TAB] -->
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li class="dropdown-item" aria-labelledby="dropdownMenuClickableInside">
                   <div class="dropdown-tabs">
                     <div><img src="@/assets/logo-white.png" width="20px"></div>
                     <div class="dropdown-tab">화상알림</div>         
                   </div>
                 </li>
 
+                <!-- notificatiion [구분선] -->
                 <li><hr class="line"></li>
 
-                <li>
-                  <a class="dropdown-item" href="#">Another action</a>
+                <!-- notificatiion [dropdown 알림 Items] -->
+                <li class="notification-scroll">
+                  <div
+                    v-for="(message, index) in notificationVideoMsgList"
+                    :key="'m' + index"
+                    class="notification-item-set">
+
+                    <hr class="line">
+
+                    <div class="notification-title">{{ message.content }}</div>
+                    
+                    <div class="notification-explanation">
+                      <span>에 화상 회의가 요청되었습니다.</span> 
+                      <button @click="fromNotiToQuestion( notification.questionId )" class="notification-togo-btn">이동</button>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </li>
@@ -120,6 +138,7 @@ export default {
     return {
       notificationList: [],
       notificationQuestionId: [],
+      notificationVideoMsgList : [],
     }
   },
   computed: {
@@ -153,8 +172,8 @@ export default {
         this.notificationList = res.data.notificationList
         
         // 7개가 넘어가면 자르기
-        if (this.notificationList.length > 7) {
-          const notificationArr = this.notificationList.splice(7, this.notificationList.length)
+        if (this.notificationList.length > 20) {
+          const notificationArr = this.notificationList.splice(20, this.notificationList.length)
           return notificationArr
         } 
 
@@ -165,9 +184,10 @@ export default {
     // 기본알림 → 질문 상세로 이동
     fromNotiToQuestion(questionId) {
       this.goQuestionDetail(questionId)
-      location.reload()
+      // location.reload()
     },
 
+    // 화상알림 AXIOS GET
     getVideoNotifications() {
       axios({
         url: API.URL + API.ROUTES.notificationReceivedMessage,
@@ -175,7 +195,7 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken}
       })
       .then ((res) => {
-        console.log(res.data)
+        this.notificationVideoMsgList = res.data.messageList
         })
       .catch ((err) => console.log(err))
     }

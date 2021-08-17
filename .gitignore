@@ -13,3 +13,7 @@ solver-backend/src/main/generated/
 backend/src/main/resources/dist/
 solver-backend/src/main/resources/dist/
 package-lock.json
+solver-kurento/gradle/
+solver-kurento/.gitignore
+solver-frontend/src/views/conference/ConferenceRoom copy 2.vue
+solver-frontend/src/views/conference/ConferenceRoom copy.vue

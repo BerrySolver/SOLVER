@@ -8,7 +8,13 @@
           <img class="point-img" v-if="point.value == 30 && point.code ==='080'" src="@/assets/plus-30.png" alt="">
           <img class="point-img" v-if="point.value == 50 && point.code ==='080'" src="@/assets/plus-50.png" alt="">
           <img class="point-img" v-if="point.value == 100 && point.code ==='080'" src="@/assets/plus-100.png" alt="">
-          <img class="point-img" v-if="point.value == 100 && point.code ==='081'" src="@/assets/minus-100.png" alt=""> &nbsp;
+          <img class="point-img" v-if="point.value == 100 && point.code ==='081'" src="@/assets/minus-100.png" alt=""> 
+          <img class="point-img" v-if="point.value == 200 && point.code ==='081'" src="@/assets/minus-200.png" alt=""> 
+          <img class="point-img" v-if="point.value == 300 && point.code ==='081'" src="@/assets/minus-300.png" alt=""> 
+          <img class="point-img" v-if="point.value == 400 && point.code ==='081'" src="@/assets/minus-400.png" alt=""> 
+          <img class="point-img" v-if="point.value == 500 && point.code ==='081'" src="@/assets/minus-500.png" alt=""> 
+          <img class="point-img" v-if="point.value == 600 && point.code ==='081'" src="@/assets/minus-600.png" alt=""> 
+          <img class="point-img" v-if="point.value == 700 && point.code ==='081'" src="@/assets/minus-700.png" alt=""> &nbsp;
           <span class="point-text" v-if="point.pointCode === '000'"> 새로운 답변을 등록했어요! </span>
           <span class="point-text" v-if="point.pointCode === '001'"> 새로운 화상 답변을 등록했어요! </span>
           <span class="point-text" v-if="point.pointCode === '002'"> 귀중한 첫 답변을 등록했어요! </span>
@@ -19,9 +25,16 @@
           <span class="point-text" v-if="point.pointCode === '007'"> 나의 답변이 추천받았어요! </span>
           <span class="point-text" v-if="point.pointCode === '008'"> 나의 질문이 북마크되었어요! </span>
           <span class="point-text" v-if="point.pointCode === '100'"> 질문이 신고 받았어요... </span>
-          <span class="point-text" v-if="point.pointCode === '101'"> 답변이 신고 받았어요! </span>
-          <span class="point-text" v-if="point.pointCode === '102'"> 댓글이 신고 받았어요! </span>
-          <span class="point-time">&nbsp; {{point.redDt.slice(0,10)}} {{point.redDt.slice(11,16)}}</span>
+          <span class="point-text" v-if="point.pointCode === '101'"> 답변이 신고 받았어요... </span>
+          <span class="point-text" v-if="point.pointCode === '102'"> 댓글이 신고 받았어요... </span>
+          <span class="point-text" v-if="point.pointCode === '103'"> 1일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '104'"> 2일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '105'"> 3일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '106'"> 4일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '107'"> 5일 홍보 신청을 했어요!</span>
+          <span class="point-text" v-if="point.pointCode === '108'"> 6일 홍보 신청을 했어요! </span>
+          <span class="point-text" v-if="point.pointCode === '109'"> 7일 홍보 신청을 했어요!</span>
+          <span class="point-time">&nbsp; {{point.redDt}}</span>
       </div>
     </div>
     <button class="btn point-log-button" @click="$emit('close')">확인완료</button>
@@ -31,6 +44,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
+import {mapState} from 'vuex'
 
 export default {
   data:function(){
@@ -42,16 +56,36 @@ export default {
     
   ], methods : {
 
+  }, 
+  computed: {
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+    }),
   }, created(){
     this.nickname = this.$store.getters.getUserNickname;
     axios({
       url: API.URL + `points/${this.nickname}`,
       method: "get",
-      headers: { Authorization: "Bearer " + localStorage.getItem("solverToken")},
+      headers: { Authorization: "Bearer " + this.accessToken},
     })
     .then((res) => {
       this.pointList = res.data.list;
-      console.log(this.pointList);
+      
+      this.pointList.forEach(p=>{
+        var date = new Date(p.redDt);
+        
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        month = month >= 10 ? month : '0' + month
+        let day = date.getDate()
+        day = day >= 10 ? day : '0' + day
+        let hour = date.getHours()
+        hour = hour >= 10 ? hour : '0' + hour
+        let min = date.getMinutes()     
+        let result = year + '-' + month + '-' + day + ' ' + hour + ':' + min;
+
+        p.redDt = result;
+      })
     })
     .catch((err) => {
       console.log(err);

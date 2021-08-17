@@ -2,7 +2,7 @@
   <div id="app">
     <NavBar id="navbar"/>
     <!-- 라우터 보여지는 부분 -->
-    <RouterView id="router"/>
+    <RouterView id="router" :key="$route.fullPath"/>
     <Footer id="footer"/>
   </div>
 </template>

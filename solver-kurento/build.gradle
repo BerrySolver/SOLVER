@@ -1,0 +1,61 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-mustache")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-websocket")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+	implementation('org.webjars.bower:jquery:3.3.1')
+    implementation('org.webjars:sockjs-client:1.1.2')
+    implementation('org.webjars:stomp-websocket:2.3.3-1')
+    implementation('org.webjars:webjars-locator:0.30')
+    // https://mvnrepository.com/artifact/org.webjars/bootstrap
+implementation group: 'org.webjars', name: 'bootstrap', version: '4.6.0'
+    // https://mvnrepository.com/artifact/org.webjars.bower/demo-console
+implementation group: 'org.webjars.bower', name: 'demo-console', version: '1.5.1'
+    // https://mvnrepository.com/artifact/org.webjars.bower/ekko-lightbox
+implementation group: 'org.webjars.bower', name: 'ekko-lightbox', version: '4.0.2'
+    // https://mvnrepository.com/artifact/org.webjars.bower/webrtc-adapter
+implementation group: 'org.webjars.bower', name: 'webrtc-adapter', version: '6.4.0'
+    
+    //WebRTC 클라이언트 의존성 추가
+    implementation('org.webjars.bower:webrtc-adapter:7.4.0')
+    //Kurento (미디어서버) 관련 의존성 추가
+    implementation('org.kurento:kurento-client:6.16.0')
+    implementation('org.kurento:kurento-utils-js:6.15.0')
+    
+    
+	
+	// https://mvnrepository.com/artifact/org.webjars/stomp-websocket
+//implementation group: 'org.webjars', name: 'stomp-websocket', version: '2.3.3-1'
+	// https://mvnrepository.com/artifact/org.webjars.bower/jquery
+//implementation group: 'org.webjars.bower', name: 'jquery', version: '3.3.1'
+// https://mvnrepository.com/artifact/org.webjars/sockjs-client
+//implementation group: 'org.webjars', name: 'sockjs-client', version: '1.1.2'
+// https://mvnrepository.com/artifact/org.webjars/webjars-locator
+//implementation group: 'org.webjars', name: 'webjars-locator', version: '0.30'
+// https://mvnrepository.com/artifact/org.webjars.bower/webrtc-adapter
+//implementation group: 'org.webjars.bower', name: 'webrtc-adapter', version: '7.4.0'
+// https://mvnrepository.com/artifact/org.kurento/kurento-client
+//implementation group: 'org.kurento', name: 'kurento-client', version: '6.16.0'
+// https://mvnrepository.com/artifact/org.kurento/kurento-utils-js
+//implementation group: 'org.kurento', name: 'kurento-utils-js', version: '6.15.0'
+}
+
+test {
+	useJUnitPlatform()
+}

@@ -106,19 +106,28 @@ public class ProfileServiceImpl implements ProfileService{
 		int point = 0;
 		int remainingPoint = 0;
 		
+		int plus = 0, minus = 0;
+		
 		for (PointLog pointLog : pointList) {
 			PointCode pointCode = pointCodeRepository.findByPointCode(pointLog.getPointCode().getPointCode());
 			
-			if(pointCode.getPointCode().equals("100") || pointCode.getPointCode().equals("101") || pointCode.getPointCode().equals("102")) {
-				remainingPoint -= pointCode.getValue();
-				
+			if(pointCode.getPointCode().charAt(0) == '0') {
+				plus += pointCode.getValue();
+			}else {
+				minus += pointCode.getValue();
 			}
-			else {
-				point += pointCode.getValue();
-			}
+			
+//			if(pointCode.getPointCode().equals("100") || pointCode.getPointCode().equals("101") || pointCode.getPointCode().equals("102")) {
+//				remainingPoint -= pointCode.getValue();
+//				
+//			}
+//			else {
+//				point += pointCode.getValue();
+//			}
 		}
 		
-		remainingPoint += point;
+		point = plus;
+		remainingPoint = plus - minus;
 		
 		/* 포인트 계산 끝*/
 		
