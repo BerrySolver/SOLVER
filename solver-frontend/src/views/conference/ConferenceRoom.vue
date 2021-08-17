@@ -174,7 +174,8 @@ function register() {
   name = document.getElementById("name").value;
   room = document.getElementById("roomName").value;
 
-  // myName = name;
+  //나중에 지울 부분
+  myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
   document.getElementById("join").style.display = "none";
@@ -536,10 +537,14 @@ function Participant(name) {
       elements.forEach(function(item) {
         item.className = PARTICIPANT_CLASS;
       });
+      video.style.width = "1800px";
+      video.style.height = "1080px";
 
       container.className = PARTICIPANT_MAIN_CLASS;
     } else {
       container.className = PARTICIPANT_CLASS;
+      video.style.width = "800px";
+      video.style.height = "600px";
     }
   }
 
@@ -1049,7 +1054,7 @@ a.hovertext:focus:after {
 
 #participants {
   margin-top: 50px;
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
 }
 
@@ -1114,6 +1119,10 @@ a.hovertext:focus:after {
 </style>
 
 <style scoped>
+#participants {
+  overflow: hide;
+}
+
 #wrapper {
   background-color: #b5c7d3;
   min-height: 1900px;

@@ -30,4 +30,6 @@ public interface UserService {
 	List<SolverRes> getUserList(SolverGetListReq solverGetListReq);
 
 	String getNickname(String accessToken, HttpServletResponse response);
+
+	void insertDefaultProfile(Long kakaoId, String profileUrl);
 }
