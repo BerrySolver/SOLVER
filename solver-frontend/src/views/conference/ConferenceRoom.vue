@@ -17,11 +17,14 @@
       </div>
       <div id="room" style="display: none;">
         <h2 id="room-header"></h2>
-        <div id="participants">
-          <div id="video1"></div>
-          <div id="video2"></div>
+        <div id="videoList">
+          <div id="participants">
+            <!-- <div id="video1"></div>
+          <div id="video2"></div> -->
+          </div>
+          <!-- <div id="screens"></div> -->
+          <div id="mainVideo"></div>
         </div>
-        <div id="screens"></div>
       </div>
       <div class="screen-buttons">
         <div id="start" v-if="checkScreen()" class="screen-start-button" @click="clickSt()">
@@ -34,6 +37,18 @@
           <img
             style="width:23px; margin: 10px 0 3px 0;"
             src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+          />
+        </div>
+        <div v-if="isRecording" @click="stopAnswerRecord()" class="conference-record-stop-btn">
+          <img
+            style="width:23px; "
+            src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
+          />
+        </div>
+        <div v-else @click="startAnswerRecord()" class="conference-record-start-btn">
+          <img
+            style="width:23px; "
+            src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
           />
         </div>
         <div class="conference-finish-btn" @click="clickLeaveRoom()">
@@ -67,34 +82,17 @@ function clStop(e) {
   stopSharing();
 }
 
-// window.onbeforeunload = function() {
-//   ws.close();
-// };
-
 async function startSharing() {
-  // sendMessage({
-  //   id: "leaveRoom",
-  // });
-
-  // for (var key in participants) {
-  //   if (participants[key] != null) participants[key].dispose();
-
-  //   participants[key] = null;
-  // }
-  // participants[name].dispose();
   if (!name.startsWith("scree&")) name = "scree&" + name;
-  console.log("--------------------------");
+
   try {
     screenName = name;
     var message = {
       id: "startShare",
-      // id: "joinRoom",
       name: name,
-      // name: name,
       room: room,
     };
     sendMessage(message);
-    // });
   } catch (error) {
     console.log(error);
   }
@@ -107,15 +105,6 @@ function stopSharing() {
   });
 
   name = myName;
-
-  // participants["scree&" + myName].dispose();
-  // isScreenSharingState
-  // document.getElementById("join").style.display = "block";
-  // document.getElementById("room").style.display = "none";
-  // const videoPlayer = document.getElementById("video2");
-  // let tracks = videoPlayer.srcObject.getTracks();
-  // tracks.forEach((track) => track.stop());
-  // videoPlayer.srcObject = null;
 }
 
 var ws = new WebSocket("wss://localhost:8443/groupcall");
@@ -163,12 +152,10 @@ ws.onmessage = function(message) {
       onExistingParticipants(parsedMessage);
       break;
     case "screenSharingStart":
-      // onNewScreenShare(parsedMessage);
       onNewParticipant(parsedMessage);
       break;
     default:
       console.error("Unrecognized message", parsedMessage);
-    // alert("!");
   }
 };
 
@@ -177,7 +164,7 @@ function register() {
   room = document.getElementById("roomName").value;
 
   //나중에 지울 부분
-  myName = name;
+  // myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
   document.getElementById("join").style.display = "none";
@@ -215,23 +202,12 @@ function receiveScreenVideoResponse(result) {
   });
 }
 
-// function callResponse(message) {
-//   if (message.response != "accepted") {
-//     console.info("Call not accepted by peer. Closing call");
-//     stop();
-//   } else {
-//     webRtcPeer.processAnswer(message.sdpAnswer, function(error) {
-//       if (error) return console.error(error);
-//     });
-//   }
-// }
-
 function onExistingParticipants(msg) {
   var constraints = {
     audio: true,
     video: {
       mandatory: {
-        maxWidth: 1800,
+        maxWidth: 1920,
         maxHeight: 1080,
         maxFrameRate: 60,
       },
@@ -247,16 +223,9 @@ function onExistingParticipants(msg) {
   console.log(participants[name]);
   console.log(name + " registered in room " + room);
 
-  // navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
-  //   console.log(stream);
-  //   video.srcObject = stream;
-  // });
-
   var options = {};
 
   if (name.startsWith("scree&")) {
-    // alert("!@!@");
-    // var participant = new ScreenParticipant(screenName);
     isSharing = true;
     var participant = new Participant(name);
     console.log(participant);
@@ -285,7 +254,7 @@ function onExistingParticipants(msg) {
         audio: true,
         video: {
           mandatory: {
-            maxWidth: 1800,
+            maxWidth: 1920,
             maxHeight: 1080,
             maxFrameRate: 60,
           },
@@ -305,25 +274,6 @@ function onExistingParticipants(msg) {
     this.generateOffer(participant.offerToReceiveVideo.bind(participant));
   });
 
-  // var participant = new Participant(name + "1");
-  // console.log(participant);
-  // participants[name] = participant;
-  // var video = participant.getVideoElement();
-  // options = {
-  //   localVideo: video,
-  //   mediaConstraints: constraints,
-  //   onicecandidate: participant.onIceCandidate.bind(participant),
-  //   // sendSource: "screen",
-  // };
-
-  // participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
-  //   if (error) {
-  //     console.log(error);
-  //     return console.error(error);
-  //   }
-  //   this.generateOffer(participant.offerToReceiveVideo.bind(participant));
-  // });
-
   console.log(msg.data);
 
   msg.data.forEach(receiveVideo);
@@ -341,15 +291,10 @@ function leaveRoom() {
 
   document.getElementById("join").style.display = "block";
   document.getElementById("room").style.display = "none";
-
-  // ws.close();
 }
 
 function receiveVideo(sender) {
-  // if (request.id == "screenSharngStart") sender = "isScreenSharingState";
   console.log("sender: " + sender);
-  //영상인 경우가 겹침
-  // if (participants[sender] != null) return;
   var participant = new Participant(sender);
   console.log(participant);
   participants[sender] = participant;
@@ -362,7 +307,7 @@ function receiveVideo(sender) {
       audio: true,
       video: {
         mandatory: {
-          maxWidth: 1800,
+          maxWidth: 1920,
           maxHeight: 1080,
           maxFrameRate: 60,
         },
@@ -387,10 +332,6 @@ function receiveVideo(sender) {
     return;
   }
 
-  // if(sender.startsWith("scree&") ){
-  //   data
-  // }
-
   var options = {
     remoteVideo: video,
     onicecandidate: participant.onIceCandidate.bind(participant),
@@ -400,33 +341,6 @@ function receiveVideo(sender) {
     if (error) {
       return console.error(error);
     }
-    this.generateOffer(participant.offerToReceiveVideo.bind(participant));
-  });
-}
-
-function receiveScreenVideo(request) {
-  // if (request.id == "screenSharngStart") sender = "isScreenSharingState";
-  console.log("Screen sender: " + request.name);
-  //영상인 경우가 겹침
-  // if (participants[sender] != null) return;
-  console.log(screenName);
-  var participant = new ScreenParticipant(screenName);
-  console.log(participant);
-  participants[room] = participant;
-  var video = participant.getVideoElement();
-
-  var options = {
-    remoteVideo: video,
-    onicecandidate: participant.onIceCandidate.bind(participant),
-  };
-
-  console.log(options);
-
-  participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options, function(error) {
-    if (error) {
-      return console.error(error);
-    }
-    console.log("screen gener");
     this.generateOffer(participant.offerToReceiveVideo.bind(participant));
   });
 }
@@ -440,16 +354,6 @@ function onParticipantLeft(request) {
 }
 
 function sendMessage(message) {
-  console.log(ws);
-  // alert("send");
-  // if (ws.readyState == 3) {
-  //   ws.close();
-  //   ws = new WebSocket("wss://localhost:8443/groupcall");
-  //   while (ws.readyState != 1) {}
-  //   console.log("!@!@!@!@!@@@#@$@$@$");
-  //   ws.readyState == 1;
-  // }
-  // console.log(ws);
   var jsonMessage = JSON.stringify(message);
   console.log("Sending message: " + jsonMessage);
   ws.send(jsonMessage);
@@ -461,63 +365,41 @@ const PARTICIPANT_CLASS = "participant";
 function Participant(name) {
   this.name = name;
   console.log("this.name : " + this.name);
-  // var container = document.createElement("div");
-  // container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
-  // container.id = name;
-  // var span = document.createElement("span");
-  // var video = document.createElement("video");
-  // video.id = "video-" + name;
-
-  // // var rtcPeer;
-
-  // container.appendChild(video);
-  // container.appendChild(span);
-  // container.onclick = switchContainerClass;
 
   if (name.startsWith("scree&")) {
     isSharing = true;
     this.name = name;
-    console.log("this.name : " + this.name);
-    var container = document.createElement("div");
-    container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
-    container.id = name;
-    // var span = document.createElement("span");
-    var video = document.createElement("video");
-    // var video = document.getElementById("screen");
-    video.id = "screen";
-    // video.style.borderRadius = "5%";
 
-    // var rtcPeer;
+    var container = document.createElement("div");
+    container.className = PARTICIPANT_CLASS;
+    container.id = name;
+
+    var video = document.createElement("video");
+    video.id = "video-" + name;
+    video.style.width = "300px";
 
     container.appendChild(video);
-    // container.appendChild(span);
     container.onclick = switchContainerClass;
-    document.getElementById("screens").appendChild(container);
-    // span.appendChild(document.createTextNode(name));
+
+    document.getElementById("participants").appendChild(container);
 
     video.autoplay = true;
     video.controls = false;
   } else {
     this.name = name;
-    console.log("this.name : " + this.name);
+
     var container = document.createElement("div");
-    container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+    container.className = PARTICIPANT_CLASS;
     container.id = name;
-    // var span = document.createElement("span");
+
     var video = document.createElement("video");
     video.id = "video-" + name;
-    video.style.width = "800px";
-    video.style.height = "600px";
-    // video.style.borderRadius = "5%";
-
-    // var rtcPeer;
+    video.style.width = "300px";
 
     container.appendChild(video);
-    // container.appendChild(span);
     container.onclick = switchContainerClass;
-    // document.getElementById("participants").appendChild(container);
-    document.getElementById("video" + participantsCount).appendChild(container);
-    // span.appendChild(document.createTextNode(name));
+    document.getElementById("participants").appendChild(container);
+
     participantsCount++;
     video.autoplay = true;
     video.controls = false;
@@ -533,25 +415,19 @@ function Participant(name) {
 
   function switchContainerClass() {
     if (container.className === PARTICIPANT_CLASS) {
-      var elements = Array.prototype.slice.call(
-        document.getElementsByClassName(PARTICIPANT_MAIN_CLASS)
-      );
-      elements.forEach(function(item) {
-        item.className = PARTICIPANT_CLASS;
-      });
-      video.style.width = "1800px";
-      video.style.height = "1080px";
-
+      const mainDiv = document.getElementById("mainVideo");
+      const childDiv = mainDiv.firstChild;
+      if (childDiv != null) {
+        const participantsDiv = document.getElementById("participants");
+        childDiv.className = PARTICIPANT_CLASS;
+        const childVideo = childDiv.firstChild;
+        childVideo.style.width = "300px";
+        participantsDiv.appendChild(childDiv);
+      }
       container.className = PARTICIPANT_MAIN_CLASS;
-    } else {
-      container.className = PARTICIPANT_CLASS;
-      video.style.width = "800px";
-      video.style.height = "600px";
+      mainDiv.appendChild(container);
+      video.style.width = "1600px";
     }
-  }
-
-  function isPresentMainParticipant() {
-    return document.getElementsByClassName(PARTICIPANT_MAIN_CLASS).length != 0;
   }
 
   this.offerToReceiveVideo = function(error, offerSdp, wp) {
@@ -564,8 +440,6 @@ function Participant(name) {
 
   this.onIceCandidate = function(candidate, wp) {
     console.log(wp);
-    // console.log("Local candidate" + JSON.stringify(candidate));
-
     var message = {
       id: "onIceCandidate",
       candidate: candidate,
@@ -596,6 +470,7 @@ export default {
       blobs: [],
       blob: null,
       desktopStream: null,
+      isRecording: false,
     };
   },
   computed: {
@@ -603,12 +478,6 @@ export default {
       accessToken: (state) => state.auth.accessToken,
     }),
     ...mapGetters(["getUserNickname"]),
-    myShare() {
-      return isMySharing == true;
-    },
-    screenShare() {
-      return isSharing == true;
-    },
   },
   methods: {
     insertConferenceLog() {
@@ -658,9 +527,7 @@ export default {
       })
         .then((res) => {
           console.log(res);
-          this.$router.push({
-            path: "/#",
-          });
+          location.href = "/";
         })
         .catch((e) => {
           console.log(e);
@@ -670,9 +537,9 @@ export default {
       register();
     },
     clickLeaveRoom() {
+      if (this.isRecording) this.stopAnswerRecord();
       // leaveRoom();
       this.conferenceEvaluate();
-      this.recoder.stop();
       this.exitConferenceLog();
     },
     clickSt() {
@@ -720,6 +587,8 @@ export default {
       );
     },
     async startAnswerRecord() {
+      this.isRecording = true;
+
       const voiceStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true }); // 오디오스트림 생성
 
       const desktopStream = await navigator.mediaDevices.getDisplayMedia({
@@ -741,15 +610,14 @@ export default {
       this.recoder.ondataavailable = (e) => this.blobs.push(e.data);
       this.recoder.onstop = async () => {
         this.blob = new Blob(this.blobs, { type: "video/mp4" });
-        // let url = window.URL.createObjectURL(blob);
-        // this.blob = blob;
         console.log(this.blob);
         this.recordVideo();
       };
       console.log(this.recoder);
       this.recoder.start(); // 녹화 시작
     },
-    clickStop() {
+    stopAnswerRecord() {
+      this.isRecording = false;
       this.recoder.stop();
     },
     recordVideo() {
@@ -762,7 +630,6 @@ export default {
       reader.onloadend = function() {
         base64data = reader.result;
         base64data = base64data.split(",")[1];
-        // base64data = reader.result;
         $this.axiosVideo(base64data);
       };
     },
@@ -781,33 +648,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    },
-    stopAnswerRecord() {
-      var reader = new window.FileReader();
-      var base64data;
-      console.log(this.blob);
-      reader.readAsDataURL(this.blob);
-      reader.onloadend = function() {
-        base64data = reader.result;
-        console.log(base64data);
-        base64data = base64data.split(",")[1];
-        // base64data = reader.result;
-        console.log(base64data);
-        axios({
-          url: API.URL + `conferences/record/12234456`,
-          method: "post",
-          headers: {
-            Authorization: "Bearer " + "testToken",
-          },
-          data: {
-            videoFile: base64data,
-          },
-        })
-          .then(() => {})
-          .catch((err) => {
-            console.log(err);
-          });
-      };
     },
     mergeAudioStreams(desktopStream, voiceStream) {
       // 비디오, 오디오스트림 연결
@@ -839,154 +679,17 @@ export default {
     name = this.getUserNickname;
 
     this.entranceConferenceLog();
-
-    // const desktopStream = navigator.mediaDevices.getDisplayMedia({
-    //   video: true,
-    //   audio: true,
-    // });
-
-    // this.desktopStream = desktopStream;
-
-    // console.log(desktopStream);
-
-    // this.desktopStream = navigator.mediaDevices
-    //   .getDisplayMedia({
-    //     video: true,
-    //     audio: true,
-    //   })
-    //   .then(() => {
-    //     console.log(this.desktopStream);
-    this.startAnswerRecord();
-    //   });
+  },
+  beforeDestroy() {
+    // if(this.isMySharing)
   },
 };
 </script>
 
 <style scoped>
-body {
-  font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
-  color: #404040;
-  background: #0ca3d2;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-  border: 1px solid #c0c0c0;
-  margin: 0 0.1em 0 0;
-  padding: 0;
-  font-size: 16px;
-  line-height: 1em;
-  width: 1.25em;
-  height: 1.25em;
-  background: #fff;
-  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ededed), to(#fbfbfb));
-  -webkit-appearance: none;
-  -webkit-box-shadow: 1px 1px 1px #fff;
-  -webkit-border-radius: 0.25em;
-  vertical-align: text-top;
-  display: inline-block;
-}
-
-input[type="radio"] {
-  -webkit-border-radius: 2em; /* Make radios round */
-}
-
-input[type="checkbox"]:checked::after {
-  content: "✔";
-  display: block;
-  text-align: center;
-  font-size: 16px;
-  height: 16px;
-  line-height: 18px;
-}
-
-input[type="radio"]:checked::after {
-  content: "●";
-  display: block;
-  height: 16px;
-  line-height: 15px;
-  font-size: 20px;
-  text-align: center;
-}
-
-select {
-  border: 1px solid #d0d0d0;
-  background: url(http://www.quilor.com/i/select.png) no-repeat right center,
-    -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fbfbfb), to(#ededed));
-  background: -moz-linear-gradient(19% 75% 90deg, #ededed, #fbfbfb);
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  color: #444;
-}
-
 .container {
   margin: 50px auto;
   width: 640px;
-}
-
-.join {
-  position: relative;
-  margin: 0 auto;
-  padding: 20px 20px 20px;
-  width: 310px;
-  background: white;
-  border-radius: 3px;
-  -webkit-box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
-  /*Transition*/
-  -webkit-transition: all 0.3s linear;
-  -moz-transition: all 0.3s linear;
-  -o-transition: all 0.3s linear;
-  transition: all 0.3s linear;
-}
-
-.join:before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  bottom: -8px;
-  left: -8px;
-  z-index: -1;
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: 4px;
-}
-
-.join h1 {
-  margin: -20px -20px 21px;
-  line-height: 40px;
-  font-size: 15px;
-  font-weight: bold;
-  color: #555;
-  text-align: center;
-  text-shadow: 0 1px white;
-  background: #f3f3f3;
-  border-bottom: 1px solid #cfcfcf;
-  border-radius: 3px 3px 0 0;
-  background-image: -webkit-linear-gradient(top, whiteffd, #eef2f5);
-  background-image: -moz-linear-gradient(top, whiteffd, #eef2f5);
-  background-image: -o-linear-gradient(top, whiteffd, #eef2f5);
-  background-image: linear-gradient(to bottom, whiteffd, #eef2f5);
-  -webkit-box-shadow: 0 1px whitesmoke;
-  box-shadow: 0 1px whitesmoke;
-}
-
-.join p {
-  margin: 20px 0 0;
-}
-
-.join p:first-child {
-  margin-top: 0;
-}
-
-.join input[type="text"],
-.join input[type="password"] {
-  width: 278px;
-}
-
-.join p.submit {
-  text-align: center;
 }
 
 :-moz-placeholder {
@@ -1052,157 +755,9 @@ input[type="submit"] {
   box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
-input[type="button"]:active,
-input[type="submit"]:active {
-  background: #cde5ef;
-  border-color: #9eb9c2 #b3c0c8 #b4ccce;
-  -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
-}
-
-.lt-ie9 input[type="text"],
-.lt-ie9 input[type="password"] {
-  line-height: 34px;
-}
-
 #room {
   width: 100%;
   text-align: center;
-}
-
-#button-leave {
-  text-align: center;
-  position: absolute;
-  bottom: 10px;
-}
-
-.participant {
-  border-radius: 4px;
-  /* border: 2px groove; */
-  margin-left: 5;
-  margin-right: 5;
-  width: 150;
-  text-align: center;
-  overflow: hide;
-  float: left;
-  padding: 5px;
-  border-radius: 10px;
-  -webkit-box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0 200px rgba(255, 255, 255, 0.5), 0 1px 2px rgba(0, 0, 0, 0.3);
-  /*Transition*/
-  -webkit-transition: all 0.3s linear;
-  -moz-transition: all 0.3s linear;
-  -o-transition: all 0.3s linear;
-  transition: all 0.3s linear;
-}
-
-.participant:before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  bottom: -8px;
-  left: -8px;
-  z-index: -1;
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: 4px;
-}
-
-.participant:hover {
-  opacity: 1;
-  background-color: 0a33b6;
-  -webkit-transition: all 0.5s linear;
-  transition: all 0.5s linear;
-}
-
-.participant video,
-.participant.main video {
-  width: 100% !important;
-  height: auto !important;
-}
-
-.participant span {
-  color: PapayaWhip;
-}
-
-.participant.main {
-  width: 20%;
-  margin: 0 auto;
-}
-
-.participant.main video {
-  height: auto;
-}
-
-.animate {
-  -webkit-animation-duration: 0.5s;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-duration: 0.5s;
-  -moz-animation-fill-mode: both;
-  -o-animation-duration: 0.5s;
-  -o-animation-fill-mode: both;
-  -ms-animation-duration: 0.5s;
-  -ms-animation-fill-mode: both;
-  animation-duration: 0.5s;
-  animation-fill-mode: both;
-}
-
-.removed {
-  -webkit-animation: disapear 1s;
-  -webkit-animation-fill-mode: forwards;
-  animation: disapear 1s;
-  animation-fill-mode: forwards;
-}
-
-@-webkit-keyframes disapear {
-  50% {
-    -webkit-transform: translateX(-5%);
-    transform: translateX(-5%);
-  }
-  100% {
-    -webkit-transform: translateX(200%);
-    transform: translateX(200%);
-  }
-}
-
-@keyframes disapear {
-  50% {
-    -webkit-transform: translateX(-5%);
-    transform: translateX(-5%);
-  }
-
-  100% {
-    -webkit-transform: translateX(200%);
-    transform: translateX(200%);
-  }
-}
-a.hovertext {
-  position: relative;
-  width: 500px;
-  text-decoration: none !important;
-  text-align: center;
-}
-
-a.hovertext:after {
-  content: attr(title);
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  padding: 0.5em 20px;
-  width: 460px;
-  background: rgba(0, 0, 0, 0.8);
-  text-decoration: none !important;
-  color: #fff;
-  opacity: 0;
-  -webkit-transition: 0.5s;
-  -moz-transition: 0.5s;
-  -o-transition: 0.5s;
-  -ms-transition: 0.5s;
-}
-
-a.hovertext:hover:after,
-a.hovertext:focus:after {
-  opacity: 1;
 }
 
 #screens {
@@ -1210,6 +765,7 @@ a.hovertext:focus:after {
 }
 
 #participants {
+  min-width: 300px;
   margin-top: 50px;
   /* display: flex; */
   justify-content: space-between;
@@ -1263,6 +819,45 @@ a.hovertext:focus:after {
   width: 45px;
 }
 
+.conference-record-start-btn {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 70%;
+  float: left;
+  height: 45px;
+  margin-right: 7px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.conference-record-start-btn:hover {
+  background-color: #658dc6;
+  cursor: pointer;
+  filter: brightness(115%);
+}
+
+.conference-record-stop-btn {
+  background-color: #658dc6;
+  filter: brightness(105%);
+  border: 1px solid #e0e0e0;
+  border-radius: 70%;
+  float: left;
+  height: 45px;
+  margin-right: 7px;
+  width: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.conference-record-stop-btn:hover {
+  background-color: #658dc6;
+  cursor: pointer;
+  filter: brightness(115%);
+}
+
 .screen-start-button:hover {
   background-color: #658dc6;
   cursor: pointer;
@@ -1272,6 +867,11 @@ a.hovertext:focus:after {
 .screen-stop-button:hover {
   cursor: pointer;
   filter: brightness(115%);
+}
+
+#videoList {
+  display: flex;
+  align-items: flex-start;
 }
 </style>
 
