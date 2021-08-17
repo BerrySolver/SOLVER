@@ -163,8 +163,10 @@ function register() {
   name = document.getElementById("name").value;
   room = document.getElementById("roomName").value;
 
+  console.log(name + " " + room);
+
   //나중에 지울 부분
-  // myName = name;
+  myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
   document.getElementById("join").style.display = "none";
@@ -279,19 +281,19 @@ function onExistingParticipants(msg) {
   msg.data.forEach(receiveVideo);
 }
 
-function leaveRoom() {
-  console.log("leaveRoom");
-  sendMessage({
-    id: "leaveRoom",
-  });
+// function leaveRoom() {
+//   console.log("leaveRoom");
+//   sendMessage({
+//     id: "leaveRoom",
+//   });
 
-  for (var key in participants) {
-    participants[key].dispose();
-  }
+//   for (var key in participants) {
+//     participants[key].dispose();
+//   }
 
-  document.getElementById("join").style.display = "block";
-  document.getElementById("room").style.display = "none";
-}
+//   document.getElementById("join").style.display = "block";
+//   document.getElementById("room").style.display = "none";
+// }
 
 function receiveVideo(sender) {
   console.log("sender: " + sender);
@@ -471,33 +473,36 @@ export default {
       blob: null,
       desktopStream: null,
       isRecording: false,
+      isAnswerUser: false,
     };
   },
   computed: {
     ...mapState({
       accessToken: (state) => state.auth.accessToken,
+      userNickname: (state) => state.auth.userNickname,
     }),
     ...mapGetters(["getUserNickname"]),
   },
+  props: ["questionId"],
   methods: {
-    insertConferenceLog() {
-      axios({
-        //conference id 값은 테스트용
-        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
-        method: "post",
-        data: {
-          type: "030",
-        },
-        headers: { Authorization: "Bearer " + this.accessToken },
-      })
-        .then((res) => {
-          console.log(res);
-          this.goQuestionDetail(res.data.questionId);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
+    // insertConferenceLog() {
+    //   axios({
+    //     //conference id 값은 테스트용
+    //     url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+    //     method: "post",
+    //     data: {
+    //       type: "030",
+    //     },
+    //     headers: { Authorization: "Bearer " + this.accessToken },
+    //   })
+    //     .then((res) => {
+    //       console.log(res);
+    //       this.goQuestionDetail(res.data.questionId);
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // },
     entranceConferenceLog() {
       axios({
         //conference id 값은 테스트용
@@ -527,7 +532,6 @@ export default {
       })
         .then((res) => {
           console.log(res);
-          location.href = "/";
         })
         .catch((e) => {
           console.log(e);
@@ -540,7 +544,7 @@ export default {
       if (this.isRecording) this.stopAnswerRecord();
       // leaveRoom();
       this.conferenceEvaluate();
-      this.exitConferenceLog();
+      if (this.isAnswerUser) this.exitConferenceLog();
     },
     clickSt() {
       if (isSharing) return;
@@ -574,15 +578,15 @@ export default {
       this.$modal.show(
         ConferenceEvaluateModal,
         {
-          // answerId: this.$route.params.questionId,
-          answerId: "answerID",
+          questionId: "test",
           modal: this.$modal,
         },
         {
           name: "dynamic-modal",
           width: "600px",
-          height: "250px",
+          height: "500px",
           draggable: false,
+          clickToClose: false,
         }
       );
     },
@@ -677,8 +681,29 @@ export default {
   mounted() {
     myName = this.getUserNickname;
     name = this.getUserNickname;
+    // room = this.questionId;
+    room = "testRoom";
 
-    this.entranceConferenceLog();
+    axios({
+      //conference id 값은 테스트용
+      url: API.URL + "/questions/1CYdWWZb3VtcY/info",
+      method: "post",
+      data: {
+        type: "030",
+      },
+      headers: { Authorization: "Bearer " + this.accessToken },
+    })
+      .then((res) => {
+        console.log(res);
+        const questionUserId = res.data.userId;
+        if (questionUserId != this.getUserNickname()) {
+          this.isAnswerUser = true;
+          this.entranceConferenceLog();
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   },
   beforeDestroy() {
     // if(this.isMySharing)
