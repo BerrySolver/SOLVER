@@ -22,17 +22,20 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.solver.api.request.ConferenceRecordPostReq;
+import com.solver.api.request.EvaluationPostReq;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.common.util.S3VideoUrlUtil;
 import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.answer.Evaluation;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceLog;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
+import com.solver.db.repository.answer.EvaluationRepository;
 import com.solver.db.repository.conference.ConferenceLogRepository;
 import com.solver.db.repository.conference.ConferenceParticipantRepository;
 import com.solver.db.repository.conference.ConferenceRepository;
@@ -58,6 +61,9 @@ public class ConferenceServiceImpl implements ConferenceService {
 	
 	@Autowired
 	AnswerRepository answerRepository;
+	
+	@Autowired
+	EvaluationRepository evaluationRepository;
 	
 	private AmazonS3 s3Client;
 	
@@ -277,6 +283,49 @@ public class ConferenceServiceImpl implements ConferenceService {
 		answerRepository.save(answer);
 
 		return 3;
+	}
+
+	@Override
+	public void insertEvaluation(String accessToken, EvaluationPostReq evaluationPostReq, HttpServletResponse response) {
+		
+		Question question = new Question();
+		question.setId(evaluationPostReq.getQuestionId());
+		
+		String evaluationId = "";
+
+		while (true) {
+			evaluationId = RandomIdUtil.makeRandomId(13);
+
+			if (evaluationRepository.findById(evaluationId).orElse(null) == null)
+				break;
+		}
+		
+		String token = accessToken.split(" ")[1];
+
+		TokenResponse tokenResponse = new TokenResponse();
+
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+
+		if (tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+		if (user == null) {
+			return;
+		}
+		
+		
+		Evaluation evaluation = new Evaluation();
+		evaluation.setReason(evaluationPostReq.getReason());
+		evaluation.setId(evaluationId);
+		evaluation.setScore(evaluationPostReq.getScore());
+		evaluation.setAnswerUser(user);
+		
+		evaluationRepository.save(evaluation);
 	}
 
 }

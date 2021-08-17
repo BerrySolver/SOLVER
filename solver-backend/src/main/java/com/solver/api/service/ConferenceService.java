@@ -3,6 +3,7 @@ package com.solver.api.service;
 import javax.servlet.http.HttpServletResponse;
 
 import com.solver.api.request.ConferenceRecordPostReq;
+import com.solver.api.request.EvaluationPostReq;
 
 public interface ConferenceService {
 
@@ -14,5 +15,7 @@ public interface ConferenceService {
 
 	int recordConference(String accessToken, String questionId, HttpServletResponse response,
 			ConferenceRecordPostReq conferenceRecordPostReq);
+
+	void insertEvaluation(String accessToken, EvaluationPostReq evaluationPostReq, HttpServletResponse response);
 
 }

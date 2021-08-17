@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ConferenceLogPostReq;
 import com.solver.api.request.ConferenceRecordPostReq;
+import com.solver.api.request.EvaluationPostReq;
 import com.solver.api.service.ConferenceLogService;
 import com.solver.api.service.ConferenceService;
 import com.solver.common.model.BaseResponse;
@@ -158,6 +159,25 @@ public class ConferenceController {
 		
 		System.out.println(accessToken);
 		conferenceService.recordConference(accessToken, questionId, response, conferenceRecordPostReq);
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 종료 성공"));
+	}
+	
+	/* 화상회의 영상 저장 */
+	@PostMapping(value="/evaluation")
+	@ApiOperation(value = "화상 회의 종료", notes = "화상 회의를 닫는다") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "영상 저장 완료"),
+        @ApiResponse(code = 409, message = "화상 회의 종료 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> insertEvaluation(
+			HttpServletResponse response, 
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@RequestBody EvaluationPostReq evaluationPostReq
+			) throws IOException, ParseException 
+	{
+
+		conferenceService.insertEvaluation(accessToken, evaluationPostReq, response);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 종료 성공"));
 	}
