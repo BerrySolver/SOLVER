@@ -63,6 +63,22 @@
   width: 600px;
 }
 
+.empty_card{
+  margin-top: 50px;
+  display: flex;
+  height: 300px;
+  justify-content: center;
+}
+
+.empty_card_detail{
+  width:500px;
+  height: 300px;
+  margin-top: 50px;
+  border-radius: 10%;
+  background-color: white;
+  padding-top:60px;
+}
+
 .form__field {
   font-family: inherit;
   width: 100%;

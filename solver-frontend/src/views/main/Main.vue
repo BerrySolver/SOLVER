@@ -85,6 +85,12 @@
         <p v-else style="margin-top:20px;color:white">능력있는 솔버들을 만나보세요!</p>
       </div>
 
+      <div v-if="isZeroSolver" class="empty_card">
+        <div class="empty_card_detail">
+          유능한 솔버를 곧 추천해드릴게요!<br><span style="font-size:20px; color:#0F4C81;">잠시만 기다려주세요!</span><br>
+          <img style="width:150px;" src="@/assets/berry-fail.png" alt="">
+        </div>
+      </div>
       <div class="solver-line-1" :class="{'solver-one-row':isEmptySolver}">
         <div class="solver-row">
           <div style="float: left;" v-for="(mul, idx) in solverLine1" :key="idx" :class="{'solver-margin-remove':isEmptySolver}">
@@ -124,10 +130,10 @@
           <div class="semi-title">모임</div>
           <div class="group-card">
             <section class="page-contain">
-              <a href="#" class="data-card">
+              <a class="data-card" href="https://danghyeona.notion.site/5999b6935e544b5fa9557e26f567b04a">
                 <div class="data-card-height">
-                  <h3>블루베리</h3>
-                  <h4>Python</h4>
+                  <h3>공지사항</h3>
+                  <h4></h4>
                   <h4>JAVA</h4>
                   <h4>Vue.js</h4>
                   <p>Aeneansed consectetur.</p>
@@ -150,9 +156,9 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="data-card">
+              <a class="data-card" href="https://danghyeona.notion.site/SOLVER-e5336b26f14147d69f9f124cd8574e9b">
                 <div class="data-card-height">
-                  <h3>SOLVER</h3>
+                  <h3>솔버소개</h3>
                   <h4>Python</h4>
                   <p>Aenean lacinia bibendum nulla sed consectetur.</p>
                 </div>
@@ -174,9 +180,9 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="data-card">                
+              <a class="data-card" href="https://danghyeona.notion.site/1c352b72fa604393adda86b681a0c3b9">                
                 <div class="data-card-height">
-                  <h3>나당연합군</h3>
+                  <h3>베리소개</h3>
                   <h4>Python</h4>
                   <h4>JAVA</h4>
                   <p>Aenean lacinia bibendum nulla sed consectetur.</p>
@@ -199,9 +205,9 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="data-card">
+              <a class="data-card" href="https://danghyeona.notion.site/edce4119fb7c49aea92846efa4253ae4">
                 <div class="data-card-height">
-                  <h3>솔버</h3>
+                  <h3>고객센터</h3>
                   <h4>Python</h4>
                   <h4>JAVA</h4>
                   <h4>Vue.js</h4>
@@ -248,6 +254,7 @@ export default {
       solverLine1: [],
       solverLine2: [],
       isEmptySolver: false,
+      isZeroSolver: false,
     };
   },
   methods: {
@@ -273,6 +280,7 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken },
       }).then((res)=>{
         this.isEmptySolver = false;
+        this.isZeroSolver = false;
         if(res.data.list.length > 3){
           var n = res.data.list.length;
 
@@ -287,6 +295,10 @@ export default {
           this.solverLine1 = res.data.list;
           this.isEmptySolver = true;
         }
+
+        if(res.data.list.length == 0)
+          this.isZeroSolver = true;
+
       }).catch((err)=>{
 
       });
