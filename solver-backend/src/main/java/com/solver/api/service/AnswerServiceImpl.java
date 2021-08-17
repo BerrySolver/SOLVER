@@ -42,7 +42,7 @@ public class AnswerServiceImpl implements AnswerService{
 	KakaoUtil kakaoUtil;
 	
 	@Autowired
-	PointCodeRepository pointCodeRepository;;
+	PointCodeRepository pointCodeRepository;
 	
 	@Autowired
 	PointLogRepository pointLogRepository;
@@ -120,6 +120,7 @@ public class AnswerServiceImpl implements AnswerService{
 		Notification notification = new Notification();
 		notification.setId(RandomIdUtil.makeRandomId(13));
 		notification.setQuestion(question);
+		notification.setRegDt(new Date(System.currentTimeMillis()));
 		
 		Code notiCode = codeRepository.findByCode("060");
 		notification.setCode(notiCode);

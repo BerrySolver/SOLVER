@@ -202,7 +202,6 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
-          console.log(res);
           this.answerList = res.data.answerList;
           this.commentListOpen = new Array(res.data.answerList.length);
           for (let i = 0; i < res.data.answerList.length; i++) {
@@ -259,13 +258,12 @@ export default {
         method: "post",
         headers: { Authorization: "Bearer " + this.accessToken },
       })
-        .then((res) => {
+        .then(() => {
           this.answerList[idx].myFavoriteAnswer = !this.answerList[idx].myFavoriteAnswer;
           this.answerList[idx].likeCount++;
-          console.log(res);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
     },
     removeFavoriteAnswer(answer, idx) {
@@ -287,20 +285,18 @@ export default {
         method: "delete",
         headers: { Authorization: "Bearer " + this.accessToken },
       })
-        .then((res) => {
+        .then(() => {
           this.answerList[idx].myFavoriteAnswer = !this.answerList[idx].myFavoriteAnswer;
           this.answerList[idx].likeCount--;
-          console.log(res);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
     },
     clickModifyBtn(answer, idx) {
       const str = "#answerModifyEditorInsert" + idx;
 
       if (this.openedIdx == idx) {
-        console.log(idx + " " + this.openedIdx);
         this.CKEditor.setData("");
         this.openedIdx = -1;
         this.isOpened = false;
@@ -363,8 +359,7 @@ export default {
           Authorization: "Bearer " + this.accessToken
         },
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.CKEditor.setData("");
           this.openedIdx = -1;
           this.isOpened = false;
@@ -383,8 +378,7 @@ export default {
           Authorization: "Bearer " + this.accessToken
         },
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.getAnswerList();
         })
         .catch((err) => {

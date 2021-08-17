@@ -91,8 +91,6 @@ export default {
         }
       })
       .then((res) => {
-        // console.log(res.data);
-        // console.log(res.data[0].category);
         if(res.data.statusCode == 200){
           this.msg = res.data.message;
           this.isPossible = true;
@@ -103,12 +101,10 @@ export default {
         }
 
         this.chekcValidation();
-        // console.log(this.signupInfo.Category)
       })
       .catch((e) => {
         this.msg = "이미 사용중인 닉네임입니다";
         this.isPossible = false;
-        console.log(this.isPossible)
         console.log(e);
       });
     },

@@ -115,7 +115,6 @@ export default {
       this.editedWeekend.forEach(element => {
         str_weekend += element + '|'
       })
-      console.log(str_weekday)
       axios({
         url: API.URL + API.ROUTES.editProfileCalendar,
         method: "put",

@@ -145,7 +145,7 @@
                 <span v-if="isLogin">잔여</span>
                 <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span>
                 <span v-if="isLogin"><button class="point-button" style="margin-right: 10px;" @click="openPointLog">내역</button></span>
-                <span v-if="isLogin"><button class="point-button">사용</button></span>
+                <span v-if="isLogin"><button class="point-button" @click="openPaySolver">사용</button></span>
               </div>
             </div>
             <br>
@@ -265,6 +265,7 @@ import ProfileHistory from "@/components/profiles/ProfileHistory"
 import ProfileMyQuestions from "@/components/profiles/ProfileMyQuestions"
 import ProfileBookmark from "@/components/profiles/ProfileBookmark"
 import PointLog from "./modal/PointLogModal.vue";
+import PaySolver from './modal/PaySolverModal.vue';
 
 import axios from 'axios'
 import API from "@/API.js"
@@ -325,7 +326,6 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken}
       })
       .then((res) => {
-        console.log(res.data)
         this.userProfileInfo = res.data
         this.userProfileInfo.favoriteFieldNameList.sort()
       })
@@ -337,7 +337,6 @@ export default {
     },
     // 프로필 자기소개 수정
     editSelfIntro(selfIntro) {
-      console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
         method: "put",
@@ -359,7 +358,6 @@ export default {
 
     // 프로필 URL 수정 - AXIOS
     editSelfUrl(selfUrl) {
-      console.log(this.userProfileInfo.favoriteFieldCodeList)
       axios({
         url: API.URL + API.ROUTES.editProfile,
         method: "put",
@@ -474,10 +472,8 @@ export default {
     // NULL 값 허용 X
     isItNaN(x) {
       if(isNaN(x)) {
-        console.log(x, 'Nan 이다')
         this.isNaN = true
       } else {
-        console.log(x, '아니야')
         this.isNaN = false
       }
     },
@@ -491,7 +487,21 @@ export default {
         height : '700px',
         draggable: false,
       });
-    }
+    },
+
+    // 결제 Modal
+    openPaySolver(){
+      this.$modal.show(PaySolver,{
+        nickName: this.userProfileInfo.nickname,
+        myPoint : this.userProfileInfo.point,
+        modal : this.$modal },{
+        name: 'dynamic-modal',
+        width : '600px',
+        height : '700px',
+        draggable: false,
+      });
+
+    },
   },
   computed: {
     ...mapState({

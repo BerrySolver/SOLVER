@@ -65,11 +65,6 @@ public class AuthController {
 		//카카오 접근 토큰 받아오기
     	OAuthToken oauthToken = kakaoUtil.getKakaoToken(code);
     	
-    	System.out.println("카카오 엑세스 토큰 : "+oauthToken.getAccess_token());
-    	System.out.println("카카오 엑세스 토큰 만료시간: "+oauthToken.getExpires_in());
-    	System.out.println("카카오 리프레시 토큰 : "+oauthToken.getRefresh_token());
-    	System.out.println("카카오 리프레시 토큰 만료시간: "+oauthToken.getRefresh_token_expires_in());
-    	
     	//카카오 토큰으로 유저 아이디 받아오기
     	Long kakaoId = kakaoUtil.getKakaoUserId(oauthToken);
     	
