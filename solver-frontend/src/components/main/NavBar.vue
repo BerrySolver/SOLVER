@@ -39,7 +39,7 @@
             </li>
 
             <!-- notification for 기본 알람 -->
-            <li class="nav-item dropdown" v-if="isLoggedIn">
+            <li class="nav-item dropdown" v-if="isLoggedIn" @click="getNotifications">
               
               <!-- notification [NAVBAR 삽입 로고] -->
               <span class="dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -86,7 +86,7 @@
             </li>
 
             <!-- notification-video -->
-            <li class="nav-item dropdown interval" v-if="isLoggedIn">
+            <li class="nav-item dropdown interval" v-if="isLoggedIn" @click="getVideoNotifications">
 
               <!-- notification video [NAVBAR 삽입 로고] -->
               <span class="dropdown-toggle" type="button" id="dropdownMenuClickableInside" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
@@ -119,7 +119,10 @@
                     </div>
                     
                     <div class="notification-explanation">
-                      <span>{{ message.sendNickName }}님으로부터 화상 회의가 요청되었습니다.</span> 
+                      <span>
+                        <span class="video-notification-highlight">{{ message.sendNickName }}</span>
+                        <span>님으로부터 화상 회의가 요청되었습니다.</span>
+                      </span> 
                     </div>
 
                     <div class="video-button">
@@ -150,7 +153,6 @@ export default {
   data() {
     return {
       notificationList: [],
-      notificationQuestionId: [],
       notificationVideoMsgList : [],
       now: new Date(),
     }
@@ -231,10 +233,18 @@ export default {
       this.goQuestionDetail(questionId)
     },
   },
-  created() {
-    this.getNotifications()
-    this.getVideoNotifications()
-  },
+  // created() {
+  //   this.getNotifications()
+  //   this.getVideoNotifications()
+  // },
+  watch: {
+    notificationList() {
+      this.getNotifications
+    },
+    notificationVideoMsgList() {
+      this.getVideoNotifications
+    }
+  }
 };
 </script>
 
