@@ -48,7 +48,7 @@
               <img class="user-level-badge" src="@/assets/berry-4.png" v-if="parseInt(solverData.point) >= 300 && parseInt(solverData.point) < 400" alt="">
               <img class="user-level-badge" src="@/assets/berry-5.png" v-if="parseInt(solverData.point) >= 400 " alt="">
               <div class="solver-user-col1">
-                <img class="user-image" src="@/assets/logo.png"/>
+                <img class="user-image" :src="solverData.profileUrl"/>
               </div>   
               <div class="detail-nickname">
                 <div>{{solverData.nickname}}</div>
@@ -235,11 +235,11 @@ export default {
   }
 
   img.user-image {
-    width:100px;
-    height:100px;
-    opacity: 60%;
     border: 1px solid #658dc673;
     border-radius: 100%;
+    height:100px;
+    object-fit: cover;
+    width:100px;
   }
 
   img.user-level-badge{

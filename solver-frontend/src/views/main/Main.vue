@@ -14,7 +14,7 @@
             지식을 공유한 분들은 원하는 목표를 향한 희망이 될 것입니다.
           </div>
 
-          <div class="form__group">
+          <div class="form__main-group">
             <input
               type="input"
               class="form__field"
@@ -108,11 +108,11 @@
     </div>
 
     <!-- 4번째 메인 페이지(모임) -->
-    <div class="group-container">
-      <div class="group-container-contents">
-        <div class="group-title">
+    <div class="main-group-container">
+      <div class="main-group-container-contents">
+        <div class="main-group-title">
           <div class="semi-title">모임</div>
-          <div class="group-card">
+          <div class="main-group-card">
             <section class="page-contain">
               <a href="#" class="data-card">
                 <h3>블루베리</h3>
