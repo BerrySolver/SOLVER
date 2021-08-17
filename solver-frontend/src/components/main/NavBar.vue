@@ -65,9 +65,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(['logout', "triggerMainReload"]),
     clickLogout() {
       this.logout();
+      this.triggerMainReload();
     },
   },
 };
