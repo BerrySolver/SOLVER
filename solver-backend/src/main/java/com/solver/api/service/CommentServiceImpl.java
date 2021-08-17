@@ -90,6 +90,7 @@ public class CommentServiceImpl implements CommentService{
 		Notification notification = new Notification();
 		notification.setId(RandomIdUtil.makeRandomId(13));
 		notification.setQuestion(answer.getQuestion());
+		notification.setRegDt(new Date(System.currentTimeMillis()));
 		
 		Code notiCode = codeRepository.findByCode("061");
 		notification.setCode(notiCode);
