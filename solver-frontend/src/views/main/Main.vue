@@ -80,27 +80,37 @@
       <br />
       <div class="month-solver-text">
         <img src="@/assets/logo-white-2.png" class="small-logo" />
-        <p class="solver-title">이달의 SOLVER</p>
+        <p class="solver-title">오늘의 SOLVER</p>
+        <p v-if="this.isLoggedIn" style="margin-top:20px;color:white;"><span style="color:#F2D6AE"><b>{{getUserNickname}}</b></span>님의 관심분야에 맞는 솔버입니다!</p>
+        <p v-else style="margin-top:20px;color:white">능력있는 솔버들을 만나보세요!</p>
       </div>
 
-      <div class="solver-line-1">
+      <div class="solver-line-1" :class="{'solver-one-row':isEmptySolver}">
         <div class="solver-row">
-          <div style="float: left; margin-right: 140px;" v-for="(mul, idx) in solverLine1" :key="idx">
-            <div class="solver-card-rank">0{{idx+1}}</div>
+          <div style="float: left;" v-for="(mul, idx) in solverLine1" :key="idx" :class="{'solver-margin-remove':isEmptySolver}">
             <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">1등 닉네임</p>
+              <img :src="mul.profileUrl" class="solver-card-img" alt="solver-card-img" @click="goUserProfile(mul.nickname)"/>
+              <img class="solver-level-badge" src="@/assets/berry-1.png" v-if="parseInt(mul.point) < 100" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-2.png" v-if="parseInt(mul.point) >= 100 && parseInt(mul.point) < 200" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-3.png" v-if="parseInt(mul.point) >= 200 && parseInt(mul.point) < 300" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-4.png" v-if="parseInt(mul.point) >= 300 && parseInt(mul.point) < 400" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-5.png" v-if="parseInt(mul.point) >= 400 " alt="">
+              <p class="solver-intro">{{mul.nickname}}</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="solver-line-2">
+      <div class="solver-line-2">        
         <div class="solver-row">
-          <div style="float: left; margin-left: 100px;" v-for="(mul, idx) in solverLine2" :key="idx">
-            <div class="solver-card-rank">0{{idx+5}}</div>
+          <div style="float: left;" v-for="(mul, idx) in solverLine2" :key="idx">
             <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">1등 닉네임</p>
+              <img :src="mul.profileUrl" class="solver-card-img" alt="solver-card-img"  @click="goUserProfile(mul.nickname)"/>
+              <img class="solver-level-badge" src="@/assets/berry-1.png" v-if="parseInt(mul.point) < 100" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-2.png" v-if="parseInt(mul.point) >= 100 && parseInt(mul.point) < 200" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-3.png" v-if="parseInt(mul.point) >= 200 && parseInt(mul.point) < 300" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-4.png" v-if="parseInt(mul.point) >= 300 && parseInt(mul.point) < 400" alt="">
+              <img class="solver-level-badge" src="@/assets/berry-5.png" v-if="parseInt(mul.point) >= 400 " alt="">
+              <p class="solver-intro">{{mul.nickname}}</p>
             </div>
           </div>
         </div>
@@ -115,13 +125,15 @@
           <div class="group-card">
             <section class="page-contain">
               <a href="#" class="data-card">
-                <h3>블루베리</h3>
-                <h4>Python</h4>
-                <h4>JAVA</h4>
-                <h4>Vue.js</h4>
-                <p>Aeneansed consectetur.</p>
+                <div class="data-card-height">
+                  <h3>블루베리</h3>
+                  <h4>Python</h4>
+                  <h4>JAVA</h4>
+                  <h4>Vue.js</h4>
+                  <p>Aeneansed consectetur.</p>
+                </div>
                 <span class="link-text">
-                  모임 상세보기
+                  상세보기
                   <svg
                     width="25"
                     height="16"
@@ -139,11 +151,38 @@
                 </span>
               </a>
               <a href="#" class="data-card">
-                <h3>SOLVER</h3>
-                <h4>Python</h4>
-                <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                <div class="data-card-height">
+                  <h3>SOLVER</h3>
+                  <h4>Python</h4>
+                  <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                </div>
                 <span class="link-text">
-                  모임 상세보기
+                  상세보기
+                  <svg
+                    width="25"
+                    height="16"
+                    viewBox="0 0 25 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M17.8631 0.929124L24.2271 7.29308C24.6176 7.68361 24.6176 8.31677 24.2271 8.7073L17.8631 15.0713C17.4726 15.4618 16.8394 15.4618 16.4489 15.0713C16.0584 14.6807 16.0584 14.0476 16.4489 13.657L21.1058 9.00019H0.47998V7.00019H21.1058L16.4489 2.34334C16.0584 1.95281 16.0584 1.31965 16.4489 0.929124C16.8394 0.538599 17.4726 0.538599 17.8631 0.929124Z"
+                      fill="#0F4C81"
+                    />
+                  </svg>
+                </span>
+              </a>
+              <a href="#" class="data-card">                
+                <div class="data-card-height">
+                  <h3>나당연합군</h3>
+                  <h4>Python</h4>
+                  <h4>JAVA</h4>
+                  <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                </div>
+                <span class="link-text">
+                  상세보기
                   <svg
                     width="25"
                     height="16"
@@ -161,36 +200,15 @@
                 </span>
               </a>
               <a href="#" class="data-card">
-                <h3>나당연합군</h3>
-                <h4>Python</h4>
-                <h4>JAVA</h4>
-                <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                <div class="data-card-height">
+                  <h3>솔버</h3>
+                  <h4>Python</h4>
+                  <h4>JAVA</h4>
+                  <h4>Vue.js</h4>
+                  <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                </div>
                 <span class="link-text">
-                  모임 상세보기
-                  <svg
-                    width="25"
-                    height="16"
-                    viewBox="0 0 25 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M17.8631 0.929124L24.2271 7.29308C24.6176 7.68361 24.6176 8.31677 24.2271 8.7073L17.8631 15.0713C17.4726 15.4618 16.8394 15.4618 16.4489 15.0713C16.0584 14.6807 16.0584 14.0476 16.4489 13.657L21.1058 9.00019H0.47998V7.00019H21.1058L16.4489 2.34334C16.0584 1.95281 16.0584 1.31965 16.4489 0.929124C16.8394 0.538599 17.4726 0.538599 17.8631 0.929124Z"
-                      fill="#0F4C81"
-                    />
-                  </svg>
-                </span>
-              </a>
-              <a href="#" class="data-card">
-                <h3>솔버</h3>
-                <h4>Python</h4>
-                <h4>JAVA</h4>
-                <h4>Vue.js</h4>
-                <p>Aenean lacinia bibendum nulla sed consectetur.</p>
-                <span class="link-text">
-                  모임 상세보기
+                  상세보기
                   <svg
                     width="25"
                     height="16"
@@ -219,7 +237,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "Main",
@@ -227,12 +245,52 @@ export default {
     return {
       mainQuestion: [],
       query: null,
-      solverLine1: [0, 0, 0, 0],
-      solverLine2: [0, 0, 0, 0]
+      solverLine1: [],
+      solverLine2: [],
+      isEmptySolver: false,
     };
   },
   methods: {
-    ...mapActions(["setStateQuery", "setStateQueryMain", "goQuestionDetail"]),
+    ...mapActions(["setStateQuery", "setStateQueryMain", "goQuestionDetail", "triggerMainReload"]),
+    goUserProfile(nickname){
+        if (nickname !== this.userNickname) {
+          this.$router.push({
+            name: 'Profile',
+            params: {
+              nickname: nickname
+            }
+          });
+        } else {
+          this.$router.push({
+            path: `/my-profile/${this.userNickname}`
+          })
+        }
+    },
+    getPaySolverList: function(){
+      axios({
+        url: API.URL + API.ROUTES.getPaySolver,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken },
+      }).then((res)=>{
+        this.isEmptySolver = false;
+        if(res.data.list.length > 3){
+          var n = res.data.list.length;
+
+          if (n%2==0){
+            this.solverLine1 = res.data.list.slice(0, n/2);
+            this.solverLine2 = res.data.list.slice(n/2);
+          }else{
+            this.solverLine1 = res.data.list.slice(0, n/2);
+            this.solverLine2 = res.data.list.slice(n/2);
+          }
+        }else{
+          this.solverLine1 = res.data.list;
+          this.isEmptySolver = true;
+        }
+      }).catch((err)=>{
+
+      });
+    }
   },
   created() {
     axios({
@@ -244,15 +302,30 @@ export default {
         offest: 0,
       },
     })
-      .then((res) => {
-        for (var i = 0; i < 6; i++) {
-          this.mainQuestion.push(res.data.questionFormList[i]);
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      });
+    .then((res) => {
+      for (var i = 0; i < 6; i++) {
+        this.mainQuestion.push(res.data.questionFormList[i]);
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    });
+
+    this.getPaySolverList();
   },
+  computed : {    
+    ...mapState({
+      accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname,
+      mainChangeTrigger: (state) => state.auth.mainChangeTrigger,
+    }),
+    ...mapGetters(['isLoggedIn', 'getUserNickname']),
+  },
+  watch: {
+    mainChangeTrigger: function () {
+      this.getPaySolverList();
+    },
+  }
 };
 </script>
 
@@ -266,4 +339,13 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+  img.solver-level-badge{
+    position: absolute;
+    width: 70px;
+    left: -10px;
+    top: -30px;
+    background: white;
+    border-radius: 100%;
+  }
 </style>
