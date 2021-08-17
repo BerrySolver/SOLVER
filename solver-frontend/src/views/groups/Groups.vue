@@ -23,7 +23,16 @@
             @click="goGroupDetail()"
           >
             <img class="group-img" :src="group.img_url" alt="">
-
+            <div class="group-info">
+              <span style="font-size: 20px; font-weight: 700;">{{group.group_name}}</span>
+              <span style="font-size: 17px; font-weight: 700;">
+                <img style="width: 17px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTEyIDUxMjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00MzcuMDIsMzMwLjk4Yy0yNy44ODMtMjcuODgyLTYxLjA3MS00OC41MjMtOTcuMjgxLTYxLjAxOEMzNzguNTIxLDI0My4yNTEsNDA0LDE5OC41NDgsNDA0LDE0OA0KCQkJQzQwNCw2Ni4zOTMsMzM3LjYwNywwLDI1NiwwUzEwOCw2Ni4zOTMsMTA4LDE0OGMwLDUwLjU0OCwyNS40NzksOTUuMjUxLDY0LjI2MiwxMjEuOTYyDQoJCQljLTM2LjIxLDEyLjQ5NS02OS4zOTgsMzMuMTM2LTk3LjI4MSw2MS4wMThDMjYuNjI5LDM3OS4zMzMsMCw0NDMuNjIsMCw1MTJoNDBjMC0xMTkuMTAzLDk2Ljg5Ny0yMTYsMjE2LTIxNnMyMTYsOTYuODk3LDIxNiwyMTYNCgkJCWg0MEM1MTIsNDQzLjYyLDQ4NS4zNzEsMzc5LjMzMyw0MzcuMDIsMzMwLjk4eiBNMjU2LDI1NmMtNTkuNTUxLDAtMTA4LTQ4LjQ0OC0xMDgtMTA4UzE5Ni40NDksNDAsMjU2LDQwDQoJCQljNTkuNTUxLDAsMTA4LDQ4LjQ0OCwxMDgsMTA4UzMxNS41NTEsMjU2LDI1NiwyNTZ6Ii8+DQoJPC9nPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=" />
+                {{group.members}}
+              </span>
+            </div>
+            <div class="group-introduce">
+              {{group.introduce}}
+            </div>
           </div>
         </div>
       </div>
@@ -41,37 +50,44 @@ export default {
         {
           group_name: 'SSAFY 5기',
           introduce: '오기로극뽁!',
-          img_url: 'https://www.ssafy.com/swp/images/sns_img.png'
+          img_url: 'https://www.ssafy.com/swp/images/sns_img.png',
+          members: 750
         },
         {
           group_name: '파이썬 병아리들',
           introduce: '우리 같이 Python을 배워봐요!',
-          img_url: 'https://s3.ap-northeast-2.amazonaws.com/grepp-cloudfront/programmers_imgs/learn/thumb-course-phthon-basic.jpg'
+          img_url: 'https://s3.ap-northeast-2.amazonaws.com/grepp-cloudfront/programmers_imgs/learn/thumb-course-phthon-basic.jpg',
+          members: 90
         },
         {
           group_name: 'Java를 잡아라',
           introduce: 'Java에 입문하는 사람들의 모임',
-          img_url: 'https://cdn.inflearn.com/wp-content/uploads/java_do_it4.jpg'
+          img_url: 'https://cdn.inflearn.com/wp-content/uploads/java_do_it4.jpg',
+          members: 57
         },
         {
           group_name: '싸피고 3학년 5반',
           introduce: '담임쌤과 함께하는 방과후',
-          img_url: 'https://img.seoul.co.kr/img/upload/2014/11/03/SSI_20141103172839.jpg'
+          img_url: 'https://img.seoul.co.kr/img/upload/2014/11/03/SSI_20141103172839.jpg',
+          members: 23
         },
         {
           group_name: '오픽으로 취뽀',
           introduce: 'AL을 목표로 하는 모임입니다.',
-          img_url: 'https://yt3.ggpht.com/ytc/AKedOLRQglLoe9sB4ewAgNbsYHFFncMeeCi04my7qu9pRg=s900-c-k-c0x00ffffff-no-rj'
+          img_url: 'https://yt3.ggpht.com/ytc/AKedOLRQglLoe9sB4ewAgNbsYHFFncMeeCi04my7qu9pRg=s900-c-k-c0x00ffffff-no-rj',
+          members: 112
         },
         {
           group_name: 'Guitar 독학 모임',
-          introduce: '우리에게 유일하게 허락된 마약, 음악',
-          img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0gkJPD6_s8IceLr8PK_iKuj-U8oUDiXrMPw&usqp=CAU'
+          introduce: '우리에게 유일하게 허락된 마약, 음악입니다. 기타를 배우시고 싶으신 분들은 여기로 연락주세요.',
+          img_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0gkJPD6_s8IceLr8PK_iKuj-U8oUDiXrMPw&usqp=CAU',
+          members: 24
         },
         {
           group_name: '하루 세 번 스트레칭!',
           introduce: '화상으로 함께 스트레칭해봐요~',
-          img_url: 'https://www.k-health.com/news/photo/202104/53348_51821_4922.jpg'
+          img_url: 'https://www.k-health.com/news/photo/202104/53348_51821_4922.jpg',
+          members: 30
         },
         
       ]
@@ -200,6 +216,22 @@ export default {
     width: 270px;
     height: 170px;
     object-fit: cover;
+  }
+
+  .group-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px 0px 15px;
+  }
+
+  .group-introduce {
+    color: #84898C;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    text-align: left;
+    overflow: hidden;
+    padding: 10px 15px 0px 15px;
   }
 
   .group-list {
