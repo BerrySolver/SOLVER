@@ -31,8 +31,7 @@ export default {
           Authorization: "Bearer " + this.accessToken,
         },
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         this.triggerAnswerReload();
       })
       .catch((err) => {

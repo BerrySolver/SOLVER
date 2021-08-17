@@ -124,7 +124,6 @@ export default {
       this.setSolverList();
     }, setResultCategory(event){
       this.subCategoryCode = event.target.value;
-      console.log("Sub : " + this.subCategoryCode);
       this.setSolverList();
     }, goUserProfile(nickname){
         if (nickname !== this.userNickname) {
@@ -172,8 +171,8 @@ export default {
 
         this.solverCnt = len;
       })
-      .catch(()=>{
-        console.log();
+      .catch((err)=>{
+        console.log(err);
       });
     }
   },
@@ -188,8 +187,8 @@ export default {
         this.isLoaded = true
       }, 1000)
     })
-    .catch(() => {
-      console.log();
+    .catch((err) => {
+      console.log(err);
     });
     this.setSolverList();
   },

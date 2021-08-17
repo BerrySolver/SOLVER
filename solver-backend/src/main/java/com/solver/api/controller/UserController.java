@@ -43,7 +43,6 @@ public class UserController {
 	public ResponseEntity<? extends BaseResponse> checkNickname(
 			@RequestParam @ApiParam(value="닉네임", required=true) String nickname)
 	{
-		System.out.println("check");
 		if(userService.checkNickname(nickname).orElse(null) == null)
 			return ResponseEntity.status(200).body(BaseResponse.of(200, "사용 가능한 닉네임입니다"));
 		
@@ -92,11 +91,8 @@ public class UserController {
 	public String getNickname(
 			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
-	{
-		System.out.println(accessToken);
-		
+	{	
 		String nickname = userService.getNickname(accessToken, response);
-		
 
 		return nickname;
 	}

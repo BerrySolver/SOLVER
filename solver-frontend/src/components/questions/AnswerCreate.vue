@@ -109,8 +109,8 @@ export default {
           this.triggerAnswerReload();
           this.CKEditor.setData("");
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
     },
   },
