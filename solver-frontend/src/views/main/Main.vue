@@ -127,16 +127,15 @@
     <div class="main-group-container">
       <div class="main-group-container-contents">
         <div class="main-group-title">
-          <div class="semi-title">모임</div>
           <div class="main-group-card">
             <section class="page-contain">
-              <a class="data-card" href="https://danghyeona.notion.site/5999b6935e544b5fa9557e26f567b04a">
+              <a class="data-card" href="https://danghyeona.notion.site/5999b6935e544b5fa9557e26f567b04a" target='_blank'>
                 <div class="data-card-height">
-                  <h3>공지사항</h3>
-                  <h4>안내사항</h4>
-                  <h4>개발기록</h4>
-                  <h4>개발자 후기</h4>
-                  <h4>업데이트 예정</h4>
+                  <h3 class="notion-h3">공지사항</h3>
+                  <div class="notion-div">안내사항</div>
+                  <div class="notion-div">개발기록</div>
+                  <div class="notion-div">개발자 후기</div>
+                  <div class="notion-div">업데이트 예정</div>
                   <p>꼼꼼히 보면 재미있는 정보!</p>
                 </div>
                 <span class="link-text">
@@ -157,12 +156,12 @@
                   </svg>
                 </span>
               </a>
-              <a class="data-card" href="https://danghyeona.notion.site/SOLVER-e5336b26f14147d69f9f124cd8574e9b">
+              <a class="data-card" href="https://danghyeona.notion.site/SOLVER-e5336b26f14147d69f9f124cd8574e9b" target='_blank'>
                 <div class="data-card-height">
-                  <h3>솔버소개</h3>
-                  <h4>솔버란?</h4>
-                  <h4>솔버의 강점</h4>
-                  <h4>솔버의 모든것</h4>
+                  <h3 class="notion-h3">솔버소개</h3>
+                  <div class="notion-div">솔버란?</div>
+                  <div class="notion-div">솔버의 강점</div>
+                  <div class="notion-div">솔버의 모든것</div>
                   <p>이렇게까지 디테일하다고?!</p>
                 </div>
                 <span class="link-text">
@@ -183,12 +182,12 @@
                   </svg>
                 </span>
               </a>
-              <a class="data-card" href="https://danghyeona.notion.site/1c352b72fa604393adda86b681a0c3b9">                
+              <a class="data-card" href="https://danghyeona.notion.site/1c352b72fa604393adda86b681a0c3b9" target='_blank'>                
                 <div class="data-card-height">
-                  <h3>베리소개</h3>
-                  <h4>베리란?</h4>
-                  <h4>베리의 역할</h4>
-                  <h4>다양한 베리</h4>
+                  <h3 class="notion-h3">베리소개</h3>
+                  <div class="notion-div">베리란?</div>
+                  <div class="notion-div">베리의 역할</div>
+                  <div class="notion-div">다양한 베리</div>
                   <p>동글동글 귀여운 얘는,<br>도대체 누구야?!</p>
                 </div>
                 <span class="link-text">
@@ -209,13 +208,13 @@
                   </svg>
                 </span>
               </a>
-              <a class="data-card" href="https://danghyeona.notion.site/edce4119fb7c49aea92846efa4253ae4">
+              <a class="data-card" href="https://danghyeona.notion.site/edce4119fb7c49aea92846efa4253ae4" target='_blank'>
                 <div class="data-card-height">
-                  <h3>고객센터</h3>
-                  <h4>1:1 문의</h4>
-                  <h4>오류 신고</h4>
-                  <h4>서비스 평가</h4>
-                  <h4>자주 묻는 질문</h4>
+                  <h3 class="notion-h3">고객센터</h3>
+                  <div class="notion-div">1:1 문의</div>
+                  <div class="notion-div">오류 신고</div>
+                  <div class="notion-div">서비스 평가</div>
+                  <div class="notion-div">자주 묻는 질문</div>
                   <p>여러분과 함께 만들어갑니다.</p>
                 </div>
                 <span class="link-text">
