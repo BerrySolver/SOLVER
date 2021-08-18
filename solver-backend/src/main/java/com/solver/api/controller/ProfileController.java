@@ -1,6 +1,8 @@
 package com.solver.api.controller;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,10 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
+import com.solver.api.response.FollowListRes;
 import com.solver.api.response.ProfileRes;
 import com.solver.api.response.ProfileTabRes;
 import com.solver.api.service.ProfileService;
 import com.solver.common.model.BaseResponse;
+import com.solver.db.entity.user.FavoriteUser;
+import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -165,5 +170,26 @@ public class ProfileController {
 		}
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "팔로우 삭제 성공"));
+	}
+	
+	/* mode: 0 -> 팔로잉 리스트, mode: 1 -> 팔로워 리스트 */
+	@GetMapping("/{nickname}/follow-list/{mode}")
+	@ApiOperation(value = "사용자 팔로우 리스트", notes = "팔로우 리스트") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "팔로우 리스트 조회 성공"),
+        @ApiResponse(code = 400, message = "팔로우 리스트 조회 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> getFollowList(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable String nickname,
+			@PathVariable int mode
+			)
+	{
+		String token = accessToken.split(" ")[1];
+		User user = profileService.getByNickname(token, nickname);
+		
+		List<FavoriteUser> followList = profileService.getFollowList(user, mode);
+		
+		return ResponseEntity.status(200).body(FollowListRes.of(200, "팔로우 리스트 조회 성공", followList, mode));
 	}
 }

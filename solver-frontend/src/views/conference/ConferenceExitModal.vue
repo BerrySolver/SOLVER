@@ -1,46 +1,16 @@
 <template>
   <div class="question-delete-modal solver-font">
-    <h3 class="question-delete-title">답변 평가</h3>
+    <h3 class="question-delete-title">회의 종료</h3>
     <hr />
-    <p>답변 상대방의 점수를 평가해주세요</p>
-    <div class="rating">
-      <input
-        v-model="rateValue"
-        type="range"
-        class="form-range"
-        min="0"
-        max="10"
-        step="0.1"
-        id="customRange3"
-      />
-      <label class="imageLabel" for="customRange3"></label>
-      <label class="imageLabel" for="customRange3"></label>
-      <label class="imageLabel" for="customRange3"></label>
-      <label class="imageLabel" for="customRange3"></label>
-      <label class="imageLabel" for="customRange3"></label>
-    </div>
-
-    <input readonly id="warnText" for="reasonInput" v-model="warningText" />
-    <textarea
-      id="reasonInput"
-      class="comment-form-field"
-      cols="30"
-      rows="10"
-      v-model="inputValue"
-      placeholder="평가 내용을 입력해주세요 (선택)"
-    >
-    </textarea>
+    <p>화상 회의에서 나가시겠습니까?</p>
     <div class="question-delete-button-bar">
-      <button type="button" class="btn btn-submit" @click="insertEvaluate()">등록</button>
+      <button type="button" class="btn btn-submit" @click="finishiConference()">나가기</button>
       <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소</button>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import API from "@/API.js";
-import router from "@/router";
 import { mapState } from "vuex";
 
 export default {
@@ -51,59 +21,11 @@ export default {
       warningText: "",
     };
   },
-  props: ["questionId", "userName"],
+  props: ["questionId"],
   methods: {
-    insertEvaluate() {
-      if (this.rateValue < 0) {
-        this.warningText = "점수를 선택해주세요!";
-        return;
-      }
-      // this.$route.params
-      axios({
-        url: API.URL + `conferences/evaluation`,
-        method: "post",
-        headers: { Authorization: "Bearer " + this.accessToken },
-        data: {
-          score: this.rateValue,
-          reason: this.inputValue,
-          nickname: this.userName,
-          // questionId: this.questionId,
-          // questionId: this.questionId,
-        },
-      })
-        .then(() => {
-          location.href = "/";
-          // router.push({ redirect: "/" });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      this.$emit("close");
-    },
-    setRate() {
-      this.warningText = "";
-      if (this.rateValue < 0.3) this.rateValue = 0;
-      else if (this.rateValue >= 10) this.rateValue = 10;
-      else this.rateValue = Math.ceil(this.rateValue);
-
-      const $this = this;
-
-      // this.rate = newRate;
-      let items = document.querySelectorAll(".imageLabel");
-      items.forEach(function(item, idx) {
-        if (idx + 1 == $this.rateValue / 2 + 0.5) {
-          item.className = "imageLabel halfImage";
-        } else if ((idx + 1) * 2 <= $this.rateValue) {
-          item.className = "imageLabel fullImage";
-        } else {
-          item.className = "imageLabel";
-        }
-      });
-    },
     finishiConference() {
       this.$emit("close");
       location.href = "/";
-      // router.push({ redirect: "/" });
     },
   },
   computed: {
@@ -111,12 +33,7 @@ export default {
       accessToken: (state) => state.auth.accessToken,
     }),
   },
-  mounted() {
-    const $this = this;
-    document.querySelector("#customRange3").addEventListener("click", function(e) {
-      $this.setRate();
-    });
-  },
+  mounted() {},
 };
 </script>
 

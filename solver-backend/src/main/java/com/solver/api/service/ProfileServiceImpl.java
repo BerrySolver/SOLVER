@@ -309,7 +309,6 @@ public class ProfileServiceImpl implements ProfileService{
 		String userId = user.getId();
 		
 		if(tabNum == 0) {
-			//화상 답변 인지 그냥 답변 인지 뭘로 구분?
 			List<Answer> textAnswerList = answerRepository.findTextAnswerByUserId(userId);
 			List<Answer> videoAnswerList = answerRepository.findVideoAnswerByUserId(userId);
 			
@@ -325,7 +324,7 @@ public class ProfileServiceImpl implements ProfileService{
 					videoAnswerTime -= conferenceLog.getRegDt().getTime();
 				}
 				//퇴장
-				else if(conferenceLog.getCode().getCode().equals("030")) {
+				else if(conferenceLog.getCode().getCode().equals("031")) {
 					videoAnswerTime += conferenceLog.getRegDt().getTime();
 				}
 			}
@@ -475,5 +474,32 @@ public class ProfileServiceImpl implements ProfileService{
 		favoriteUserRepository.delete(favoriteUser);
 
 		return 3;
+	}
+
+	@Override
+	public User getByNickname(String token, String nickname) {
+		TokenResponse tokenResponse = new TokenResponse();
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		User profileUser = userRepository.findByNickname(nickname).orElse(null);
+
+		//없는 유저인 경우
+		if (user == null || profileUser == null) {
+			return null;
+		}
+		
+		return profileUser;
+	}
+
+	@Override
+	public List<FavoriteUser> getFollowList(User user, int mode) {
+		if (mode == 0) {
+			return user.getFavoriteFollowingUser();
+		}
+		
+		return user.getFavoriteUser();
 	}
 }

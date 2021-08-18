@@ -84,6 +84,24 @@
   filter: brightness(115%)
 }
 
+.follower-button {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.follower-button:hover {
+  background-color: #488ec438;
+}
+
+.following-button {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.following-button:hover {
+  background-color: #488ec438;
+}
+
 .for-center {
   display: flex;
   justify-content: center;

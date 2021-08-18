@@ -132,6 +132,7 @@ public class QuestionController {
 			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
+		System.out.println(questionId);
 		Optional<Question> question = questionService.getById(questionId);
 		String token = accessToken.split(" ")[1];
 	
@@ -142,6 +143,7 @@ public class QuestionController {
 		boolean isLiked = favoriteQuestionService.checkFavoriteQuestion(token, question.get());
 		boolean isBookmarked = bookmarkService.checkBookmarkQuestion(token, question.get());
 				
+		System.out.println(question.get().getUser().getId());
 		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get(), isLiked, isBookmarked));
 	}
 	

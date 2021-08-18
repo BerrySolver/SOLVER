@@ -45,7 +45,11 @@
             src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
           />
         </div>
-        <div v-else @click="startAnswerRecord()" class="conference-record-start-btn">
+        <div
+          v-else-if="isAnswerUser"
+          @click="startAnswerRecord()"
+          class="conference-record-start-btn"
+        >
           <img
             style="width:23px; "
             src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
@@ -72,6 +76,7 @@ import axios from "axios";
 import API from "@/API.js";
 import { mapState, mapGetters } from "vuex";
 import ConferenceEvaluateModal from "./ConferenceEvaluateModal.vue";
+import ConferenceExitModal from "./ConferenceExitModal.vue";
 
 function clStart() {
   console.log(isMySharing);
@@ -112,11 +117,11 @@ var ws = new WebSocket("wss://localhost:8443/groupcall");
 var participants = {};
 var name;
 var room;
-var screenName;
+var opponentName;
 var myName;
 var isSharing = false;
 var isMySharing = false;
-var participantsCount = 1;
+// var participantsCount = 1;
 
 ws.onmessage = function(message) {
   var parsedMessage = JSON.parse(message.data);
@@ -365,6 +370,8 @@ const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
 
 function Participant(name) {
+  if (!name.startsWith("scree&") && name != myName) opponentName = name;
+
   this.name = name;
   console.log("this.name : " + this.name);
 
@@ -402,7 +409,7 @@ function Participant(name) {
     container.onclick = switchContainerClass;
     document.getElementById("participants").appendChild(container);
 
-    participantsCount++;
+    // participantsCount++;
     video.autoplay = true;
     video.controls = false;
   }
@@ -459,10 +466,6 @@ function Participant(name) {
   };
 }
 
-function test() {
-  console.log(data.isSharing);
-}
-
 export default {
   data: function() {
     return {
@@ -483,7 +486,7 @@ export default {
     }),
     ...mapGetters(["getUserNickname"]),
   },
-  props: ["questionId"],
+  props: ["questionId", "questionUserNickname"],
   methods: {
     // insertConferenceLog() {
     //   axios({
@@ -541,10 +544,13 @@ export default {
       register();
     },
     clickLeaveRoom() {
-      if (this.isRecording) this.stopAnswerRecord();
+      // if (this.isRecording) this.stopAnswerRecord();
       // leaveRoom();
-      this.conferenceEvaluate();
-      if (this.isAnswerUser) this.exitConferenceLog();
+
+      if (this.isAnswerUser) this.conferenceExit();
+      else this.conferenceEvaluate();
+
+      // if (this.isAnswerUser) this.exitConferenceLog();
     },
     clickSt() {
       if (isSharing) return;
@@ -578,13 +584,29 @@ export default {
       this.$modal.show(
         ConferenceEvaluateModal,
         {
-          questionId: "test",
+          userName: opponentName,
+          questionId: this.questionId,
           modal: this.$modal,
         },
         {
           name: "dynamic-modal",
           width: "600px",
           height: "500px",
+          draggable: false,
+          clickToClose: false,
+        }
+      );
+    },
+    conferenceExit() {
+      this.$modal.show(
+        ConferenceExitModal,
+        {
+          modal: this.$modal,
+        },
+        {
+          name: "dynamic-modal",
+          width: "600px",
+          height: "230px",
           draggable: false,
           clickToClose: false,
         }
@@ -615,7 +637,7 @@ export default {
       this.recoder.onstop = async () => {
         this.blob = new Blob(this.blobs, { type: "video/mp4" });
         console.log(this.blob);
-        this.recordVideo();
+        if (this.isAnswerUser) this.recordVideo();
       };
       console.log(this.recoder);
       this.recoder.start(); // 녹화 시작
@@ -686,27 +708,36 @@ export default {
     console.log(this.questionId);
     // room = "testRoom";
 
-    axios({
-      //conference id 값은 테스트용
-      url: API.URL + `questions/${this.questionId}/info`,
-      method: "get",
-      headers: { Authorization: "Bearer " + this.accessToken },
-    })
-      .then((res) => {
-        console.log(res);
-        const questionUserId = res.data.userId;
-        if (questionUserId != this.getUserNickname) {
-          this.isAnswerUser = true;
-          this.entranceConferenceLog();
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    console.log(this.questionUserNickname);
+
+    if (this.questionUserNickname != this.getUserNickname) {
+      this.isAnswerUser = true;
+      this.entranceConferenceLog();
+    }
+
+    // axios({
+    //   //conference id 값은 테스트용
+    //   url: API.URL + `questions/${this.questionId}/info`,
+    //   method: "get",
+    //   headers: { Authorization: "Bearer " + this.accessToken },
+    // })
+    //   .then((res) => {
+    //     console.log(res);
+    //     const questionUserId = res.data.userId;
+    //     if (questionUserId != this.getUserNickname) {
+    //       this.isAnswerUser = true;
+    //       this.entranceConferenceLog();
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
 
     this.clickRegister();
   },
   beforeDestroy() {
+    if (this.isAnswerUser) this.exitConferenceLog();
+    if (this.isRecording) this.stopAnswerRecord();
     // if(this.isMySharing)
   },
 };

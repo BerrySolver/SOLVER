@@ -287,11 +287,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 	}
 
 	@Override
-	public void insertEvaluation(String accessToken, EvaluationPostReq evaluationPostReq, HttpServletResponse response) {
-		
-		Question question = new Question();
-		question.setId(evaluationPostReq.getQuestionId());
-		
+	public void insertEvaluation(String accessToken, EvaluationPostReq evaluationPostReq, HttpServletResponse response) {		
 		String evaluationId = "";
 
 		while (true) {
@@ -313,9 +309,11 @@ public class ConferenceServiceImpl implements ConferenceService {
 			response.setHeader("Authorization", tokenResponse.getAccessToken());
 		}
 
-		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		User questionUser = userRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		User answerUser = userRepository.findByNickname(evaluationPostReq.getNickname()).orElse(null);
 
-		if (user == null) {
+		if (questionUser == null) {
 			return;
 		}
 		
@@ -324,7 +322,8 @@ public class ConferenceServiceImpl implements ConferenceService {
 		evaluation.setReason(evaluationPostReq.getReason());
 		evaluation.setId(evaluationId);
 		evaluation.setScore(evaluationPostReq.getScore());
-		evaluation.setAnswerUser(user);
+		evaluation.setQuestionUser(questionUser);
+		evaluation.setAnswerUser(answerUser);
 		
 		evaluationRepository.save(evaluation);
 	}
