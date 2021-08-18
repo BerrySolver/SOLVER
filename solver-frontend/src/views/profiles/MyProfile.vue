@@ -673,13 +673,10 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.profileSetting();
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(() => {});
     },
   },
   computed: {
