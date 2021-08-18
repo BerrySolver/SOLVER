@@ -75,7 +75,7 @@
       </div>
     </div>
     <hr style="color: #e0e0e0; opacity: 0.8;" />
-    <Answer :questionNickname="question.nickname" />
+    <Answer :questionNickname="question.nickname" :questionState="question.type" />
     <AnswerCreate v-if="isLoggedIn" :questionId="$route.params.questionId" />
     <div v-else class="nonlogin-answer" @click="$router.push({name: 'Login'})">
       <div class="nonlogin-answer-content">
@@ -114,6 +114,24 @@ export default {
   },
   methods: {
     ...mapActions(["setStateQuestionId", "setStateQuestion", "setStateContent"]),
+    getQuestionDetail: function() {
+      axios({
+      url: API.URL + `questions/${this.$route.params.questionId}/info`,
+      method: "get",
+      headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then((res) => {
+          this.question = res.data;
+          this.answerCount = res.data.answerCount;
+          this.likeCount = res.data.likeCount;
+          this.bookmarkCount = res.data.bookmarkCount;
+          this.isLiked = res.data.liked;
+          this.isBookmarked = res.data.bookmarked;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     changeLike: function() {
       if (this.isLoggedIn) {
         if (this.isLiked) {
@@ -218,6 +236,7 @@ export default {
       endpoint = endpoint.replaceAll("watch?v=", "embed/");
       endpoint = endpoint.replaceAll("</oembed", "</iframe");
       endpoint = endpoint.replaceAll(`youtu.be/`, `www.youtube.com/embed/`);
+      endpoint = endpoint.replaceAll(`<img src=`, `<img style="max-width:870px;" src=`);
 
       return endpoint;
     },
@@ -259,30 +278,21 @@ export default {
     },
   },
   created() {
-    axios({
-      url: API.URL + `questions/${this.$route.params.questionId}/info`,
-      method: "get",
-      headers: { Authorization: "Bearer " + this.accessToken },
-    })
-      .then((res) => {
-        this.question = res.data;
-        this.answerCount = res.data.answerCount;
-        this.likeCount = res.data.likeCount;
-        this.bookmarkCount = res.data.bookmarkCount;
-        this.isLiked = res.data.liked;
-        this.isBookmarked = res.data.bookmarked;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.getQuestionDetail()
   },
   computed: {
     ...mapState({
+      questionChangeTrigger: (state) => state.questions.questionChangeTrigger,
       accessToken: state => state.auth.accessToken,
       userNickname: state => state.auth.userNickname,
     }),
     ...mapGetters(["isLoggedIn"])
-  }
+  },
+  watch: {
+    questionChangeTrigger: function() {
+      this.getQuestionDetail()
+    }
+  },
 };
 </script>
 

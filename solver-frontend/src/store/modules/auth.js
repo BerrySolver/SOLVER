@@ -8,6 +8,7 @@ const state = {
   possibleTime: [],
   accessToken: null,
   isFirst: false,
+  mainChangeTrigger: false,
   userNickname: "",
 };
 
@@ -37,9 +38,15 @@ const mutations = {
   SET_USER_NICKNAME: (state, userNickname) => {
     state.userNickname = userNickname;
   },
+  SET_MAIN_CHANGE_TRIGGER : (state) => {
+    state.mainChangeTrigger = !state.mainChangeTrigger;
+  },
 };
 
 const actions = {
+  triggerMainReload({commit}){
+    commit("SET_MAIN_CHANGE_TRIGGER");
+  },
   signup(context, credentials) {
     axios({
       url: API.URL + API.ROUTES.signup,
@@ -110,6 +117,7 @@ const actions = {
       .then(() => {
         commit("SET_ACCESS_TOKEN", null);
         commit("SET_USER_NICKNAME", "");
+        commit("SET_MAIN_CHANGE_TRIGGER");
         router.push({ path: "/#" });
       })
       .catch(() => {

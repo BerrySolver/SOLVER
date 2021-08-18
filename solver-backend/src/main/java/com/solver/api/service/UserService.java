@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.solver.api.request.SolverGetListReq;
 import com.solver.api.request.UserRegistPostReq;
+import com.solver.api.response.PaySolverRes;
 import com.solver.api.response.SolverRes;
 import com.solver.common.model.OAuthToken;
 import com.solver.db.entity.user.Token;
@@ -30,6 +31,8 @@ public interface UserService {
 	List<SolverRes> getUserList(SolverGetListReq solverGetListReq);
 
 	String getNickname(String accessToken, HttpServletResponse response);
+	
+	List<PaySolverRes> getPaySolver(String accessToken);
 
 	void insertDefaultProfile(Long kakaoId, String profileUrl);
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.solver.common.model.BaseResponse;
+import com.solver.db.entity.code.Code;
 import com.solver.db.entity.question.Question;
 
 import io.swagger.annotations.ApiModel;
@@ -34,12 +35,14 @@ public class QuestionListRes extends BaseResponse {
 		// question 리스트에서 하나씩 가져와 questionForm으로 재가공
 		for (int i = 0; i < questionList.size(); i++) {
 			Question question = questionList.get(i);
+			Code type = question.getCode();
 			QuestionForm qForm = new QuestionForm();
 			qForm.setQuestionId(question.getId());
 			qForm.setTitle(question.getTitle());
 			qForm.setDifficulty(question.getDifficulty());
 			qForm.setContent(question.getContent());
 			qForm.setNickname(question.getUser().getNickname());
+			qForm.setType(type.getCodeName());
 			qForm.setRegDt(question.getRegDt());
 			qForm.setAnswerCount(question.getAnswer().size());
 			qForm.setLikeCount(question.getFavoriteQuestion().size());
@@ -72,6 +75,8 @@ class QuestionForm {
 	private String content;
 	// 작성자 닉네임
 	private String nickname;
+	// 상태
+	private String type;
 	// 생성 시간
 	private Date regDt;
 	// 답변 개수
