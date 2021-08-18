@@ -119,7 +119,8 @@ public class MessageServiceImpl implements MessageService{
 			return messageListRes;
 		}
 		
-		List<Message> messageList = messageRepository.findByReceiveUserId(user.getId());
+		Date date = new Date(System.currentTimeMillis());
+		List<Message> messageList = messageRepository.findByReceiveUserIdAndRegDtBefore(user.getId(), date);
 		List<MessageRes> list = new ArrayList<MessageRes>();
 		
 		// 반환 리스트 만들기
@@ -243,7 +244,7 @@ public class MessageServiceImpl implements MessageService{
 			conferenceReservationRepository.save(conferenceReservation);
 			
 			// 컨퍼런스 메시지 남기기
-			Date newDate = new Date(to.getTime()-(1000*60*30));
+			Date newDate = new Date(to.getTime()-(1000*60*15));
 			m = new Message();
 			m.setId(RandomIdUtil.makeRandomId(13));
 			m.setSendUser(message.getReceiveUser());

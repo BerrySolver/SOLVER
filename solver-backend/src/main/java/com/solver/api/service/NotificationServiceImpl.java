@@ -82,6 +82,10 @@ public class NotificationServiceImpl implements NotificationService{
 			}
 		});
 		
+		// 20개가 넘어가면 자르기
+		if(list.size() > 20)
+			list = list.subList(0, 20);
+		
 		return list;
 	}
 	

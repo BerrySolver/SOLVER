@@ -188,6 +188,14 @@
   margin-bottom: 10px;
 }
 
+.notion-div {
+  color: #B5C7D3;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 15px 0px 15px 0px;
+  transform: skew(-0.1deg);
+}
+
 .popular-question {
   background-color: white;
   display: flex;
@@ -308,7 +316,7 @@
 }
 
 
-/* 모임 CSS copy */
+/* 모임 CSS */
 .page-contain {
   display: flex;
   justify-content: center;
@@ -336,12 +344,13 @@
   border-bottom: 2px solid #0F4C81;
   transition: color 0.45s ease, border 0.45s ease;
 }
-.data-card h4 {
+.data-card div {
   color: #B5C7D3;
-  text-transform: uppercase;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   transition: color 0.45s ease;
+  transform: skew(-0.1deg);
+
 }
 .data-card p {
   opacity: 0;
@@ -352,6 +361,8 @@
   margin: 0 0 15px;
   transform: translateY(-1em);
   transition: opacity 0.45s ease, transform 0.5s ease;
+  transform: skew(-0.1deg);
+
 }
 .data-card .link-text {
   bottom: 0;
@@ -361,6 +372,8 @@
   font-weight: 500;
   margin-bottom: 20px;
   transition: color 0.45s ease;
+  transform: skew(-0.1deg);
+
 }
 .data-card .link-text svg {
   margin-left: 5px;
@@ -372,20 +385,25 @@
 .data-card:hover {
   background: #0F4C81;
   transform: scale(1.02);
+  transform: skew(-0.1deg);
 }
 .data-card:hover h3 {
   color: #FFFFFF;
   border-bottom-color: #0F4C81;
+  transform: skew(-0.1deg);
 }
-.data-card:hover h4 {
+.data-card:hover div {
   color: #FFFFFF;
+  transform: skew(-0.1deg);
 }
 .data-card:hover p {
   opacity: 1;
   transform: none;
+  transform: skew(-0.1deg);
 }
 .data-card:hover .link-text {
   color: #FFFFFF;
+  transform: skew(-0.1deg);
 }
 .data-card:hover .link-text svg {
   -webkit-animation: point 1.25s infinite alternate;
