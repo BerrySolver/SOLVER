@@ -101,7 +101,7 @@
               <img class="solver-level-badge" src="@/assets/berry-3.png" v-if="parseInt(mul.point) >= 200 && parseInt(mul.point) < 300" alt="">
               <img class="solver-level-badge" src="@/assets/berry-4.png" v-if="parseInt(mul.point) >= 300 && parseInt(mul.point) < 400" alt="">
               <img class="solver-level-badge" src="@/assets/berry-5.png" v-if="parseInt(mul.point) >= 400 " alt="">
-              <p class="solver-intro">{{mul.nickname}}</p>
+              <p class="solver-intro font-break">{{mul.nickname}}</p>
             </div>
           </div>
         </div>

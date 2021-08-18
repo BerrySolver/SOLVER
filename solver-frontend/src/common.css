@@ -32,6 +32,10 @@
   display: inline-block;
 }
 
+.font-break {
+  transform: skew(-0.1deg);
+}
+
 .m-left-1 {
   margin-left: 10px;
 }
