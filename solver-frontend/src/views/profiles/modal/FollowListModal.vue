@@ -26,18 +26,25 @@ export default {
     'data'
   ], methods : {
     goUserProfile: function (nickname) {
-      this.$router.push({
-        name: 'Profile',
-        params: {
-          nickname: nickname
-        }
-      });
+      if (nickname !== this.userNickname) {
+        this.$router.push({
+          name: 'Profile',
+          params: {
+            nickname: nickname
+          }
+        });
+      } else {
+        this.$router.push({
+          path: `/my-profile/${this.userNickname}`
+        })
+      }
       this.$emit('close');
     }
   }, 
   computed: {
     ...mapState({
       accessToken: state => state.auth.accessToken,
+      userNickname: state => state.auth.userNickname
     }),
   }, created(){
     axios({
