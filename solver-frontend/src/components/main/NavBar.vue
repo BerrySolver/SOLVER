@@ -59,7 +59,7 @@
                 <li><hr class="line"></li>
 
                 <!-- notificatiion [dropdown 알림 Items] -->
-                <li class="notification-scroll">
+                <li v-if="!notificationList.length == 0" class="notification-scroll">
                   <div
                     v-for="(notification, index) in notificationList"
                     :key="'n' + index"
@@ -82,6 +82,9 @@
                   </div>
                 </li>
 
+                <li v-if="notificationList.length == 0">
+                  <img src="@/assets/no-notification.png" class="no-notification-img">
+                </li>
               </ul>
             </li>
 
@@ -106,7 +109,7 @@
                 <li><hr class="line"></li>
 
                 <!-- notificatiion [dropdown 알림 Items] -->
-                <li class="notification-scroll">
+                <li v-if="!notificationVideoMsgList.length == 0" class="notification-scroll">
                   <div
                     v-for="(message, index) in notificationVideoMsgList"
                     :key="'m' + index"
@@ -131,6 +134,10 @@
                     </div>
                     <hr class="notification-line">
                   </div>
+                </li>
+
+                <li v-if="notificationVideoMsgList.length == 0">
+                  <img src="@/assets/no-notification.png" class="no-notification-img">
                 </li>
               </ul>
             </li>

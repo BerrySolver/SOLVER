@@ -61,6 +61,14 @@
   cursor: pointer;
 }
 
+.no-notification-img {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  width: 300px;
+}
+
 .notification-dateTime {
   color: #84898c;
   font-size: 12px;
