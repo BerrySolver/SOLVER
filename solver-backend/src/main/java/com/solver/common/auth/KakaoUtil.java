@@ -123,6 +123,7 @@ public class KakaoUtil {
     	}
     	//만료된 엑세스 토큰이면 갱신
     	catch(HttpClientErrorException e) {
+    		System.out.println(accessToken);
     		Token token = tokenRepository.findByAccessToken(accessToken);
     		
     		//토큰이 일치하지 않는 경우
