@@ -44,31 +44,31 @@
           <div class="small-box"></div>
           <span class="subheading interval">솔버 등급</span>
         </div>
-        <div v-if="userProfileInfo.remainingPoint < 100">
+        <div v-if="userProfileInfo.point < 100">
           <div class="content-center">
             <img src="@/assets/berry-1-gif.gif" width="300px">
             <div class="point-color-1">새싹베리 등급</div> 
           </div>          
         </div>
-        <div v-if="100 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 200">
+        <div v-if="100 <= userProfileInfo.point && userProfileInfo.point < 200">
           <div class="content-center">
             <img src="@/assets/berry-2-gif.gif" width="300px">
             <div class="point-color-1">베이비베리 등급</div> 
           </div>
         </div>    
-        <div v-if="200 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 300">
+        <div v-if="200 <= userProfileInfo.point && userProfileInfo.point < 300">
           <div class="content-center">
             <img src="@/assets/berry-3-gif.gif" width="300px">
             <div class="point-color-1">전교1등베리 등급</div> 
           </div>
         </div>
-        <div v-if="300 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 400">
+        <div v-if="300 <= userProfileInfo.point && userProfileInfo.point < 400">
           <div class="content-center">
             <img src="@/assets/berry-4-gif.gif" width="300px">
             <div class="point-color-1">척척박사베리 등급</div> 
           </div>
         </div>     
-        <div v-if="400 <= userProfileInfo.remainingPoint">
+        <div v-if="400 <= userProfileInfo.point">
           <div class="content-center">
             <img src="@/assets/berry-5-gif.gif" width="300px">
             <div class="point-color-1">베리킹 등급</div> 
