@@ -7,7 +7,7 @@
             <div>{{ question.mainCategory }} > {{ question.subCategory }}</div>
             <div v-if="checkNickname()" class="question-buttons">
               <div class="question-modify-btn" @click="modifyQuestion()">
-                <img src="@/assets/edit-button.png" width="20px">
+                <img src="@/assets/edit-button.png" width="20px" />
               </div>
               <div class="question-delete-btn" @click="deleteQuestionCheck()">
                 <img
@@ -22,11 +22,14 @@
           </div>
           <div class="question-detail-user">
             <img
+              @click="goUserProfile(question.nickname)"
               class="question-detail-profileImg"
               :src="question.profileUrl"
               alt="profile-image"
             />
-            <span class="question-detail-nickname">{{ question.nickname }}</span>
+            <span @click="goUserProfile(question.nickname)" class="question-detail-nickname">{{
+              question.nickname
+            }}</span>
           </div>
           <div class="question-detail-content" v-html="modifyUrl(question.content)">
             <!-- {{question.content}} -->
@@ -77,7 +80,7 @@
     <hr style="color: #e0e0e0; opacity: 0.8;" />
     <Answer :questionNickname="question.nickname" :questionState="question.type" />
     <AnswerCreate v-if="isLoggedIn" :questionId="$route.params.questionId" />
-    <div v-else class="nonlogin-answer" @click="$router.push({name: 'Login'})">
+    <div v-else class="nonlogin-answer" @click="$router.push({ name: 'Login' })">
       <div class="nonlogin-answer-content">
         <span>로그인하고 여러분의 지식을 공유해보세요!</span>
       </div>
@@ -90,10 +93,10 @@ import axios from "axios";
 import API from "@/API.js";
 import Answer from "@/components/questions/Answer";
 import AnswerCreate from "@/components/questions/AnswerCreate";
-import LoginModal from "@/components/main/LoginModal"
+import LoginModal from "@/components/main/LoginModal";
 import router from "@/router";
 import { mapState, mapGetters, mapActions } from "vuex";
-import QuestionDelete from './QuestionDeleteModal.vue';
+import QuestionDelete from "./QuestionDeleteModal.vue";
 
 export default {
   name: "QuestionsDetail",
@@ -116,9 +119,9 @@ export default {
     ...mapActions(["setStateQuestionId", "setStateQuestion", "setStateContent"]),
     getQuestionDetail: function() {
       axios({
-      url: API.URL + `questions/${this.$route.params.questionId}/info`,
-      method: "get",
-      headers: { Authorization: "Bearer " + this.accessToken },
+        url: API.URL + `questions/${this.$route.params.questionId}/info`,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
           this.question = res.data;
@@ -162,13 +165,18 @@ export default {
             });
         }
       } else {
-        this.$modal.show(LoginModal,{
-          modal : this.$modal },{
-            name: 'dynamic-modal',
-            width : '600px',
-            height : '250px',
+        this.$modal.show(
+          LoginModal,
+          {
+            modal: this.$modal,
+          },
+          {
+            name: "dynamic-modal",
+            width: "600px",
+            height: "250px",
             draggable: false,
-        });
+          }
+        );
       }
     },
     changeBookmark: function() {
@@ -201,13 +209,18 @@ export default {
             });
         }
       } else {
-        this.$modal.show(LoginModal,{
-          modal : this.$modal },{
-            name: 'dynamic-modal',
-            width : '600px',
-            height : '250px',
+        this.$modal.show(
+          LoginModal,
+          {
+            modal: this.$modal,
+          },
+          {
+            name: "dynamic-modal",
+            width: "600px",
+            height: "250px",
             draggable: false,
-        });
+          }
+        );
       }
     },
     humanize: function(now, date) {
@@ -253,13 +266,17 @@ export default {
           console.log(err);
         });
     },
-    deleteQuestionCheck(){
-      this.$modal.show(QuestionDelete,{
-        question : this.$route.params.questionId,
-        modal : this.$modal },{
-          name: 'dynamic-modal',
-          width : '600px',
-          height : '250px',
+    deleteQuestionCheck() {
+      this.$modal.show(
+        QuestionDelete,
+        {
+          question: this.$route.params.questionId,
+          modal: this.$modal,
+        },
+        {
+          name: "dynamic-modal",
+          width: "600px",
+          height: "250px",
           draggable: false,
         }
       );
@@ -276,22 +293,36 @@ export default {
 
       return false;
     },
+    goUserProfile(nickname) {
+      if (nickname !== this.userNickname) {
+        this.$router.push({
+          name: "Profile",
+          params: {
+            nickname: nickname,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: `/my-profile/${this.userNickname}`,
+        });
+      }
+    },
   },
   created() {
-    this.getQuestionDetail()
+    this.getQuestionDetail();
   },
   computed: {
     ...mapState({
       questionChangeTrigger: (state) => state.questions.questionChangeTrigger,
-      accessToken: state => state.auth.accessToken,
-      userNickname: state => state.auth.userNickname,
+      accessToken: (state) => state.auth.accessToken,
+      userNickname: (state) => state.auth.userNickname,
     }),
-    ...mapGetters(["isLoggedIn"])
+    ...mapGetters(["isLoggedIn"]),
   },
   watch: {
     questionChangeTrigger: function() {
-      this.getQuestionDetail()
-    }
+      this.getQuestionDetail();
+    },
   },
 };
 </script>
@@ -395,12 +426,14 @@ iframe {
 }
 
 .question-detail-nickname {
+  cursor: pointer;
   color: #84898c;
   margin-left: 10px;
   font-size: 16px;
 }
 
 .question-detail-profileImg {
+  cursor: pointer;
   border-radius: 70%;
   height: 30px;
   object-fit: cover;
