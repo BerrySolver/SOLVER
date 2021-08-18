@@ -1,12 +1,12 @@
 <template>
   <div class="conference-rejcet-modal solver-font">
     <div v-if="!isSuccess">
-      <h3 class="conference-rejcet-title">요청 승인</h3>
+      <h3 class="conference-rejcet-title font-break">요청 승인</h3>
       <br>
-      <input type="email" class="form-control" placeholder="수업 준비사항이 있다면 써주세요!" v-model="content">
+      <input type="email" class="form-control font-break" placeholder="수업 준비사항이 있다면 써주세요!" v-model="content">
       <div class="conference-rejcet-button-bar">
-        <button type="button" class="btn btn-submit" @click="OKButton()">승인</button>
-        <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소</button>
+        <button type="button" class="btn btn-submit font-break" @click="OKButton()">승인</button>
+        <button type="button" class="btn btn-outline-cancel font-break" @click="$emit('close')">취소</button>
       </div>
     </div>
     <div v-else>

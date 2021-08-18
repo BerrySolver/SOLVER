@@ -217,7 +217,7 @@ public class MessageServiceImpl implements MessageService{
 			m.setId(RandomIdUtil.makeRandomId(13));
 			m.setSendUser(message.getSendUser());
 			m.setReceiveUser(message.getReceiveUser());
-			m.setContent("성사되었습니다.");
+			m.setContent(messagePostReq.getContent());
 			messageRepository.save(m);
 			
 			// 컨퍼런스 예약은 양쪽다 남기기
@@ -244,7 +244,7 @@ public class MessageServiceImpl implements MessageService{
 			conferenceReservationRepository.save(conferenceReservation);
 			
 			// 컨퍼런스 메시지 남기기
-			Date newDate = new Date(to.getTime()-(1000*60*15));
+//			Date newDate = new Date(to.getTime()-(1000*60*15));
 			m = new Message();
 			m.setId(RandomIdUtil.makeRandomId(13));
 			m.setSendUser(message.getReceiveUser());
@@ -252,8 +252,8 @@ public class MessageServiceImpl implements MessageService{
 			m.setQuestionId(message.getQuestionId());
 			code = codeRepository.findByCode("075");
 			m.setCode(code);
-			m.setRegDt(newDate);
-			m.setContent("곧 화상이 시작됩니다.");
+			m.setRegDt(new Date(System.currentTimeMillis()));
+			m.setContent(message.getContent());
 			messageRepository.save(m); 
 			
 			m.setId(RandomIdUtil.makeRandomId(13));

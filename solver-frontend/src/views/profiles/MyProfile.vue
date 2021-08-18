@@ -684,6 +684,7 @@ export default {
       accessToken: (state) => state.auth.accessToken,
       categoryList: (state) => state.auth.categoryList,
       userNickname: (state) => state.auth.userNickname,
+      pointUseTrigger: (state) => state.profiles.pointUseTrigger
     }),
     ...mapGetters(["isLoggedIn"]),
     groups() {
@@ -729,6 +730,9 @@ export default {
       this.editedCategory = this.userProfileInfo.favoriteFieldCodeList;
       this.followers = this.userProfileInfo.followers;
     },
+    pointUseTrigger() {
+      this.profileSetting()
+    }
   },
 };
 </script>
