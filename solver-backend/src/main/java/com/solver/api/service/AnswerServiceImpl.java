@@ -237,6 +237,36 @@ public class AnswerServiceImpl implements AnswerService{
 			return null;
 		}
 		
+		String questionId = question.getId();
+		
+		// 포인트 배당
+		List<Answer> list = answerRepository.findByQuestionIdOrderByRegDtAsc(questionId);
+		PointLog pointLog = new PointLog();
+		PointCode pointCode = null;
+		
+		pointCode = pointCodeRepository.findByPointCode("004");	
+		pointLog.setId(RandomIdUtil.makeRandomId(13));
+		pointLog.setRegDt(new Date(System.currentTimeMillis()));
+		pointLog.setPointCode(pointCode);
+		pointLog.setUser(answer.getUser());		
+		
+		pointLogRepository.save(pointLog);
+		
+		// 알림 배당 : 답변을 남긴 질문자에게 알림을 배당함
+		Notification notification = new Notification();
+		notification.setId(RandomIdUtil.makeRandomId(13));
+		notification.setQuestion(question);
+		notification.setRegDt(new Date(System.currentTimeMillis()));
+		
+		Code notiCode = codeRepository.findByCode("065");
+		notification.setCode(notiCode);
+		
+		Optional<Question> q = questionRepository.findById(questionId);
+		notification.setUser(answer.getUser());
+		
+		notificationRepository.save(notification);
+		
+		// 채택 상태 변경
 		Code questionType = new Code();
 		questionType = codeRepository.findByCode("040");
 		Code answerType = new Code();
