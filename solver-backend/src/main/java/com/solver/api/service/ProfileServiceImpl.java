@@ -1,17 +1,36 @@
 package com.solver.api.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Base64.Decoder;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
@@ -28,7 +47,6 @@ import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.conference.ConferenceLog;
 import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.question.BookmarkQuestion;
-import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.FavoriteUser;
 import com.solver.db.entity.user.Notification;
@@ -100,6 +118,20 @@ public class ProfileServiceImpl implements ProfileService{
 
 	@Autowired
 	CodeRepository codeRepository;
+	
+	private AmazonS3 s3Client;
+	
+	private String s3Url = "https://solver-bucket.s3.ap-northeast-2.amazonaws.com/";
+	
+    @PostConstruct          
+    public void setS3Client(){
+        AWSCredentials credentials = new BasicAWSCredentials("AKIARMPAI5JURFO5RVG5", "2VNZUcbCHPFewyyOxPLZndakCtAEO0ZdvvaRHYww");
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .build();
+    }
 
 	/* 마이페이지 정보를 불러 올 때 그룹이나 관심분야는 그냥 이름만 불러오나 - o
 	 * 관심분야는 sub category 기준인가 - o
@@ -525,5 +557,54 @@ public class ProfileServiceImpl implements ProfileService{
 		}
 		
 		return user.getFavoriteUser();
+	}
+
+	@Override
+	public String updateProfileImg(MultipartFile imgFile, String accessToken, HttpServletResponse response) {
+		String token = accessToken.split(" ")[1];
+
+		TokenResponse tokenResponse = new TokenResponse();
+
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+
+		if (tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		if (user == null) {
+			return null;
+		}
+		
+		byte[] bytes = null;
+		
+		try {
+			bytes = imgFile.getBytes();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		UUID uuid = UUID.randomUUID();
+
+		String saveFilename = uuid + ".png";
+		
+		System.out.println(imgFile.getContentType());
+		ObjectMetadata objectMetadata = new ObjectMetadata();
+		objectMetadata.setContentType(imgFile.getContentType());
+		
+		objectMetadata.setContentLength(bytes.length);
+		ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
+		
+		s3Client.putObject(new PutObjectRequest("solver-bucket", saveFilename, byteArrayIs, objectMetadata)
+				.withCannedAcl(CannedAccessControlList.PublicRead)); // public read 권한 주기
+		
+		user.setProfileUrl(s3Url+saveFilename);
+		
+		userRepository.save(user);	
+		
+		return s3Url+saveFilename;
 	}
 }

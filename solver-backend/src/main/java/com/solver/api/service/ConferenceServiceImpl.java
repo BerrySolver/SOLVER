@@ -222,7 +222,6 @@ public class ConferenceServiceImpl implements ConferenceService {
 	@Override
 	public int recordConference(String accessToken, String questionId, HttpServletResponse response,
 			ConferenceRecordPostReq conferenceRecordPostReq) {
-		/* 회의 주관자인 경우의 예외처리가 필요할까? */
 		String token = accessToken.split(" ")[1];
 
 		TokenResponse tokenResponse = new TokenResponse();

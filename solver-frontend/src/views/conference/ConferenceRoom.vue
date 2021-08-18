@@ -1,72 +1,50 @@
 <template>
   <div id="container">
     <div id="wrapper">
-      <!-- <div id="join" class="animate join">
-        <h1>Join a Room</h1>
-        <form accept-charset="UTF-8">
-          <p>
-            <input type="text" name="name" value="" id="name" placeholder="Username" required />
-          </p>
-          <p>
-            <input type="text" name="room" value="" id="roomName" placeholder="Room" required />
-          </p>
-          <p class="submit">
-            <input @click="clickRegister()" type="submit" name="commit" value="Join!" />
-          </p>
-        </form>
-      </div> -->
       <div id="room">
+        <div class="screen-buttons">
+          <div id="start" v-if="checkScreen()" class="screen-start-button" @click="clickSt()">
+            <img
+              style="width:23px; margin: 10px 0 3px 0;"
+              src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+            />
+          </div>
+          <div id="stop" v-if="isMyScreen" class="screen-stop-button" @click="clickSp()">
+            <img
+              style="width:23px; margin: 10px 0 3px 0;"
+              src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
+            />
+          </div>
+          <div v-if="isRecording" @click="stopAnswerRecord()" class="conference-record-stop-btn">
+            <img
+              style="width:23px; "
+              src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
+            />
+          </div>
+          <div
+            v-else-if="isAnswerUser"
+            @click="startAnswerRecord()"
+            class="conference-record-start-btn"
+          >
+            <img
+              style="width:23px; "
+              src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
+            />
+          </div>
+          <div class="conference-finish-btn" @click="clickLeaveRoom()">
+            <img
+              style="width: 12px;"
+              src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
+            />
+          </div>
+        </div>
         <h2 id="room-header"></h2>
         <div id="videoList">
-          <div id="participants">
-            <!-- <div id="video1"></div>
-          <div id="video2"></div> -->
-          </div>
-          <!-- <div id="screens"></div> -->
+          <div id="participants"></div>
           <div id="mainVideo"></div>
         </div>
       </div>
-      <div class="screen-buttons">
-        <div id="start" v-if="checkScreen()" class="screen-start-button" @click="clickSt()">
-          <img
-            style="width:23px; margin: 10px 0 3px 0;"
-            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
-          />
-        </div>
-        <div id="stop" v-if="isMyScreen" class="screen-stop-button" @click="clickSp()">
-          <img
-            style="width:23px; margin: 10px 0 3px 0;"
-            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
-          />
-        </div>
-        <div v-if="isRecording" @click="stopAnswerRecord()" class="conference-record-stop-btn">
-          <img
-            style="width:23px; "
-            src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
-          />
-        </div>
-        <div
-          v-else-if="isAnswerUser"
-          @click="startAnswerRecord()"
-          class="conference-record-start-btn"
-        >
-          <img
-            style="width:23px; "
-            src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
-          />
-        </div>
-        <div class="conference-finish-btn" @click="clickLeaveRoom()">
-          <img
-            style="width: 12px;"
-            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
-          />
-        </div>
-      </div>
-      <!-- <div>
-        <input type="button" id="button-leave" @click="clickLeaveRoom()" value="Leave room" />
-      </div> -->
     </div>
-    <button id="stopBtn" @click="clickStop()">Stop</button>
   </div>
 </template>
 
@@ -77,15 +55,6 @@ import API from "@/API.js";
 import { mapState, mapGetters } from "vuex";
 import ConferenceEvaluateModal from "./ConferenceEvaluateModal.vue";
 import ConferenceExitModal from "./ConferenceExitModal.vue";
-
-function clStart() {
-  console.log(isMySharing);
-  startSharing();
-}
-function clStop(e) {
-  console.log(e);
-  stopSharing();
-}
 
 async function startSharing() {
   if (!name.startsWith("scree&")) name = "scree&" + name;
@@ -106,7 +75,7 @@ async function startSharing() {
 function stopSharing() {
   sendMessage({
     id: "stopShare",
-    name: myName,
+    name: screenName,
   });
 
   name = myName;
@@ -117,11 +86,11 @@ var ws = new WebSocket("wss://localhost:8443/groupcall");
 var participants = {};
 var name;
 var room;
+var screenName;
 var opponentName;
 var myName;
 var isSharing = false;
 var isMySharing = false;
-// var participantsCount = 1;
 
 ws.onmessage = function(message) {
   var parsedMessage = JSON.parse(message.data);
@@ -165,17 +134,9 @@ ws.onmessage = function(message) {
 };
 
 function register() {
-  // name = document.getElementById("name").value;
-  // room = document.getElementById("roomName").value;
-
-  console.log(name + " " + room);
-
-  //나중에 지울 부분
   myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
-  // document.getElementById("join").style.display = "none";
-  // document.getElementById("room").style.display = "block";
 
   var message = {
     id: "joinRoom",
@@ -235,7 +196,6 @@ function onExistingParticipants(msg) {
   if (name.startsWith("scree&")) {
     isSharing = true;
     var participant = new Participant(name);
-    console.log(participant);
     participants[name] = participant;
     var video = participant.getVideoElement();
     var audio = "";
@@ -268,37 +228,17 @@ function onExistingParticipants(msg) {
         },
       },
       onicecandidate: participant.onIceCandidate.bind(participant),
-      // sendSource: "screen",
     };
   }
-  console.log("sendOnly");
-  stop(100000000);
   participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
     if (error) {
-      console.log(error);
       return console.error(error);
     }
     this.generateOffer(participant.offerToReceiveVideo.bind(participant));
   });
 
-  console.log(msg.data);
-
   msg.data.forEach(receiveVideo);
 }
-
-// function leaveRoom() {
-//   console.log("leaveRoom");
-//   sendMessage({
-//     id: "leaveRoom",
-//   });
-
-//   for (var key in participants) {
-//     participants[key].dispose();
-//   }
-
-//   document.getElementById("join").style.display = "block";
-//   document.getElementById("room").style.display = "none";
-// }
 
 function receiveVideo(sender) {
   console.log("sender: " + sender);
@@ -409,7 +349,6 @@ function Participant(name) {
     container.onclick = switchContainerClass;
     document.getElementById("participants").appendChild(container);
 
-    // participantsCount++;
     video.autoplay = true;
     video.controls = false;
   }
@@ -488,27 +427,8 @@ export default {
   },
   props: ["questionId", "questionUserNickname"],
   methods: {
-    // insertConferenceLog() {
-    //   axios({
-    //     //conference id 값은 테스트용
-    //     url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
-    //     method: "post",
-    //     data: {
-    //       type: "030",
-    //     },
-    //     headers: { Authorization: "Bearer " + this.accessToken },
-    //   })
-    //     .then((res) => {
-    //       console.log(res);
-    //       this.goQuestionDetail(res.data.questionId);
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // },
     entranceConferenceLog() {
       axios({
-        //conference id 값은 테스트용
         url: API.URL + API.ROUTES.conferenceLog,
         method: "post",
         data: {
@@ -525,7 +445,6 @@ export default {
     },
     exitConferenceLog() {
       axios({
-        //conference id 값은 테스트용
         url: API.URL + API.ROUTES.conferenceLog,
         method: "post",
         data: {
@@ -544,28 +463,25 @@ export default {
       register();
     },
     clickLeaveRoom() {
-      // if (this.isRecording) this.stopAnswerRecord();
-      // leaveRoom();
+      if (this.isRecording) this.stopAnswerRecord();
 
       if (this.isAnswerUser) this.conferenceExit();
       else this.conferenceEvaluate();
-
-      // if (this.isAnswerUser) this.exitConferenceLog();
     },
     clickSt() {
       if (isSharing) return;
-      // if (participantsCount < 2) return;
+
       this.isMyScreen = true;
       isMySharing = true;
       isSharing = true;
-      clStart();
+      startSharing();
     },
     clickSp() {
       if (!isMySharing) return;
       this.isMyScreen = false;
       isMySharing = false;
       isSharing = false;
-      clStop();
+      stopSharing();
     },
     checkScreen() {
       if (isSharing && !this.isMyScreen) return false;
@@ -703,42 +619,26 @@ export default {
   mounted() {
     myName = this.getUserNickname;
     name = this.getUserNickname;
-    console.log(this.getUserNickname);
     room = this.questionId;
-    console.log(this.questionId);
-    // room = "testRoom";
 
-    console.log(this.questionUserNickname);
-
-    if (this.questionUserNickname != this.getUserNickname) {
+    if (room != null && this.questionUserNickname != this.getUserNickname) {
       this.isAnswerUser = true;
       this.entranceConferenceLog();
     }
 
-    // axios({
-    //   //conference id 값은 테스트용
-    //   url: API.URL + `questions/${this.questionId}/info`,
-    //   method: "get",
-    //   headers: { Authorization: "Bearer " + this.accessToken },
-    // })
-    //   .then((res) => {
-    //     console.log(res);
-    //     const questionUserId = res.data.userId;
-    //     if (questionUserId != this.getUserNickname) {
-    //       this.isAnswerUser = true;
-    //       this.entranceConferenceLog();
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+    if (room == null) location.href = "/";
+
+    const $this = this;
+    window.onpopstate = function() {
+      window.history.go(0);
+    };
+
+    window.addEventListener("beforeunload", () => {
+      if ($this.isAnswerUser) $this.exitConferenceLog();
+      if ($this.isRecording) $this.stopAnswerRecord();
+    });
 
     this.clickRegister();
-  },
-  beforeDestroy() {
-    if (this.isAnswerUser) this.exitConferenceLog();
-    if (this.isRecording) this.stopAnswerRecord();
-    // if(this.isMySharing)
   },
 };
 </script>
@@ -938,7 +838,10 @@ input[type="submit"] {
 }
 
 #wrapper {
-  background-color: #b5c7d3;
-  min-height: 1900px;
+  min-height: 1400px;
+}
+
+#router {
+  background: linear-gradient(135deg, #658dc6, #b5c7d3);
 }
 </style>
