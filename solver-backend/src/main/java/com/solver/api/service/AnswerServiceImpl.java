@@ -215,4 +215,38 @@ public class AnswerServiceImpl implements AnswerService{
 		return answerList;
 	}
 
+	@Override
+	public Optional<Answer> getById(String answerId) {
+		Optional<Answer> answer = answerRepository.findById(answerId);
+		
+		return answer;
+	}
+
+	@Override
+	public Answer selectAnswer(String token, Question question, Answer answer) {
+		TokenResponse tokenResponse = new TokenResponse();
+		
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+		// 유저 인증에서 오류가 있는 경우
+		if (user == null) {
+			return null;
+		}
+		
+		Code questionType = new Code();
+		questionType = codeRepository.findByCode("040");
+		Code answerType = new Code();
+		answerType = codeRepository.findByCode("052");
+		
+		question.setCode(questionType);
+		answer.setCode(answerType);
+		
+		questionRepository.save(question);
+		return answerRepository.save(answer);
+	}
+
 }

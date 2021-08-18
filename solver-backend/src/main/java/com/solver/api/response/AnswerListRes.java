@@ -7,6 +7,7 @@ import java.util.List;
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.FavoriteAnswer;
+import com.solver.db.entity.code.Code;
 import com.solver.db.entity.user.User;
 
 import io.swagger.annotations.ApiModel;
@@ -27,11 +28,13 @@ public class AnswerListRes extends BaseResponse{
 		for (Answer answer : answerList) {
 			AnswerInfo answerInfo = new AnswerInfo();
 			User user = answer.getUser();
+			Code type = answer.getCode();
 			
 			answerInfo.setAnswerId(answer.getId());
 			answerInfo.setContent(answer.getContent());
 			answerInfo.setUserId(user.getId());
 			answerInfo.setNickname(user.getNickname());
+			answerInfo.setType(type.getCodeName());
 			answerInfo.setProfileUrl(user.getProfileUrl());
 			answerInfo.setRegDt(answer.getRegDt());
 			answerInfo.setLikeCount(answer.getFavoriteAnswer().size());
@@ -74,6 +77,7 @@ class AnswerInfo{
 	private String nickname;
 	private String profileUrl;
 	private String content;
+	private String type;
 	private Date regDt;
 	private int likeCount;
 	private int commentCount;
