@@ -140,10 +140,10 @@
               <div class="subheading">베리 포인트</div>
               <!-- ingroup의 last child -->
               <div class="d-inline-block interval">
-                <span>누적</span>
-                <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
-                <span v-if="isLogin">잔여</span>
+                <span v-if="isLogin">누적</span>
                 <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span>
+                <span>잔여</span>
+                <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
                 <span v-if="isLogin"><button class="point-button" style="margin-right: 10px;" @click="openPointLog">내역</button></span>
                 <span v-if="isLogin"><button class="point-button" @click="openPaySolver">사용</button></span>
               </div>

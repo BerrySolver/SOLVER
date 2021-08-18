@@ -210,6 +210,10 @@ export default {
     margin: 20px;
   }
 
+  .form-check-label {
+    transform: skew(-0.1deg);
+  }
+
   .pay-solver-modal {
     padding: 40px 50px;
   }
