@@ -4,6 +4,7 @@ import router from "@/router";
 
 const state = {
   query: null,
+  questionChangeTrigger: false,
   answerChangeTrigger: false,
   commentCreateTrigger: false,
   commentDeleteTrigger: false,
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_QUESTION_ID: (state, questionId) => {
     state.questionId = questionId;
+  },
+  SET_QUESTION_CHANGE_TRIGGER: (state) => {
+    state.questionChangeTrigger = !state.questionChangeTrigger;
   },
   SET_ANSWER_CHANGE_TRIGGER: (state) => {
     state.answerChangeTrigger = !state.answerChangeTrigger;
@@ -60,6 +64,9 @@ const actions = {
         questionId: questionId,
       },
     });
+  },
+  triggerQuestionReload({ commit }) {
+    commit("SET_QUESTION_CHANGE_TRIGGER");
   },
   triggerAnswerReload({ commit }) {
     commit("SET_ANSWER_CHANGE_TRIGGER");

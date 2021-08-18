@@ -143,7 +143,7 @@ public class QuestionServiceImpl implements QuestionService{
 		Code mainCategory = new Code();
 		Category subCategory = new Category();
 		
-		type = codeRepository.findByCode("042");
+		type = codeRepository.findByCode("041");
 		mainCategory = codeRepository.findByCode(questionPostReq.getMainCategory());
 		subCategory = categoryRepository.findBySubCategoryCode(questionPostReq.getSubCategory());
 		
