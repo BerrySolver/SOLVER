@@ -71,7 +71,8 @@ export default {
         },
       })
         .then(() => {
-          router.push({ path: "/" });
+          location.href = "/";
+          // router.push({ redirect: "/" });
         })
         .catch((err) => {
           console.log(err);
@@ -100,7 +101,8 @@ export default {
     },
     finishiConference() {
       this.$emit("close");
-      router.push({ path: "/" });
+      location.href = "/";
+      // router.push({ redirect: "/" });
     },
   },
   computed: {

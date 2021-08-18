@@ -76,6 +76,7 @@ const routes = [
   // conference
   { path: "/conference", name: "Conference", component: Conference, props: true },
   { path: "/conferenceTest", name: "ConferenceTest", component: ConferenceTest },
+  { path: "/conferenceFinish", name: "conferenceFinish", redirect: { name: "Main" } },
 ];
 
 const router = new VueRouter({
