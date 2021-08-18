@@ -138,7 +138,7 @@ export default {
 }
 </style>
 
-<style scopde>
+<style scoped>
 #customRange3 {
   position: absolute;
   display: inline-block;
