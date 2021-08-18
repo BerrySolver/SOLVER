@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-question-tab">
     <!-- 질문 목록 소제목 -->
     <div style="display:flex; align-items:center; ">
       <div class="small-box"></div>
@@ -68,4 +68,25 @@ export default {
   color: white;
   cursor: pointer;
 }
+
+.my-question-tab {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.my-question-tab::-webkit-scrollbar {
+  width: 10px; /*스크롤바의 너비*/
+}
+
+.my-question-tab::-webkit-scrollbar-thumb {
+  background-color: #B5C7D3; /*스크롤바의 색상*/
+  border: 4px solid transparent;
+  border-radius: 50px;
+}
+
+.my-question-tab::-webkit-scrollbar-track {
+  background-color: rgb(245, 245, 245); 
+}
+
 </style>
