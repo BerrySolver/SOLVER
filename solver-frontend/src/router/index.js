@@ -74,7 +74,7 @@ const routes = [
   { path: "/reports", name: "Reports", component: Reports },
 
   // conference
-  { path: "/conference", name: "Conference", component: Conference },
+  { path: "/conference", name: "Conference", component: Conference, props: true },
   { path: "/conferenceTest", name: "ConferenceTest", component: ConferenceTest },
 ];
 

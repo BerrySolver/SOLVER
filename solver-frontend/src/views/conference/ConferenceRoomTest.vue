@@ -680,7 +680,9 @@ export default {
 
       return hasDesktop || hasVoice ? destination.stream.getAudioTracks() : [];
     },
-    pushToConference() {},
+    pushToConference() {
+      this.$router.push({ name: "Conference", params: { questionId: "1CYdWWZb3VtcY" } });
+    },
     getReservationList() {
       axios({
         //conference id 값은 테스트용
@@ -702,26 +704,26 @@ export default {
     // room = this.questionId;
     room = "testRoom";
 
-    axios({
-      //conference id 값은 테스트용
-      url: API.URL + "/questions/1CYdWWZb3VtcY/info",
-      method: "post",
-      data: {
-        type: "030",
-      },
-      headers: { Authorization: "Bearer " + this.accessToken },
-    })
-      .then((res) => {
-        console.log(res);
-        const questionUserId = res.data.userId;
-        if (questionUserId != this.getUserNickname()) {
-          this.isAnswerUser = true;
-          this.entranceConferenceLog();
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    // axios({
+    //   //conference id 값은 테스트용
+    //   url: API.URL + "questions/1CYdWWZb3VtcY/info",
+    //   method: "post",
+    //   data: {
+    //     type: "030",
+    //   },
+    //   headers: { Authorization: "Bearer " + this.accessToken },
+    // })
+    //   .then((res) => {
+    //     console.log(res);
+    //     const questionUserId = res.data.userId;
+    //     if (questionUserId != this.getUserNickname()) {
+    //       this.isAnswerUser = true;
+    //       this.entranceConferenceLog();
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
   },
   beforeDestroy() {
     // if(this.isMySharing)

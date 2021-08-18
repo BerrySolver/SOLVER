@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <div id="wrapper">
-      <div id="join" class="animate join">
+      <!-- <div id="join" class="animate join">
         <h1>Join a Room</h1>
         <form accept-charset="UTF-8">
           <p>
@@ -14,8 +14,8 @@
             <input @click="clickRegister()" type="submit" name="commit" value="Join!" />
           </p>
         </form>
-      </div>
-      <div id="room" style="display: none;">
+      </div> -->
+      <div id="room">
         <h2 id="room-header"></h2>
         <div id="videoList">
           <div id="participants">
@@ -160,8 +160,8 @@ ws.onmessage = function(message) {
 };
 
 function register() {
-  name = document.getElementById("name").value;
-  room = document.getElementById("roomName").value;
+  // name = document.getElementById("name").value;
+  // room = document.getElementById("roomName").value;
 
   console.log(name + " " + room);
 
@@ -169,8 +169,8 @@ function register() {
   myName = name;
 
   document.getElementById("room-header").innerText = "ROOM " + room;
-  document.getElementById("join").style.display = "none";
-  document.getElementById("room").style.display = "block";
+  // document.getElementById("join").style.display = "none";
+  // document.getElementById("room").style.display = "block";
 
   var message = {
     id: "joinRoom",
@@ -681,22 +681,21 @@ export default {
   mounted() {
     myName = this.getUserNickname;
     name = this.getUserNickname;
-    // room = this.questionId;
-    room = "testRoom";
+    console.log(this.getUserNickname);
+    room = this.questionId;
+    console.log(this.questionId);
+    // room = "testRoom";
 
     axios({
       //conference id 값은 테스트용
-      url: API.URL + "/questions/1CYdWWZb3VtcY/info",
-      method: "post",
-      data: {
-        type: "030",
-      },
+      url: API.URL + "questions/1CYdWWZb3VtcY/info",
+      method: "get",
       headers: { Authorization: "Bearer " + this.accessToken },
     })
       .then((res) => {
         console.log(res);
         const questionUserId = res.data.userId;
-        if (questionUserId != this.getUserNickname()) {
+        if (questionUserId != this.getUserNickname) {
           this.isAnswerUser = true;
           this.entranceConferenceLog();
         }
@@ -704,6 +703,8 @@ export default {
       .catch((e) => {
         console.log(e);
       });
+
+    this.clickRegister();
   },
   beforeDestroy() {
     // if(this.isMySharing)
