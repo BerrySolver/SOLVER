@@ -170,8 +170,8 @@
                     </div>
 
                     <!-- TYPE 075 : 화상회의가 곧 진행될 것을 알림 -->
-                    <div v-if="message.type == '075'" @click="fromNotiToQuestion( message.questionId )">
-                      <div class="video-notification-title">
+                    <div v-if="message.type == '075'">
+                      <div class="video-notification-title" @click="fromNotiToQuestion( message.questionId )">
                         <span class="video-notification-datetime">{{ message.sendNickName }}</span>
                         <span class="one">님과의 화상회의가 곧 </span>
                         <span class="video-notification-highlight">시작</span>
@@ -179,7 +179,7 @@
                       </div>                      
 
                       <div class="video-enter">
-                        <button @click="pushToConference()" class="video-enter-button">입장하기</button>
+                        <button @click="pushToConference(message.questionId)" class="video-enter-button">입장하기</button>
                       </div>
                       <hr class="notification-line">
                     </div>
@@ -318,30 +318,29 @@ export default {
             height : '250px',
             draggable: false,
         });
-    }
-  },
+    },
 
-  // 화상회의 사이트로 이동
-  pushToConference() {
-    axios({
-      //conference id 값은 테스트용
-      url: API.URL + `questions/5deK0GDhDpdZG/info`,
-      method: "get",
-      headers: { Authorization: "Bearer " + this.accessToken },
-    })
-      .then((res) => {
-        console.log(res);
-        const questionUserNickname = res.data.nickname;
-        this.$router.push({
-          name: "Conference",
-          params: { questionId: "5deK0GDhDpdZG", questionUserNickname: questionUserNickname },
-        });
+    // 화상회의 사이트로 이동
+    pushToConference(questionId) {
+      axios({
+        //conference id 값은 테스트용
+        url: API.URL + `questions/${questionId}/info`,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken },
       })
-      .catch((e) => {
-        console.log(e);
-      });
+        .then((res) => {
+          console.log(res);
+          const questionUserNickname = res.data.nickname;
+          this.$router.push({
+            name: "Conference",
+            params: { questionId: questionId, questionUserNickname: questionUserNickname },
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
-
 };
 </script>
 
