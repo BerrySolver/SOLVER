@@ -22,15 +22,14 @@ export default {
     editProfile: "profiles",
     editProfileCalendar: "profiles/time-table",
 
-
     // 알림
     notificationsAlarm: "notifications",
-    notificationReceivedMessage : "messages/receptions",
+    notificationReceivedMessage: "messages/receptions",
 
     // 솔버 결제
     paySolver: "points/pay",
-    
+
     //화상회의
-    conferenceLog: "conferences",
+    conferenceLog: "conferences/log",
   },
 };

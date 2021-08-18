@@ -84,7 +84,7 @@ public class ConferenceController {
 	 * 
 	 * 상태 변경은 public으로 변환만 하는 건가?
 	 * */
-	@PostMapping(value="/{conferenceId}")
+	@PostMapping(value="/log")
 	@ApiOperation(value = "화상 회의 상태 변경", notes = "화상 회의 공개여부 상태 변경") 
     @ApiResponses({
         @ApiResponse(code = 201, message = "상태 변경 성공"),
@@ -93,11 +93,10 @@ public class ConferenceController {
 	public ResponseEntity<? extends BaseResponse> createConferenceLog(
 			HttpServletResponse response, 
 			@ApiIgnore @RequestHeader("Authorization") String accessToken,
-			@PathVariable String conferenceId,
 			@RequestBody ConferenceLogPostReq conferenceLogPostReq
 			) 
 	{
-		int flag = conferenceLogService.createConferenceLog(accessToken, conferenceId, response, conferenceLogPostReq);
+		int flag = conferenceLogService.createConferenceLog(accessToken, response, conferenceLogPostReq);
 		
 		if(flag != 3) {
 			return ResponseEntity.status(409).body(BaseResponse.of(409, "상태 변경 실패"));
