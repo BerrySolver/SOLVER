@@ -689,7 +689,7 @@ export default {
     this.isLoginUser();
     setTimeout(() => {
       this.isLoaded = true;
-    }, 300);
+    }, 500);
   },
   watch: {
     userProfileInfo() {
