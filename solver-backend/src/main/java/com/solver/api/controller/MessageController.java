@@ -1,5 +1,7 @@
 package com.solver.api.controller;
 
+import java.text.ParseException;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.solver.api.request.MessageConferenceCreatePostReq;
+import com.solver.api.request.MessageConferenceResultPostReq;
 import com.solver.api.request.QuestionPostReq;
 import com.solver.api.response.MessageListRes;
 import com.solver.api.service.MessageService;
@@ -85,4 +88,27 @@ public class MessageController {
 		
 		return ResponseEntity.status(200).body(BaseResponse.of(200, "요청성공"));
 	}
+	
+
+	@PostMapping("/result")
+	@ApiOperation(value = " ", notes = " ") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "  등록 성공"),
+        @ApiResponse(code = 409, message = "  등록 실패")
+    })
+	public ResponseEntity<? extends BaseResponse> setConferenceResult(
+			HttpServletResponse response, 
+			@RequestBody @ApiParam(value=" ", required=true) MessageConferenceResultPostReq messagePostReq,
+			@ApiIgnore @RequestHeader("Authorization") String accessToken
+			)
+	{
+		try {
+			messageService.resultMessage(messagePostReq);
+		} catch (ParseException e) {
+			return ResponseEntity.status(409).body(BaseResponse.of(409, "요청실패"));
+		}
+		
+		return ResponseEntity.status(200).body(BaseResponse.of(200, "요청성공"));
+	}
+
 }
