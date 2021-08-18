@@ -3,18 +3,20 @@
     <div v-if="!isSuccess">
       <h3 class="conference-rejcet-title">요청 거절</h3>
       <br>
-      <input type="email" class="form-control" placeholder="거절 사유를 기재해주세요." v-model="content">
+      <input type="email" class="form-control font-break" placeholder="거절 사유를 기재해주세요." v-model="content">
       <div class="conference-rejcet-button-bar">
-        <button type="button" class="btn btn-submit" @click="NOButton()">거절</button>
-        <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소</button>
+        <button type="button" class="btn btn-submit font-break" @click="NOButton()">거절</button>
+        <button type="button" class="btn btn-outline-cancel font-break" @click="$emit('close')">취소</button>
       </div>
     </div>
     <div v-else>
-      <h4>정상적으로 거절되었습니다.</h4>
+      <h4 class="font-break">정상적으로 거절되었습니다.</h4>
       <br>
-      혹시 더이상 답변할 수 없는 시간이라면, 마이프로필에서 시간 수정하세요!
+      <div class="font-break">
+        혹시 답변할 수 없는 시간이라면, 마이프로필에서 화상 가능 시간을 수정하세요!
+      </div>
       <div class="reject-result-button-bar">
-        <button @click="$emit('close')" class="btn request-check-button">닫기</button>
+        <button @click="$emit('close')" class="btn request-check-button font-break">닫기</button>
       </div>
     </div>
   </div>
