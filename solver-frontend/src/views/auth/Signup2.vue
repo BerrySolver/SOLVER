@@ -1,86 +1,69 @@
 <template>
-  <!-- <div>
-    <div>
-      <ul>
-        <h3>1. 관심있는 분야를 골라주세요.</h3>
-        <li v-for="(Category, idx) in categoryList" :key="idx">
-        </li>
-      </ul>
-    </div>
-    <div>
-      <ul>
-        <h3>2. 가능하신 요일과 시간을 골라주세요.</h3> 
-      </ul>
-    </div>
-  </div> -->
-
   <div class="background">
+
+    <!-- 상단 bar -->
     <div class="nav-for-signup">
-      <div class="row pt-3">
-        <div class="col-2">
-          <RouterLink :to="{ name: 'Signup1' }" style="text-decoration:none; color:#fff"
-            >← 돌아가기</RouterLink
-          >
-        </div>
-        <div class="col-5"></div>
-        <div class="col-5">
-          이미 솔버이신가요?
-          <button class="ghost-button">
-            <RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff"
-              >LOGIN</RouterLink
-            >
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="logo"><img src="@/assets/logo.png" alt="logo" height="100px" /></div>
-
-    <div class="signup2 container">
-      <div class="content">SOLVER</div>
-      <div class="layout"></div>
-      <div class="row">
-        <ul class="col" style="color:#fff; list-style:none;padding-left:0px;">
-          <div>관심있는 분야를 골라주세요</div>
-          <div>( {{ selectedCode.length }} / 3 )</div>
-          <div class="mt-2 row">
-            <div class="col-1"></div>
-            <div class="col">
-              <li v-for="(main, index) in mainCategory" v-bind:key="main.code" @click="changeIndex(index)">
-                <button class=" mb-2 category-btn">{{ main.codeName }}</button>
-              </li>
-              
-            </div>
-            <div class="col">
-              <li v-for="(sub) in subCategory" v-bind:key="sub.subCategoryCode" @click="selectCategory(sub.subCategoryCode)">
-                <button v-bind:class="{selected:isSelectedCategory(sub.subCategoryCode)}" class="mb-2 category-btn">{{ sub.subCategoryName }}</button>
-              </li>
-            </div>
-            <div class="col-1"></div>
-          </div>
-        </ul>
-        <div class="col" style="color:#fff">
-          <div>화상 응답이 가능한 요일과 시간을 골라주세요</div>
-          <div class="m-4">
-            <button v-bind:class="{selected: !isWeekend}" class="time-btn" @click="selectWeekday()">평일</button>
-            <button v-bind:class="{selected: isWeekend}" class="time-btn" @click="selectWeekend()">주말</button>
-          </div>
-          <div class="col">
-            <span v-for="(time, index) in timeList" v-bind:key="time">
-              <button v-bind:class="{selected:isSelectedTime(time)}" class="mb-2 time-btn" @click="selectTime(time)">{{time}}</button>
-              <div v-if="(index+1)%8 == 0"></div>
-            </span>
-          </div>
-        </div>
+      <div>
+        <RouterLink :to="{ name: 'Signup1' }" style="text-decoration:none; color:#fff">← 돌아가기</RouterLink>
       </div>
       <div>
-        <button
-          class="ghost-round m-4"
-          @click="clickSignupBtn($route.params.nickname)"
-        >
-          SOLVER 이용하기
+        이미 솔버이신가요?
+        <button class="ghost-button">
+          <RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff">LOGIN</RouterLink>
         </button>
       </div>
+    </div>
+
+    <!-- 로고 -->
+    <div class="logo"><img src="@/assets/logo.png" alt="logo" height="100px" /></div>
+    <div class="content">SOLVER</div>
+    
+
+    <div class="signup-main">
+      <!-- 왼쪽 -->
+      <div class="left">
+        <!-- 왼쪽 질문 -->
+        <div class="signup-question">1. 관심있는 분야를 골라주세요.</div>
+        <div>( {{ selectedCode.length }} / 3 )</div>
+
+        <div class="left-sub">
+          <div class="sub-1">
+            <li v-for="(main, index) in mainCategory" v-bind:key="main.code" @click="changeIndex(index)">
+              <button class=" mb-2 category-btn">{{ main.codeName }}</button>
+            </li>
+          </div>
+          
+          <div class="sub-2">
+            <li v-for="(sub) in subCategory" v-bind:key="sub.subCategoryCode" @click="selectCategory(sub.subCategoryCode)">
+              <button v-bind:class="{selected:isSelectedCategory(sub.subCategoryCode)}" class="mb-2 category-btn">{{ sub.subCategoryName }}</button>
+            </li>
+          </div>
+        </div>
+      </div>
+
+      <!-- 오른쪽 -->
+      <div class="right">
+        <!-- 오른쪽 질문 -->
+        <div class="signup-question">2. 화상 응답이 가능한 요일과 시간을 골라주세요.</div>
+        <div class="m-4">
+          <button v-bind:class="{selected: !isWeekend}" class="time-btn" @click="selectWeekday()">평일</button>
+          <button v-bind:class="{selected: isWeekend}" class="time-btn" @click="selectWeekend()">주말</button>
+        </div>
+        <div>
+          <span v-for="(time, index) in timeList" v-bind:key="time">
+            <button v-bind:class="{selected:isSelectedTime(time)}" class="mb-2 time-btn" @click="selectTime(time)">{{time}}</button>
+            <div v-if="(index+1)%8 == 0"></div>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button
+        class="ghost-round"
+        @click="clickSignupBtn($route.params.nickname)"
+      >
+        SOLVER 이용하기
+      </button>
     </div>
   </div>
 </template>
@@ -233,59 +216,16 @@ export default {
     });
   },
   mounted() {
-  },
+    },
 };
 </script>
 
 <style>
 .background {
   background: linear-gradient(135deg, #658dc6, #b5c7d3);
-  height: 100vh;
-  width: 100vw;
-}
-
- .category-btn{
-  cursor: pointer;
-  width: 200px;
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  color: rgba(255, 255, 255, 0.65);
-  -webkit-align-self: flex-end;
-  -ms-flex-item-align: end;
-  align-self: flex-end;
-  margin-left: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
- }
-
-.time-btn{
-  cursor: pointer;
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  color: rgba(255, 255, 255, 0.65);
-  -webkit-align-self: flex-end;
-  -ms-flex-item-align: end;
-  align-self: flex-end;
-  margin-left: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
 }
 
 .content {
-  padding-left: 0;
-  padding-right: 0;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-flow: column;
-  -ms-flex-flow: column;
-  flex-flow: column;
-  z-index: 5;
   font-weight: 100;
   text-align: center;
   font-size: 30px;
@@ -293,17 +233,44 @@ export default {
   color: #fff;
 }
 
+.category-btn{
+  cursor: pointer;
+  width: 200px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65);
+  /* -webkit-align-self: flex-end;
+  -ms-flex-item-align: end;
+  align-self: flex-end; */
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.time-btn{
+  cursor: pointer;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65);
+  /* -webkit-align-self: flex-end;
+  -ms-flex-item-align: end;
+  align-self: flex-end; */
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+
 .nav-for-signup {
-  height: 10vh;
   color: #fff;
-}
-
-input {
-  border: none;
-}
-
-.layout {
-  height: 5vh;
+  display: flex;
+  height: 100px;
+  justify-content: space-between;
+  padding: 0px 50px 0px 50px;
 }
 
 .ghost-button {
@@ -349,8 +316,7 @@ input {
   font-size: 1.2rem;
   font-weight: 200;
   line-height: 2.5em;
-  margin-top: auto;
-  margin-bottom: 25px;
+  margin-top: 50px;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
@@ -366,58 +332,33 @@ button:focus {
   outline: none;
 }
 
-::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.65);
+.left {
+  color:#fff;
+  list-style:none;
+  padding-left:0px;
 }
 
-::-webkit-input-placeholder .input-line:focus + ::input-placeholder {
-  color: #fff;
+.left-sub {
+  display: grid;
+  gap: 50px;
+  grid-template-columns: 200px 200px;
+  margin: auto;
+  margin-top: 50px;
+  width: 500px;
 }
 
-.highlight {
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 400;
-  cursor: pointer;
-  transition: color 0.2s ease;
+.signup-main {
+  display: grid;
+  gap: 100px;
+  grid-template-columns: 500px 700px;
+  margin: auto;
+  width: 1200px;
 }
 
-.highlight:hover {
-  color: #fff;
-  transition: color 0.2s ease;
-}
-
-.input-line:focus {
-  outline: none;
-  border-color: #fff;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-
-.input-line {
-  background: none;
-  margin-bottom: 10px;
-  line-height: 2.4em;
-  color: #fff;
-  font-family: roboto;
-  font-weight: 300;
-  letter-spacing: 0px;
-  letter-spacing: 0.02rem;
-  font-size: 19px;
-  font-size: 1.2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.65);
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-
-.full-width {
-  width: 100%;
-}
-
-.input-fields {
-  margin-top: 25px;
-}
-
-.for-margin {
-  height: 5vh;
+.signup-question {
+  color: white;
+  font-size: 17px;
+  font-weight: 500;
+  margin-top: 50px;
 }
 </style>

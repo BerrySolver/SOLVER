@@ -1,36 +1,32 @@
 <template>
   <div class="background">
+
+    <!-- 상단 bar -->
     <div class="nav-for-signup">
-      <div class="row pt-3">
-        <div class="col-2">
-          <RouterLink :to="{ name: 'Main' }" style="text-decoration:none; color:#fff"
-            >← 돌아가기</RouterLink
-          >
-        </div>
-        <div class="col-5"></div>
-        <div class="col-5">
-          이미 솔버이신가요?
-          <button class="ghost-button">
-            <RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff"
-              >LOGIN</RouterLink
-            >
-          </button>
-        </div>
+      <div>
+        <RouterLink :to="{ name: 'Main' }" style="text-decoration:none; color:#fff">← 돌아가기</RouterLink>
+      </div>
+      <div>
+        이미 솔버이신가요?
+        <button class="ghost-button">
+          <RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff">LOGIN</RouterLink>
+        </button>
       </div>
     </div>
 
+    <!-- 로고 -->
     <div class="logo"><img src="@/assets/logo.png" alt="logo" height="100px" /></div>
-
-    <div class="window">
+    <div class="content">SOLVER</div>
+    
+    <div>
       <div class="content">
-        <div class="welcome">SOLVER</div>
-        <div class="row">
+        <div>
           <div class="input-fields">
             <!-- <input type="text" v-model="signup1Data.loginId" placeholder="아이디" class='input-line full-width'> -->
             <input
               type="text"
               v-model="signup1Data.nickname"
-              placeholder="닉네임"
+              placeholder=" 닉네임"
               class="input-line full-width"
               @input="checkSameNickname()"
             />
@@ -77,7 +73,7 @@ export default {
         password1: "",
         password2: "",
       },
-      msg: "닉네임을 입력해주세요",
+      msg: "닉네임을 입력해주세요.",
       isPossible: false,
     };
   },
@@ -103,26 +99,26 @@ export default {
         this.chekcValidation();
       })
       .catch((e) => {
-        this.msg = "이미 사용중인 닉네임입니다";
+        this.msg = "이미 사용중인 닉네임입니다.";
         this.isPossible = false;
         console.log(e);
       });
     },
     chekcValidation(){
       const validNickname = this.signup1Data.nickname;
-      const regExp1 = /[!?@#$%^&*():;+-=~{}<>_[]|"',.]/g;
+      const regExp1 = /[`~!@#$%^&*|\\\'\";:=+,.\/?]/gi;
       const regExp2 = /[ㄱ-ㅎㅏ-ㅣ]/g;
 
       if(regExp1.test(validNickname)){
-        this.msg = "특수문자를 사용할 수 없습니다";
+        this.msg = "특수문자를 사용할 수 없습니다.";
         this.isPossible = false;
       }
       else if(regExp2.test(validNickname)){
-        this.msg = "자음/모음을 사용할 수 없습니다";
+        this.msg = "자음/모음만 사용할 수 없습니다.";
         this.isPossible = false;
       }
       if(validNickname == ""){
-        this.msg = "닉네임을 입력해주세요";
+        this.msg = "닉네임을 입력해주세요.";
         this.isPossible = false;
       }
     },
@@ -255,13 +251,13 @@ button:focus {
   margin-bottom: 10px;
   line-height: 2.4em;
   color: #fff;
-  font-family: roboto;
+  /* font-family: roboto; */
   font-weight: 300;
   letter-spacing: 0px;
   letter-spacing: 0.02rem;
-  font-size: 19px;
-  font-size: 1.2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+  font-size: 15px;
+  border: 1px solid white;
+  /* border-bottom: 10px solid rgba(255, 255, 255, 0.65); */
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
@@ -271,7 +267,7 @@ button:focus {
 }
 
 .input-fields {
-  margin-top: 25px;
+  margin-top: 100px;
 }
 
 .content {
@@ -296,13 +292,6 @@ button:focus {
   letter-spacing: 0px;
   letter-spacing: 0.05rem;
   color: #fff;
-}
-
-.window {
-  width: 30%;
-  text-align: center;
-  margin-left: 35%;
-  margin-right: 35%;
 }
 
 .for-margin {
