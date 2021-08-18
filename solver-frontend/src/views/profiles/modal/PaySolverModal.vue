@@ -89,6 +89,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
+import {mapActions} from 'vuex'
 
 export default {
   data: function () {
@@ -111,6 +112,9 @@ export default {
 
   },
   methods: {
+    ...mapActions([
+      'pointUseTrigger'
+    ]),
     checkOneBox: function(){
       this.checkOne = true;
     },
@@ -139,10 +143,11 @@ export default {
           endRegDt: this.endDate + " 23:59:59"
         },
         headers: { Authorization: "Bearer " + this.accessToken },
-      }).then((res)=>{
+      }).then(()=>{
         this.checkResult = true;
+        this.pointUseTrigger()
       }).catch((err)=>{
-
+        console.log(err)
       });
     },
   },
