@@ -73,8 +73,8 @@ public class QuestionRepositorySupport {
 	
 	private OrderSpecifier<?> selectMode(String mode) {
 		// 답변 개수 내림차순
-		if (mode.equals("answerDesc")) {
-			return question.answer.size().desc();
+		if (mode.equals("visitDesc")) {
+			return question.readCount.desc();
 		// 좋아요 개수 내림차순
 		} else if (mode.equals("likeDesc")) {
 			return question.favoriteQuestion.size().desc();
