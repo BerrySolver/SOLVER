@@ -24,4 +24,6 @@ public interface AnswerRepository extends JpaRepository<Answer, String>{
 
 	List<Answer> findByRegDtBetween(Date todayStart, Date todayEnd);
 
+	List<Answer> findByQuestionId(String questionId);
+
 }
