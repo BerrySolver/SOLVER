@@ -118,32 +118,6 @@
                         }}</span>
                       </div>
 
-                      <div class="notification-explanation">
-                        <span v-if="notification.code == 60"
-                          >라는 글에 새로운 <span class="notification-highlight">답변</span>이
-                          달렸습니다.</span
-                        >
-                        <span v-if="notification.code == 61"
-                          >라는 글에 새로운 <span class="notification-highlight">댓글</span>이
-                          달렸습니다.</span
-                        >
-                        <span v-if="notification.code == 62"
-                          >라는 글에 <span class="notification-highlight">좋아요</span>가
-                          달렸습니다.</span
-                        >
-                        <span v-if="notification.code == 63"
-                          >에 대한 답변에 <span class="notification-highlight">좋아요</span>가
-                          달렸습니다.</span
-                        >
-                        <span v-if="notification.code == 64"
-                          >라는 글이
-                          <span class="notification-highlight">북마크</span>되었습니다.</span
-                        >
-                        <span class="notification-dateTime">{{
-                          humanize(now, notification.regDt)
-                        }}</span>
-                      </div>
-
                       <hr class="notification-line" />
                     </div>
                   </li>
@@ -249,10 +223,12 @@
                         <span class="one">님과의 화상회의가 곧 </span>
                         <span class="video-notification-highlight">시작</span>
                         <span class="one">됩니다!</span>
-                      </div>                      
+                      </div> 
+
+                      <div class="reason">약속시간 : {{ message.content }}</div>                     
 
                       <div class="video-enter">
-                        <button @click="pushToConference(message.questionId)" class="video-enter-button">입장하기</button>
+                        <button @click="pushToConference(message.questionId)" class="video-enter-button" >입장하기</button>
                       </div>
                       <hr class="notification-line">
                     </div>
