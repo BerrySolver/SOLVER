@@ -498,9 +498,9 @@ public class ProfileServiceImpl implements ProfileService{
 	@Override
 	public List<FavoriteUser> getFollowList(User user, int mode) {
 		if (mode == 0) {
-			return user.getFavoriteUser();
+			return user.getFavoriteFollowingUser();
 		}
 		
-		return user.getFavoriteFollowingUser();
+		return user.getFavoriteUser();
 	}
 }

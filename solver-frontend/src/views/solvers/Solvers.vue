@@ -407,6 +407,7 @@ export default {
     background-color: white;
     border-radius: 2px;
     position: relative;
+    transition: 0.2s;
   }
 
   .solver-user-card:hover {

@@ -90,8 +90,7 @@
 }
 
 .follower-button:hover {
-  background-color: #c5c9cc38;
-  filter: brightness(90%);
+  background-color: #488ec438;
 }
 
 .following-button {
@@ -100,8 +99,7 @@
 }
 
 .following-button:hover {
-  background-color: #c5c9cc38;
-  filter: brightness(90%);
+  background-color: #488ec438;
 }
 
 .for-center {

@@ -85,10 +85,14 @@
           <!-- profile-info의 last child(right) -->
           <div>
             <div class="follow-info">
-              <span class="subheading">팔로워</span>
-              <span class="interval point-color-1">{{followers}}</span>
-              <span class="subheading">팔로잉</span>
-              <span class="interval point-color-1">{{userProfileInfo.followings}}</span>
+              <span class="follower-button" @click="getFollowList(1)">
+                <span class="subheading">팔로워</span>
+                <span class="interval point-color-1">{{followers}}</span>
+              </span>
+              <span class="following-button" @click="getFollowList(0)">
+                <span class="subheading">팔로잉</span>
+                <span class="interval point-color-1">{{userProfileInfo.followings}}</span>
+              </span>
             </div>
             <br>
             <div class="berry-point">
@@ -214,6 +218,8 @@ import ProfileTimetable from "@/components/profiles/ProfileTimetable"
 import ProfileStatistics from "@/components/profiles/ProfileStatistics"
 import ProfileHistory from "@/components/profiles/ProfileHistory"
 import ProfileMyQuestions from "@/components/profiles/ProfileMyQuestions"
+import FollowListModal from "./modal/FollowListModal.vue"
+import LoginModal from "@/components/main/LoginModal"
 
 export default {
   name: 'Profile',
@@ -312,7 +318,30 @@ export default {
         this.isFollowing = false
         })
       .catch((err) => console.log(err))
-    }
+    },
+    getFollowList(mode) {
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
+      } else {
+        this.$modal.show(FollowListModal,{
+          data: {
+            mode: mode,
+            nickname: this.$route.params.nickname
+          },
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '700px',
+            draggable: false,
+        });
+      }
+    },
   },
   computed: {
     ...mapState({

@@ -1,43 +1,14 @@
 <template>
-  <div class="point-log-modal solver-font">
-    <h3 class="point-log-title">포인트 내역</h3>
-    <hr>
-    <div class="point-log-box">
-      <div v-for="(point, index) in pointList" :key="index" class="point-detail">
-          <img class="point-img" v-if="point.value == 10 && point.code ==='080'" src="@/assets/plus-10.png" alt="">
-          <img class="point-img" v-if="point.value == 30 && point.code ==='080'" src="@/assets/plus-30.png" alt="">
-          <img class="point-img" v-if="point.value == 50 && point.code ==='080'" src="@/assets/plus-50.png" alt="">
-          <img class="point-img" v-if="point.value == 100 && point.code ==='080'" src="@/assets/plus-100.png" alt="">
-          <img class="point-img" v-if="point.value == 100 && point.code ==='081'" src="@/assets/minus-100.png" alt=""> 
-          <img class="point-img" v-if="point.value == 200 && point.code ==='081'" src="@/assets/minus-200.png" alt=""> 
-          <img class="point-img" v-if="point.value == 300 && point.code ==='081'" src="@/assets/minus-300.png" alt=""> 
-          <img class="point-img" v-if="point.value == 400 && point.code ==='081'" src="@/assets/minus-400.png" alt=""> 
-          <img class="point-img" v-if="point.value == 500 && point.code ==='081'" src="@/assets/minus-500.png" alt=""> 
-          <img class="point-img" v-if="point.value == 600 && point.code ==='081'" src="@/assets/minus-600.png" alt=""> 
-          <img class="point-img" v-if="point.value == 700 && point.code ==='081'" src="@/assets/minus-700.png" alt=""> &nbsp;
-          <span class="point-text" v-if="point.pointCode === '000'"> 새로운 답변을 등록했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '001'"> 새로운 화상 답변을 등록했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '002'"> 귀중한 첫 답변을 등록했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '003'"> 곧 마감할 질문에 답변을 했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '004'"> 답변이 채택됬어요! </span>
-          <span class="point-text" v-if="point.pointCode === '005'"> 화상답변이 채택됬어요! </span>
-          <span class="point-text" v-if="point.pointCode === '006'"> 나의 질문이 추천받았어요! </span>
-          <span class="point-text" v-if="point.pointCode === '007'"> 나의 답변이 추천받았어요! </span>
-          <span class="point-text" v-if="point.pointCode === '008'"> 나의 질문이 북마크되었어요! </span>
-          <span class="point-text" v-if="point.pointCode === '100'"> 질문이 신고 받았어요... </span>
-          <span class="point-text" v-if="point.pointCode === '101'"> 답변이 신고 받았어요... </span>
-          <span class="point-text" v-if="point.pointCode === '102'"> 댓글이 신고 받았어요... </span>
-          <span class="point-text" v-if="point.pointCode === '103'"> 1일 홍보 신청을 했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '104'"> 2일 홍보 신청을 했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '105'"> 3일 홍보 신청을 했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '106'"> 4일 홍보 신청을 했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '107'"> 5일 홍보 신청을 했어요!</span>
-          <span class="point-text" v-if="point.pointCode === '108'"> 6일 홍보 신청을 했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '109'"> 7일 홍보 신청을 했어요!</span>
-          <span class="point-time">&nbsp; {{point.redDt}}</span>
+  <div class="follow-list-modal solver-font">
+    <h3 v-if="this.data.mode == 0" class="follow-list-title">팔로잉 목록</h3>
+    <h3 v-else class="follow-list-title">팔로워 목록</h3>
+    <div class="follow-list-box">
+      <div v-for="(user, index) in userList" :key="index" class="follow-detail" @click="goUserProfile(user.nickname)">
+          <img class="follow-img" :src="user.profileUrl" alt="">
+          <span class="follow-nickname">{{user.nickname}}</span>
       </div>
     </div>
-    <button class="btn point-log-button" @click="$emit('close')">확인완료</button>
+    <button class="btn follow-list-button" @click="$emit('close')">나가기</button>
   </div>
 </template>
 
@@ -49,43 +20,33 @@ import {mapState} from 'vuex'
 export default {
   data:function(){
     return {
-      nickname: '',
-      pointList: [],
+      userList: [],
     }
   }, props : [
-    
+    'data'
   ], methods : {
-
+    goUserProfile: function (nickname) {
+      this.$router.push({
+        name: 'Profile',
+        params: {
+          nickname: nickname
+        }
+      });
+      this.$emit('close');
+    }
   }, 
   computed: {
     ...mapState({
       accessToken: state => state.auth.accessToken,
     }),
   }, created(){
-    this.nickname = this.$store.getters.getUserNickname;
     axios({
-      url: API.URL + `points/${this.nickname}`,
+      url: API.URL + `profiles/${this.data.nickname}/follow-list/${this.data.mode}`,
       method: "get",
       headers: { Authorization: "Bearer " + this.accessToken},
     })
     .then((res) => {
-      this.pointList = res.data.list;
-      
-      this.pointList.forEach(p=>{
-        var date = new Date(p.redDt);
-        
-        let year = date.getFullYear()
-        let month = date.getMonth() + 1
-        month = month >= 10 ? month : '0' + month
-        let day = date.getDate()
-        day = day >= 10 ? day : '0' + day
-        let hour = date.getHours()
-        hour = hour >= 10 ? hour : '0' + hour
-        let min = date.getMinutes()     
-        let result = year + '-' + month + '-' + day + ' ' + hour + ':' + min;
-
-        p.redDt = result;
-      })
+      this.userList = res.data.followList
     })
     .catch((err) => {
       console.log(err);
@@ -95,28 +56,36 @@ export default {
 </script>
 
 <style>
-  .point-detail{
+  .follow-detail {
     border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
     padding: 20px 0px;
+    transition: 0.2s;
   }
 
-  .point-detail-text{
-    display: inline-block;
-    width: 200px;
-    border: 1px solid #0F4C81;
+  .follow-detail:hover {
+    background-color: #ecf4ff;
   }
 
-  .point-log-box{
-    /* background: #0F4C81; */
+  .follow-img {
+    border-radius: 70%;
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+  }
+
+  .follow-list-box {
+    border-top: 1px solid #e0e0e0;
     height: 500px;
+    margin-top: 20px;
     overflow: auto;
   }
  
-  .point-log-box::-webkit-scrollbar {
+  .follow-list-box::-webkit-scrollbar {
       width: 10px; /*스크롤바의 너비*/
   }
 
-  .point-log-box::-webkit-scrollbar-thumb {
+  .follow-list-box::-webkit-scrollbar-thumb {
       background-color: #B5C7D3; /*스크롤바의 색상*/
       /* background-clip: padding-box; */
       border: 4px solid transparent;
@@ -125,12 +94,12 @@ export default {
       border-bottom-left-radius: 50px; */
   }
 
-  .point-log-box::-webkit-scrollbar-track {
+  .follow-list-box::-webkit-scrollbar-track {
       background-color: rgb(245, 245, 245); 
       border-radius: 50px;
   }
 
-  .point-log-button{
+  .follow-list-button {
     margin-top: 25px;
     border: 1px solid #0F4C81;
     color: #0F4C81;
@@ -138,7 +107,7 @@ export default {
     padding: 10px 0px;
   }
 
-  .point-log-button:hover{
+  .follow-list-button:hover {
     margin-top: 25px;
     background:  #658dc665;
     color: white;
@@ -147,24 +116,13 @@ export default {
     padding: 10px 0px;
   }
 
-  .point-log-modal{
+  .follow-list-modal {
      padding: 40px 50px;
   }
 
-  .point-log-title{
-    color: #0F4C81;
-  } 
-
-  .point-text{
-    display: inline-block;
-    width: 290px;
-  }
-
-  .point-time{
-    font-size: 10px;
-  }
-
-  .point-img {
-    width: 80px;
+  .follow-nickname {
+    color: #84898C;
+    font-size: 17px;
+    margin-left: 20px;
   }
 </style>
