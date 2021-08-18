@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.BaseEntity;
 import com.solver.db.entity.answer.Answer;
@@ -36,7 +38,9 @@ import lombok.Setter;
 public class User extends BaseEntity{
 	private Long kakaoId;
 	private String nickname;
+	@ColumnDefault("")
 	private String introduction;
+	@ColumnDefault("")
 	private String linkText;
 	private String profileUrl;
 	

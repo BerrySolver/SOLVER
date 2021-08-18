@@ -506,7 +506,7 @@ export default {
     entranceConferenceLog() {
       axios({
         //conference id 값은 테스트용
-        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+        url: API.URL + API.ROUTES.conferenceLog,
         method: "post",
         data: {
           type: "030",
@@ -523,7 +523,7 @@ export default {
     exitConferenceLog() {
       axios({
         //conference id 값은 테스트용
-        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+        url: API.URL + API.ROUTES.conferenceLog,
         method: "post",
         data: {
           type: "031",
@@ -639,7 +639,7 @@ export default {
     },
     axiosVideo(base64data) {
       axios({
-        url: API.URL + `conferences/record/aOa1yOS9cGdSX`,
+        url: API.URL + `conferences/record/${this.questionId}`,
         method: "post",
         headers: {
           Authorization: "Bearer " + this.accessToken,
@@ -688,7 +688,7 @@ export default {
 
     axios({
       //conference id 값은 테스트용
-      url: API.URL + "questions/1CYdWWZb3VtcY/info",
+      url: API.URL + `questions/${this.questionId}/info`,
       method: "get",
       headers: { Authorization: "Bearer " + this.accessToken },
     })
