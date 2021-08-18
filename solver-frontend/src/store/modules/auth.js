@@ -10,13 +10,15 @@ const state = {
   isFirst: false,
   mainChangeTrigger: false,
   userNickname: "",
+  loginTime: 1,
 };
 
 const getters = {
-  isLoggedIn: (state) => state.accessToken == null ? false : true,
+  isLoggedIn: (state) => (state.accessToken == null ? false : true),
   isFirst: (state) => state.isFirst,
   getAccessToken: (state) => state.accessToken,
   getUserNickname: (state) => state.userNickname,
+  getLoginTime: (state) => state.loginTime,
 };
 
 const mutations = {
@@ -38,13 +40,16 @@ const mutations = {
   SET_USER_NICKNAME: (state, userNickname) => {
     state.userNickname = userNickname;
   },
-  SET_MAIN_CHANGE_TRIGGER : (state) => {
+  SET_MAIN_CHANGE_TRIGGER: (state) => {
     state.mainChangeTrigger = !state.mainChangeTrigger;
+  },
+  SET_LOGIN_TIME: (state) => {
+    state.loginTime = new Date().getTime();
   },
 };
 
 const actions = {
-  triggerMainReload({commit}){
+  triggerMainReload({ commit }) {
     commit("SET_MAIN_CHANGE_TRIGGER");
   },
   signup(context, credentials) {
@@ -83,11 +88,13 @@ const actions = {
           // };
           // localStorage.setItem("userInfo", JSON.stringify(info));
           commit("SET_USER_NICKNAME", res.data);
+          commit("SET_LOGIN_TIME");
+          state.loginTime = new Date().getTime();
           // commit("SET_ACCESS_TOKEN", token);
 
           // const info2 = JSON.parse(localStorage.getItem("userInfo"));
           // router.go(-2)
-          router.push({ path: "/" })
+          router.push({ path: "/" });
         }
       })
       .catch((e) => {
@@ -115,14 +122,14 @@ const actions = {
       headers: { Authorization: "Bearer " + state.accessToken },
     })
       .then(() => {
-        commit("SET_ACCESS_TOKEN", null);
-        commit("SET_USER_NICKNAME", "");
-        commit("SET_MAIN_CHANGE_TRIGGER");
         router.push({ path: "/#" });
       })
       .catch(() => {
-        console.log();
+        router.push({ path: "/#" });
       });
+    commit("SET_ACCESS_TOKEN", null);
+    commit("SET_USER_NICKNAME", "");
+    commit("SET_MAIN_CHANGE_TRIGGER");
   },
   // 카테고리 받기
   fetchSignupData({ commit }) {
@@ -138,6 +145,22 @@ const actions = {
       })
       .catch((err) => console.log(err));
   },
+  // checkLoginTime() {
+  //   const ttt = getters.getUserNickname();
+  //   console.log(ttt);
+  //   if (state.loginTime == 1) return;
+
+  //   alert("0-0----");
+
+  //   const time = state.loginTime.getTime();
+  //   const currentTime = new Date().getTime();
+
+  //   if (currentTime - time < 1000 * 60 * 60 * 2) {
+  //     commit("SET_ACCESS_TOKEN", null);
+  //     commit("SET_USER_NICKNAME", "");
+  //     commit("SET_MAIN_CHANGE_TRIGGER");
+  //   }
+  // },
 };
 
 export default {
