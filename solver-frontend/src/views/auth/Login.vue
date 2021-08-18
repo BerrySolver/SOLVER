@@ -216,6 +216,8 @@ input {
 
 .window {
   width: 30%;
+  display: flex;
+  justify-content: center;
   text-align: center;
   margin-left: 35%;
   margin-right: 35%;
