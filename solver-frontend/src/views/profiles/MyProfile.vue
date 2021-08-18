@@ -132,10 +132,14 @@
           <!-- profile-info의 last child(right) -->
           <div>
             <div class="follow-info">
-              <span class="subheading">팔로워</span>
-              <span class="interval point-color-1">{{followers}}</span>
-              <span class="subheading">팔로잉</span>
-              <span class="interval point-color-1">{{userProfileInfo.followings}}</span>
+              <span class="follower-button" @click="getFollowList(0)">
+                <span class="subheading">팔로워</span>
+                <span class="interval point-color-1">{{followers}}</span>
+              </span>
+              <span class="following-button" @click="getFollowList(1)">
+                <span class="subheading">팔로잉</span>
+                <span class="interval point-color-1">{{userProfileInfo.followings}}</span>
+              </span>
             </div>
             <br>
             <div class="berry-point">
@@ -270,6 +274,8 @@ import ProfileBookmark from "@/components/profiles/ProfileBookmark"
 import PointLog from "./modal/PointLogModal.vue";
 import PaySolver from './modal/PaySolverModal.vue';
 import Reservation from "./modal/Reservation.vue"
+import FollowListModal from "./modal/FollowListModal.vue"
+import LoginModal from "@/components/main/LoginModal"
 
 import axios from 'axios'
 import API from "@/API.js"
@@ -391,6 +397,25 @@ export default {
       this.selectedTab = tabIndex
     },
 
+    getFollowList(mode) {
+      if (!this.isLoggedIn) {
+        this.$modal.show(LoginModal,{
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
+      } else {
+        this.$modal.show(FollowListModal,{
+          modal : this.$modal },{
+            mode: mode,
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
+      }
+    },
     // 카테고리 수정 요청 CLICK
     requestEditCategory() {
       this.isCategoryEdit = !this.isCategoryEdit
