@@ -18,6 +18,19 @@
   float: 3;
 }
 
+.check-reservation {
+  background-color: transparent;
+  border: solid 1px #658DC6;
+  color: #658DC6;
+  font-size: 13px;
+  padding: 1.5px;
+}
+
+.check-reservation:hover {
+  background-color: #658DC6;
+  color: white;
+}
+
 .complete-edit {
   display: flex; 
   align-items: center; 

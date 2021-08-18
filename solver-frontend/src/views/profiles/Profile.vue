@@ -96,7 +96,7 @@
               <div class="subheading">베리 포인트</div>
               <!-- ingroup의 last child -->
               <div class="d-inline-block interval">
-                <span>누적</span>
+                <!-- <span>누적</span> -->
                 <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
                 <span v-if="isLogin">잔여</span>
                 <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span><br>

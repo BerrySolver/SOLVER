@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-history-tab">
     <!-- 질문 목록 소제목 -->
     <div style="display:flex; align-items:center; ">
       <div class="small-box"></div>
@@ -60,8 +60,8 @@ export default {
 }
 
 .my-answer-title {
-  text-align: left;
   margin: 10px;
+  text-align: left;
 }
 
 .my-answer-title div{
@@ -74,4 +74,25 @@ export default {
   color: white;
   cursor: pointer;
 } 
+
+.my-history-tab {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.my-history-tab::-webkit-scrollbar {
+  width: 10px; /*스크롤바의 너비*/
+}
+
+.my-history-tab::-webkit-scrollbar-thumb {
+  background-color: #B5C7D3; /*스크롤바의 색상*/
+  border: 4px solid transparent;
+  border-radius: 50px;
+}
+
+.my-history-tab::-webkit-scrollbar-track {
+  background-color: rgb(245, 245, 245); 
+}
+
 </style>

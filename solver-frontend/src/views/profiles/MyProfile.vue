@@ -10,7 +10,10 @@
       <!-- profile-text_info section -->
       <div class="profile-info-section">
         <div class="nickname">
-          <div>{{ userProfileInfo.nickname }}</div>
+          <div style="display:flex; align-items:center;">
+            {{ userProfileInfo.nickname }}
+            <button @click="openReservation" class="check-reservation interval">화상시간 예약 확인</button>
+          </div>
           <div
           v-if="isLogin"
           class="edit-img"
@@ -140,10 +143,10 @@
               <div class="subheading">베리 포인트</div>
               <!-- ingroup의 last child -->
               <div class="d-inline-block interval">
-                <span>누적</span>
-                <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
-                <span v-if="isLogin">잔여</span>
+                <span v-if="isLogin">누적</span>
                 <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span>
+                <span>잔여</span>
+                <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
                 <span v-if="isLogin"><button class="point-button" style="margin-right: 10px;" @click="openPointLog">내역</button></span>
                 <span v-if="isLogin"><button class="point-button" @click="openPaySolver">사용</button></span>
               </div>
@@ -266,6 +269,7 @@ import ProfileMyQuestions from "@/components/profiles/ProfileMyQuestions"
 import ProfileBookmark from "@/components/profiles/ProfileBookmark"
 import PointLog from "./modal/PointLogModal.vue";
 import PaySolver from './modal/PaySolverModal.vue';
+import Reservation from "./modal/Reservation.vue"
 
 import axios from 'axios'
 import API from "@/API.js"
@@ -479,7 +483,7 @@ export default {
     },
 
     // 사용 내역 Modal
-    openPointLog(){
+    openPointLog() {
       this.$modal.show(PointLog,{
         modal : this.$modal },{
         name: 'dynamic-modal',
@@ -490,7 +494,7 @@ export default {
     },
 
     // 결제 Modal
-    openPaySolver(){
+    openPaySolver() {
       this.$modal.show(PaySolver,{
         nickName: this.userProfileInfo.nickname,
         myPoint : this.userProfileInfo.point,
@@ -500,7 +504,10 @@ export default {
         height : '700px',
         draggable: false,
       });
-
+    },
+    openReservation() {
+      this.$modal.show(Reservation, {
+      });
     },
   },
   computed: {
