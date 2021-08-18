@@ -32,6 +32,7 @@
           <!-- answer-statistics의 lastchild(right) -->
           <div class="text-left">
             <ProfilePieChart v-if="isLoaded && Object.keys(this.userStatistics.answerStatistics).length > 0" :dataset="chartDataset" :options="chartOptions"/>
+            <span v-if="isLoaded && Object.keys(this.userStatistics.answerStatistics).length == 0">답변 기록이 아직 없어요</span>
           </div>
         </div>
       </div>

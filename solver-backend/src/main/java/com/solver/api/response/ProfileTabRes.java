@@ -1,8 +1,12 @@
 package com.solver.api.response;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
@@ -22,7 +26,7 @@ public class ProfileTabRes extends BaseResponse{
 	
 	private List<ProfileQuestionForm> bookmarkQuestionList;
 	
-	private HashMap<String, Integer> answerStatistics = new HashMap<String, Integer>();
+	private LinkedHashMap<String, Integer> answerStatistics = new LinkedHashMap<String, Integer>();
 	
 	private int textAnswerCount;
 	
@@ -44,10 +48,23 @@ public class ProfileTabRes extends BaseResponse{
 			}
 		}
 		
+		List<Entry<String, Integer>> list_entries = new ArrayList<Entry<String,Integer>>(answerStatistics.entrySet());
+		// 차트 값 기준 내림차순 정렬
+		Collections.sort(list_entries, new Comparator<Entry<String, Integer>>() {
+			public int compare(Entry<String, Integer> obj1, Entry<String, Integer> obj2) {
+				return obj2.getValue().compareTo(obj1.getValue());
+			}
+		});
+		
+		LinkedHashMap<String, Integer> sortedAnswerStatistics = new LinkedHashMap<String, Integer>();
+		for (Entry<String, Integer> entry : list_entries) {
+			sortedAnswerStatistics.put(entry.getKey(), entry.getValue());
+		}
+		
 		res.setTextAnswerCount(textAnswerCount);
 		res.setVideoAnswerCount(videoAnswerCount);
 		res.setVideoAnswerTime(videoAnswerTime);
-		res.setAnswerStatistics(answerStatistics);
+		res.setAnswerStatistics(sortedAnswerStatistics);
 		
 		return res;
 	}
