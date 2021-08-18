@@ -15,6 +15,6 @@ public class EvaluationPostReq {
 	@ApiModelProperty(name="reason", example="그냥 좋다")
 	private String reason;
 	
-	@ApiModelProperty(name="questionId", example="")
-	private String questionId;
+	@ApiModelProperty(name="nickname", example="min")
+	private String nickname;
 }
