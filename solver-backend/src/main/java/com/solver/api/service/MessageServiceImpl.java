@@ -3,6 +3,7 @@ package com.solver.api.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.solver.api.request.MessageConferenceCreatePostReq;
+import com.solver.api.request.MessageConferenceResultPostReq;
 import com.solver.api.response.MessageListRes;
 import com.solver.api.response.MessageRes;
 import com.solver.common.auth.KakaoUtil;
@@ -22,10 +24,16 @@ import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.code.Code;
+import com.solver.db.entity.conference.ConferenceLog;
+import com.solver.db.entity.conference.ConferenceReservation;
+import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.Message;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.code.CodeRepository;
+import com.solver.db.repository.conference.ConferenceLogRepository;
+import com.solver.db.repository.conference.ConferenceReservationRepository;
+import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.user.MessageRepository;
 import com.solver.db.repository.user.UserRepository;
 
@@ -46,7 +54,13 @@ public class MessageServiceImpl implements MessageService{
 	
 	@Autowired
 	CodeRepository codeRepository;
+	
+	@Autowired
+	ConferenceReservationRepository conferenceReservationRepository;
 
+	@Autowired
+	QuestionRepository questionRepository;
+	
 	@Override
 	public MessageListRes getSendMessageList(String accessToken, HttpServletResponse response) {
 		String token = accessToken.split(" ")[1];
@@ -110,12 +124,14 @@ public class MessageServiceImpl implements MessageService{
 		
 		// 반환 리스트 만들기
 		for (Message message : messageList) {
-			MessageRes res = new MessageRes();
+			MessageRes res = new MessageRes();	
+			res.setMessageId(message.getId());
 			res.setQuestionId(message.getQuestionId());
 			res.setContent(message.getContent());
 			res.setSendNickName(message.getSendUser().getNickname());
 			res.setType(message.getCode().getCode());
 			res.setRegDt(message.getRegDt());
+			res.setChecked(message.isChecked());
 			list.add(res);
 		}
 		
@@ -162,10 +178,101 @@ public class MessageServiceImpl implements MessageService{
 					e.printStackTrace();
 				}
 				content = time;
+				message.setChecked(false);	
 			}
-			
+					
 			message.setContent(content);
 			messageRepository.save(message);
 		}
+	}
+
+	@Override
+	public void resultMessage(MessageConferenceResultPostReq messagePostReq) throws ParseException {
+		String type = messagePostReq.getType();
+		
+		Optional<Message> optionalMessage = messageRepository.findById(messagePostReq.getMessageId());
+		Message message = optionalMessage.get();
+		
+		// 원래 질문을 다시 선택할 수 없도록 DB 갱신
+		message.setChecked(true);
+		messageRepository.save(message);
+		
+		if("073".equals(type)) {
+			// 승인했을 때
+			
+			// 신청자에게 승인 안내문구 전달
+			Message m = new Message();
+			m.setId(RandomIdUtil.makeRandomId(13));
+			m.setSendUser(message.getReceiveUser());
+			m.setReceiveUser(message.getSendUser());
+			m.setQuestionId(message.getQuestionId());
+			Code code = codeRepository.findByCode(type);
+			m.setCode(code);
+			m.setRegDt(new Date(System.currentTimeMillis()));
+			m.setContent(messagePostReq.getContent());
+			messageRepository.save(m); 
+			
+			// 승인자에게 성사 안내문구 전달
+			m.setId(RandomIdUtil.makeRandomId(13));
+			m.setSendUser(message.getSendUser());
+			m.setReceiveUser(message.getReceiveUser());
+			m.setContent("성사되었습니다.");
+			messageRepository.save(m);
+			
+			// 컨퍼런스 예약은 양쪽다 남기기
+			ConferenceReservation conferenceReservation = new ConferenceReservation();			
+			Optional<Question> q = questionRepository.findById(message.getQuestionId());
+			conferenceReservation.setQuestion(q.get());
+			
+			SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Date to = null;
+			String time = null;
+			try {
+				to = transFormat.parse(message.getContent());
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			conferenceReservation.setStartDt(to);
+			
+			conferenceReservation.setId(RandomIdUtil.makeRandomId(13));
+			conferenceReservation.setUser(message.getSendUser());
+			conferenceReservationRepository.save(conferenceReservation);
+			
+			conferenceReservation.setId(RandomIdUtil.makeRandomId(13));
+			conferenceReservation.setUser(message.getReceiveUser());
+			conferenceReservationRepository.save(conferenceReservation);
+			
+			// 컨퍼런스 메시지 남기기
+			Date newDate = new Date(to.getTime()-(1000*60*30));
+			m = new Message();
+			m.setId(RandomIdUtil.makeRandomId(13));
+			m.setSendUser(message.getReceiveUser());
+			m.setReceiveUser(message.getSendUser());
+			m.setQuestionId(message.getQuestionId());
+			code = codeRepository.findByCode("075");
+			m.setCode(code);
+			m.setRegDt(newDate);
+			m.setContent("곧 화상이 시작됩니다.");
+			messageRepository.save(m); 
+			
+			m.setId(RandomIdUtil.makeRandomId(13));
+			m.setSendUser(message.getSendUser());
+			m.setReceiveUser(message.getReceiveUser());
+			messageRepository.save(m);		
+			
+		}else if("074".equals(type)) {
+			// 신청한 사람에게 사유와 함께 전달
+			Message m = new Message();
+			m.setId(RandomIdUtil.makeRandomId(13));
+			m.setSendUser(message.getReceiveUser());
+			m.setReceiveUser(message.getSendUser());
+			m.setQuestionId(message.getQuestionId());
+			Code code = codeRepository.findByCode(type);
+			m.setCode(code);
+			m.setRegDt(new Date(System.currentTimeMillis()));
+			m.setContent(messagePostReq.getContent());
+			messageRepository.save(m);
+		}
+		
 	}
 }
