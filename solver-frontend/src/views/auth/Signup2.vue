@@ -190,6 +190,7 @@ export default {
     ...mapState({
       categoryList: (state) => state.auth.CategoryList,
     }),
+    ...mapGetters(['isLoggedIn']),
     mainCategory(){
       return this.Category;
     },
@@ -213,10 +214,14 @@ export default {
     })
     .catch((err) => {
       console.log(err)
-    });
+    })
+
+    if (this.isLoggedIn) {
+      this.$router.push({
+        name: "Main",
+      })
+    }
   },
-  mounted() {
-    },
 };
 </script>
 
