@@ -509,7 +509,7 @@ export default {
     entranceConferenceLog() {
       axios({
         //conference id 값은 테스트용
-        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+        url: API.URL + API.ROUTES.conferenceLog,
         method: "post",
         data: {
           type: "030",
@@ -526,7 +526,7 @@ export default {
     exitConferenceLog() {
       axios({
         //conference id 값은 테스트용
-        url: API.URL + API.ROUTES.conferenceLog + `/12345678`,
+        url: API.URL + API.ROUTES.conferenceLog,
         method: "post",
         data: {
           type: "031",
@@ -681,7 +681,24 @@ export default {
       return hasDesktop || hasVoice ? destination.stream.getAudioTracks() : [];
     },
     pushToConference() {
-      this.$router.push({ name: "Conference", params: { questionId: "1CYdWWZb3VtcY" } });
+      axios({
+        //conference id 값은 테스트용
+        url: API.URL + `questions/5deK0GDhDpdZG/info`,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then((res) => {
+          console.log(res);
+          const questionUserNickname = res.data.nickname;
+          // console.log(questionUserId);
+          this.$router.push({
+            name: "Conference",
+            params: { questionId: "5deK0GDhDpdZG", questionUserNickname: questionUserNickname },
+          });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     getReservationList() {
       axios({

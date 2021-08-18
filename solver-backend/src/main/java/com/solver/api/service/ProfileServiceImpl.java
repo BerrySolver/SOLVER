@@ -309,7 +309,6 @@ public class ProfileServiceImpl implements ProfileService{
 		String userId = user.getId();
 		
 		if(tabNum == 0) {
-			//화상 답변 인지 그냥 답변 인지 뭘로 구분?
 			List<Answer> textAnswerList = answerRepository.findTextAnswerByUserId(userId);
 			List<Answer> videoAnswerList = answerRepository.findVideoAnswerByUserId(userId);
 			
@@ -325,7 +324,7 @@ public class ProfileServiceImpl implements ProfileService{
 					videoAnswerTime -= conferenceLog.getRegDt().getTime();
 				}
 				//퇴장
-				else if(conferenceLog.getCode().getCode().equals("030")) {
+				else if(conferenceLog.getCode().getCode().equals("031")) {
 					videoAnswerTime += conferenceLog.getRegDt().getTime();
 				}
 			}
