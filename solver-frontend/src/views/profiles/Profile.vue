@@ -97,9 +97,9 @@
               <!-- ingroup의 last child -->
               <div class="d-inline-block interval">
                 <!-- <span>누적</span> -->
-                <span class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
+                <span class="interval point-color-1">{{ userProfileInfo.point }}P</span><br>
                 <span v-if="isLogin">잔여</span>
-                <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.point }}P</span><br>
+                <span v-if="isLogin" class="interval point-color-1">{{ userProfileInfo.remainingPoint }}P</span>                     
               </div>
             </div>
             <br>
@@ -120,7 +120,7 @@
                 </span>
               </div>
               <div v-if="isNaN">
-                <div v-if="userProfileInfo.point < 100">
+                <div v-if="userProfileInfo.remainingPoint < 100">
                   <span v-for="berryImg01 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c1'+berryImg01">
                     <img src="@/assets/berry-1.png" width="42px">
                   </span>
@@ -128,7 +128,7 @@
                     <img src="@/assets/berry-1-b.png" width="42px" class="berry-opacity">
                   </span>
                 </div>
-                <div v-if="100 <= userProfileInfo.point && userProfileInfo.point < 200">
+                <div v-if="100 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 200">
                   <span v-for="berryImg02 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c2'+berryImg02">
                     <img src="@/assets/berry-2.png" width="42px">
                   </span>
@@ -136,7 +136,7 @@
                     <img src="@/assets/berry-2-b.png" width="42px" class="berry-opacity">
                   </span>                
                 </div>    
-                <div v-if="200 <= userProfileInfo.point && userProfileInfo.point < 300">
+                <div v-if="200 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 300">
                   <span v-for="berryImg03 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c3'+berryImg03">
                     <img src="@/assets/berry-3.png" width="42px">
                   </span>
@@ -144,7 +144,7 @@
                     <img src="@/assets/berry-3-b.png" width="42px" class="berry-opacity">
                   </span>  
                 </div>
-                <div v-if="300 <= userProfileInfo.point && userProfileInfo.point < 400">
+                <div v-if="300 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 400">
                   <span v-for="berryImg04 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c4'+berryImg04">
                     <img src="@/assets/berry-4.png" width="42px">
                   </span>
@@ -152,7 +152,7 @@
                     <img src="@/assets/berry-4-b.png" width="42px" class="berry-opacity">
                   </span> 
                 </div>         
-                <div v-if="400 <= userProfileInfo.point">
+                <div v-if="400 <= userProfileInfo.remainingPoint">
                   <span v-for="berryImg05 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c5'+berryImg05">
                     <img src="@/assets/berry-5.png" width="42px">
                   </span>
