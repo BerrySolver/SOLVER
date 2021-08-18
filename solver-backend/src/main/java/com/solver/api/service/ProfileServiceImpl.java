@@ -475,4 +475,31 @@ public class ProfileServiceImpl implements ProfileService{
 
 		return 3;
 	}
+
+	@Override
+	public User getByNickname(String token, String nickname) {
+		TokenResponse tokenResponse = new TokenResponse();
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		User profileUser = userRepository.findByNickname(nickname).orElse(null);
+
+		//없는 유저인 경우
+		if (user == null || profileUser == null) {
+			return null;
+		}
+		
+		return profileUser;
+	}
+
+	@Override
+	public List<FavoriteUser> getFollowList(User user, int mode) {
+		if (mode == 0) {
+			return user.getFavoriteFollowingUser();
+		}
+		
+		return user.getFavoriteUser();
+	}
 }
