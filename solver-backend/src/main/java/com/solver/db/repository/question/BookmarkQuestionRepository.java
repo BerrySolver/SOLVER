@@ -13,4 +13,6 @@ public interface BookmarkQuestionRepository extends JpaRepository<BookmarkQuesti
 
 	Optional<BookmarkQuestion> findByUserIdAndQuestionId(String userId, String questionId);
 
+	List<BookmarkQuestion> findByQuestionId(String questionId);
+
 }

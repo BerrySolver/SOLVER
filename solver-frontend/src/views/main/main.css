@@ -51,12 +51,32 @@
   white-space: nowrap;
 }
 
+.data-card-height{
+  min-height: 280px;
+}
+
 /* MAIN 1번째 페이지 검색창 */
 .form__main-group {
   position: relative;
   padding-top: 15px;
   margin-top: 100px;
   width: 600px;
+}
+
+.empty_card{
+  margin-top: 50px;
+  display: flex;
+  height: 300px;
+  justify-content: center;
+}
+
+.empty_card_detail{
+  width:500px;
+  height: 300px;
+  margin-top: 50px;
+  border-radius: 10%;
+  background-color: white;
+  padding-top:60px;
 }
 
 .form__field {
@@ -164,7 +184,7 @@
 }
 
 .month-solver-text {
-  margin-top: 40px;
+  margin-top: 30px;
   margin-bottom: 10px;
 }
 
@@ -192,29 +212,39 @@
 }
 
 .solver-card-img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 100%;
-  height: 100px;
   margin-bottom: 15px;
-  width: 100px;
+  border: 4px solid white;
+}
+
+.solver-card-img:hover {
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  border: 4px solid #0F4C81;
 }
 
 .solver-intro {
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 200;
 }
 
 .solver-line-1 {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .solver-line-1 .solver-card-content {
   color: white;
-  margin-left: 20px;
   position: relative;
-  width: 100px;
+  width: 150px;
   z-index: 2;
+  margin: 0px 40px;
 }
 
 .solver-line-1 .solver-card-rank {
@@ -229,24 +259,34 @@
 .solver-line-2 {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
 }
 
 .solver-line-2 .solver-card-content {
   color: white;
-  margin-left: 60px;
   position: relative;
-  width: 100px;
+  width: 150px;
   z-index: 2;
+  margin: 0px 40px;
 }
 
 .solver-line-2 .solver-card-rank {
   color: white;
   font-size: 50px;
   font-weight: 700;
-  margin-left: 40px;
   opacity: 50%;
   width: 50px;
   z-index: 1;
+}
+
+.solver-one-row{
+  margin-top: 150px;
+}
+
+.solver-margin-remove{
+  display: flex;
+  justify-content: center;
+  
 }
 
 .solver-title {

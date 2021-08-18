@@ -13,6 +13,7 @@ export default {
 
     // 질문/답변 페이지
     getQuestionList: "questions/list",
+    getRecommendQuestion: "questions/recommend",
 
     // 솔버리스트
     getSolverList: "solver",
@@ -29,6 +30,7 @@ export default {
 
     // 솔버 결제
     paySolver: "points/pay",
+    getPaySolver : "solver/pay",
     
     //화상회의
     conferenceLog: "conferences",

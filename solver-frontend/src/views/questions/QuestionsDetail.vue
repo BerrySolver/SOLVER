@@ -218,6 +218,7 @@ export default {
       endpoint = endpoint.replaceAll("watch?v=", "embed/");
       endpoint = endpoint.replaceAll("</oembed", "</iframe");
       endpoint = endpoint.replaceAll(`youtu.be/`, `www.youtube.com/embed/`);
+      endpoint = endpoint.replaceAll(`<img src=`, `<img style="max-width:870px;" src=`);
 
       return endpoint;
     },

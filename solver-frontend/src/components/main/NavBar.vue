@@ -172,10 +172,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['logout', 'goQuestionDetail']),
-    // 로그아웃
+    ...mapActions(['logout', "triggerMainReload"]),
     clickLogout() {
       this.logout();
+      this.triggerMainReload();
     },
 
     // 시간 humanize

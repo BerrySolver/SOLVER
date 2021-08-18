@@ -8,7 +8,7 @@
       <div class="footer-center col-6 row">
         <div class="col-3">
           <div class="footer-title">
-            <RouterLink :to="{ name: 'Main' }" class="footer-router">솔버(SOLVER)</RouterLink>
+            <div style="color:white;">SOLVER</div>
           </div>
           <div class="footer-text">
             <div>공지사항</div>
@@ -19,33 +19,37 @@
 
         <div class="col-3">
           <div class="footer-title">
-            <RouterLink :to="{ name: 'Questions' }" class="footer-router">질문/답변</RouterLink>
+            <div style="color:white;">질문/답변</div>
           </div>
           <div class="footer-text">
-            <div>최신 질문</div>
+            <div>모든 질문</div>
             <div>인기 질문</div>
-            <div>최신 답변</div>
+            <div>질문 검색</div>
+            <div>화상 예약</div>
+            <div>화상 답변</div>
           </div>
         </div>
 
         <div class="col-3">
           <div class="footer-title">
-            <RouterLink :to="{ name: 'Groups' }" class="footer-router">모임</RouterLink>
+            <div style="color:white;">솔버</div>
           </div>
           <div class="footer-text">
-            <div>모임 목록</div>
-            <div>신규 목록</div>
-          </div>
-        </div>
-
-        <div class="col-3">
-          <div class="footer-title">
-            <RouterLink :to="{ name: 'Solvers' }" class="footer-router">솔버</RouterLink>
-          </div>
-          <div class="footer-text">
-            <div>신규 솔버</div>
+            <div>모든 솔버</div>
             <div>인기 솔버</div>
-            <div>급상승 솔버</div>
+            <div>솔버 검색</div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="footer-title">
+            <div style="color:white;">프로필</div>
+          </div>
+          <div class="footer-text">
+            <div>모든 정보</div>
+            <div>답변 통계</div>
+            <div>화상 시간표</div>
+            <div>프로필 링크</div>
           </div>
         </div>
       </div>
@@ -82,6 +86,11 @@ export default {
 }
 
 .footer-router {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-router:hover {
   color: white;
   text-decoration: none;
 }
