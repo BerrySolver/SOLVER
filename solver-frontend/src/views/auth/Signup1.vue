@@ -62,6 +62,7 @@
 <script>
 import axios from 'axios';
 import API from "@/API.js";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Signup1",
@@ -124,6 +125,16 @@ export default {
     },
     isPossibleNickname(){
       return this.isPossible;
+    }
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn']),
+  },
+  created() {
+    if (this.isLoggedIn) {
+      this.$router.push({
+        name: "Main",
+      })
     }
   },
 };
