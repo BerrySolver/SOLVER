@@ -6,6 +6,7 @@ const state = {
   myAnswers: [],
   myQuestions: [],
   userStatistics: [],
+  pointUseTrigger: false,
 };
 
 const getters = {
@@ -22,6 +23,9 @@ const mutations = {
   SET_USER_STATISTICS: (state, userStatistics) => {
     state.userStatistics = userStatistics
   },
+  SET_POINT_USE_TRIGGER: (state) => {
+    state.pointUseTrigger = !state.pointUseTrigger
+  }
 };
 
 const actions = {
@@ -72,6 +76,10 @@ const actions = {
       commit('SET_USER_STATISTICS', res.data)
     })
   },
+
+  pointUseTrigger({commit}) {
+    commit('SET_POINT_USE_TRIGGER')
+  }
 };
 
 export default {
