@@ -13,6 +13,7 @@ export default {
 
     // 질문/답변 페이지
     getQuestionList: "questions/list",
+    getRecommendQuestion: "questions/recommend",
 
     // 솔버리스트
     getSolverList: "solver",
