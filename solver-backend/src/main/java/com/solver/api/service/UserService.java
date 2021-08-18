@@ -33,4 +33,6 @@ public interface UserService {
 	String getNickname(String accessToken, HttpServletResponse response);
 	
 	List<PaySolverRes> getPaySolver(String accessToken);
+
+	void insertDefaultProfile(Long kakaoId, String profileUrl);
 }

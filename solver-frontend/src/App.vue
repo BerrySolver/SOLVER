@@ -2,7 +2,7 @@
   <div id="app">
     <NavBar id="navbar"/>
     <!-- 라우터 보여지는 부분 -->
-    <RouterView id="router"/>
+    <RouterView id="router" :key="$route.fullPath"/>
     <Footer id="footer"/>
   </div>
 </template>
@@ -33,16 +33,17 @@ export default {
 #router {
   padding-top: 56px;
   min-width: 1190px;
-  transform: skew(-0.001deg);
+  transform: skew(-0.1deg);
 }
 
 #footer {
   bottom: 0;
-  transform: skew(-0.001deg);
+  transform: skew(-0.1deg);
   min-width: 1190px;
 }
 
 #navbar {
   min-width: 1190px;
+  transform: skew(-0.1deg);
 }
 </style>

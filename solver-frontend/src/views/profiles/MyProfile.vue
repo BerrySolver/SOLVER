@@ -3,7 +3,7 @@
     <div class="profile solver-font">
       <!-- profile-image section -->
       <div class="profile-img-section">
-        <img src="@/assets/profile-ex.jpg" class="profile-img">
+        <img style="object-fit: cover;" :src="userProfileInfo.profileUrl" class="profile-img">
       </div>
 
 

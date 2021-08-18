@@ -21,6 +21,9 @@ public class QuestionRes extends BaseResponse{
 	@ApiModelProperty(name="유저 닉네임")
 	private String nickname;
 	
+	@ApiModelProperty(name = "사용자 프로필 url")
+	private String profileUrl;
+	
 	@ApiModelProperty(name="질문 상태")
 	private String type;
 	
@@ -82,6 +85,7 @@ public class QuestionRes extends BaseResponse{
 		res.setStatusCode(statusCode);
 		res.setMessage(message);
 		res.setNickname(user.getNickname());
+		res.setProfileUrl(user.getProfileUrl());
 		res.setType(type.getCodeName());
 		res.setTitle(question.getTitle());
 		res.setContent(question.getContent());

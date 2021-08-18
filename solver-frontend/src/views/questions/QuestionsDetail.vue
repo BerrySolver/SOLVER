@@ -23,7 +23,7 @@
           <div class="question-detail-user">
             <img
               class="question-detail-profileImg"
-              src="@/assets/profile-ex.jpg"
+              :src="question.profileUrl"
               alt="profile-image"
             />
             <span class="question-detail-nickname">{{ question.nickname }}</span>

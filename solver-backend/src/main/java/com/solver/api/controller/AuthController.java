@@ -84,6 +84,10 @@ public class AuthController {
 		userLoginRes.setMessage("로그인에 성공했습니다");
 		userLoginRes.setStatusCode(200);
 		
+		String profileUrl = kakaoUtil.getKakaoProfileUrl(oauthToken.getAccess_token());
+		
+		userService.insertDefaultProfile(kakaoId ,profileUrl);
+		
 		ModelAndView mav = new ModelAndView("jsonView");
 		
 		mav.setViewName("redirect:http://localhost:8081/auth/login");

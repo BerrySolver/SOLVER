@@ -6,4 +6,5 @@ import lombok.Data;
 public class TokenResponse {
 	Long kakaoId;
 	String accessToken;
+	String profileUrl;
 }
