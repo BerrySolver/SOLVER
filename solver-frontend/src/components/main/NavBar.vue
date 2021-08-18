@@ -118,29 +118,75 @@
                     :key="'m' + index"
                     
                     class="video-notification-item-set">
-
-                    <div class="video-notification-title">
-                      <span class="video-notification-datetime">{{ message.content }}</span>
-                      <span class="one">에</span>
-                    </div>
                     
-                    <div class="notification-explanation" @click="fromNotiToQuestion( message.questionId )">
-                      <span>
-                        <span class="video-notification-highlight">{{ message.sendNickName }}</span>
-                        <span>님으로부터 화상 회의가 요청되었습니다.</span>
-                      </span> 
-                    </div>
+                    <!-- TYPE 072 : 화상회의를 요청받음 -->
+                    <div v-if="message.type == '072'" @click="fromNotiToQuestion( message.questionId )">
+                      <div class="video-notification-title">
+                        <span class="video-notification-datetime">{{ message.content }}</span>
+                        <span class="one"> 에</span>
+                      </div>
 
-                    <div>
-                      <div class="video-button">
+                      <div class="notification-explanation">
+                        <span>
+                          <span class="video-notification-highlight">{{ message.sendNickName }}</span>
+                          <span>님으로부터 화상 회의가 요청되었습니다.</span>
+                        </span> 
+                      </div>
+
+                      <div v-if="message.checked == 0" class="video-button">
                         <button class="video-yes-button" @click="OKButton(message)">수락</button>
                         <button class="video-no-button interval" @click="NOButton(message)">거절</button>
                       </div>
+
+                      <hr class="notification-line">
                     </div>
-                    <hr class="notification-line">
+
+                    <!-- TYPE 073 : 화상회의가 승인되었음을 알림 -->
+                    <div v-if="message.type == '073'" @click="fromNotiToQuestion( message.questionId )">
+                      <div class="video-notification-title">
+                        <span class="video-notification-datetime">{{ message.sendNickName }}</span>
+                        <span class="one">님이 화상 회의 요청을 </span>
+                        <span class="video-notification-highlight">승인</span>
+                        <span class="one">하셨습니다.</span>
+                      </div>
+
+                      <div class="reason">"{{ message.content }}"</div>
+
+                      <hr class="notification-line">
+                    </div>
+
+                    <!-- TYPE 074 : 화상회의가 거절되었음을 알림 -->
+                    <div v-if="message.type == '074'" @click="fromNotiToQuestion( message.questionId )">
+                      <div class="video-notification-title">
+                        <span class="video-notification-datetime">{{ message.sendNickName }}</span>
+                        <span class="one">님이 화상 회의 요청을 </span>
+                        <span class="video-notification-highlight">거절</span>
+                        <span class="one">하셨습니다.</span>
+                      </div>
+
+                      <div class="reason">"{{ message.content }}"</div>
+
+                      <hr class="notification-line">
+                    </div>
+
+                    <!-- TYPE 075 : 화상회의가 곧 진행될 것을 알림 -->
+                    <div v-if="message.type == '075'" @click="fromNotiToQuestion( message.questionId )">
+                      <div class="video-notification-title">
+                        <span class="video-notification-datetime">{{ message.sendNickName }}</span>
+                        <span class="one">님과의 화상회의가 곧 </span>
+                        <span class="video-notification-highlight">시작</span>
+                        <span class="one">됩니다!</span>
+                      </div>                      
+
+                      <div class="video-enter">
+                        <button @click="pushToConference()" class="video-enter-button">입장하기</button>
+                      </div>
+                      <hr class="notification-line">
+                    </div>
                   </div>
                 </li>
 
+                <!-- 화상 알림이 0개일 때 -->
                 <li v-if="notificationVideoMsgList.length == 0">
                   <img src="@/assets/no-notification.png" class="no-notification-img">
                 </li>
@@ -231,6 +277,7 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken}
       })
       .then ((res) => {
+        console.log(res.data)
         this.notificationVideoMsgList = res.data.messageList
         })
       .catch ((err) => console.log(err))
@@ -247,6 +294,7 @@ export default {
       }
     },
 
+    // MODAL - 화상회의 요청 승낙시
     OKButton(message){
         this.$modal.show(ApprovalModal,{
           type: "073",
@@ -259,6 +307,7 @@ export default {
         });
     },
 
+    // MODAL - 화상회의 요청 거절시
     NOButton(message){
         this.$modal.show(RejectModal,{
           type: "074",
@@ -271,18 +320,28 @@ export default {
         });
     }
   },
-  // created() {
-  //   this.getNotifications()
-  //   this.getVideoNotifications()
-  // },
-  watch: {
-    notificationList() {
-      this.getNotifications
-    },
-    notificationVideoMsgList() {
-      this.getVideoNotifications
-    }
+
+  // 화상회의 사이트로 이동
+  pushToConference() {
+    axios({
+      //conference id 값은 테스트용
+      url: API.URL + `questions/5deK0GDhDpdZG/info`,
+      method: "get",
+      headers: { Authorization: "Bearer " + this.accessToken },
+    })
+      .then((res) => {
+        console.log(res);
+        const questionUserNickname = res.data.nickname;
+        this.$router.push({
+          name: "Conference",
+          params: { questionId: "5deK0GDhDpdZG", questionUserNickname: questionUserNickname },
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   },
+
 };
 </script>
 
