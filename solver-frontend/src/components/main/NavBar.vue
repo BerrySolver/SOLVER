@@ -218,14 +218,7 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken},
       })
       .then((res) => {
-        this.notificationList = res.data.notificationList
-        
-        // 만약, 알림이 20개가 넘어가면 자르기
-        if (this.notificationList.length > 20) {
-          const notificationArr = this.notificationList.splice(20, this.notificationList.length)
-          return notificationArr
-        } 
-
+        this.notificationList = res.data.notificationList;
       })
       .catch((err) => console.log(err))
     },
