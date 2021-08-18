@@ -163,8 +163,6 @@ public class ConferenceController {
 			@RequestBody ConferenceRecordPostReq conferenceRecordPostReq
 			) throws IOException, ParseException 
 	{
-		
-		System.out.println(accessToken);
 		conferenceService.recordConference(accessToken, questionId, response, conferenceRecordPostReq);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 종료 성공"));

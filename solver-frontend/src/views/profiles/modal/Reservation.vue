@@ -69,6 +69,7 @@ export default {
           let hour = date.getHours();
           hour = hour >= 10 ? hour : "0" + hour;
           let min = date.getMinutes();
+          if (min == 0) min = "00";
           let result = year + "-" + month + "-" + day + " " + hour + ":" + min;
 
           p.startDt = result;

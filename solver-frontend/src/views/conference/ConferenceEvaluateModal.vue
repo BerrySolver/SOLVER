@@ -40,7 +40,6 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import router from "@/router";
 import { mapState } from "vuex";
 
 export default {

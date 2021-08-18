@@ -2,16 +2,15 @@ package com.solver.api.controller;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
@@ -104,6 +105,23 @@ public class ProfileController {
 		profileService.updateProfilePossibleTime(profilePossibleTimePatchReq, accessToken, response);
 		
 		return ResponseEntity.status(201).body(BaseResponse.of(201, "화상 회의 테이블 정보 수정 성공"));
+	}
+	
+	/* 유저 화상 회의 테이블 정보 수정 */
+	@PutMapping(value="/profileImg", consumes= {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@ApiOperation(value = "회원 화상 회의 테이블 정보 수정", notes = "회원 화상 회의 테이블 정보 수정") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "화상 회의 테이블 정보 수정"),
+        @ApiResponse(code = 409, message = "화상 회의 테이블 정보 수정")
+    })
+	public ResponseEntity<? extends BaseResponse> updateProfileImg(
+			HttpServletResponse response, 
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			MultipartFile imgFile)
+	{		
+		profileService.updateProfileImg(imgFile, accessToken, response);
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "프로필 이미지 변경 완료"));
 	}
 	
 	/* 유저 탭 정보 조회
