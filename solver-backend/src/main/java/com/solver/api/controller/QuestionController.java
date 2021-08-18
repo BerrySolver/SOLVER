@@ -396,4 +396,5 @@ public class QuestionController {
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "참관 신청 취소 성공"));
 	}
+
 }

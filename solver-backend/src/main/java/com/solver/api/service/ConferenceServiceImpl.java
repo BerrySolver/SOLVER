@@ -39,6 +39,7 @@ import com.solver.db.repository.answer.EvaluationRepository;
 import com.solver.db.repository.conference.ConferenceLogRepository;
 import com.solver.db.repository.conference.ConferenceParticipantRepository;
 import com.solver.db.repository.conference.ConferenceRepository;
+import com.solver.db.repository.conference.ConferenceReservationRepository;
 import com.solver.db.repository.user.UserRepository;
 
 @Service
@@ -327,5 +328,6 @@ public class ConferenceServiceImpl implements ConferenceService {
 		
 		evaluationRepository.save(evaluation);
 	}
+
 
 }
