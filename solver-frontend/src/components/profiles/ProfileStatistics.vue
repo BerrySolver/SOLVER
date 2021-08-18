@@ -30,7 +30,7 @@
             <span class="subheading interval">답변 통계</span>            
           </div>
           <!-- answer-statistics의 lastchild(right) -->
-          <div class="text-left">
+          <div class="text-left" style="height: 300px;">
             <ProfilePieChart v-if="isLoaded && Object.keys(this.userStatistics.answerStatistics).length > 0" :dataset="chartDataset" :options="chartOptions"/>
             <span v-if="isLoaded && Object.keys(this.userStatistics.answerStatistics).length == 0">답변 기록이 아직 없어요</span>
           </div>
@@ -98,6 +98,7 @@ export default {
         hoverBorderWidth: 20,
         legend: {
           display: true,
+          position: 'left',
         },
         responsive: true,
         maintainAspectRatio: false,
@@ -157,9 +158,15 @@ export default {
   flex: 1; /* 공간차지비율 */
   height: 100%;
 }
+
 .answer-statistics > div:last-child {
   flex: 5.5; /* 공간차지비율 */
   height: 100%;
+}
+
+#doughnut-chart {
+  width: 553px;
+  height: 250px;
 }
 
 .content-center {
@@ -178,6 +185,7 @@ export default {
   flex: 6; /* 공간차지비율 */
   height: 100%;
 }
+
 .statistics-info > div:last-child {
   flex: 4; /* 공간차지비율 */
   height: 100%;
