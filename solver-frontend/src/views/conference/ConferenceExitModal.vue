@@ -4,7 +4,7 @@
     <hr />
     <p>화상 회의에서 나가시겠습니까?</p>
     <div class="question-delete-button-bar">
-      <button type="button" class="btn btn-submit" @click="finishiConference()">나가기</button>
+      <button type="button" class="btn btn-submit" @click="exitConferenceLog()">나가기</button>
       <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소</button>
     </div>
   </div>
@@ -12,6 +12,8 @@
 
 <script>
 import { mapState } from "vuex";
+import axios from "axios";
+import API from "@/API.js";
 
 export default {
   data: function() {
@@ -26,6 +28,22 @@ export default {
     finishiConference() {
       this.$emit("close");
       location.href = "/";
+    },
+    exitConferenceLog() {
+      axios({
+        url: API.URL + API.ROUTES.conferenceLog,
+        method: "post",
+        data: {
+          type: "031",
+        },
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then(() => {
+          this.finishiConference();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
   computed: {
