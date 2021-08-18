@@ -53,7 +53,7 @@
               {{ question.title }}
             </div>
             <div class="card-question-body">
-              <div class="card-text card-content">{{ question.content }}</div>
+              <div class="card-text card-content" v-html="question.content"></div>
               <p class="card-text text-right">
                 <img
                   style="width:15px;"
@@ -123,20 +123,20 @@
       </div>
     </div>
 
-    <!-- 4번째 메인 페이지(모임) -->
+    <!-- 4번째 메인 페이지(공지) -->
     <div class="group-container">
       <div class="group-container-contents">
         <div class="group-title">
-          <div class="semi-title">모임</div>
           <div class="group-card">
             <section class="page-contain">
               <a class="data-card" href="https://danghyeona.notion.site/5999b6935e544b5fa9557e26f567b04a">
                 <div class="data-card-height">
                   <h3>공지사항</h3>
-                  <h4></h4>
-                  <h4>JAVA</h4>
-                  <h4>Vue.js</h4>
-                  <p>Aeneansed consectetur.</p>
+                  <h4>안내사항</h4>
+                  <h4>개발기록</h4>
+                  <h4>개발자 후기</h4>
+                  <h4>업데이트 예정</h4>
+                  <p>꼼꼼히 보면 재미있는 정보!</p>
                 </div>
                 <span class="link-text">
                   상세보기
@@ -159,8 +159,10 @@
               <a class="data-card" href="https://danghyeona.notion.site/SOLVER-e5336b26f14147d69f9f124cd8574e9b">
                 <div class="data-card-height">
                   <h3>솔버소개</h3>
-                  <h4>Python</h4>
-                  <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                  <h4>솔버란?</h4>
+                  <h4>솔버의 강점</h4>
+                  <h4>솔버의 모든것</h4>
+                  <p>이렇게까지 디테일하다고?!</p>
                 </div>
                 <span class="link-text">
                   상세보기
@@ -183,9 +185,10 @@
               <a class="data-card" href="https://danghyeona.notion.site/1c352b72fa604393adda86b681a0c3b9">                
                 <div class="data-card-height">
                   <h3>베리소개</h3>
-                  <h4>Python</h4>
-                  <h4>JAVA</h4>
-                  <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                  <h4>베리란?</h4>
+                  <h4>베리의 역할</h4>
+                  <h4>다양한 베리</h4>
+                  <p>동글동글 귀여운 얘는,<br>도대체 누구야?!</p>
                 </div>
                 <span class="link-text">
                   상세보기
@@ -208,10 +211,11 @@
               <a class="data-card" href="https://danghyeona.notion.site/edce4119fb7c49aea92846efa4253ae4">
                 <div class="data-card-height">
                   <h3>고객센터</h3>
-                  <h4>Python</h4>
-                  <h4>JAVA</h4>
-                  <h4>Vue.js</h4>
-                  <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+                  <h4>1:1 문의</h4>
+                  <h4>오류 신고</h4>
+                  <h4>서비스 평가</h4>
+                  <h4>자주 묻는 질문</h4>
+                  <p>여러분과 함께 만들어갑니다.</p>
                 </div>
                 <span class="link-text">
                   상세보기
@@ -302,27 +306,40 @@ export default {
       }).catch((err)=>{
 
       });
-    }
+    },
+    getMainQuestionList : function(){
+      axios({
+        url: API.URL + API.ROUTES.getRecommendQuestion,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+      .then((res) => {
+        this.mainQuestion = res.data.list;
+        this.mainQuestion.forEach((e) => {
+          var isImage = false;
+          var isVideo = false;
+          while (e.content.indexOf("<figure") != -1) {
+            if (e.content.indexOf('<figure class="image">') != -1) {
+              isImage = true;
+            }
+            if (e.content.indexOf('<figure class="media">') != -1) {
+              isVideo = true;
+            }
+            e.content =
+              e.content.slice(0, e.content.indexOf("<figure")) +
+              e.content.slice(e.content.indexOf("</figure>") + 9);
+          }
+          // e.isImge = isImage;
+          // e.isVideao = isVideo;
+        });
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+    },
   },
   created() {
-    axios({
-      url: API.URL + API.ROUTES.getQuestionList,
-      method: "get",
-      params: {
-        mode: "likeDesc",
-        limit: 6,
-        offest: 0,
-      },
-    })
-    .then((res) => {
-      for (var i = 0; i < 6; i++) {
-        this.mainQuestion.push(res.data.questionFormList[i]);
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-    });
-
+    this.getMainQuestionList();
     this.getPaySolverList();
   },
   computed : {    
@@ -335,6 +352,7 @@ export default {
   },
   watch: {
     mainChangeTrigger: function () {
+      this.getMainQuestionList();
       this.getPaySolverList();
     },
   }
