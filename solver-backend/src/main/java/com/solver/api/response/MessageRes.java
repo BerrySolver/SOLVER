@@ -15,6 +15,9 @@ import lombok.Setter;
 @Setter
 @ApiModel("MessageRes")
 public class MessageRes extends BaseResponse{
+	
+	@ApiModelProperty(name="메시지 ID")
+	private String messageId;	
 
 	@ApiModelProperty(name = "질문 ID")
 	private String questionId;
@@ -30,6 +33,10 @@ public class MessageRes extends BaseResponse{
 
 	@ApiModelProperty(name = "알림 등록 시간")
 	private Date regDt;
+	
+	// 알림 처리 유무
+	@ApiModelProperty(name="알림 처리 유무")
+	private boolean checked;
 
 	public static MessageRes of(Integer statusCode, String message, MessageRes messageRes) {
 		MessageRes res = messageRes;

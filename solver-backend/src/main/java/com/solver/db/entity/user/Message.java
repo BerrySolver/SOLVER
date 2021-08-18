@@ -37,4 +37,6 @@ public class Message extends BaseEntity{
 	private Code code;
 	
 	private Date regDt;
+	
+	private boolean checked;
 }

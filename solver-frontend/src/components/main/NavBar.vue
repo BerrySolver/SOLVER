@@ -113,7 +113,7 @@
                   <div
                     v-for="(message, index) in notificationVideoMsgList"
                     :key="'m' + index"
-                    @click="fromNotiToQuestion( message.questionId )"
+                    
                     class="video-notification-item-set">
 
                     <div class="video-notification-title">
@@ -121,16 +121,18 @@
                       <span class="one">에</span>
                     </div>
                     
-                    <div class="notification-explanation">
+                    <div class="notification-explanation" @click="fromNotiToQuestion( message.questionId )">
                       <span>
                         <span class="video-notification-highlight">{{ message.sendNickName }}</span>
                         <span>님으로부터 화상 회의가 요청되었습니다.</span>
                       </span> 
                     </div>
 
-                    <div class="video-button">
-                      <button class="video-yes-button">수락</button>
-                      <button class="video-no-button interval">거절</button>
+                    <div>
+                      <div class="video-button">
+                        <button class="video-yes-button" @click="OKButton(message)">수락</button>
+                        <button class="video-no-button interval" @click="NOButton(message)">거절</button>
+                      </div>
                     </div>
                     <hr class="notification-line">
                   </div>
@@ -154,6 +156,9 @@
 import API from "@/API.js"
 import axios from 'axios';
 import { mapActions, mapGetters, mapState } from "vuex";
+
+import RejectModal from "@/components/main/RejectModal.vue";
+import ApprovalModal from "@/components/main/ApprovalModal.vue";
 
 export default {
   name: "Navbar",
@@ -239,6 +244,30 @@ export default {
     fromNotiToQuestion(questionId) {
       this.goQuestionDetail(questionId)
     },
+
+    OKButton(message){
+        this.$modal.show(ApprovalModal,{
+          type: "073",
+          messageId: message.messageId, 
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
+    },
+
+    NOButton(message){
+        this.$modal.show(RejectModal,{
+          type: "074",
+          messageId: message.messageId, 
+          modal : this.$modal },{
+            name: 'dynamic-modal',
+            width : '600px',
+            height : '250px',
+            draggable: false,
+        });
+    }
   },
   // created() {
   //   this.getNotifications()
