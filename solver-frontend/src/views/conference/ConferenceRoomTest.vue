@@ -942,8 +942,11 @@ input[type="submit"] {
   overflow: hide;
 }
 
+#router {
+  background: linear-gradient(135deg, #658dc6, #b5c7d3);
+}
+
 #wrapper {
-  background-color: #b5c7d3;
   min-height: 1900px;
 }
 </style>

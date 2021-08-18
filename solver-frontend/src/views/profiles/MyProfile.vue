@@ -4,6 +4,12 @@
       <!-- profile-image section -->
       <div class="profile-img-section">
         <img style="object-fit: cover;" :src="userProfileInfo.profileUrl" class="profile-img" />
+        <label class="profile-img-label" for="profile-img-input" type="file"
+          ><img src="@/assets/edit-button.png" width="20px"
+        /></label>
+        <form id="profileImgForm" enctype="multipart/form-data">
+          <input @change="profileImgChange()" id="profile-img-input" type="file" />
+        </form>
       </div>
 
       <!-- profile-text_info section -->
@@ -157,11 +163,11 @@
             <div class="follow-info">
               <span class="follower-button" @click="getFollowList(1)">
                 <span class="subheading">팔로워</span>
-                <span class="interval point-color-1">{{followers}}</span>
+                <span class="interval point-color-1">{{ followers }}</span>
               </span>
               <span class="following-button" @click="getFollowList(0)">
                 <span class="subheading">팔로잉</span>
-                <span class="interval point-color-1">{{userProfileInfo.followings}}</span>
+                <span class="interval point-color-1">{{ userProfileInfo.followings }}</span>
               </span>
             </div>
             <br />
@@ -350,7 +356,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex'
+import { mapActions, mapGetters, mapState } from "vuex";
 
 import ProfileTimetable from "@/components/profiles/ProfileTimetable";
 import ProfileStatistics from "@/components/profiles/ProfileStatistics";
@@ -358,10 +364,10 @@ import ProfileHistory from "@/components/profiles/ProfileHistory";
 import ProfileMyQuestions from "@/components/profiles/ProfileMyQuestions";
 import ProfileBookmark from "@/components/profiles/ProfileBookmark";
 import PointLog from "./modal/PointLogModal.vue";
-import PaySolver from './modal/PaySolverModal.vue';
-import Reservation from "./modal/Reservation.vue"
-import FollowListModal from "./modal/FollowListModal.vue"
-import LoginModal from "@/components/main/LoginModal"
+import PaySolver from "./modal/PaySolverModal.vue";
+import Reservation from "./modal/Reservation.vue";
+import FollowListModal from "./modal/FollowListModal.vue";
+import LoginModal from "@/components/main/LoginModal";
 
 import axios from "axios";
 import API from "@/API.js";
@@ -411,6 +417,7 @@ export default {
       ],
       userProfileInfo: {},
       isLoaded: false,
+      profileImgFile: null,
     };
   },
   methods: {
@@ -485,25 +492,35 @@ export default {
 
     getFollowList(mode) {
       if (!this.isLoggedIn) {
-        this.$modal.show(LoginModal,{
-          modal : this.$modal },{
-            name: 'dynamic-modal',
-            width : '600px',
-            height : '250px',
-            draggable: false,
-        });
-      } else {
-        this.$modal.show(FollowListModal,{
-          data: {
-            mode: mode,
-            nickname: this.$route.params.nickname
+        this.$modal.show(
+          LoginModal,
+          {
+            modal: this.$modal,
           },
-          modal : this.$modal },{
-            name: 'dynamic-modal',
-            width : '600px',
-            height : '700px',
+          {
+            name: "dynamic-modal",
+            width: "600px",
+            height: "250px",
             draggable: false,
-        });
+          }
+        );
+      } else {
+        this.$modal.show(
+          FollowListModal,
+          {
+            data: {
+              mode: mode,
+              nickname: this.$route.params.nickname,
+            },
+            modal: this.$modal,
+          },
+          {
+            name: "dynamic-modal",
+            width: "600px",
+            height: "700px",
+            draggable: false,
+          }
+        );
       }
     },
     // 카테고리 수정 요청 CLICK
@@ -645,6 +662,25 @@ export default {
         }
       );
     },
+    profileImgChange() {
+      const fileInput = document.getElementById("profile-img-input").files[0];
+      const formData = new FormData();
+      formData.append("imgFile", fileInput);
+      axios
+        .put(API.URL + `profiles/profileImg`, formData, {
+          headers: {
+            Authorization: "Bearer " + this.accessToken,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          this.profileSetting();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   computed: {
     ...mapState({
@@ -652,9 +688,7 @@ export default {
       categoryList: (state) => state.auth.categoryList,
       userNickname: (state) => state.auth.userNickname,
     }),
-    ...mapGetters([
-      'isLoggedIn'
-    ]),
+    ...mapGetters(["isLoggedIn"]),
     groups() {
       return this.userProfileInfo.groupNameList;
     },
@@ -705,4 +739,27 @@ export default {
 <style>
 @import "./Profile.css";
 @import "../../common.css";
+</style>
+
+<style scoped>
+#profile-img-input {
+  display: none;
+}
+
+.profile-img-section {
+  position: relative;
+}
+
+.profile-img-section img {
+  background-color: white;
+}
+
+.profile-img-label {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 310px;
+  top: 238px;
+  cursor: pointer;
+}
 </style>
