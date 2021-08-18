@@ -123,7 +123,7 @@
               >
               <span style="margin: 0 30px 0 30px;">|</span>
               <span class="question-mode-item" :style="{ color: modeColor[1] }" @click="setMode(1)"
-                >답변순</span
+                >조회순</span
               >
               <span style="margin: 0 30px 0 30px;">|</span>
               <span class="question-mode-item" :style="{ color: modeColor[2] }" @click="setMode(2)"
@@ -375,7 +375,7 @@ export default {
     },
     setMode: function(modeNum) {
       if (modeNum === 1) {
-        this.request.mode = "answerDesc";
+        this.request.mode = "visitDesc";
       } else if (modeNum == 2) {
         this.request.mode = "likeDesc";
       } else {
@@ -547,7 +547,7 @@ export default {
       }
     },
     modeWatch: function() {
-      if (this.modeWatch == "answerDesc") {
+      if (this.modeWatch == "visitDesc") {
         this.modeColor[0] = "#89848C";
         this.modeColor[1] = "#0F4C81";
         this.modeColor[2] = "#89848C";
