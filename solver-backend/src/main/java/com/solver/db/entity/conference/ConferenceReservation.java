@@ -1,5 +1,7 @@
 package com.solver.db.entity.conference;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -17,6 +19,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ConferenceReservation extends BaseEntity{
+	private Date startDt;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="userId")
