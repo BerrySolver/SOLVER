@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import auth from "@/store/modules/auth.js";
 
 import Main from "@/views/main/Main.vue";
 
@@ -86,6 +87,23 @@ const router = new VueRouter({
   scrollBehavior() {
     return { x: 0, y: 0 };
   },
+});
+
+router.beforeEach((to, from, next) => {
+  const local = localStorage.getItem("vuex");
+
+  if (local != null) {
+    const loginTime = JSON.parse(local).auth.loginTime;
+
+    if (loginTime != null) {
+      const currentTime = new Date().getTime();
+      if (currentTime - loginTime > 1000 * 60 * 60 * 2) {
+        localStorage.clear();
+      }
+    }
+  }
+
+  next();
 });
 
 export default router;
