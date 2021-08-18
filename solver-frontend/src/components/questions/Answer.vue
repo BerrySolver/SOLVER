@@ -46,7 +46,7 @@
                 />
               </div>
               <div
-                v-if="questionNickname == nickname"
+                v-if="questionNickname == nickname && answer.nickname != nickname"
                 class="answer-button"
                 @click="openRequestConference(answer)"
               >

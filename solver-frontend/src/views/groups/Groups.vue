@@ -12,8 +12,8 @@
     <div class="groups">
       <div class="groups-container">
         <div class="group-form-group">
-            <input class="group-form-field" type="text" placeholder="닉네임을 검색해보세요!">
-            <span>검&nbsp;&nbsp;색</span>
+            <input class="group-form-field" type="text" placeholder="키워드를 검색해보세요!" @keypress.enter="goGroupDetail">
+            <span @click="goGroupDetail()" class="group-search-btn">검&nbsp;&nbsp;색</span>
         </div>
         <div class="group-list">
           <div
@@ -154,8 +154,8 @@ export default {
 
   .group-form-group {
     display: flex;
-    margin: 15px 0 0 10px;
-    width: 500px;
+    margin: 20px 0 0 10px;
+    width: 1140px;
   }
 
   .group-form-group > span,
@@ -204,6 +204,11 @@ export default {
     background: #EEF4FF;
     border: 1px solid #CDD9ED;
     transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+  }
+
+  .group-form-group > span:hover {
+    cursor: pointer;
+    color: #0F4C81;
   }
 
   .group-form-group:focus-within > span {
@@ -272,5 +277,10 @@ export default {
     display: flex;
     height: 180px;
     justify-content: center;
+  }
+
+  .group-search-btn:hover{
+    cursor: pointer;
+    color: #0F4C81;
   }
 </style>
