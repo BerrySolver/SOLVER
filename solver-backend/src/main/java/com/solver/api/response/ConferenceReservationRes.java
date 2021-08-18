@@ -28,6 +28,7 @@ public class ConferenceReservationRes extends BaseResponse{
 			conferenceReservationForm.setQuestionId(conferenceReservation.getQuestion().getId());
 			conferenceReservationForm.setStartDt(conferenceReservation.getStartDt());
 			conferenceReservationForm.setUserId(conferenceReservation.getUser().getId());
+			conferenceReservationForm.setQuestionTitle(conferenceReservation.getQuestion().getTitle());
 			
 			tempList.add(conferenceReservationForm);
 		}
@@ -44,7 +45,9 @@ public class ConferenceReservationRes extends BaseResponse{
 class ConferenceReservationForm{
 	private String userId;
 	
-	private String QuestionId;
+	private String questionId;
+	
+	private String questionTitle;
 	
 	private Date startDt;
 	
