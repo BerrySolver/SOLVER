@@ -77,7 +77,46 @@
                       @click="fromNotiToQuestion(notification.questionId)"
                       class="notification-item-set"
                     >
-                      <div class="notification-title">'{{ notification.title }}'</div>
+                      <div class="notification-title" v-if="notification.code != 66">
+                        '{{ notification.title }}'
+                      </div>
+                      <div class="notification-title" v-if="notification.code == 66">
+                        '팔로우가 추가되었습니다!'
+                      </div>
+
+                      <div class="notification-explanation">
+                        <span v-if="notification.code == 60"
+                          >라는 글에 새로운 <span class="notification-highlight">답변</span>이
+                          달렸습니다.</span
+                        >
+                        <span v-if="notification.code == 61"
+                          >라는 글에 새로운 <span class="notification-highlight">댓글</span>이
+                          달렸습니다.</span
+                        >
+                        <span v-if="notification.code == 62"
+                          >라는 글에 <span class="notification-highlight">좋아요</span>가
+                          달렸습니다.</span
+                        >
+                        <span v-if="notification.code == 63"
+                          >에 대한 답변에 <span class="notification-highlight">좋아요</span>가
+                          달렸습니다.</span
+                        >
+                        <span v-if="notification.code == 64"
+                          >라는 글이
+                          <span class="notification-highlight">북마크</span>되었습니다.</span
+                        >
+                        <span v-if="notification.code == 65"
+                          >라는 글이
+                          <span class="notification-highlight">채택</span>되었습니다.</span
+                        >
+                        <span v-if="notification.code == 66"
+                          >새로운 솔버가
+                          <span class="notification-highlight">팔로우</span>했습니다.</span
+                        >
+                        <span class="notification-dateTime">{{
+                          humanize(now, notification.regDt)
+                        }}</span>
+                      </div>
 
                       <div class="notification-explanation">
                         <span v-if="notification.code == 60"
@@ -227,7 +266,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["logout", "triggerMainReload"]),
+    ...mapActions(["logout", "goQuestionDetail", "triggerMainReload"]),
     clickLogout() {
       this.logout();
       this.triggerMainReload();
@@ -284,7 +323,13 @@ export default {
 
     // 알림 → 질문 상세로 이동
     fromNotiToQuestion(questionId) {
-      this.goQuestionDetail(questionId);
+      if (questionId == null) {
+        this.$router.push({
+          path: `/my-profile/${this.userNickname}`,
+        });
+      } else {
+        this.goQuestionDetail(questionId);
+      }
     },
 
     OKButton(message) {
