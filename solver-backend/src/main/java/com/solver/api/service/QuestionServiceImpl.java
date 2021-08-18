@@ -1,6 +1,9 @@
 package com.solver.api.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -15,19 +18,28 @@ import com.solver.api.request.QuestionGetListReq;
 import com.solver.api.request.QuestionPatchReq;
 import com.solver.api.request.QuestionPostReq;
 import com.solver.api.response.QuestionListRes;
+import com.solver.api.response.QuestionRecommendRes;
+import com.solver.api.response.QuestionRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.TokenResponse;
 import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
+import com.solver.db.entity.code.FavoriteField;
+import com.solver.db.entity.question.BookmarkQuestion;
+import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
+import com.solver.db.repository.question.BookmarkQuestionRepository;
+import com.solver.db.repository.question.FavoriteQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.question.QuestionRepositorySupport;
 import com.solver.db.repository.user.UserRepository;
+
+import lombok.Getter;
 
 @Service
 public class QuestionServiceImpl implements QuestionService{
@@ -45,6 +57,12 @@ public class QuestionServiceImpl implements QuestionService{
 	
 	@Autowired
 	CategoryRepository categoryRepository;
+	
+	@Autowired
+	FavoriteQuestionRepository favoriteQuestionRepository;
+	
+	@Autowired
+	BookmarkQuestionRepository bookmarkQuestionRepository;
 	
 	@Autowired
 	AnswerRepository answerRepository;
@@ -241,4 +259,89 @@ public class QuestionServiceImpl implements QuestionService{
 		return questionList;
 	}
 
+	@Override
+	public List<QuestionRecommendRes> getRecommendQuestion(String accessToken, HttpServletResponse response) {	
+		// 로그인 확인
+		String token = accessToken.split(" ")[1];
+		
+		List<String> subCategory = new ArrayList<String>();
+		if(!token.equals("null")) {
+			TokenResponse tokenResponse = new TokenResponse();			
+			tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+			Long kakaoId = tokenResponse.getKakaoId();			
+			User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+			List<FavoriteField> fields = user.getFavoriteField(); // 나의 관심분야 가져오기	
+			for (FavoriteField favoriteField : fields)
+				subCategory.add(favoriteField.getCategory().getSubCategoryCode());
+		}
+		
+		List<Question> questionList = questionRepositorySupport.findDynamicQueryQuestion(null, null, null, 0, null, "likeDesc");
+		
+//		List<Recommend> recommendList = new ArrayList<Recommend>();
+//		for (Question question : questionList)
+//			recommendList.add(new Recommend(question));
+//		
+//		Collections.sort(recommendList, new Comparator<Recommend>() {
+//
+//			@Override
+//			public int compare(Recommend o1, Recommend o2) {				
+//				return o2.point - o1.point;
+//			}
+//		});
+		Collections.sort(questionList, new Comparator<Question>() {
+
+			@Override
+			public int compare(Question o1, Question o2) {
+				return o2.getReadCount()-o1.getReadCount();
+			}
+		});
+		
+		List<QuestionRecommendRes> list = new ArrayList<QuestionRecommendRes>();
+		int size = 0;
+		
+//		for (Recommend recommend : recommendList) {
+//			Question q = recommend.getQuestion();
+		for(Question q : questionList) {
+			
+			if(!token.equals("null") && !subCategory.contains(q.getSubCategory().getSubCategoryCode())) {
+				// 로그인상태인데, 현 글이 내 관심분야에 없을 때는 다음 질문 확인
+				continue;
+			}
+			
+			QuestionRecommendRes res = new QuestionRecommendRes();
+			res.setQuestionId(q.getId());
+			res.setTitle(q.getTitle());
+			res.setContent(q.getContent());
+			res.setAnswerCount(favoriteQuestionRepository.findByQuestionId(q.getId()).size());
+			res.setLikeCount(bookmarkQuestionRepository.findByQuestionId(q.getId()).size());
+			res.setBookMarkCount(answerRepository.findByQuestionId(q.getId()).size());
+			res.setReadCount(q.getReadCount());
+			list.add(res);
+			
+			if(++size==6)
+				break;
+		}
+		
+		
+		
+		return list;
+	}
+	
+//	@Getter
+//	class Recommend{
+//		public Question question;
+//		public int point;
+//		public int likeCnt;
+//		public int bookMarkCnt;
+//		public int answerCnt;
+//		
+//		public Recommend(Question q) {
+//			this.question = q;
+//			this.likeCnt = favoriteQuestionRepository.findByQuestionId(q.getId()).size();
+//			this.bookMarkCnt = bookmarkQuestionRepository.findByQuestionId(q.getId()).size();
+//			this.answerCnt = answerRepository.findByQuestionId(q.getId()).size();
+//			
+//			this.point = q.getReadCount() + this.likeCnt + this.bookMarkCnt + this.answerCnt; 
+//		}
+//	}
 }
