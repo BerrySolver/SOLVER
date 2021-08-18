@@ -60,9 +60,15 @@ public class NotificationServiceImpl implements NotificationService{
 		// 반환 리스트 만들기
 		for (Notification notifi : notification) {
 			NotificationRes notificationRes = new NotificationRes();
-			notificationRes.setQuestionId(notifi.getQuestion().getId());
+			if(notifi.getQuestion() == null)
+				notificationRes.setQuestionId(null);
+			else
+				notificationRes.setQuestionId(notifi.getQuestion().getId());
 			notificationRes.setCode(notifi.getCode().getCode());
-			notificationRes.setTitle(notifi.getQuestion().getTitle());
+			if(notifi.getQuestion() == null)
+				notificationRes.setTitle(null);
+			else
+				notificationRes.setTitle(notifi.getQuestion().getTitle());
 			notificationRes.setRegDt(notifi.getRegDt());
 			list.add(notificationRes);
 		}

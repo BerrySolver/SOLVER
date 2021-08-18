@@ -1,6 +1,7 @@
 package com.solver.api.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.Evaluation;
 import com.solver.db.entity.code.Category;
+import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.conference.ConferenceLog;
@@ -29,12 +31,14 @@ import com.solver.db.entity.question.BookmarkQuestion;
 import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.FavoriteUser;
+import com.solver.db.entity.user.Notification;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 import com.solver.db.entity.user.UserCalendar;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.answer.EvaluationRepository;
 import com.solver.db.repository.code.CategoryRepository;
+import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.conference.ConferenceLogRepository;
@@ -42,6 +46,7 @@ import com.solver.db.repository.group.GroupMemberRepository;
 import com.solver.db.repository.question.BookmarkQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.user.FavoriteUserRepository;
+import com.solver.db.repository.user.NotificationRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserCalendarRepository;
 import com.solver.db.repository.user.UserRepository;
@@ -89,6 +94,12 @@ public class ProfileServiceImpl implements ProfileService{
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
+
+	@Autowired
+	NotificationRepository notificationRepository;
+
+	@Autowired
+	CodeRepository codeRepository;
 
 	/* 마이페이지 정보를 불러 올 때 그룹이나 관심분야는 그냥 이름만 불러오나 - o
 	 * 관심분야는 sub category 기준인가 - o
@@ -425,6 +436,19 @@ public class ProfileServiceImpl implements ProfileService{
 		}
 
 		
+		// 알림 배당 : 팔로우를 당한 사람에게 알림을 배당함
+		Notification notification = new Notification();
+		notification.setId(RandomIdUtil.makeRandomId(13));
+		notification.setQuestion(null); // 질문이 아니기에 null 처리
+		notification.setRegDt(new Date(System.currentTimeMillis()));
+		
+		Code notiCode = codeRepository.findByCode("066");
+		notification.setCode(notiCode);
+		notification.setUser(followedUserInfo);
+		
+		notificationRepository.save(notification);
+		
+		// 팔로우 유저 등록
 		FavoriteUser favoriteUser = new FavoriteUser();
 		favoriteUser.setFollowingUser(myUserInfo);
 		favoriteUser.setUser(followedUserInfo);
