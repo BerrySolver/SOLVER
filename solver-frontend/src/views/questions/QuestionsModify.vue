@@ -22,6 +22,7 @@
                   color="#0F4C81"
                   class="selectMainCategory"
                   v-model="request.mainCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setMainCategory"
                 >
@@ -38,6 +39,7 @@
                   color="#0F4C81"
                   class="selectSubCategory"
                   v-model="request.subCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setSubCategory"
                 >
@@ -54,6 +56,7 @@
                   color="#0F4C81"
                   class="selectDifficulty"
                   v-model="request.difficulty"
+                  icon-pack=false
                   width="285px"
                   @change="setDifficulty"
                 >
@@ -84,7 +87,7 @@
             <div id="divEditorInsert"></div>
             <div class="row btn-group">
               <div class="question-create-btn1 col-5" @click="questionModify">
-                수정하기
+                수정
               </div>
               <div class="question-cancel-btn1 col-5" @click="clickCancle">
                 취소
