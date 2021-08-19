@@ -23,9 +23,9 @@
               <li class="nav-item">
                 <RouterLink :to="{ name: 'Questions' }" class="nav-router">질문/답변</RouterLink>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <RouterLink :to="{ name: 'Groups' }" class="nav-router">모임</RouterLink>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <RouterLink :to="{ name: 'Solvers' }" class="nav-router">솔버</RouterLink>
               </li>
