@@ -143,11 +143,11 @@
             >
               <div class="d-flex" style="margin-bottom: 10px;">
                 <div
-                  style="background-color: #B5C7D3; border-radius: 6px; height: 27px; margin-top: 1px; width: 27px;"
+                  style="background-color: #B5C7D3; border-radius: 6px; height: 27px; margin-top: 1px; width: 27px; padding-top:2px;"
                 >
-                  <span style="color: white; font-size: 20px; font-weight: 700;">{{
-                    question.difficulty
-                  }}</span>
+                  <span v-if="question.difficulty == 1" style="color: white; font-size: 17px; font-weight: 700;">하</span>
+                  <span v-else-if="question.difficulty == 2" style="color: white; font-size: 17px; font-weight: 700;">중</span>
+                  <span v-else style="color: white; font-size: 17px; font-weight: 700;">상</span>
                 </div>
                 <div style="display: flex;">
                   <span

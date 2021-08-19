@@ -38,7 +38,8 @@ public class KakaoUtil {
     	MultiValueMap<String, String> tokenParams = new LinkedMultiValueMap<>();
     	tokenParams.add("grant_type", "authorization_code");
     	tokenParams.add("client_id", "4d0b843e88238ebf6614549fce8bff85");
-    	tokenParams.add("redirect_uri", "https://localhost:8080/api/v1/auth/login");
+    	//tokenParams.add("redirect_uri", "https://localhost:8080/api/v1/auth/login");
+    	tokenParams.add("redirect_uri", "https://i5a507.p.ssafy.io:8080/api/v1/auth/login");
     	tokenParams.add("code", code);
     	
     	//HttpHeader와 HttpBody를 하나의 오브젝트에 담기

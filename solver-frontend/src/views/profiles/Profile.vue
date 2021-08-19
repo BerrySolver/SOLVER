@@ -119,50 +119,80 @@
             <div>
               <!-- null값 없으면 오류 발생 -->
               <div v-if="!isNaN">
-                <span v-for="berryImg01 in 5" :key="'b0'+berryImg01">
-                  <img src="@/assets/berry-1-b.png" width="42px" class="berry-opacity">
+                <span v-for="berryImg01 in 5" :key="'b0' + berryImg01">
+                  <img src="@/assets/berry-1-b.png" width="42px" class="berry-opacity" />
                 </span>
               </div>
               <div v-if="isNaN">
-                <div v-if="userProfileInfo.remainingPoint < 100">
-                  <span v-for="berryImg01 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c1'+berryImg01">
-                    <img src="@/assets/berry-1.png" width="42px">
+                <div v-if="userProfileInfo.point < 100">
+                  <span
+                    v-for="berryImg01 in parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'c1' + berryImg01"
+                  >
+                    <img src="@/assets/berry-1.png" width="42px" />
                   </span>
-                  <span v-for="berryImg01 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b1'+berryImg01">
-                    <img src="@/assets/berry-1-b.png" width="42px" class="berry-opacity">
+                  <span
+                    v-for="berryImg01 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'b1' + berryImg01"
+                  >
+                    <img src="@/assets/berry-1-b.png" width="42px" class="berry-opacity" />
                   </span>
                 </div>
-                <div v-if="100 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 200">
-                  <span v-for="berryImg02 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c2'+berryImg02">
-                    <img src="@/assets/berry-2.png" width="42px">
+                <div v-if="100 <= userProfileInfo.point && userProfileInfo.point < 200">
+                  <span
+                    v-for="berryImg02 in parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'c2' + berryImg02"
+                  >
+                    <img src="@/assets/berry-2.png" width="42px" />
                   </span>
-                  <span v-for="berryImg02 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b2'+berryImg02">
-                    <img src="@/assets/berry-2-b.png" width="42px" class="berry-opacity">
-                  </span>                
-                </div>    
-                <div v-if="200 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 300">
-                  <span v-for="berryImg03 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c3'+berryImg03">
-                    <img src="@/assets/berry-3.png" width="42px">
+                  <span
+                    v-for="berryImg02 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'b2' + berryImg02"
+                  >
+                    <img src="@/assets/berry-2-b.png" width="42px" class="berry-opacity" />
                   </span>
-                  <span v-for="berryImg03 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b3'+berryImg03">
-                    <img src="@/assets/berry-3-b.png" width="42px" class="berry-opacity">
-                  </span>  
                 </div>
-                <div v-if="300 <= userProfileInfo.remainingPoint && userProfileInfo.remainingPoint < 400">
-                  <span v-for="berryImg04 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c4'+berryImg04">
-                    <img src="@/assets/berry-4.png" width="42px">
+                <div v-if="200 <= userProfileInfo.point && userProfileInfo.point < 300">
+                  <span
+                    v-for="berryImg03 in parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'c3' + berryImg03"
+                  >
+                    <img src="@/assets/berry-3.png" width="42px" />
                   </span>
-                  <span v-for="berryImg04 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b4'+berryImg04">
-                    <img src="@/assets/berry-4-b.png" width="42px" class="berry-opacity">
-                  </span> 
-                </div>         
-                <div v-if="400 <= userProfileInfo.remainingPoint">
-                  <span v-for="berryImg05 in parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'c5'+berryImg05">
-                    <img src="@/assets/berry-5.png" width="42px">
+                  <span
+                    v-for="berryImg03 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'b3' + berryImg03"
+                  >
+                    <img src="@/assets/berry-3-b.png" width="42px" class="berry-opacity" />
                   </span>
-                  <span v-for="berryImg05 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)" :key="'b5'+berryImg05">
-                    <img src="@/assets/berry-5-b.png" width="42px" class="berry-opacity">
-                  </span> 
+                </div>
+                <div v-if="300 <= userProfileInfo.point && userProfileInfo.point < 400">
+                  <span
+                    v-for="berryImg04 in parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'c4' + berryImg04"
+                  >
+                    <img src="@/assets/berry-4.png" width="42px" />
+                  </span>
+                  <span
+                    v-for="berryImg04 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'b4' + berryImg04"
+                  >
+                    <img src="@/assets/berry-4-b.png" width="42px" class="berry-opacity" />
+                  </span>
+                </div>
+                <div v-if="400 <= userProfileInfo.point">
+                  <span
+                    v-for="berryImg05 in parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'c5' + berryImg05"
+                  >
+                    <img src="@/assets/berry-5.png" width="42px" />
+                  </span>
+                  <span
+                    v-for="berryImg05 in 5 - parseInt(this.userProfileInfo.evaluationScore / 2)"
+                    :key="'b5' + berryImg05"
+                  >
+                    <img src="@/assets/berry-5-b.png" width="42px" class="berry-opacity" />
+                  </span>
                 </div>
               </div>
             </div>

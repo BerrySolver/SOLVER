@@ -99,8 +99,8 @@ function stopSharing() {
   name = myName;
 }
 
-var ws = new WebSocket("wss://localhost:8443/groupcall");
-// var ws = new WebSocket("wss://i5a507.p.ssafy.io:8443/groupcall");
+//var ws = new WebSocket("wss://localhost:8443/groupcall");
+var ws = new WebSocket("wss://i5a507.p.ssafy.io:8443/groupcall");
 var participants = {};
 var name;
 var room;

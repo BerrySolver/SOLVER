@@ -90,7 +90,8 @@ public class AuthController {
 		
 		ModelAndView mav = new ModelAndView("jsonView");
 		
-		mav.setViewName("redirect:https://localhost:8081/auth/login");
+		//mav.setViewName("redirect:https://localhost:8081/auth/login");
+		mav.setViewName("redirect:https://i5a507.p.ssafy.io/auth/login");
 		mav.addObject("accessToken", oauthToken.getAccess_token());
 		
 		RedirectAttributes ra = new RedirectAttributesModelMap();
