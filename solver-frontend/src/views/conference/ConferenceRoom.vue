@@ -87,6 +87,7 @@ function stopSharing() {
   sendMessage({
     id: "stopShare",
     name: screenName,
+    userName: myName,
   });
 
   name = myName;
@@ -105,7 +106,7 @@ var isMySharing = false;
 
 ws.onmessage = function(message) {
   var parsedMessage = JSON.parse(message.data);
-  console.info("Received message: " + message.data);
+  // console.info("Received message: " + message.data);
 
   switch (parsedMessage.id) {
     case "existingParticipants":
@@ -145,11 +146,11 @@ ws.onmessage = function(message) {
 };
 
 function register() {
-  myName = name;
+  // myName = name;
 
   var message = {
     id: "joinRoom",
-    name: name,
+    name: myName,
     room: room,
   };
   sendMessage(message);
@@ -160,9 +161,7 @@ function onNewParticipant(request) {
 }
 
 function receiveVideoResponse(result) {
-  console.log(result.name);
   participants[result.name].rtcPeer.processAnswer(result.sdpAnswer, function(error) {
-    console.log(result);
     if (error) {
       return console.error(error);
     }
@@ -170,9 +169,7 @@ function receiveVideoResponse(result) {
 }
 
 function receiveScreenVideoResponse(result) {
-  console.log(participants[room]);
   participants[room].rtcPeer.processAnswer(result.sdpAnswer, function(error) {
-    console.log(result);
     if (error) {
       return console.error(error);
     }
@@ -190,15 +187,10 @@ function onExistingParticipants(msg) {
       },
     },
   };
-  console.log(msg);
-  console.log(name);
+
   if (participants[name] != null && msg.id != "myScreenSharingStart") {
-    console.log(participants[name]);
     return;
   }
-
-  console.log(participants[name]);
-  console.log(name + " registered in room " + room);
 
   var options = {};
 
@@ -211,7 +203,7 @@ function onExistingParticipants(msg) {
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       audio = new MediaRecorder(stream);
     });
-    console.log(audio);
+
     options = {
       localVideo: video,
       mediaConstraints: constraints,
@@ -221,7 +213,7 @@ function onExistingParticipants(msg) {
     };
   } else {
     var participant = new Participant(name);
-    console.log(participant);
+
     participants[name] = participant;
     var video = participant.getVideoElement();
     options = {
@@ -250,13 +242,9 @@ function onExistingParticipants(msg) {
 }
 
 function receiveVideo(sender) {
-  console.log("sender: " + sender);
   var participant = new Participant(sender);
-  console.log(participant);
   participants[sender] = participant;
   var video = participant.getVideoElement();
-
-  console.log(sender.includes(myName));
 
   if (sender.startsWith("scree&") && sender.includes(myName)) {
     var constraints = {
@@ -279,7 +267,6 @@ function receiveVideo(sender) {
 
     participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function(error) {
       if (error) {
-        console.log(error);
         return console.error(error);
       }
       this.generateOffer(participant.offerToReceiveVideo.bind(participant));
@@ -302,7 +289,6 @@ function receiveVideo(sender) {
 }
 
 function onParticipantLeft(request) {
-  console.log("Participant " + request.name + " left");
   if (request.name.startsWith("scree&")) isSharing = false;
   var participant = participants[request.name];
   participant.dispose();
@@ -311,7 +297,7 @@ function onParticipantLeft(request) {
 
 function sendMessage(message) {
   var jsonMessage = JSON.stringify(message);
-  console.log("Sending message: " + jsonMessage);
+  // console.log("Sending message: " + jsonMessage);
   ws.send(jsonMessage);
 }
 
@@ -322,7 +308,6 @@ function Participant(name) {
   if (!name.startsWith("scree&") && name != myName) opponentName = name;
 
   this.name = name;
-  console.log("this.name : " + this.name);
 
   if (name.startsWith("scree&")) {
     isSharing = true;
@@ -576,10 +561,8 @@ export default {
       this.recoder.ondataavailable = (e) => this.blobs.push(e.data);
       this.recoder.onstop = async () => {
         this.blob = new Blob(this.blobs, { type: "video/mp4" });
-        console.log(this.blob);
         if (this.isAnswerUser) this.recordVideo();
       };
-      console.log(this.recoder);
       this.recoder.start(); // 녹화 시작
     },
     stopAnswerRecord() {
@@ -590,9 +573,7 @@ export default {
       var reader = new window.FileReader();
       var base64data;
       const $this = this;
-      console.log(this.blob);
       reader.readAsDataURL(this.blob);
-      console.log(this.accessToken);
       reader.onloadend = function() {
         base64data = reader.result;
         base64data = base64data.split(",")[1];
@@ -692,69 +673,6 @@ export default {
 .container {
   margin: 50px auto;
   width: 640px;
-}
-
-:-moz-placeholder {
-  color: #c9c9c9 !important;
-  font-size: 13px;
-}
-
-::-webkit-input-placeholder {
-  color: #ccc;
-  font-size: 13px;
-}
-
-input {
-  font-family: "Lucida Grande", Tahoma, Verdana, sans-serif;
-  font-size: 14px;
-}
-
-input[type="text"],
-input[type="password"] {
-  margin: 5px;
-  padding: 0 10px;
-  width: 200px;
-  height: 34px;
-  color: #404040;
-  background: white;
-  border: 1px solid;
-  border-color: #c4c4c4 #d1d1d1 #d4d4d4;
-  border-radius: 2px;
-  outline: 5px solid #eff4f7;
-  -moz-outline-radius: 3px;
-  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border-color: #7dc9e2;
-  outline-color: #dceefc;
-  outline-offset: 0;
-}
-
-input[type="button"],
-input[type="submit"] {
-  padding: 0 18px;
-  height: 29px;
-  font-size: 12px;
-  font-weight: bold;
-  color: #527881;
-  text-shadow: 0 1px #e3f1f1;
-  background: #cde5ef;
-  border: 1px solid;
-  border-color: #b4ccce #b3c0c8 #9eb9c2;
-  border-radius: 16px;
-  outline: 0;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  background-image: -webkit-linear-gradient(top, #edf5f8, #cde5ef);
-  background-image: -moz-linear-gradient(top, #edf5f8, #cde5ef);
-  background-image: -o-linear-gradient(top, #edf5f8, #cde5ef);
-  background-image: linear-gradient(to bottom, #edf5f8, #cde5ef);
-  -webkit-box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.15);
-  box-shadow: inset 0 1px white, 0 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 #room {
@@ -901,7 +819,6 @@ input[type="submit"] {
   justify-content: center;
   margin-top: 10px;
   margin-bottom: 15px;
-  /* align-items: center; */
 }
 </style>
 

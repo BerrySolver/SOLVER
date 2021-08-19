@@ -24,7 +24,6 @@ import Profile from "@/views/profiles/Profile.vue";
 import Reports from "@/views/reports/Reports.vue";
 
 import Conference from "@/views/conference/ConferenceRoom.vue";
-import ConferenceTest from "@/views/conference/ConferenceRoomTest.vue";
 
 import ErrorPage from "@/views/ErrorPage.vue";
 
@@ -62,12 +61,10 @@ const routes = [
 
   // conference
   { path: "/conference", name: "Conference", component: Conference, props: true },
-  { path: "/conferenceTest", name: "ConferenceTest", component: ConferenceTest },
-  { path: "/conferenceFinish", name: "conferenceFinish", redirect: { name: "Main" } },
 
   // 404
-  { path: '*', name: "ErrorPage", component: ErrorPage},
-  { path: '/404', name: "ErrorPage", component: ErrorPage}
+  { path: "*", name: "ErrorPage", component: ErrorPage },
+  { path: "/404", name: "ErrorPage", component: ErrorPage },
 ];
 
 const router = new VueRouter({
