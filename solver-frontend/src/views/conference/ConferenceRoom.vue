@@ -374,16 +374,16 @@ function Participant(name) {
       }
       container.className = PARTICIPANT_MAIN_CLASS;
       mainDiv.appendChild(container);
-      video.style.width = "1800px";
+      video.style.width = "1280px";
       video.style.borderRadius = "5%";
-      video.style.height = "1350px";
+      video.style.height = "720px";
     } else {
       const participantsDiv = document.getElementById("participants");
       container.className = PARTICIPANT_CLASS;
       participantsDiv.appendChild(container);
-      video.style.width = "300px";
+      video.style.width = "320px";
       video.style.borderRadius = "5%";
-      video.style.height = "225px";
+      video.style.height = "180px";
     }
   }
 

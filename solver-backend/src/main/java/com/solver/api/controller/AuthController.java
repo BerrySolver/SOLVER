@@ -90,7 +90,7 @@ public class AuthController {
 		
 		ModelAndView mav = new ModelAndView("jsonView");
 		
-		mav.setViewName("redirect:http://localhost:8081/auth/login");
+		mav.setViewName("redirect:https://localhost:8081/auth/login");
 		mav.addObject("accessToken", oauthToken.getAccess_token());
 		
 		RedirectAttributes ra = new RedirectAttributesModelMap();
