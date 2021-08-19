@@ -97,7 +97,6 @@ router.beforeEach((to, from, next) => {
     return;
   } else {
     const loginTime = JSON.parse(local).auth.loginTime;
-
     if (loginTime != null) {
       const currentTime = new Date().getTime();
       if (currentTime - loginTime > 1000 * 60 * 60 * 2) {

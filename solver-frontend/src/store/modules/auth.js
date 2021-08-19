@@ -10,7 +10,7 @@ const state = {
   isFirst: false,
   mainChangeTrigger: false,
   userNickname: "",
-  loginTime: 1,
+  loginTime: null,
 };
 
 const getters = {
