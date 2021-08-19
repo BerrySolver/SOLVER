@@ -6,7 +6,7 @@
       <div class="main-container-contents">
         <div class="main-info">
           <div class="title">솔버(SOLVER)</div>
-          <div class="introduction">
+          <div class="introduction font-break">
             무언가를 꾸준히 해서 얻는 성과는 달콤한 법이죠.
             <br />
             공부를 하고 얻은 지식은 자산이 되고,
@@ -14,7 +14,7 @@
             지식을 공유한 분들은 원하는 목표를 향한 희망이 될 것입니다.
           </div>
 
-          <div class="form__group">
+          <div class="form__main-group">
             <input
               type="input"
               class="form__field"
@@ -53,7 +53,7 @@
               {{ question.title }}
             </div>
             <div class="card-question-body">
-              <div class="card-text card-content">{{ question.content }}</div>
+              <div class="card-text card-content font-break" v-html="question.content"></div>
               <p class="card-text text-right">
                 <img
                   style="width:15px;"
@@ -78,29 +78,116 @@
 
     <div class="month-solver">
       <br />
-      <div class="month-solver-text">
+      <div class="month-solver-text font-break">
         <img src="@/assets/logo-white-2.png" class="small-logo" />
-        <p class="solver-title">이달의 SOLVER</p>
+        <p class="solver-title">오늘의 SOLVER</p>
+        <p v-if="this.isLoggedIn" style="margin-top:20px;color:white;">
+          <span style="color:#F2D6AE"
+            ><b>{{ getUserNickname }}</b></span
+          >님의 관심분야에 맞는 솔버입니다!
+        </p>
+        <p v-else style="margin-top:20px;color:white">능력있는 솔버들을 만나보세요!</p>
       </div>
 
-      <div class="solver-line-1">
+      <div v-if="isZeroSolver" class="empty_card">
+        <div class="empty_card_detail">
+          유능한 솔버를 곧 추천해드릴게요!<br /><span style="font-size:20px; color:#0F4C81;"
+            >잠시만 기다려주세요!</span
+          ><br />
+          <img style="width:150px;" src="@/assets/berry-fail.png" alt="" />
+        </div>
+      </div>
+      <div class="solver-line-1" :class="{ 'solver-one-row': isEmptySolver }">
         <div class="solver-row">
-          <div style="float: left; margin-right: 140px;" v-for="(mul, idx) in solverLine1" :key="idx">
-            <div class="solver-card-rank">0{{idx+1}}</div>
+          <div
+            style="float: left;"
+            v-for="(mul, idx) in solverLine1"
+            :key="idx"
+            :class="{ 'solver-margin-remove': isEmptySolver }"
+          >
             <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">1등 닉네임</p>
+              <img
+                :src="mul.profileUrl"
+                class="solver-card-img"
+                alt="solver-card-img"
+                @click="goUserProfile(mul.nickname)"
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-1.png"
+                v-if="parseInt(mul.point) < 100"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-2.png"
+                v-if="parseInt(mul.point) >= 100 && parseInt(mul.point) < 200"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-3.png"
+                v-if="parseInt(mul.point) >= 200 && parseInt(mul.point) < 300"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-4.png"
+                v-if="parseInt(mul.point) >= 300 && parseInt(mul.point) < 400"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-5.png"
+                v-if="parseInt(mul.point) >= 400"
+                alt=""
+              />
+              <p class="solver-intro">{{ mul.nickname }}</p>
             </div>
           </div>
         </div>
       </div>
       <div class="solver-line-2">
         <div class="solver-row">
-          <div style="float: left; margin-left: 100px;" v-for="(mul, idx) in solverLine2" :key="idx">
-            <div class="solver-card-rank">0{{idx+5}}</div>
+          <div style="float: left;" v-for="(mul, idx) in solverLine2" :key="idx">
             <div class="solver-card-content">
-              <img src="@/assets/예시.jpg" class="solver-card-img" alt="solver-card-img" />
-              <p class="solver-intro">1등 닉네임</p>
+              <img
+                :src="mul.profileUrl"
+                class="solver-card-img"
+                alt="solver-card-img"
+                @click="goUserProfile(mul.nickname)"
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-1.png"
+                v-if="parseInt(mul.point) < 100"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-2.png"
+                v-if="parseInt(mul.point) >= 100 && parseInt(mul.point) < 200"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-3.png"
+                v-if="parseInt(mul.point) >= 200 && parseInt(mul.point) < 300"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-4.png"
+                v-if="parseInt(mul.point) >= 300 && parseInt(mul.point) < 400"
+                alt=""
+              />
+              <img
+                class="solver-level-badge"
+                src="@/assets/berry-5.png"
+                v-if="parseInt(mul.point) >= 400"
+                alt=""
+              />
+              <p class="solver-intro">{{ mul.nickname }}</p>
             </div>
           </div>
         </div>
@@ -108,20 +195,26 @@
     </div>
 
     <!-- 4번째 메인 페이지(모임) -->
-    <div class="group-container">
-      <div class="group-container-contents">
-        <div class="group-title">
-          <div class="semi-title">모임</div>
-          <div class="group-card">
+    <div class="main-group-container">
+      <div class="main-group-container-contents">
+        <div class="main-group-title">
+          <div class="main-group-card">
             <section class="page-contain">
-              <a href="#" class="data-card">
-                <h3>블루베리</h3>
-                <h4>Python</h4>
-                <h4>JAVA</h4>
-                <h4>Vue.js</h4>
-                <p>Aeneansed consectetur.</p>
+              <a
+                class="data-card"
+                href="https://danghyeona.notion.site/5999b6935e544b5fa9557e26f567b04a"
+                target="_blank"
+              >
+                <div class="data-card-height">
+                  <h3 class="notion-h3">공지사항</h3>
+                  <div class="notion-div">안내사항</div>
+                  <div class="notion-div">개발기록</div>
+                  <div class="notion-div">개발자 후기</div>
+                  <div class="notion-div">업데이트 예정</div>
+                  <p>꼼꼼히 보면 재미있는 정보!</p>
+                </div>
                 <span class="link-text">
-                  모임 상세보기
+                  상세보기
                   <svg
                     width="25"
                     height="16"
@@ -138,12 +231,20 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="data-card">
-                <h3>SOLVER</h3>
-                <h4>Python</h4>
-                <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+              <a
+                class="data-card"
+                href="https://danghyeona.notion.site/SOLVER-e5336b26f14147d69f9f124cd8574e9b"
+                target="_blank"
+              >
+                <div class="data-card-height">
+                  <h3 class="notion-h3">솔버소개</h3>
+                  <div class="notion-div">솔버란?</div>
+                  <div class="notion-div">솔버의 강점</div>
+                  <div class="notion-div">솔버의 모든것</div>
+                  <p>이렇게까지 디테일하다고?!</p>
+                </div>
                 <span class="link-text">
-                  모임 상세보기
+                  상세보기
                   <svg
                     width="25"
                     height="16"
@@ -160,13 +261,20 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="data-card">
-                <h3>나당연합군</h3>
-                <h4>Python</h4>
-                <h4>JAVA</h4>
-                <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+              <a
+                class="data-card"
+                href="https://danghyeona.notion.site/1c352b72fa604393adda86b681a0c3b9"
+                target="_blank"
+              >
+                <div class="data-card-height">
+                  <h3 class="notion-h3">베리소개</h3>
+                  <div class="notion-div">베리란?</div>
+                  <div class="notion-div">베리의 역할</div>
+                  <div class="notion-div">다양한 베리</div>
+                  <p>동글동글 귀여운 얘는,<br />도대체 누구야?!</p>
+                </div>
                 <span class="link-text">
-                  모임 상세보기
+                  상세보기
                   <svg
                     width="25"
                     height="16"
@@ -183,14 +291,21 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="data-card">
-                <h3>솔버</h3>
-                <h4>Python</h4>
-                <h4>JAVA</h4>
-                <h4>Vue.js</h4>
-                <p>Aenean lacinia bibendum nulla sed consectetur.</p>
+              <a
+                class="data-card"
+                href="https://danghyeona.notion.site/edce4119fb7c49aea92846efa4253ae4"
+                target="_blank"
+              >
+                <div class="data-card-height">
+                  <h3 class="notion-h3">고객센터</h3>
+                  <div class="notion-div">1:1 문의</div>
+                  <div class="notion-div">오류 신고</div>
+                  <div class="notion-div">서비스 평가</div>
+                  <div class="notion-div">자주 묻는 질문</div>
+                  <p>여러분과 함께 만들어갑니다.</p>
+                </div>
                 <span class="link-text">
-                  모임 상세보기
+                  상세보기
                   <svg
                     width="25"
                     height="16"
@@ -219,7 +334,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "Main",
@@ -227,32 +342,106 @@ export default {
     return {
       mainQuestion: [],
       query: null,
-      solverLine1: [0, 0, 0, 0],
-      solverLine2: [0, 0, 0, 0]
+      solverLine1: [],
+      solverLine2: [],
+      isEmptySolver: false,
+      isZeroSolver: false,
     };
   },
   methods: {
-    ...mapActions(["setStateQuery", "setStateQueryMain", "goQuestionDetail"]),
+    ...mapActions(["setStateQuery", "setStateQueryMain", "goQuestionDetail", "triggerMainReload"]),
+    goUserProfile(nickname) {
+      if (nickname !== this.userNickname) {
+        this.$router.push({
+          name: "Profile",
+          params: {
+            nickname: nickname,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: `/my-profile/${this.userNickname}`,
+        });
+      }
+    },
+    getPaySolverList: function() {
+      axios({
+        url: API.URL + API.ROUTES.getPaySolver,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then((res) => {
+          this.isEmptySolver = false;
+          this.isZeroSolver = false;
+          if (res.data.list.length > 3) {
+            var n = res.data.list.length;
+
+            if (n % 2 == 0) {
+              this.solverLine1 = res.data.list.slice(0, n / 2);
+              this.solverLine2 = res.data.list.slice(n / 2);
+            } else {
+              this.solverLine1 = res.data.list.slice(0, n / 2);
+              this.solverLine2 = res.data.list.slice(n / 2);
+            }
+          } else {
+            this.solverLine1 = res.data.list;
+            this.isEmptySolver = true;
+          }
+
+          if (res.data.list.length == 0) this.isZeroSolver = true;
+        })
+        .catch((err) => {});
+    },
+    getMainQuestionList: function() {
+      axios({
+        url: API.URL + API.ROUTES.getRecommendQuestion,
+        method: "get",
+        headers: { Authorization: "Bearer " + this.accessToken },
+      })
+        .then((res) => {
+          this.mainQuestion = res.data.list;
+          this.mainQuestion.forEach((e) => {
+            var isImage = false;
+            var isVideo = false;
+            while (e.content.indexOf("<figure") != -1) {
+              if (e.content.indexOf('<figure class="image">') != -1) {
+                isImage = true;
+              }
+              if (e.content.indexOf('<figure class="media">') != -1) {
+                isVideo = true;
+              }
+              e.content =
+                e.content.slice(0, e.content.indexOf("<figure")) +
+                e.content.slice(e.content.indexOf("</figure>") + 9);
+            }
+
+            e.content = e.content.replaceAll(`<img `, `<img style="display:none;" `);
+            // e.isImge = isImage;
+            // e.isVideao = isVideo;
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   created() {
-    axios({
-      url: API.URL + API.ROUTES.getQuestionList,
-      method: "get",
-      params: {
-        mode: "likeDesc",
-        limit: 6,
-        offest: 0,
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        for (var i = 0; i < 6; i++) {
-          this.mainQuestion.push(res.data.questionFormList[i]);
-        }
-      })
-      .catch(() => {
-        console.log();
-      });
+    this.getMainQuestionList();
+    this.getPaySolverList();
+  },
+  computed: {
+    ...mapState({
+      accessToken: (state) => state.auth.accessToken,
+      userNickname: (state) => state.auth.userNickname,
+      mainChangeTrigger: (state) => state.auth.mainChangeTrigger,
+    }),
+    ...mapGetters(["isLoggedIn", "getUserNickname"]),
+  },
+  watch: {
+    mainChangeTrigger: function() {
+      this.getMainQuestionList();
+      this.getPaySolverList();
+    },
   },
 };
 </script>
@@ -266,5 +455,14 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+img.solver-level-badge {
+  position: absolute;
+  width: 70px;
+  left: -10px;
+  top: -30px;
+  background: white;
+  border-radius: 100%;
 }
 </style>

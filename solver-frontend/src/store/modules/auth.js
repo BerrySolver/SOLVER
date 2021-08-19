@@ -8,14 +8,17 @@ const state = {
   possibleTime: [],
   accessToken: null,
   isFirst: false,
+  mainChangeTrigger: false,
   userNickname: "",
+  loginTime: null,
 };
 
 const getters = {
-  isLoggedIn: (state) => state.accessToken == null ? false : true,
+  isLoggedIn: (state) => (state.accessToken == null ? false : true),
   isFirst: (state) => state.isFirst,
   getAccessToken: (state) => state.accessToken,
   getUserNickname: (state) => state.userNickname,
+  getLoginTime: (state) => state.loginTime,
 };
 
 const mutations = {
@@ -37,24 +40,33 @@ const mutations = {
   SET_USER_NICKNAME: (state, userNickname) => {
     state.userNickname = userNickname;
   },
+  SET_MAIN_CHANGE_TRIGGER: (state) => {
+    state.mainChangeTrigger = !state.mainChangeTrigger;
+  },
+  SET_LOGIN_TIME: (state) => {
+    state.loginTime = new Date().getTime();
+  },
 };
 
 const actions = {
-  signup(context, credentials) {
+  triggerMainReload({ commit }) {
+    commit("SET_MAIN_CHANGE_TRIGGER");
+  },
+  signup({ commit }, credentials) {
     axios({
       url: API.URL + API.ROUTES.signup,
       method: "post",
       data: credentials,
-      headers: { Authorization: "Bearer " + this.getters.isLoggedIn },
+      headers: { Authorization: "Bearer " + this.getters.getAccessToken },
     })
-      .then((res) => {
-        console.log(res);
-        commit("SET_USER_NICKNAME", credentials.nickname);
-        router.push({ path: "/" });
-      })
-      .catch(() => {
-        console.log(credentials);
-      });
+    .then((res) => {
+      console.log(res);
+      commit("SET_USER_NICKNAME", credentials.nickname);
+      router.push({ path: "/" });
+    })
+    .catch(() => {
+      console.log(credentials);
+    });
   },
   tokenLogin({ commit }, token) {
     commit("SET_ACCESS_TOKEN", token);
@@ -76,11 +88,13 @@ const actions = {
           // };
           // localStorage.setItem("userInfo", JSON.stringify(info));
           commit("SET_USER_NICKNAME", res.data);
+          commit("SET_LOGIN_TIME");
+          state.loginTime = new Date().getTime();
           // commit("SET_ACCESS_TOKEN", token);
 
           // const info2 = JSON.parse(localStorage.getItem("userInfo"));
           // router.go(-2)
-          router.push({ path: "/" })
+          router.push({ path: "/" });
         }
       })
       .catch((e) => {
@@ -108,13 +122,14 @@ const actions = {
       headers: { Authorization: "Bearer " + state.accessToken },
     })
       .then(() => {
-        commit("SET_ACCESS_TOKEN", null);
-        commit("SET_USER_NICKNAME", "");
         router.push({ path: "/#" });
       })
       .catch(() => {
-        console.log();
+        router.push({ path: "/#" });
       });
+    commit("SET_ACCESS_TOKEN", null);
+    commit("SET_USER_NICKNAME", "");
+    commit("SET_MAIN_CHANGE_TRIGGER");
   },
   // 카테고리 받기
   fetchSignupData({ commit }) {
@@ -130,6 +145,22 @@ const actions = {
       })
       .catch((err) => console.log(err));
   },
+  // checkLoginTime() {
+  //   const ttt = getters.getUserNickname();
+  //   console.log(ttt);
+  //   if (state.loginTime == 1) return;
+
+  //   alert("0-0----");
+
+  //   const time = state.loginTime.getTime();
+  //   const currentTime = new Date().getTime();
+
+  //   if (currentTime - time < 1000 * 60 * 60 * 2) {
+  //     commit("SET_ACCESS_TOKEN", null);
+  //     commit("SET_USER_NICKNAME", "");
+  //     commit("SET_MAIN_CHANGE_TRIGGER");
+  //   }
+  // },
 };
 
 export default {

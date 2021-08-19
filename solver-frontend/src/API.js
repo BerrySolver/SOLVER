@@ -1,5 +1,6 @@
 export default {
-  URL: "http://localhost:8080/api/v1/",
+   URL: "https://i5a507.p.ssafy.io:8080/api/v1/",
+  //URL: "https://localhost:8080/api/v1/",
   ROUTES: {
     // 회원가입, 로그인
     signup: "user/signup",
@@ -13,6 +14,7 @@ export default {
 
     // 질문/답변 페이지
     getQuestionList: "questions/list",
+    getRecommendQuestion: "questions/recommend",
 
     // 솔버리스트
     getSolverList: "solver",
@@ -22,10 +24,16 @@ export default {
     editProfile: "profiles",
     editProfileCalendar: "profiles/time-table",
 
+    // 알림
+    notificationsAlarm: "notifications",
+    notificationReceivedMessage: "messages/receptions",
+
     // 솔버 결제
     paySolver: "points/pay",
-    
+
+    getPaySolver: "solver/pay",
+
     //화상회의
-    conferenceLog: "conferences",
+    conferenceLog: "conferences/log",
   },
 };

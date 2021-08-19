@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="question-header">
+    <div class="question-header font-break">
       <div class="question-banner">
         <img src="@/assets/logo-white-2.png" alt="white-logo" />
         <div class="question-banner-ment">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="question-body">
+    <div class="question-body font-break">
       <div class="question-body-contents">
         <div class="question-main container">
           <div class="question-query">
@@ -277,28 +277,11 @@ export default {
         headers: { Authorization: "Bearer " + this.accessToken },
       })
         .then((res) => {
-          console.log(res);
           this.goQuestionDetail(res.data.questionId);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
-
-      // axios
-      //   .post("/notices", formData, { headers: { "Content-Type": "multipart/form-data" } })
-      //   .then(({ data }) => {
-      //     console.log("InsertModalVue: data : ");
-      //     console.log(data);
-      //     if (data.result == "login") {
-      //       this.$router.push("/login");
-      //     } else {
-      //       this.$router.push("/notice");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("InsertModalVue: error ");
-      //     console.log(error);
-      //   });
     },
     clickCancle() {
       this.$router.go(-1);

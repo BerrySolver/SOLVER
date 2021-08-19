@@ -3,6 +3,7 @@ package com.solver.api.service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.solver.api.request.SolverGetListReq;
 import com.solver.api.request.UserRegistPostReq;
+import com.solver.api.response.PaySolverRes;
 import com.solver.api.response.SolverRes;
 import com.solver.common.auth.KakaoUtil;
 import com.solver.common.model.OAuthToken;
@@ -23,6 +25,7 @@ import com.solver.db.entity.code.Category;
 import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
+import com.solver.db.entity.user.PaidSolver;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.Token;
 import com.solver.db.entity.user.TokenId;
@@ -33,9 +36,8 @@ import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
-import com.solver.db.repository.group.GroupInfoRepository;
-import com.solver.db.repository.group.GroupMemberRepository;
 import com.solver.db.repository.user.FavoriteUserRepository;
+import com.solver.db.repository.user.PaidSolverRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.TokenRepository;
 import com.solver.db.repository.user.UserCalendarRepository;
@@ -71,12 +73,6 @@ public class UserServiceImpl implements UserService {
 	CategoryRepository categoryRepository;
 
 	@Autowired
-	GroupMemberRepository groupMemberRepository;
-
-	@Autowired
-	GroupInfoRepository groupInfoRepository;
-
-	@Autowired
 	CodeRepository codeRepository;
 
 	@Autowired
@@ -87,6 +83,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepositorySupport userRepositorySupport;
+	
+	@Autowired
+	PaidSolverRepository paidSolverRepository;
 
 	@Override
 	public Optional<User> checkNickname(String nickname) {
@@ -392,7 +391,7 @@ public class UserServiceImpl implements UserService {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
-					return o1.getPoint() - o2.getPoint();
+					return o2.getPoint() - o1.getPoint();
 				}
 
 			});
@@ -401,7 +400,7 @@ public class UserServiceImpl implements UserService {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
-					return (int) o1.getEvaluationScore() - (int) o2.getEvaluationScore();
+					return (int) o2.getEvaluationScore() - (int) o1.getEvaluationScore();
 				}
 
 			});
@@ -410,7 +409,7 @@ public class UserServiceImpl implements UserService {
 
 				@Override
 				public int compare(SolverRes o1, SolverRes o2) {
-					return (int) o1.getFollower() - (int) o2.getFollower();
+					return (int) o2.getFollower() - (int) o1.getFollower();
 				}
 
 			});
@@ -437,5 +436,88 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
 
 		return user.getNickname();
+	}
+
+	@Override
+	public List<PaySolverRes> getPaySolver(String accessToken) {
+		String token = accessToken.split(" ")[1];
+		
+		// 오늘 홍보를 하기로 한 사람들의 정보
+		Date date = new Date();
+		List<PaidSolver> paidSolvers = paidSolverRepository.findByStartTimeBeforeAndEndTimeAfter(date, date);
+		List<PaySolverRes> list = new ArrayList<PaySolverRes>();
+		
+		if(paidSolvers.size() == 0)
+			return list;
+		
+		// paidSolver 리스트 생성
+		for (PaidSolver paidSolver : paidSolvers) {
+			PaySolverRes res = new PaySolverRes();
+			res.setNickname(paidSolver.getUser().getNickname());
+			res.setProfileUrl(paidSolver.getUser().getProfileUrl());
+			List<PointLog> pointLog = paidSolver.getUser().getPointLog();
+			
+			int point = 0;
+			for (PointLog p : pointLog) {
+				if(p.getPointCode().getPointCode().charAt(0) == '0') // 얻은 로그라면
+					point += p.getPointCode().getValue();
+			}
+
+			res.setPoint(point);			
+			list.add(res);
+		}
+		
+		if(!token.equals("null")) {
+			// 로그인 상태 - 관심분야에 있는 사람으로 추리기
+			TokenResponse tokenResponse = new TokenResponse();			
+			tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+			Long kakaoId = tokenResponse.getKakaoId();			
+			User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+			List<FavoriteField> fields = user.getFavoriteField(); // 나의 관심분야 가져오기
+			
+			List<PaySolverRes> result = new ArrayList<PaySolverRes>();
+			for (PaySolverRes paySolverRes : list) {
+				User solverUser = userRepository.findByNickname(paySolverRes.getNickname()).orElse(null);
+
+				boolean flag = false;
+
+				for (FavoriteField field : solverUser.getFavoriteField()) { // 검색된 사람의 관심분야 확인하기
+					for(FavoriteField basic : fields) {
+						if(basic.getCategory().getSubCategoryCode().equals(field.getCategory().getSubCategoryCode()))
+							flag = true;
+						if(flag) break;
+					}
+					if(flag) break;	// 하나라도 존재하면 더이상 확인하지 않음				
+				}
+				
+				if(flag)// 같은게 하나라도 있으면 추가
+					result.add(paySolverRes);
+			}
+			
+			list = result;
+		}
+		
+		// 랜덤하게 배치
+		Collections.shuffle(list);
+		if(list.size() > 8) {
+			// 대상자가 8명 이상일 경우 노출할 8명을 추출하기
+			List<PaySolverRes> result = new ArrayList<PaySolverRes>(list.subList(0, 8));
+			list = result;
+		}		
+		
+		return list;
+	}
+	
+	public void insertDefaultProfile(Long kakaoId, String profileUrl) {
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		user.setNickname("");
+		user.setLinkText("");
+		user.setIntroduction("");
+		
+		if(user.getProfileUrl() == null) {
+			user.setProfileUrl(profileUrl);
+			userRepository.save(user);
+		}
+		
 	}
 }

@@ -51,12 +51,32 @@
   white-space: nowrap;
 }
 
+.data-card-height{
+  min-height: 280px;
+}
+
 /* MAIN 1번째 페이지 검색창 */
-.form__group {
+.form__main-group {
   position: relative;
   padding-top: 15px;
   margin-top: 100px;
   width: 600px;
+}
+
+.empty_card{
+  margin-top: 50px;
+  display: flex;
+  height: 300px;
+  justify-content: center;
+}
+
+.empty_card_detail{
+  width:500px;
+  height: 300px;
+  margin-top: 50px;
+  border-radius: 10%;
+  background-color: white;
+  padding-top:60px;
 }
 
 .form__field {
@@ -110,17 +130,17 @@
   box-shadow: none;
 }
 
-.group-container {
+.main-group-container {
   display: flex;
   height: 800px;
   justify-content: center;
 }
 
-.group-container-contents {
+.main-group-container-contents {
   width: 1190px;
 }
 
-.group-title {
+.main-group-title {
   margin-top: 190px;
   text-align: right;
   padding: 0;
@@ -164,8 +184,16 @@
 }
 
 .month-solver-text {
-  margin-top: 40px;
+  margin-top: 30px;
   margin-bottom: 10px;
+}
+
+.notion-div {
+  color: #B5C7D3;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 15px 0px 15px 0px;
+  transform: skew(-0.1deg);
 }
 
 .popular-question {
@@ -192,29 +220,39 @@
 }
 
 .solver-card-img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 100%;
-  height: 100px;
   margin-bottom: 15px;
-  width: 100px;
+  border: 4px solid white;
+}
+
+.solver-card-img:hover {
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+  border: 4px solid #0F4C81;
 }
 
 .solver-intro {
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 200;
 }
 
 .solver-line-1 {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .solver-line-1 .solver-card-content {
   color: white;
-  margin-left: 20px;
   position: relative;
-  width: 100px;
+  width: 150px;
   z-index: 2;
+  margin: 0px 40px;
 }
 
 .solver-line-1 .solver-card-rank {
@@ -229,24 +267,34 @@
 .solver-line-2 {
   display: flex;
   justify-content: center;
+  margin-top: 10px;
 }
 
 .solver-line-2 .solver-card-content {
   color: white;
-  margin-left: 60px;
   position: relative;
-  width: 100px;
+  width: 150px;
   z-index: 2;
+  margin: 0px 40px;
 }
 
 .solver-line-2 .solver-card-rank {
   color: white;
   font-size: 50px;
   font-weight: 700;
-  margin-left: 40px;
   opacity: 50%;
   width: 50px;
   z-index: 1;
+}
+
+.solver-one-row{
+  margin-top: 150px;
+}
+
+.solver-margin-remove{
+  display: flex;
+  justify-content: center;
+  
 }
 
 .solver-title {
@@ -268,7 +316,7 @@
 }
 
 
-/* 모임 CSS copy */
+/* 모임 CSS */
 .page-contain {
   display: flex;
   justify-content: center;
@@ -296,12 +344,13 @@
   border-bottom: 2px solid #0F4C81;
   transition: color 0.45s ease, border 0.45s ease;
 }
-.data-card h4 {
+.data-card div {
   color: #B5C7D3;
-  text-transform: uppercase;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 500;
   transition: color 0.45s ease;
+  transform: skew(-0.1deg);
+
 }
 .data-card p {
   opacity: 0;
@@ -312,6 +361,8 @@
   margin: 0 0 15px;
   transform: translateY(-1em);
   transition: opacity 0.45s ease, transform 0.5s ease;
+  transform: skew(-0.1deg);
+
 }
 .data-card .link-text {
   bottom: 0;
@@ -321,6 +372,8 @@
   font-weight: 500;
   margin-bottom: 20px;
   transition: color 0.45s ease;
+  transform: skew(-0.1deg);
+
 }
 .data-card .link-text svg {
   margin-left: 5px;
@@ -332,20 +385,25 @@
 .data-card:hover {
   background: #0F4C81;
   transform: scale(1.02);
+  transform: skew(-0.1deg);
 }
 .data-card:hover h3 {
   color: #FFFFFF;
   border-bottom-color: #0F4C81;
+  transform: skew(-0.1deg);
 }
-.data-card:hover h4 {
+.data-card:hover div {
   color: #FFFFFF;
+  transform: skew(-0.1deg);
 }
 .data-card:hover p {
   opacity: 1;
   transform: none;
+  transform: skew(-0.1deg);
 }
 .data-card:hover .link-text {
   color: #FFFFFF;
+  transform: skew(-0.1deg);
 }
 .data-card:hover .link-text svg {
   -webkit-animation: point 1.25s infinite alternate;

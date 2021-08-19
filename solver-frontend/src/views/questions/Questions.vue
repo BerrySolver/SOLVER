@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="question-header">
+    <div class="question-header font-break">
       <div class="question-banner">
         <img src="@/assets/logo-white-2.png" alt="white-logo" />
         <div class="question-banner-ment">
@@ -14,7 +14,7 @@
     </div>
     <div class="question-body">
       <div class="question-body-contents">
-        <div class="question-category">
+        <div class="question-category font-break">
           <div><span class="info1">TODAY</span></div>
           <div style="display: flex; justify-content: space-between;">
             <span class="info2">질문: </span><span><span id="todayQuestions"></span>개</span>
@@ -66,7 +66,7 @@
           <div class="question-query">
             <div class="question-query-head">
               <span style="font-size: 20px; font-weight: 700;">{{ request.curCategory }}</span>
-              <div class="question-type">
+              <div class="question-type font-break">
                 <span
                   class="question-type-item"
                   :style="{ color: typeColor[0] }"
@@ -99,7 +99,7 @@
               />
               <span style="cursor: pointer;" @click="setQuery">검&nbsp;&nbsp;색</span>
             </div>
-            <div class="selectDifficultyBox">
+            <div class="selectDifficultyBox font-break">
               <vs-select
                 color="#0F4C81"
                 class="selectDifficulty"
@@ -117,13 +117,13 @@
                 />
               </vs-select>
             </div>
-            <div class="question-mode">
+            <div class="question-mode font-break">
               <span class="question-mode-item" :style="{ color: modeColor[0] }" @click="setMode(0)"
                 >최신순</span
               >
               <span style="margin: 0 30px 0 30px;">|</span>
               <span class="question-mode-item" :style="{ color: modeColor[1] }" @click="setMode(1)"
-                >답변순</span
+                >조회순</span
               >
               <span style="margin: 0 30px 0 30px;">|</span>
               <span class="question-mode-item" :style="{ color: modeColor[2] }" @click="setMode(2)"
@@ -143,11 +143,11 @@
             >
               <div class="d-flex" style="margin-bottom: 10px;">
                 <div
-                  style="background-color: #B5C7D3; border-radius: 6px; height: 27px; margin-top: 1px; width: 27px;"
+                  style="background-color: #B5C7D3; border-radius: 6px; height: 27px; margin-top: 1px; width: 27px; padding-top:2px;"
                 >
-                  <span style="color: white; font-size: 20px; font-weight: 700;">{{
-                    question.difficulty
-                  }}</span>
+                  <span v-if="question.difficulty == 1" style="color: white; font-size: 17px; font-weight: 700;">하</span>
+                  <span v-else-if="question.difficulty == 2" style="color: white; font-size: 17px; font-weight: 700;">중</span>
+                  <span v-else style="color: white; font-size: 17px; font-weight: 700;">상</span>
                 </div>
                 <div style="display: flex;">
                   <span
@@ -176,7 +176,7 @@
                 ></span>
               </div>
               <div class="d-flex justify-content-between">
-                <div class="d-flex">
+                <div class="d-flex font-break">
                   <div style="padding-top: 2px;">{{ question.nickname }}</div>
                   <div
                     style=" border-radius: 6px;  margin-left: 25px; padding: 7px 5px 0 5px; font-size: 12px;"
@@ -342,6 +342,8 @@ export default {
       this.request.query = null;
       this.request.difficulty = null;
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setSubCategory: function(mainCategoryName, subCategoryName, code) {
@@ -351,15 +353,21 @@ export default {
       this.request.query = null;
       this.request.difficulty = null;
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setQuery: function() {
       this.request.difficulty = null;
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setType: function(typeNum) {
@@ -371,11 +379,13 @@ export default {
         this.request.type = null;
       }
       this.request.mode = "releaseDesc";
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setMode: function(modeNum) {
       if (modeNum === 1) {
-        this.request.mode = "answerDesc";
+        this.request.mode = "visitDesc";
       } else if (modeNum == 2) {
         this.request.mode = "likeDesc";
       } else {
@@ -410,6 +420,8 @@ export default {
                 e.content.slice(0, e.content.indexOf("<figure")) +
                 e.content.slice(e.content.indexOf("</figure>") + 9);
             }
+            
+            e.content = e.content.replaceAll(`<img `, `<img style="display:none;" `);
             e.isImage = isImage;
             e.isVideo = isVideo;
           });
@@ -547,7 +559,7 @@ export default {
       }
     },
     modeWatch: function() {
-      if (this.modeWatch == "answerDesc") {
+      if (this.modeWatch == "visitDesc") {
         this.modeColor[0] = "#89848C";
         this.modeColor[1] = "#0F4C81";
         this.modeColor[2] = "#89848C";

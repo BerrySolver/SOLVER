@@ -1,5 +1,6 @@
 package com.solver.api.response;
 
+import java.util.Date;
 import java.util.List;
 
 import com.solver.common.model.BaseResponse;
@@ -23,6 +24,9 @@ public class NotificationRes extends BaseResponse {
 
 	@ApiModelProperty(name = "질문 제목")
 	private String title;
+
+	@ApiModelProperty(name = "알림 등록 시간")
+	private Date regDt;
 
 	public static NotificationRes of(Integer statusCode, String message, NotificationRes notificationRes) {
 		NotificationRes res = notificationRes;

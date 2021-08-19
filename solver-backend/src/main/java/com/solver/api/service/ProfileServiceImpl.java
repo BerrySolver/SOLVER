@@ -1,16 +1,31 @@
 package com.solver.api.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.solver.api.request.ProfilePossibleTimePatchReq;
 import com.solver.api.request.ProfileUpdatePatchReq;
 import com.solver.api.response.ProfileRes;
@@ -21,27 +36,28 @@ import com.solver.common.util.RandomIdUtil;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.answer.Evaluation;
 import com.solver.db.entity.code.Category;
+import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.conference.ConferenceLog;
-import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.question.BookmarkQuestion;
-import com.solver.db.entity.question.FavoriteQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.FavoriteUser;
+import com.solver.db.entity.user.Notification;
 import com.solver.db.entity.user.PointLog;
 import com.solver.db.entity.user.User;
 import com.solver.db.entity.user.UserCalendar;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.answer.EvaluationRepository;
 import com.solver.db.repository.code.CategoryRepository;
+import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.conference.ConferenceLogRepository;
-import com.solver.db.repository.group.GroupMemberRepository;
 import com.solver.db.repository.question.BookmarkQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.user.FavoriteUserRepository;
+import com.solver.db.repository.user.NotificationRepository;
 import com.solver.db.repository.user.PointLogRepository;
 import com.solver.db.repository.user.UserCalendarRepository;
 import com.solver.db.repository.user.UserRepository;
@@ -82,13 +98,30 @@ public class ProfileServiceImpl implements ProfileService{
 	CategoryRepository categoryRepository;
 	
 	@Autowired
-	GroupMemberRepository groupMemberRepository;
-	
-	@Autowired
 	FavoriteUserRepository favoriteUserRepository;
 	
 	@Autowired
 	KakaoUtil kakaoUtil;
+
+	@Autowired
+	NotificationRepository notificationRepository;
+
+	@Autowired
+	CodeRepository codeRepository;
+	
+	private AmazonS3 s3Client;
+	
+	private String s3Url = "https://solver-bucket.s3.ap-northeast-2.amazonaws.com/";
+	
+    @PostConstruct          
+    public void setS3Client(){
+        AWSCredentials credentials = new BasicAWSCredentials("AKIARMPAI5JURFO5RVG5", "2VNZUcbCHPFewyyOxPLZndakCtAEO0ZdvvaRHYww");
+
+        s3Client = AmazonS3ClientBuilder.standard()
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .build();
+    }
 
 	/* 마이페이지 정보를 불러 올 때 그룹이나 관심분야는 그냥 이름만 불러오나 - o
 	 * 관심분야는 sub category 기준인가 - o
@@ -99,7 +132,6 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		List<PointLog> pointList = user.get().getPointLog();
 		List<Evaluation> evaluationList = user.get().getEvaluateAnswer();
-		List<GroupMember> groupMemberList = user.get().getGroupMember();
 		List<FavoriteField> favoriteFieldList = user.get().getFavoriteField();
 		
 		/* 포인트 계산 - entity 변경할 예정이어서 수정 필요 */
@@ -143,14 +175,6 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		/* 평점 계산 끝 */
 		
-		/* 가입한 그룹 이름 리스트 생성 */
-		List<String> groupNameList = new ArrayList<>();
-		
-		for (GroupMember groupMember : groupMemberList) {
-			groupNameList.add(groupMember.getGroup().getGroupName());
-		}
-		/* 가입한 그룹 이름 리스트 생성 끝 */
-		
 		/* 관심 분야 이름 리스트 생성 */
 		List<String> favoriteFieldNameList = new ArrayList<>();
 		List<String> favoriteFieldCodeList = new ArrayList<>();
@@ -189,7 +213,6 @@ public class ProfileServiceImpl implements ProfileService{
 		profileRes.setEvaluationScore(evaluationScore);
 		profileRes.setFavoriteFieldCodeList(favoriteFieldCodeList);
 		profileRes.setFavoriteFieldNameList(favoriteFieldNameList);
-		profileRes.setGroupNameList(groupNameList);
 		profileRes.setPoint(point);
 		profileRes.setRemainingPoint(remainingPoint);
 		profileRes.setNickname(user.get().getNickname());
@@ -309,9 +332,8 @@ public class ProfileServiceImpl implements ProfileService{
 		String userId = user.getId();
 		
 		if(tabNum == 0) {
-			//화상 답변 인지 그냥 답변 인지 뭘로 구분?
 			List<Answer> textAnswerList = answerRepository.findTextAnswerByUserId(userId);
-			List<Answer> videoAnswerList = answerRepository.findTextAnswerByUserId(userId);
+			List<Answer> videoAnswerList = answerRepository.findVideoAnswerByUserId(userId);
 			
 			int textAnswerCount = textAnswerList.size();
 			int videoAnswerCount = videoAnswerList.size();
@@ -325,18 +347,18 @@ public class ProfileServiceImpl implements ProfileService{
 					videoAnswerTime -= conferenceLog.getRegDt().getTime();
 				}
 				//퇴장
-				else if(conferenceLog.getCode().getCode().equals("030")) {
+				else if(conferenceLog.getCode().getCode().equals("031")) {
 					videoAnswerTime += conferenceLog.getRegDt().getTime();
 				}
 			}
 			
 			videoAnswerTime /= (1000*60);
 			
-			profileTabRes.setVideoAnswerTime(videoAnswerTime);
-			profileTabRes.setVideoAnswerCount(videoAnswerCount);
-			profileTabRes.setTextAnswerCount(textAnswerCount);
+			List<Answer> myAnswerList = new ArrayList<Answer>();
+			myAnswerList.addAll(textAnswerList);
+			myAnswerList.addAll(videoAnswerList);
 			
-			profileTabRes.setVideoAnswerTime(videoAnswerTime);
+			profileTabRes = ProfileTabRes.makeAnswerStatistics(videoAnswerTime, videoAnswerCount, textAnswerCount, myAnswerList);
 		}
 		//답변을 달은 질문 목록
 		else if(tabNum == 1) {
@@ -426,6 +448,19 @@ public class ProfileServiceImpl implements ProfileService{
 		}
 
 		
+		// 알림 배당 : 팔로우를 당한 사람에게 알림을 배당함
+		Notification notification = new Notification();
+		notification.setId(RandomIdUtil.makeRandomId(13));
+		notification.setQuestion(null); // 질문이 아니기에 null 처리
+		notification.setRegDt(new Date(System.currentTimeMillis()));
+		
+		Code notiCode = codeRepository.findByCode("066");
+		notification.setCode(notiCode);
+		notification.setUser(followedUserInfo);
+		
+		notificationRepository.save(notification);
+		
+		// 팔로우 유저 등록
 		FavoriteUser favoriteUser = new FavoriteUser();
 		favoriteUser.setFollowingUser(myUserInfo);
 		favoriteUser.setUser(followedUserInfo);
@@ -475,5 +510,81 @@ public class ProfileServiceImpl implements ProfileService{
 		favoriteUserRepository.delete(favoriteUser);
 
 		return 3;
+	}
+
+	@Override
+	public User getByNickname(String token, String nickname) {
+		TokenResponse tokenResponse = new TokenResponse();
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+		
+		Long kakaoId = tokenResponse.getKakaoId();
+		
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		User profileUser = userRepository.findByNickname(nickname).orElse(null);
+
+		//없는 유저인 경우
+		if (user == null || profileUser == null) {
+			return null;
+		}
+		
+		return profileUser;
+	}
+
+	@Override
+	public List<FavoriteUser> getFollowList(User user, int mode) {
+		if (mode == 0) {
+			return user.getFavoriteFollowingUser();
+		}
+		
+		return user.getFavoriteUser();
+	}
+
+	@Override
+	public String updateProfileImg(MultipartFile imgFile, String accessToken, HttpServletResponse response) {
+		String token = accessToken.split(" ")[1];
+
+		TokenResponse tokenResponse = new TokenResponse();
+
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+
+		if (tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		
+		if (user == null) {
+			return null;
+		}
+		
+		byte[] bytes = null;
+		
+		try {
+			bytes = imgFile.getBytes();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		UUID uuid = UUID.randomUUID();
+
+		String saveFilename = uuid + ".png";
+		
+		System.out.println(imgFile.getContentType());
+		ObjectMetadata objectMetadata = new ObjectMetadata();
+		objectMetadata.setContentType(imgFile.getContentType());
+		
+		objectMetadata.setContentLength(bytes.length);
+		ByteArrayInputStream byteArrayIs = new ByteArrayInputStream(bytes);
+		
+		s3Client.putObject(new PutObjectRequest("solver-bucket", saveFilename, byteArrayIs, objectMetadata)
+				.withCannedAcl(CannedAccessControlList.PublicRead)); // public read 권한 주기
+		
+		user.setProfileUrl(s3Url+saveFilename);
+		
+		userRepository.save(user);	
+		
+		return s3Url+saveFilename;
 	}
 }

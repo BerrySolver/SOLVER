@@ -98,6 +98,7 @@ public class FavoriteAnswerServiceImpl implements FavoriteAnswerService {
 		Notification notification = new Notification();
 		notification.setId(RandomIdUtil.makeRandomId(13));
 		notification.setQuestion(answer.getQuestion());
+		notification.setRegDt(new Date(System.currentTimeMillis()));
 		
 		Code notiCode = codeRepository.findByCode("063");
 		notification.setCode(notiCode);

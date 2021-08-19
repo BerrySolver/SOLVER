@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="question-header">
+    <div class="question-header font-break">
       <div class="question-banner">
         <img src="@/assets/logo-white-2.png" alt="white-logo" />
         <div class="question-banner-ment">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="question-body">
+    <div class="question-body font-break">
       <div class="question-body-contents">
         <div class="question-main container">
           <div class="question-query">
@@ -22,6 +22,7 @@
                   color="#0F4C81"
                   class="selectMainCategory"
                   v-model="request.mainCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setMainCategory"
                 >
@@ -38,6 +39,7 @@
                   color="#0F4C81"
                   class="selectSubCategory"
                   v-model="request.subCategoryIndex"
+                  icon-pack=false
                   width="285px"
                   @change="setSubCategory"
                 >
@@ -54,6 +56,7 @@
                   color="#0F4C81"
                   class="selectDifficulty"
                   v-model="request.difficulty"
+                  icon-pack=false
                   width="285px"
                   @change="setDifficulty"
                 >
@@ -84,7 +87,7 @@
             <div id="divEditorInsert"></div>
             <div class="row btn-group">
               <div class="question-create-btn1 col-5" @click="questionModify">
-                수정하기
+                수정
               </div>
               <div class="question-cancel-btn1 col-5" @click="clickCancle">
                 취소
@@ -201,13 +204,10 @@ export default {
       this.subCategories = this.categories[idx].category;
       this.request.mainCategoryCode = this.categories[idx].code;
       this.request.mainCategoryName = this.categories[idx].codeName;
-      console.log(this.request.mainCategoryCode);
-      console.log(this.request.mainCategoryName);
     },
     setSubCategory: function() {
       const idx = this.request.subCategoryIndex;
       this.subCategory = this.subCategories[idx].subCategoryCode;
-      console.log(this.subCategory);
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
@@ -248,7 +248,6 @@ export default {
     },
     questionModify() {
       if (!this.isLoggedIn) {
-        console.log("로그인 안 된 상태");
         return;
       }
 
@@ -264,29 +263,12 @@ export default {
         },
         headers: { Authorization: "Bearer " + this.getAccessToken },
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.goQuestionDetail(Question.state.questionId);
         })
-        .catch((e) => {
-          console.log(e);
+        .catch((err) => {
+          console.log(err);
         });
-
-      // axios
-      //   .post("/notices", formData, { headers: { "Content-Type": "multipart/form-data" } })
-      //   .then(({ data }) => {
-      //     console.log("InsertModalVue: data : ");
-      //     console.log(data);
-      //     if (data.result == "login") {
-      //       this.$router.push("/login");
-      //     } else {
-      //       this.$router.push("/notice");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("InsertModalVue: error ");
-      //     console.log(error);
-      //   });
     },
     clickCancle() {
       this.$router.go(-1);
@@ -301,14 +283,11 @@ export default {
       method: "get",
     })
       .then((res) => {
-        console.log(res);
         this.categories = res.data;
-        // this.subCategories = res.data[0].category;
 
         for (var idx = 0; idx < this.categories.length; idx++) {
           if (this.categories[idx].codeName == Question.state.question.mainCategory) {
             this.request.mainCategoryIndex = idx;
-            // this.subCategories = res.data[idx].category;
             break;
           }
         }
@@ -328,7 +307,6 @@ export default {
       });
   },
   mounted() {
-    console.log(this.getQuestion);
     this.request.difficulty = Question.state.question.difficulty;
     this.request.title = Question.state.question.title;
 

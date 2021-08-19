@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-bookmark-tab">
     <div style="display:flex; align-items:center; ">
       <div class="small-box"></div>
       <span class="subheading interval">북마크 목록</span>
@@ -41,7 +41,6 @@ export default {
       }
     })
     .then((res) => {
-      console.log(res.data)
       this.myBookmarkQuestions = res.data
     })
     .catch((err) => {
@@ -67,4 +66,25 @@ export default {
   color: white;
   cursor: pointer;
 }
+
+.my-bookmark-tab {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.my-bookmark-tab::-webkit-scrollbar {
+  width: 10px; /*스크롤바의 너비*/
+}
+
+.my-bookmark-tab::-webkit-scrollbar-thumb {
+  background-color: #B5C7D3; /*스크롤바의 색상*/
+  border: 4px solid transparent;
+  border-radius: 50px;
+}
+
+.my-bookmark-tab::-webkit-scrollbar-track {
+  background-color: rgb(245, 245, 245); 
+}
+
 </style>

@@ -3,7 +3,6 @@ package com.solver.db.entity.conference;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -47,10 +46,6 @@ public class Conference extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="type")
 	private Code code;
-	
-	@JsonManagedReference
-	@OneToMany(mappedBy="conference", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<ConferenceParticipant> conferenceParticipant;
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy="conference", orphanRemoval = true)

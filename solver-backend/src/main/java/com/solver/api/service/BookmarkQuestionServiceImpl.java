@@ -114,6 +114,7 @@ public class BookmarkQuestionServiceImpl implements BookmarkQuestionService{
 		Notification notification = new Notification();
 		notification.setId(RandomIdUtil.makeRandomId(13));
 		notification.setQuestion(question);
+		notification.setRegDt(new Date(System.currentTimeMillis()));
 		
 		Code notiCode = codeRepository.findByCode("064");
 		notification.setCode(notiCode);

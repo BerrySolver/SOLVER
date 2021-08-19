@@ -15,8 +15,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.solver.db.entity.answer.Answer;
 import com.solver.db.entity.conference.Conference;
 import com.solver.db.entity.conference.ConferenceLog;
-import com.solver.db.entity.conference.ConferenceParticipant;
-import com.solver.db.entity.group.GroupComment;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.Message;
 import com.solver.db.entity.user.Notification;
@@ -79,15 +77,7 @@ public class Code {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<ConferenceParticipant> conferenceParticipant;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<ConferenceLog> conferenceLog;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<GroupComment> groupComment;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="code", cascade = {CascadeType.REMOVE}, orphanRemoval = true)

@@ -1,5 +1,6 @@
 package com.solver.db.repository.user;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface MessageRepository extends JpaRepository<Message, String>{
 	List<Message> findBySendUserId(String id);
 
 	List<Message> findByReceiveUserId(String id);
+
+	List<Message> findByReceiveUserIdAndRegDtBefore(String id, Date date);
 }

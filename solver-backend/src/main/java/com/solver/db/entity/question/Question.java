@@ -64,12 +64,6 @@ public class Question extends BaseEntity{
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<BookmarkQuestion> bookmarkQuestion;
 	
-	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<Hashtag> hashtag;
-	
-	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<ReportQuestion> reportQuestion;
-	
 	@JsonManagedReference
 	@OneToMany(mappedBy="question", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Answer> answer;

@@ -3,7 +3,7 @@
     <div class="comment-item" v-for="(comment, idx) in commentList" :key="idx">
       <div class="comment-header">
         <div style="float: left;">
-          <img class="comment-item-profileImg" src="@/assets/profile-ex.jpg" alt="">
+          <img class="comment-item-profileImg" :src="comment.profileUrl" alt="">
         </div>
         <div class="comment-info">
           <div style="font-size: 16px;">{{comment.nickname}}</div>
@@ -123,6 +123,7 @@ export default {
     float: left; 
     margin-left: 10px;
     text-align: left;
+    width: 100px;
   }
 
   .comment-item {

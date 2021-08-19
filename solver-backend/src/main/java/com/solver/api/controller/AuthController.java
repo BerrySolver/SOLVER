@@ -65,11 +65,6 @@ public class AuthController {
 		//카카오 접근 토큰 받아오기
     	OAuthToken oauthToken = kakaoUtil.getKakaoToken(code);
     	
-    	System.out.println("카카오 엑세스 토큰 : "+oauthToken.getAccess_token());
-    	System.out.println("카카오 엑세스 토큰 만료시간: "+oauthToken.getExpires_in());
-    	System.out.println("카카오 리프레시 토큰 : "+oauthToken.getRefresh_token());
-    	System.out.println("카카오 리프레시 토큰 만료시간: "+oauthToken.getRefresh_token_expires_in());
-    	
     	//카카오 토큰으로 유저 아이디 받아오기
     	Long kakaoId = kakaoUtil.getKakaoUserId(oauthToken);
     	
@@ -89,9 +84,14 @@ public class AuthController {
 		userLoginRes.setMessage("로그인에 성공했습니다");
 		userLoginRes.setStatusCode(200);
 		
+		String profileUrl = kakaoUtil.getKakaoProfileUrl(oauthToken.getAccess_token());
+		
+		userService.insertDefaultProfile(kakaoId ,profileUrl);
+		
 		ModelAndView mav = new ModelAndView("jsonView");
 		
-		mav.setViewName("redirect:http://localhost:8081/auth/login");
+		//mav.setViewName("redirect:https://localhost:8081/auth/login");
+		mav.setViewName("redirect:https://i5a507.p.ssafy.io/auth/login");
 		mav.addObject("accessToken", oauthToken.getAccess_token());
 		
 		RedirectAttributes ra = new RedirectAttributesModelMap();

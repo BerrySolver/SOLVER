@@ -2,7 +2,7 @@
   <div class="question-delete-modal solver-font">
     <h3 class="question-delete-title">질문 삭제</h3>
     <hr>
-    <p>정말 질문을 삭제하시겠습니까?</p>
+    <p class="font-break">정말 질문을 삭제하시겠습니까?</p>
     <div class="question-delete-button-bar">
       <button type="button" class="btn btn-submit" @click="deleteQuestion()">삭제</button>
       <button type="button" class="btn btn-outline-cancel" @click="$emit('close')">취소</button>
@@ -29,9 +29,8 @@ export default {
         method: "delete",
         headers: { Authorization: "Bearer " + this.accessToken },
       })
-      .then((res) => {
+      .then(() => {
         router.push({ path: "/questions" });
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);

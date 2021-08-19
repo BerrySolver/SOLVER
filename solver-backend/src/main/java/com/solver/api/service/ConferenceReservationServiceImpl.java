@@ -1,5 +1,7 @@
 package com.solver.api.service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -98,6 +100,42 @@ public class ConferenceReservationServiceImpl implements ConferenceReservationSe
 		
 		return;
 		
+	}
+	
+	@Override
+	public List<ConferenceReservation> getReservationList(String accessToken, HttpServletResponse response) {
+		String token = accessToken.split(" ")[1];
+
+		TokenResponse tokenResponse = new TokenResponse();
+
+		tokenResponse = kakaoUtil.getKakaoUserIdByToken(token);
+
+		Long kakaoId = tokenResponse.getKakaoId();
+
+		if (tokenResponse.getAccessToken() != null) {
+			response.setHeader("Authorization", tokenResponse.getAccessToken());
+		}
+
+		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+
+		if (user == null) {
+			return null;
+		}
+		
+		Date nowDate = new Date(System.currentTimeMillis()-(3600*1000));
+		Date endDate = new Date(System.currentTimeMillis()+(604800*1000));
+		
+		List<ConferenceReservation> list = conferenceReservationRepository.findAllByUserId(user.getId(), nowDate, endDate);
+		
+		list.sort((o1, o2)->{
+			return o1.getStartDt().compareTo(o2.getStartDt());
+		});
+		
+		for (ConferenceReservation conferenceReservation : list) {
+			System.out.println(conferenceReservation.getId()+" "+conferenceReservation.getStartDt()+" "+conferenceReservation.getQuestion().getId());
+		}
+		
+		return list;
 	}
 
 }

@@ -27,6 +27,8 @@ import com.solver.api.request.QuestionPostReq;
 import com.solver.api.response.QuestionCreateRes;
 import com.solver.api.response.QuestionListRes;
 import com.solver.api.response.QuestionMeRes;
+import com.solver.api.response.QuestionRecommendListRes;
+import com.solver.api.response.QuestionRecommendRes;
 import com.solver.api.response.QuestionRes;
 import com.solver.api.service.BookmarkQuestionService;
 import com.solver.api.service.ConferenceReservationService;
@@ -130,8 +132,8 @@ public class QuestionController {
 			@PathVariable @ApiParam(value="질문 Id", required=true) String questionId,
 			@ApiIgnore @RequestHeader("Authorization") String accessToken)
 	{
+		System.out.println(questionId);
 		Optional<Question> question = questionService.getById(questionId);
-		System.out.println(accessToken);
 		String token = accessToken.split(" ")[1];
 	
 		if (question == null) {
@@ -141,6 +143,7 @@ public class QuestionController {
 		boolean isLiked = favoriteQuestionService.checkFavoriteQuestion(token, question.get());
 		boolean isBookmarked = bookmarkService.checkBookmarkQuestion(token, question.get());
 				
+		System.out.println(question.get().getUser().getId());
 		return ResponseEntity.status(200).body(QuestionRes.of(200, "질문을 성공적으로 조회했습니다.", question.get(), isLiked, isBookmarked));
 	}
 	
@@ -396,5 +399,28 @@ public class QuestionController {
 		}
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "참관 신청 취소 성공"));
+	}
+	
+	// 인기질문목록 API
+	@GetMapping("/recommend")
+	@ApiOperation(value = "내가 남긴 질문 목록", notes = "내 질문 목록 API")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "질문 목록을 성공적으로 조회했습니다."),
+        @ApiResponse(code = 400, message = "질문 목록 조회에 실패했습니다.")
+	})
+	public ResponseEntity<? extends BaseResponse> getRecommendQuestion(
+			HttpServletResponse response, 
+			@ApiIgnore @RequestHeader("Authorization") String accessToken)
+	{
+		List<QuestionRecommendRes> questionList;
+		try {
+			questionList = questionService.getRecommendQuestion(accessToken, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(400).body(QuestionListRes.of(400, "질문 목록 조회에 실패했습니다."));
+		}
+		
+		return ResponseEntity.status(200).body(QuestionRecommendListRes.of(200, "질문 목록을 성공적으로 조회했습니다.", questionList));
+		
 	}
 }

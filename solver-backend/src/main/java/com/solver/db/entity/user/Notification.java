@@ -1,5 +1,7 @@
 package com.solver.db.entity.user;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,4 +32,6 @@ public class Notification extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="questionId")
 	private Question question;
+	
+	private Date regDt;
 }

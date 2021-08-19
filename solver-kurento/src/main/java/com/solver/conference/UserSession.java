@@ -197,6 +197,7 @@ public class UserSession implements Closeable {
 		final WebRtcEndpoint incoming = incomingMedia.remove(senderName);
 
 		log.debug("PARTICIPANT {}: removing endpoint for {}", this.name, senderName);
+		if(incoming == null) return;
 		incoming.release(new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {
@@ -277,7 +278,12 @@ public class UserSession implements Closeable {
 	public void sendMessage(JsonObject message) throws IOException {
 		log.debug("USER {}: Sending message {}", name, message);
 		synchronized (session) {
+			try {
 			session.sendMessage(new TextMessage(message.toString()));
+			}
+			catch(Exception e) {
+				System.out.println("Message will not be sent because the WebSocket session has been closed");
+			}
 		}
 	}
 

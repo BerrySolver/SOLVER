@@ -18,6 +18,19 @@
   float: 3;
 }
 
+.check-reservation {
+  background-color: transparent;
+  border: solid 1px #658DC6;
+  color: #658DC6;
+  font-size: 13px;
+  padding: 1.5px;
+}
+
+.check-reservation:hover {
+  background-color: #658DC6;
+  color: white;
+}
+
 .complete-edit {
   display: flex; 
   align-items: center; 
@@ -69,6 +82,24 @@
 
 .follow-button-delete:hover {
   filter: brightness(115%)
+}
+
+.follower-button {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.follower-button:hover {
+  background-color: #488ec438;
+}
+
+.following-button {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.following-button:hover {
+  background-color: #488ec438;
 }
 
 .for-center {
@@ -248,13 +279,6 @@
 .tab-li {
   display: inline-block;
 }
-
-.line {
-  background-color: #B5C7D3;
-  height: 0.1px;
-  margin: 0;
-}
-
 
 .tab-btn {
   border: 2px solid #B5C7D3;

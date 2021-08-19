@@ -1,5 +1,5 @@
 <template>
-  <div class="point-log-modal solver-font">
+  <div class="point-log-modal solver-font font-break">
     <h3 class="point-log-title">포인트 내역</h3>
     <hr>
     <div class="point-log-box">
@@ -19,11 +19,11 @@
           <span class="point-text" v-if="point.pointCode === '001'"> 새로운 화상 답변을 등록했어요! </span>
           <span class="point-text" v-if="point.pointCode === '002'"> 귀중한 첫 답변을 등록했어요! </span>
           <span class="point-text" v-if="point.pointCode === '003'"> 곧 마감할 질문에 답변을 했어요! </span>
-          <span class="point-text" v-if="point.pointCode === '004'"> 답변이 채택됬어요! </span>
-          <span class="point-text" v-if="point.pointCode === '005'"> 화상답변이 채택됬어요! </span>
+          <span class="point-text" v-if="point.pointCode === '004'"> 답변이 채택됐어요! </span>
+          <span class="point-text" v-if="point.pointCode === '005'"> 화상답변이 채택됐어요! </span>
           <span class="point-text" v-if="point.pointCode === '006'"> 나의 질문이 추천받았어요! </span>
           <span class="point-text" v-if="point.pointCode === '007'"> 나의 답변이 추천받았어요! </span>
-          <span class="point-text" v-if="point.pointCode === '008'"> 나의 질문이 북마크되었어요! </span>
+          <span class="point-text" v-if="point.pointCode === '008'"> 나의 질문이 북마크됐어요! </span>
           <span class="point-text" v-if="point.pointCode === '100'"> 질문이 신고 받았어요... </span>
           <span class="point-text" v-if="point.pointCode === '101'"> 답변이 신고 받았어요... </span>
           <span class="point-text" v-if="point.pointCode === '102'"> 댓글이 신고 받았어요... </span>
@@ -136,6 +136,7 @@ export default {
     color: #0F4C81;
     width: 500px;
     padding: 10px 0px;
+    transform: skew(-0.1deg);
   }
 
   .point-log-button:hover{
@@ -148,7 +149,7 @@ export default {
   }
 
   .point-log-modal{
-     padding: 40px 50px;
+    padding: 40px 50px;
   }
 
   .point-log-title{
@@ -158,10 +159,12 @@ export default {
   .point-text{
     display: inline-block;
     width: 290px;
+    transform: skew(-0.1deg);
   }
 
   .point-time{
     font-size: 10px;
+    transform: skew(-0.1deg);
   }
 
   .point-img {

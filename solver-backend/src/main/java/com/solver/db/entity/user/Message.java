@@ -35,4 +35,8 @@ public class Message extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="type")
 	private Code code;
+	
+	private Date regDt;
+	
+	private boolean checked;
 }

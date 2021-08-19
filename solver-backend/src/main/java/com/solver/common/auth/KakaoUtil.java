@@ -38,7 +38,8 @@ public class KakaoUtil {
     	MultiValueMap<String, String> tokenParams = new LinkedMultiValueMap<>();
     	tokenParams.add("grant_type", "authorization_code");
     	tokenParams.add("client_id", "4d0b843e88238ebf6614549fce8bff85");
-    	tokenParams.add("redirect_uri", "http://localhost:8080/api/v1/auth/login");
+    	//tokenParams.add("redirect_uri", "https://localhost:8080/api/v1/auth/login");
+    	tokenParams.add("redirect_uri", "https://i5a507.p.ssafy.io:8080/api/v1/auth/login");
     	tokenParams.add("code", code);
     	
     	//HttpHeader와 HttpBody를 하나의 오브젝트에 담기
@@ -97,6 +98,136 @@ public class KakaoUtil {
 	}
 
 	public TokenResponse getKakaoUserIdByToken(String accessToken) {
+		TokenResponse tokenResponseData = new TokenResponse();
+		
+		
+    	//HttpHeader 오브젝트
+    	RestTemplate rt = new RestTemplate();
+    	HttpHeaders headers = new HttpHeaders();
+    	headers.add("Authorization", "Bearer "+accessToken);
+    	headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+    	
+    	//HttpHeader와 HttpBody를 하나의 오브젝트에 담기
+    	HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest =
+    			new HttpEntity<>(headers);
+    	
+    	ResponseEntity<String> response = null;
+    	
+    	try {
+    		//Http 요청하기 - Post - response 변수의 웅답 받음
+    		response = rt.exchange(
+    				"https://kapi.kakao.com/v2/user/me",
+    				HttpMethod.POST,
+    				kakaoProfileRequest,
+    				String.class
+    				);
+    	}
+    	//만료된 엑세스 토큰이면 갱신
+    	catch(HttpClientErrorException e) {
+    		System.out.println(accessToken);
+    		Token token = tokenRepository.findByAccessToken(accessToken);
+    		
+    		//토큰이 일치하지 않는 경우
+    		if(!token.getAccessToken().equals(accessToken)) {
+    			
+    		}
+    		
+        	RestTemplate tokenRt = new RestTemplate();
+        	HttpHeaders tokenHeaders = new HttpHeaders();
+        	tokenHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        	
+        	//HttpBody 오브젝트
+        	MultiValueMap<String, String> tokenParams = new LinkedMultiValueMap<>();
+        	tokenParams.add("grant_type", "refresh_token");
+        	tokenParams.add("client_id", "4d0b843e88238ebf6614549fce8bff85");
+        	tokenParams.add("refresh_token", token.getRefreshToken());
+    		
+        	HttpEntity<MultiValueMap<String, String>> tokenRefreshRequest =
+        			new HttpEntity<>(tokenParams, tokenHeaders);
+        	
+        	ResponseEntity<String> tokenResponse = tokenRt.exchange(
+    				"https://kauth.kakao.com/oauth/token",
+    				HttpMethod.POST,
+    				tokenRefreshRequest,
+    				String.class
+    				);
+        	
+        	JSONParser jsonParser = new JSONParser();
+        	
+        	JSONObject jsonObject = null;
+        	
+    		try {
+    			jsonObject = (JSONObject) jsonParser.parse(tokenResponse.getBody());
+    		} catch (ParseException e2) {
+    			e2.printStackTrace();
+    		}
+        	
+    		//갱신된 액세스 토큰 저장
+        	token.setAccessToken((String)jsonObject.get("access_token"));
+        	
+        	String refreshToken = (String)jsonObject.get("refresh_token");
+        	
+        	//리프레시 토큰도 갱신된 경우
+        	if(refreshToken != null) {
+        		token.setRefreshToken(refreshToken);
+        	}
+        	
+        	String refreshedAccessToken = (String) jsonObject.get("access_token");
+        	
+        	System.out.println(refreshedAccessToken);
+        	tokenResponseData.setAccessToken(refreshedAccessToken);
+        	
+        	rt = new RestTemplate();
+        	headers = new HttpHeaders();
+        	
+        	headers.add("Authorization", "Bearer "+refreshedAccessToken);
+        	headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        	
+        	//HttpHeader와 HttpBody를 하나의 오브젝트에 담기
+        	kakaoProfileRequest = new HttpEntity<>(headers);
+        	
+    		//Http 요청하기 - Post - response 변수의 웅답 받음
+    		response = rt.exchange(
+    				"https://kapi.kakao.com/v2/user/me",
+    				HttpMethod.POST,
+    				kakaoProfileRequest,
+    				String.class
+    				);
+    		
+        	jsonParser = new JSONParser();
+        	
+        	jsonObject = null;
+        	
+    		try {
+    			jsonObject = (JSONObject) jsonParser.parse(response.getBody());
+    		} catch (ParseException e2) {
+    			e2.printStackTrace();
+    		}
+    		
+        	
+        	tokenRepository.save(token);
+    	}
+    	
+    	
+    	JSONParser jsonParser = new JSONParser();
+    	
+    	JSONObject jsonObject = null;
+    	
+		try {
+			jsonObject = (JSONObject) jsonParser.parse(response.getBody());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		    	
+    	Long kakaoId = (Long) jsonObject.get("id");
+    	
+    	tokenResponseData.setKakaoId(kakaoId);
+    	
+    	return tokenResponseData;
+		
+	}
+	
+	public String getKakaoProfileUrl(String accessToken) {
 		TokenResponse tokenResponseData = new TokenResponse();
 		
 		
@@ -221,7 +352,10 @@ public class KakaoUtil {
     	
     	tokenResponseData.setKakaoId(kakaoId);
     	
-    	return tokenResponseData;
-		
+    	JSONObject profileJsonObject = (JSONObject) ((JSONObject) jsonObject.get("kakao_account")).get("profile");
+    	
+    	String profileUrl = (String) profileJsonObject.get("profile_image_url");
+    	
+    	return profileUrl;
 	}
 }

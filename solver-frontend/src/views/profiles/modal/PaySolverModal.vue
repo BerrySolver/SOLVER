@@ -1,5 +1,5 @@
 <template>
-  <div class="pay-solver-modal solver-font">
+  <div class="pay-solver-modal solver-font font-break">
     <h3 class="pay-solver-title">홍보하기</h3>
     <hr>
     <div v-if="!checkNotifi && !checkResult">
@@ -10,7 +10,7 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" @click="checkOneBox" :disabled="checkOne" id="oneCheckBox">
           <label class="form-check-label" for="oneCheckBox">
-            결제하고 나면 취소가 불가능한 것을 숙지했습니다.
+            결제 후 취소가 불가능합니다.
           </label>
         </div>
         <div class="form-check">
@@ -22,7 +22,7 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" @click="checkThreeBox" :disabled="checkThree" id="threeCheckBox">
           <label class="form-check-label" for="threeCheckBox">
-            지정한 날짜의 범위만큼, 메인화면에 정보가 노출되는 것을 동의합니다.
+            지정한 날짜의 범위만큼 메인화면에 정보가 노출됩니다.
           </label>
         </div>
       </div>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div v-else-if="checkNotifi && !checkResult">
-      <p>원하는 날짜의 범위를 입력해주시면, 메인 화면에 여러분이 소개됩니다!<br>결제는 여러분이 모은 포인트로 진행합니다.</p>
+      <p class="font-break">원하는 날짜의 범위를 입력해주시면, 메인 화면에 여러분이 소개됩니다!<br>결제는 여러분이 모은 포인트로 진행합니다.</p>
       <div class="date-box">
         <div class="date-box-col">
           <h5>시작</h5>
@@ -48,19 +48,19 @@
         <h5>결정 내역</h5>
         <table class="table pay-table pay-result" style="width: 300px;">
             <tr>
-              <th style="width:150px;">시작일</th>
+              <th class="font-break" style="width:150px;">시작일</th>
               <td>{{startDate}}</td>
             </tr>
             <tr>
-              <th>마지막일</th>
+              <th class="font-break">마지막일</th>
               <td>{{endDate}}</td>
             </tr>
             <tr class="pay-result-under">
-              <th>총 기간</th>
+              <th class="font-break">총 기간</th>
               <td>{{lenDate}}</td>
             </tr>
             <tr>
-              <th>결제 총 포인트</th>
+              <th class="font-break">결제 총 포인트</th>
               <td>{{pointCalcul}}</td>
             </tr>
         </table>
@@ -89,6 +89,7 @@
 <script>
 import axios from "axios";
 import API from "@/API.js";
+import {mapActions} from 'vuex'
 
 export default {
   data: function () {
@@ -111,6 +112,9 @@ export default {
 
   },
   methods: {
+    ...mapActions([
+      'pointUseTrigger'
+    ]),
     checkOneBox: function(){
       this.checkOne = true;
     },
@@ -139,10 +143,11 @@ export default {
           endRegDt: this.endDate + " 23:59:59"
         },
         headers: { Authorization: "Bearer " + this.accessToken },
-      }).then((res)=>{
+      }).then(()=>{
         this.checkResult = true;
+        this.pointUseTrigger()
       }).catch((err)=>{
-
+        console.log(err)
       });
     },
   },
@@ -208,6 +213,10 @@ export default {
     display: inline-block;
     width: 200px;
     margin: 20px;
+  }
+
+  .form-check-label {
+    transform: skew(-0.1deg);
   }
 
   .pay-solver-modal {

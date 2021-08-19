@@ -2,8 +2,8 @@
 // Vue3 관련 설정 파일
 module.exports = {
   devServer: {
-    https: false,
-    port: 8083,
+    https: true,
+    port: 8081,
     open: true,
     proxy: {
       '/api/v1': {

@@ -9,7 +9,6 @@ import Signup1 from "@/views/auth/Signup1.vue";
 import Signup2 from "@/views/auth/Signup2.vue";
 
 import Groups from "@/views/groups/Groups.vue";
-import GroupCreate from "@/views/groups/GroupCreate.vue";
 import GroupDetail from "@/views/groups/GroupDetail.vue";
 
 import Questions from "@/views/questions/Questions.vue";
@@ -22,15 +21,11 @@ import Solvers from "@/views/solvers/Solvers.vue";
 import MyProfile from "@/views/profiles/MyProfile.vue";
 import Profile from "@/views/profiles/Profile.vue";
 
-import Notifications from "@/views/notifications/Notifications.vue";
-import NotificationsVideo from "@/views/notifications/NotificationsVideo.vue";
-import NotificationsDetail from "@/views/notifications/NotificationsDetail.vue";
-import MessageForwarding from "@/views/notifications/MessageForwarding.vue";
-import MessageReceptions from "@/views/notifications/MessageReceptions.vue";
-
 import Reports from "@/views/reports/Reports.vue";
 
 import Conference from "@/views/conference/ConferenceRoom.vue";
+
+import ErrorPage from "@/views/ErrorPage.vue";
 
 Vue.use(VueRouter);
 
@@ -46,7 +41,6 @@ const routes = [
 
   // groups
   { path: "/groups", name: "Groups", component: Groups },
-  { path: "/groups/create", name: "GroupCreate", component: GroupCreate },
   { path: "/groups/detail", name: "GroupDetail", component: GroupDetail },
 
   // questions
@@ -54,13 +48,6 @@ const routes = [
   { path: "/questions/create", name: "QuestionsCreate", component: QuestionsCreate }, // 질문 작성
   { path: "/questions/:questionId", name: "QuestionsDetail", component: QuestionsDetail },
   { path: "/questions/modify", name: "QuestionsModify", component: QuestionsModify },
-
-  // notifications
-  { path: "/notifications", name: "Notifications", component: Notifications },
-  { path: "/video-notifications", name: "NotificationsVideo", component: NotificationsVideo },
-  { path: "/notifications/forwardings", name: "MessageForwarding", component: MessageForwarding },
-  { path: "/notifications/receptions", name: "MessageReceptions", component: MessageReceptions },
-  { path: "/notifications/detail", name: "NotificationsDetail", component: NotificationsDetail },
 
   // solver
   { path: "/solvers", name: "Solvers", component: Solvers },
@@ -73,7 +60,11 @@ const routes = [
   { path: "/reports", name: "Reports", component: Reports },
 
   // conference
-  { path: "/conference", name: "Conference", component: Conference },
+  { path: "/conference", name: "Conference", component: Conference, props: true },
+
+  // 404
+  { path: "*", name: "ErrorPage", component: ErrorPage },
+  { path: "/404", name: "ErrorPage", component: ErrorPage },
 ];
 
 const router = new VueRouter({
@@ -84,5 +75,26 @@ const router = new VueRouter({
     return { x: 0, y: 0 };
   },
 });
+
+// router.beforeEach((to, from, next) => {
+//   const local = localStorage.getItem("vuex");
+
+//   if (local == null) {
+//     next();
+//     return;
+//   } else {
+//     const loginTime = JSON.parse(local).auth.loginTime;
+//     if (loginTime != null) {
+//       const currentTime = new Date().getTime();
+//       if (currentTime - loginTime > 1000 * 60 * 60 * 2) {
+//         localStorage.clear();
+//         location.href = "/#";
+//         return;
+//       }
+//     }
+//   }
+
+//   next();
+// });
 
 export default router;

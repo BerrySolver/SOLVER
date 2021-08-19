@@ -143,7 +143,7 @@ public class CallHandler extends TextWebSocketHandler {
 	
 	private void stopShare(JsonObject params, UserSession user, WebSocketSession session) throws IOException {
 		registry.removeScreen(user);
-		final String name = params.get("name").getAsString();
+		final String name = params.get("userName").getAsString();
 		final Room room = roomManager.getRoom(user.getRoomName());
 		room.stopShare(user);
 		UserSession mainUser = room.getUserSession(name, session);

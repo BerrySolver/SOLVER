@@ -20,8 +20,6 @@ public class RandomIdUtil {
 		  .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
 		  .toString();
 		
-		System.out.println("make id : "+id);
-		
 		return id;
 	}
 }

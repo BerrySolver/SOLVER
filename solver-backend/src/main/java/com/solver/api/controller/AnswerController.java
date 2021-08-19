@@ -1,6 +1,7 @@
 package com.solver.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +26,10 @@ import com.solver.api.request.AnswerUpdatePatchReq;
 import com.solver.api.response.AnswerListRes;
 import com.solver.api.service.AnswerService;
 import com.solver.api.service.FavoriteAnswerService;
+import com.solver.api.service.QuestionService;
 import com.solver.common.model.BaseResponse;
 import com.solver.db.entity.answer.Answer;
+import com.solver.db.entity.question.Question;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +49,9 @@ public class AnswerController {
 	
 	@Autowired
 	FavoriteAnswerService favoriteAnswerService;
+	
+	@Autowired
+	QuestionService questionService;
 
 	/* 답변 등록 */
 	@PostMapping(value="/{questionId}")
@@ -169,5 +176,41 @@ public class AnswerController {
 		}
 		
 		return ResponseEntity.status(204).body(BaseResponse.of(204, "답변 좋아요 삭제 성공"));
+	}
+	
+	/* 답변 채택 */
+	@PutMapping("/select/{questionId}/{answerId}")
+	@ApiOperation(value = "답변 채택", notes = "질문자가 답변 채택") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "답변 채택 성공"),
+        @ApiResponse(code = 400, message = "답변 채택 실패"),
+        @ApiResponse(code = 404, message = "존재하지 않는 질문입니다."),
+        @ApiResponse(code = 404, message = "존재하지 않는 답변입니다.")
+    })
+	public ResponseEntity<? extends BaseResponse> selectAnswer(
+			@ApiIgnore @RequestHeader("Authorization") String accessToken,
+			@PathVariable @ApiParam(value="채택 질문 ID", required=true) String questionId,
+			@PathVariable @ApiParam(value="채택 답변 ID", required=true) String answerId
+			) 
+	{
+		String token = accessToken.split(" ")[1];
+		Optional<Question> question = questionService.getById(questionId);
+		Optional<Answer> answer = answerService.getById(answerId);
+		
+		if (question == null) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 질문입니다."));
+		}
+		
+		if (answer == null) {
+			return ResponseEntity.status(404).body(BaseResponse.of(404, "존재하지 않는 답변입니다."));
+		}
+		
+		Answer selectedAnswer = answerService.selectAnswer(token, question.get(), answer.get());
+		
+		if (selectedAnswer == null) {
+			return ResponseEntity.status(400).body(BaseResponse.of(400, "답변 채택 실패"));
+		}
+		
+		return ResponseEntity.status(201).body(BaseResponse.of(201, "답변 채택 성공"));
 	}
 }

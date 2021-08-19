@@ -53,8 +53,7 @@ public class SolverKurentoApplication implements WebSocketConfigurer {
 	
 	  @Override
 	  public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		  registry.addHandler(groupCallHandler(), "/groupcall").setAllowedOriginPatterns("http://localhost:8080");
-		  registry.addHandler(groupCallHandler(), "/groupcall").setAllowedOriginPatterns("http://localhost:8081");
+		  registry.addHandler(groupCallHandler(), "/groupcall").setAllowedOriginPatterns("*");
 	  }
 
 }

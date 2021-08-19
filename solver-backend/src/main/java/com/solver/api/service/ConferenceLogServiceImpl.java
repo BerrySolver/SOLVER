@@ -32,7 +32,7 @@ public class ConferenceLogServiceImpl implements ConferenceLogService{
 	
 	
 	@Override
-	public int createConferenceLog(String accessToken, String conferenceId, HttpServletResponse response, ConferenceLogPostReq conferenceLogPostReq) {
+	public int createConferenceLog(String accessToken, HttpServletResponse response, ConferenceLogPostReq conferenceLogPostReq) {
 		String token = accessToken.split(" ")[1];
 		
 		TokenResponse tokenResponse = new TokenResponse();
@@ -59,13 +59,9 @@ public class ConferenceLogServiceImpl implements ConferenceLogService{
 				break;
 		}
 		
-		Conference conference = new Conference();
-		conference.setId(conferenceId);
-		
 		ConferenceLog conferenceLog = new ConferenceLog();
 		conferenceLog.setCode(code);
 		conferenceLog.setUser(user);
-		conferenceLog.setConference(conference);
 		conferenceLog.setRegDt(new Date(System.currentTimeMillis()));
 		conferenceLog.setId(id);
 		
