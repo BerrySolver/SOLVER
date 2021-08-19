@@ -14,6 +14,11 @@ backend/src/main/resources/dist/
 solver-backend/src/main/resources/dist/
 package-lock.json
 solver-kurento/gradle/
+solver-kurento/.classpath
+solver-kurento/.project
+solver-kurento/.gradle/
+solver-kurento/.settings/
+solver-kurento/bin/
 solver-kurento/.gitignore
 solver-frontend/src/views/conference/ConferenceRoom copy 2.vue
 solver-frontend/src/views/conference/ConferenceRoom copy.vue
