@@ -1,25 +1,25 @@
 <template>
-  <div class="point-log-modal solver-font">
+  <div class="point-log-modal solver-font font-break">
     <h3 class="point-log-title">화상시간 예약 확인</h3>
     <hr />
     <div class="point-log-box">
       <div v-for="(point, index) in reservationList" :key="index" class="point-detail">
         <div class="title-wrapper">
           <div class="reservation-title">
-            <span class="reservation-question-title font-break">"{{ titleSlice(point.questionTitle) }}</span
+            <span class="reservation-question-title">"{{ titleSlice(point.questionTitle) }}</span
             >"
           </div>
 
-          <span class="reservation-time-title font-break">예약시간</span>
+          <span class="reservation-time-title">예약시간</span>
         </div>
 
         <div class="reservation-explanation">
-          <span class="font-break">질문에 대한 화상 회의가 예약되어 있습니다.</span>
-          <span class="reservation-dateTime font-break">{{ point.startDt }}</span>
+          <span>질문에 대한 화상 회의가 예약되어 있습니다.</span>
+          <span class="reservation-dateTime">{{ point.startDt }}</span>
         </div>
       </div>
     </div>
-    <button class="btn point-log-button font-break" @click="$emit('close')">확인완료</button>
+    <button class="btn point-log-button" @click="$emit('close')">확인완료</button>
   </div>
 </template>
 

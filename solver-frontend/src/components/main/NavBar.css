@@ -21,7 +21,7 @@
   font-weight: 400;
   padding-top: 5px;
   text-align: center;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
   width: 300px;
 }
 
@@ -73,7 +73,7 @@
   color: #84898c;
   font-size: 12px;
   padding-top: 3px;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
 }
 
 .notification-explanation {
@@ -82,7 +82,7 @@
   font-size: 14px;
   justify-content: space-between;
   padding: 0px 5px 0px 12px;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
 }
 
 .notification-highlight {
@@ -110,7 +110,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
 }
 
 .notification-togo-btn {
@@ -165,21 +165,20 @@
   color: #84898c;
   font-size: 14px;
   padding: 5px 7px 0px 15px;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
 }
 
 .video-button {
   padding: 5px 0px 0px 15px;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
 }
 
 .video-dropdown-tabs {
   color: #84898c;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 400;
   padding-top: 5px;
   text-align: center;
-  transform: skew(-0.1deg);
   width: 300px;
 }
 
@@ -194,7 +193,7 @@
   color: #658dc6;
   font-size: 14px;
   width: 100%;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
 }
 
 .video-enter-button:hover {
@@ -212,7 +211,7 @@
 
 .video-notification-title {
   padding: 15px 0px 0px 15px;
-  transform: skew(-0.1deg);
+  transform: skew(-0.03deg);
 }
 
 .video-yes-button {

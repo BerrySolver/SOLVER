@@ -1,6 +1,6 @@
 <template>
   <div class="for-center">
-    <div class="profile solver-font">
+    <div class="profile solver-font font-break">
       <!-- profile-image section -->
       <div class="profile-img-section">
         <img style="object-fit: cover;" :src="userProfileInfo.profileUrl" class="profile-img" />
