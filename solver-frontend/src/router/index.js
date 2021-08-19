@@ -89,25 +89,25 @@ const router = new VueRouter({
   },
 });
 
-router.beforeEach((to, from, next) => {
-  const local = localStorage.getItem("vuex");
+// router.beforeEach((to, from, next) => {
+//   const local = localStorage.getItem("vuex");
 
-  if (local == null) {
-    next();
-    return;
-  } else {
-    const loginTime = JSON.parse(local).auth.loginTime;
-    if (loginTime != null) {
-      const currentTime = new Date().getTime();
-      if (currentTime - loginTime > 1000 * 60 * 60 * 2) {
-        localStorage.clear();
-        location.href = "/#";
-        return;
-      }
-    }
-  }
+//   if (local == null) {
+//     next();
+//     return;
+//   } else {
+//     const loginTime = JSON.parse(local).auth.loginTime;
+//     if (loginTime != null) {
+//       const currentTime = new Date().getTime();
+//       if (currentTime - loginTime > 1000 * 60 * 60 * 2) {
+//         localStorage.clear();
+//         location.href = "/#";
+//         return;
+//       }
+//     }
+//   }
 
-  next();
-});
+//   next();
+// });
 
 export default router;

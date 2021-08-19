@@ -1,6 +1,6 @@
 export default {
-  URL: "https://i5a507.p.ssafy.io:8080/api/v1/",
-  // URL: "https://localhost:8080/api/v1/",
+  // URL: "https://i5a507.p.ssafy.io:8080/api/v1/",
+  URL: "http://localhost:8080/api/v1/",
   ROUTES: {
     // 회원가입, 로그인
     signup: "user/signup",
