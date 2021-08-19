@@ -7,6 +7,9 @@
           <div id="room-header" style="font-size: 28px;"></div>
 =======
         <div style="dislay: flex; align-items: flex-start;">
+<<<<<<< HEAD
+          <div id="room-header" style="font-size: 28px;">{{ questionUserNickname }}님의 질문방</div>
+=======
           <div id="room-header" style="font-size: 28px;">
             {{questionUserNickname}}님의 질문방
           </div>
@@ -17,8 +20,15 @@
           <div id="mainVideo">
 
           </div>
+>>>>>>> c744e194fa60a1c98af31387115859d818288cf8
         </div>
         <div class="screen-buttons">
+          <div id="help" class="help-button" @click="clickHelp()">
+            <img
+              style="width:23px; margin: 10px 0 3px 0;"
+              src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9Ijk3My4xcHgiIGhlaWdodD0iOTczLjFweCIgdmlld0JveD0iMCAwIDk3My4xIDk3My4xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA5NzMuMSA5NzMuMTsiIHhtbDpzcGFjZT0icHJlc2VydmUiDQoJPg0KPGc+DQoJPHBhdGggZD0iTTUwMi4yOSw3ODguMTk5aC00N2MtMzMuMSwwLTYwLDI2LjktNjAsNjB2NjQuOWMwLDMzLjEsMjYuOSw2MCw2MCw2MGg0N2MzMy4xMDEsMCw2MC0yNi45LDYwLTYwdi02NC45DQoJCUM1NjIuMjksODE1LDUzNS4zOTEsNzg4LjE5OSw1MDIuMjksNzg4LjE5OXoiLz4NCgk8cGF0aCBkPSJNMTcwLjg5LDI4NS44bDg2LjcsMTAuOGMyNy41LDMuNCw1My42LTEyLjQsNjMuNS0zOC4zYzEyLjUtMzIuNywyOS45LTU4LjUsNTIuMi03Ny4zYzMxLjYwMS0yNi42LDcwLjktNDAsMTE3LjktNDANCgkJYzQ4LjcsMCw4Ny41LDEyLjgsMTE2LjMsMzguM2MyOC44LDI1LjYsNDMuMSw1Ni4yLDQzLjEsOTIuMWMwLDI1LjgtOC4xLDQ5LjQtMjQuMyw3MC44Yy0xMC41LDEzLjYtNDIuOCw0Mi4yLTk2LjcsODUuOQ0KCQljLTU0LDQzLjctODkuODk5LDgzLjA5OS0xMDcuODk5LDExOC4wOTljLTE4LjQsMzUuODAxLTI0LjgsNzUuNS0yNi40LDExNS4zMDFjLTEuMzk5LDM0LjEsMjUuOCw2Mi41LDYwLDYyLjVoNDkNCgkJYzMxLjIsMCw1Ny0yMy45LDU5LjgtNTQuOWMyLTIyLjI5OSw1LjctMzkuMTk5LDExLjMwMS01MC42OTljOS4zOTktMTkuNzAxLDMzLjY5OS00NS43MDEsNzIuNjk5LTc4LjENCgkJQzcyMy41OSw0NzcuOCw3NzIuNzksNDI4LjQsNzk1Ljg5MSwzOTJjMjMtMzYuMywzNC42LTc0LjgsMzQuNi0xMTUuNWMwLTczLjUtMzEuMy0xMzgtOTQtMTkzLjRjLTYyLjYtNTUuNC0xNDctODMuMS0yNTMtODMuMQ0KCQljLTEwMC44LDAtMTgyLjEsMjcuMy0yNDQuMSw4MmMtNTIuOCw0Ni42LTg0LjksMTAxLjgtOTYuMiwxNjUuNUMxMzkuNjksMjY2LjEsMTUyLjM5LDI4My41LDE3MC44OSwyODUuOHoiLz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
+            />
+          </div>
           <div id="start" v-if="checkScreen()" class="screen-start-button" @click="clickSt()">
             <img
               style="width:23px; margin: 10px 0 3px 0;"
@@ -54,6 +64,12 @@
             />
           </div>
         </div>
+        <div id="videoList">
+          <div id="participants"></div>
+        </div>
+        <div id="main-video-wrapper">
+          <div id="mainVideo"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -66,6 +82,7 @@ import API from "@/API.js";
 import { mapState, mapGetters } from "vuex";
 import ConferenceEvaluateModal from "./ConferenceEvaluateModal.vue";
 import ConferenceExitModal from "./ConferenceExitModal.vue";
+import ConferenceHelpModal from "./ConferenceHelpModal.vue";
 
 async function startSharing() {
   if (!name.startsWith("scree&")) name = "scree&" + name;
@@ -92,8 +109,8 @@ function stopSharing() {
   name = myName;
 }
 
-// var ws = new WebSocket("wss://localhost:8443/groupcall");
-var ws = new WebSocket("wss://i5a507.p.ssafy.io:8443/groupcall");
+var ws = new WebSocket("wss://localhost:8443/groupcall");
+// var ws = new WebSocket("wss://i5a507.p.ssafy.io:8443/groupcall");
 var participants = {};
 var name;
 var room;
@@ -335,6 +352,8 @@ function Participant(name) {
     var video = document.createElement("video");
     video.id = "video-" + name;
     video.style.width = "300px";
+    video.style.borderRadius = "5%";
+    video.style.height = "225px";
 
     container.appendChild(video);
     container.onclick = switchContainerClass;
@@ -353,6 +372,8 @@ function Participant(name) {
     var video = document.createElement("video");
     video.id = "video-" + name;
     video.style.width = "300px";
+    video.style.borderRadius = "5%";
+    video.style.height = "225px";
 
     container.appendChild(video);
     container.onclick = switchContainerClass;
@@ -379,11 +400,22 @@ function Participant(name) {
         childDiv.className = PARTICIPANT_CLASS;
         const childVideo = childDiv.firstChild;
         childVideo.style.width = "300px";
+        childVideo.style.borderRadius = "5%";
+        childVideo.style.height = "225px";
         participantsDiv.appendChild(childDiv);
       }
       container.className = PARTICIPANT_MAIN_CLASS;
       mainDiv.appendChild(container);
-      video.style.width = "1600px";
+      video.style.width = "1800px";
+      video.style.borderRadius = "5%";
+      video.style.height = "1350px";
+    } else {
+      const participantsDiv = document.getElementById("participants");
+      container.className = PARTICIPANT_CLASS;
+      participantsDiv.appendChild(container);
+      video.style.width = "300px";
+      video.style.borderRadius = "5%";
+      video.style.height = "225px";
     }
   }
 
@@ -624,6 +656,21 @@ export default {
 
       return hasDesktop || hasVoice ? destination.stream.getAudioTracks() : [];
     },
+    clickHelp() {
+      this.$modal.show(
+        ConferenceHelpModal,
+        {
+          modal: this.$modal,
+        },
+        {
+          name: "dynamic-modal",
+          width: "600px",
+          height: "500px",
+          draggable: false,
+          clickToClose: false,
+        }
+      );
+    },
   },
   mounted() {
     myName = this.getUserNickname;
@@ -653,6 +700,12 @@ export default {
 </script>
 
 <style scoped>
+#help {
+  right: 20px;
+  top: 20px;
+  position: absolute;
+}
+
 .container {
   margin: 50px auto;
   width: 640px;
@@ -731,59 +784,30 @@ input[type="submit"] {
 }
 
 #mainVideo {
-  border: 1px solid black;
-  margin-left: 55px;
-  width: 100%;
-  height: 38vw;
-  margin-right: 50px;
-  max-width: 1280px;
-  max-height: 720px;
-  min-height: 455px;
+  border: 10px;
 }
-
-#participants {
-  border: 1px solid black;
-  min-width: 256px;
-  min-height: 144px;
-  margin-left: 20px;
-  /* display: flex; */
-  justify-content: space-between;
+#main-video-wrapper {
+  display: inline-flex;
+  justify-content: center;
 }
 
 #room-header {
-<<<<<<< HEAD
-  display: flex;
+  display: inline-flex;
   justify-content: center;
-  text-align: center;
-  width: 100%;
-  max-width: 1280px;
-=======
-  padding-left: 331px;
-  margin-right: 50px;
   max-width: 1611px;
->>>>>>> e6163f9b1a18f5f6e9e75b18affe343578feff13
 }
 
 .screen-buttons {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 20px;
-<<<<<<< HEAD
-  margin-left: 331px;
-  margin-right: 50px;
-  width: 100%;
-  max-width: 1280px;
-=======
-  padding-left: 331px;
-  margin-right: 50px;
   max-width: 1611px;
->>>>>>> e6163f9b1a18f5f6e9e75b18affe343578feff13
   align-items: center;
 }
 
 .conference-finish-btn {
-  background-color: white;
+  background-color: #ff6e6e;
   border: 1px solid #e0e0e0;
   border-radius: 70%;
   float: left;
@@ -796,7 +820,7 @@ input[type="submit"] {
 }
 
 .conference-finish-btn:hover {
-  background-color: #84898c;
+  background-color: #fa4545;
   cursor: pointer;
   filter: brightness(115%);
 }
@@ -809,6 +833,22 @@ input[type="submit"] {
   height: 45px;
   margin-right: 7px;
   width: 45px;
+}
+
+.help-button {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 70%;
+  float: left;
+  height: 45px;
+  margin-right: 7px;
+  width: 45px;
+}
+
+.help-button:hover {
+  background-color: #658dc6;
+  cursor: pointer;
+  filter: brightness(115%);
 }
 
 .screen-stop-button {
@@ -873,13 +913,22 @@ input[type="submit"] {
 }
 
 #videoList {
+  height: 245px;
   display: flex;
-  align-items: flex-start;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  /* align-items: center; */
 }
 </style>
 
 <style scoped>
 #participants {
+  display: flex;
+  min-width: 320px;
+  min-height: 225px;
+  justify-content: center;
+  border: 10px;
   overflow: hide;
 }
 
@@ -889,5 +938,6 @@ input[type="submit"] {
 
 #router {
   background: linear-gradient(135deg, #658dc6, #b5c7d3);
+  padding-bottom: 100px;
 }
 </style>

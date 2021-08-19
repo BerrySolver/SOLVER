@@ -37,11 +37,13 @@ import lombok.Setter;
 @Setter
 public class User extends BaseEntity{
 	private Long kakaoId;
+	@ColumnDefault("")
 	private String nickname;
 	@ColumnDefault("")
 	private String introduction;
 	@ColumnDefault("")
 	private String linkText;
+	@ColumnDefault("")
 	private String profileUrl;
 	
 	@ManyToOne

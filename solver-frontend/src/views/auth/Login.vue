@@ -9,6 +9,19 @@
 
     <div class="logo"><img src="@/assets/logo.png" alt="logo" height="100px" /></div>
 
+<<<<<<< HEAD
+    <div class="window">
+      <div class="content">
+        <div class="welcome">SOLVER</div>
+        <div class="for-margin"></div>
+        <div>
+          <a
+            href="https://kauth.kakao.com/oauth/authorize?client_id=4d0b843e88238ebf6614549fce8bff85&redirect_uri=http://localhost:8080/api/v1/auth/login&response_type=code"
+          >
+            <img src="@/assets/kakao_login_medium_wide.png" />
+          </a>
+        </div>
+=======
     <div class="content">
       <div class="welcome">SOLVER</div>
       <div>
@@ -17,6 +30,7 @@
         >
           <img src="@/assets/kakao_login_medium_wide.png" />
         </a>
+>>>>>>> c744e194fa60a1c98af31387115859d818288cf8
       </div>
     </div>
   </div>
