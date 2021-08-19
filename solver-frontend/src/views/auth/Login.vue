@@ -13,7 +13,7 @@
         <div class="welcome">SOLVER</div>
         <div>
           <a
-            href="https://kauth.kakao.com/oauth/authorize?client_id=4d0b843e88238ebf6614549fce8bff85&redirect_uri=https://i5a507.p.ssafy.io:8080/api/v1/auth/login&response_type=code"
+            href="https://kauth.kakao.com/oauth/authorize?client_id=4d0b843e88238ebf6614549fce8bff85&redirect_uri=http://localhost:8080/api/v1/auth/login&response_type=code"
           >
             <img src="@/assets/kakao_login_medium_wide.png" />
           </a>
