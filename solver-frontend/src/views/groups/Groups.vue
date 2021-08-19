@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="groups-header">
+    <div class="groups-header font-break">
         <div class="groups-banner">
           <img src="@/assets/logo-white-2.png" alt="white-logo">
           <div class="solver-banner-ment">
@@ -9,7 +9,7 @@
           </div>
         </div>
     </div>
-    <div class="groups">
+    <div class="groups font-break">
       <div class="groups-container">
         <div class="group-form-group">
             <input class="group-form-field" type="text" placeholder="키워드를 검색해보세요!" @keypress.enter="goGroupDetail">

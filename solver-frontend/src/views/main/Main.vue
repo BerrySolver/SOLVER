@@ -6,7 +6,7 @@
       <div class="main-container-contents">
         <div class="main-info">
           <div class="title">솔버(SOLVER)</div>
-          <div class="introduction">
+          <div class="introduction font-break">
             무언가를 꾸준히 해서 얻는 성과는 달콤한 법이죠.
             <br />
             공부를 하고 얻은 지식은 자산이 되고,
@@ -53,7 +53,7 @@
               {{ question.title }}
             </div>
             <div class="card-question-body">
-              <div class="card-text card-content" v-html="question.content"></div>
+              <div class="card-text card-content font-break" v-html="question.content"></div>
               <p class="card-text text-right">
                 <img
                   style="width:15px;"
@@ -78,7 +78,7 @@
 
     <div class="month-solver">
       <br />
-      <div class="month-solver-text">
+      <div class="month-solver-text font-break">
         <img src="@/assets/logo-white-2.png" class="small-logo" />
         <p class="solver-title">오늘의 SOLVER</p>
         <p v-if="this.isLoggedIn" style="margin-top:20px;color:white;">

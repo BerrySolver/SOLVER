@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="question-header">
+    <div class="question-header font-break">
       <div class="question-banner">
         <img src="@/assets/logo-white-2.png" alt="white-logo" />
         <div class="question-banner-ment">
@@ -14,7 +14,7 @@
     </div>
     <div class="question-body">
       <div class="question-body-contents">
-        <div class="question-category">
+        <div class="question-category font-break">
           <div><span class="info1">TODAY</span></div>
           <div style="display: flex; justify-content: space-between;">
             <span class="info2">질문: </span><span><span id="todayQuestions"></span>개</span>
@@ -66,7 +66,7 @@
           <div class="question-query">
             <div class="question-query-head">
               <span style="font-size: 20px; font-weight: 700;">{{ request.curCategory }}</span>
-              <div class="question-type">
+              <div class="question-type font-break">
                 <span
                   class="question-type-item"
                   :style="{ color: typeColor[0] }"
@@ -99,7 +99,7 @@
               />
               <span style="cursor: pointer;" @click="setQuery">검&nbsp;&nbsp;색</span>
             </div>
-            <div class="selectDifficultyBox">
+            <div class="selectDifficultyBox font-break">
               <vs-select
                 color="#0F4C81"
                 class="selectDifficulty"
@@ -117,7 +117,7 @@
                 />
               </vs-select>
             </div>
-            <div class="question-mode">
+            <div class="question-mode font-break">
               <span class="question-mode-item" :style="{ color: modeColor[0] }" @click="setMode(0)"
                 >최신순</span
               >
@@ -176,7 +176,7 @@
                 ></span>
               </div>
               <div class="d-flex justify-content-between">
-                <div class="d-flex">
+                <div class="d-flex font-break">
                   <div style="padding-top: 2px;">{{ question.nickname }}</div>
                   <div
                     style=" border-radius: 6px;  margin-left: 25px; padding: 7px 5px 0 5px; font-size: 12px;"

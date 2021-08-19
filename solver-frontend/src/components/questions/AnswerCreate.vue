@@ -1,5 +1,5 @@
 <template>
-  <div class="answer-editor">
+  <div class="answer-editor font-break">
     <div style="width: 900px;">
       <div style="font-size: 17px; text-align: left;">
         <span style="color: #0F4C81; font-size: 22px; font-weight: 700;">{{ userNickname }}</span

@@ -1,5 +1,5 @@
 <template>
-  <div class="for-center">
+  <div class="for-center font-break">
     <div class="profile solver-font">
       <!-- profile-image section -->
       <div class="profile-img-section">

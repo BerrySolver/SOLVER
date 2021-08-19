@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="group-detail-header">
+    <div class="group-detail-header font-break">
         <div class="group-detail-banner">
           <img src="@/assets/logo-white-2.png" alt="white-logo">
           <div class="solver-banner-ment">
