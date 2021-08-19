@@ -2,25 +2,8 @@
   <div id="container">
     <div id="wrapper">
       <div id="room">
-<<<<<<< HEAD
-        <div style="dislay: flex;">
-          <div id="room-header" style="font-size: 28px;"></div>
-=======
         <div style="dislay: flex; align-items: flex-start;">
-<<<<<<< HEAD
           <div id="room-header" style="font-size: 28px;">{{ questionUserNickname }}님의 질문방</div>
-=======
-          <div id="room-header" style="font-size: 28px;">
-            {{questionUserNickname}}님의 질문방
-          </div>
->>>>>>> e6163f9b1a18f5f6e9e75b18affe343578feff13
-        </div>
-        <div id="videoList">
-          <div id="participants"></div>
-          <div id="mainVideo">
-
-          </div>
->>>>>>> c744e194fa60a1c98af31387115859d818288cf8
         </div>
         <div class="screen-buttons">
           <div id="help" class="help-button" @click="clickHelp()">
