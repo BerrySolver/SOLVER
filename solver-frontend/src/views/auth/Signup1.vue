@@ -122,6 +122,10 @@ export default {
         this.msg = "닉네임을 입력해주세요.";
         this.isPossible = false;
       }
+      if(validNickname.length > 12){
+        this.msg = "12자 이하만 가능합니다";
+        this.isPossible = false;
+      }
     },
     isPossibleNickname(){
       return this.isPossible;
