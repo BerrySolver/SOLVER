@@ -432,7 +432,7 @@ export default {
           this.userProfileInfo = res.data;
           this.userProfileInfo.favoriteFieldNameList.sort();
         })
-        .catch(() => this.$router.push({name: 'ErrorPage'}));
+        .catch(() => this.$router.push({ name: "ErrorPage" }));
     },
     // 프로필 수정 요청 CLICK
     editRequest() {
@@ -628,7 +628,7 @@ export default {
         PaySolver,
         {
           nickName: this.userProfileInfo.nickname,
-          myPoint: this.userProfileInfo.point,
+          myPoint: this.userProfileInfo.remainingPoint,
           modal: this.$modal,
         },
         {
@@ -675,7 +675,7 @@ export default {
       accessToken: (state) => state.auth.accessToken,
       categoryList: (state) => state.auth.categoryList,
       userNickname: (state) => state.auth.userNickname,
-      pointUseTrigger: (state) => state.profiles.pointUseTrigger
+      pointUseTrigger: (state) => state.profiles.pointUseTrigger,
     }),
     ...mapGetters(["isLoggedIn"]),
     groups() {
@@ -695,7 +695,7 @@ export default {
     if (this.$route.params.nickname != this.userNickname) {
       this.$router.push({
         path: `/profiles/${this.$route.params.nickname}`,
-      })
+      });
     }
     this.profileSetting();
     const solveTabInfo = {
@@ -727,8 +727,8 @@ export default {
       this.followers = this.userProfileInfo.followers;
     },
     pointUseTrigger() {
-      this.profileSetting()
-    }
+      this.profileSetting();
+    },
   },
 };
 </script>
