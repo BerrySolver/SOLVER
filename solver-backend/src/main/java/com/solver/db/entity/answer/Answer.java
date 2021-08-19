@@ -46,9 +46,6 @@ public class Answer extends BaseEntity{
 	private List<FavoriteAnswer> favoriteAnswer;
 	
 	@OneToMany(mappedBy="answer", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<ReportAnswer> reportAnswer;
-	
-	@OneToMany(mappedBy="answer", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
 	private List<Evaluation> evaluation;
 	
 	@OneToMany(mappedBy="answer", cascade = {CascadeType.REMOVE}, orphanRemoval = true)

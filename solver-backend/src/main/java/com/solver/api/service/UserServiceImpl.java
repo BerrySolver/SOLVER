@@ -36,8 +36,6 @@ import com.solver.db.repository.code.CategoryRepository;
 import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
-import com.solver.db.repository.group.GroupInfoRepository;
-import com.solver.db.repository.group.GroupMemberRepository;
 import com.solver.db.repository.user.FavoriteUserRepository;
 import com.solver.db.repository.user.PaidSolverRepository;
 import com.solver.db.repository.user.PointLogRepository;
@@ -73,12 +71,6 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	CategoryRepository categoryRepository;
-
-	@Autowired
-	GroupMemberRepository groupMemberRepository;
-
-	@Autowired
-	GroupInfoRepository groupInfoRepository;
 
 	@Autowired
 	CodeRepository codeRepository;
@@ -518,6 +510,9 @@ public class UserServiceImpl implements UserService {
 	
 	public void insertDefaultProfile(Long kakaoId, String profileUrl) {
 		User user = userRepository.findByKakaoId(kakaoId).orElse(null);
+		user.setNickname("");
+		user.setLinkText("");
+		user.setIntroduction("");
 		
 		if(user.getProfileUrl() == null) {
 			user.setProfileUrl(profileUrl);

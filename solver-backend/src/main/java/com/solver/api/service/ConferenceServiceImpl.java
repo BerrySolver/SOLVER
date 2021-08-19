@@ -37,9 +37,7 @@ import com.solver.db.entity.user.User;
 import com.solver.db.repository.answer.AnswerRepository;
 import com.solver.db.repository.answer.EvaluationRepository;
 import com.solver.db.repository.conference.ConferenceLogRepository;
-import com.solver.db.repository.conference.ConferenceParticipantRepository;
 import com.solver.db.repository.conference.ConferenceRepository;
-import com.solver.db.repository.conference.ConferenceReservationRepository;
 import com.solver.db.repository.user.UserRepository;
 
 @Service
@@ -53,9 +51,6 @@ public class ConferenceServiceImpl implements ConferenceService {
 
 	@Autowired
 	ConferenceRepository conferenceRepository;
-
-	@Autowired
-	ConferenceParticipantRepository conferenceParticipantRepository;
 
 	@Autowired
 	ConferenceLogRepository conferenceLogRepository;
@@ -171,7 +166,6 @@ public class ConferenceServiceImpl implements ConferenceService {
 
 		conference.setCount(conference.getCount() - 1);
 
-		conferenceParticipantRepository.deleteByUserId(user.getId());
 		conferenceRepository.save(conference);
 		conferenceLogRepository.save(conferenceLog);
 

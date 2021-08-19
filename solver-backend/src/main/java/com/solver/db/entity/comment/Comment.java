@@ -34,8 +34,4 @@ public class Comment extends BaseEntity{
 	@ManyToOne
 	@JoinColumn(name="answerId")
 	private Answer answer;
-	
-	@JsonManagedReference
-	@OneToMany(mappedBy="comment", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
-	private List<ReportComment> reportComment;
 }

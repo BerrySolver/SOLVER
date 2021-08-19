@@ -1,13 +1,8 @@
 package com.solver.api.service;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Base64.Decoder;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -45,7 +40,6 @@ import com.solver.db.entity.code.Code;
 import com.solver.db.entity.code.FavoriteField;
 import com.solver.db.entity.code.PointCode;
 import com.solver.db.entity.conference.ConferenceLog;
-import com.solver.db.entity.group.GroupMember;
 import com.solver.db.entity.question.BookmarkQuestion;
 import com.solver.db.entity.question.Question;
 import com.solver.db.entity.user.FavoriteUser;
@@ -60,7 +54,6 @@ import com.solver.db.repository.code.CodeRepository;
 import com.solver.db.repository.code.FavoriteFieldRepository;
 import com.solver.db.repository.code.PointCodeRepository;
 import com.solver.db.repository.conference.ConferenceLogRepository;
-import com.solver.db.repository.group.GroupMemberRepository;
 import com.solver.db.repository.question.BookmarkQuestionRepository;
 import com.solver.db.repository.question.QuestionRepository;
 import com.solver.db.repository.user.FavoriteUserRepository;
@@ -105,9 +98,6 @@ public class ProfileServiceImpl implements ProfileService{
 	CategoryRepository categoryRepository;
 	
 	@Autowired
-	GroupMemberRepository groupMemberRepository;
-	
-	@Autowired
 	FavoriteUserRepository favoriteUserRepository;
 	
 	@Autowired
@@ -142,7 +132,6 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		List<PointLog> pointList = user.get().getPointLog();
 		List<Evaluation> evaluationList = user.get().getEvaluateAnswer();
-		List<GroupMember> groupMemberList = user.get().getGroupMember();
 		List<FavoriteField> favoriteFieldList = user.get().getFavoriteField();
 		
 		/* 포인트 계산 - entity 변경할 예정이어서 수정 필요 */
@@ -186,14 +175,6 @@ public class ProfileServiceImpl implements ProfileService{
 		
 		/* 평점 계산 끝 */
 		
-		/* 가입한 그룹 이름 리스트 생성 */
-		List<String> groupNameList = new ArrayList<>();
-		
-		for (GroupMember groupMember : groupMemberList) {
-			groupNameList.add(groupMember.getGroup().getGroupName());
-		}
-		/* 가입한 그룹 이름 리스트 생성 끝 */
-		
 		/* 관심 분야 이름 리스트 생성 */
 		List<String> favoriteFieldNameList = new ArrayList<>();
 		List<String> favoriteFieldCodeList = new ArrayList<>();
@@ -232,7 +213,6 @@ public class ProfileServiceImpl implements ProfileService{
 		profileRes.setEvaluationScore(evaluationScore);
 		profileRes.setFavoriteFieldCodeList(favoriteFieldCodeList);
 		profileRes.setFavoriteFieldNameList(favoriteFieldNameList);
-		profileRes.setGroupNameList(groupNameList);
 		profileRes.setPoint(point);
 		profileRes.setRemainingPoint(remainingPoint);
 		profileRes.setNickname(user.get().getNickname());
