@@ -1,5 +1,5 @@
 <template>
-  <div class="point-log-modal solver-font">
+  <div class="point-log-modal solver-font font-break">
     <h3 class="point-log-title">포인트 내역</h3>
     <hr>
     <div class="point-log-box">

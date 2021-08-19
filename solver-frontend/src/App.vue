@@ -28,13 +28,12 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  overflow-x:hidden;
 }
 
 #router {
   padding-top: 56px;
   min-width: 1190px;
-  transform: skew(-0.1deg);
+  /* transform: skew(-0.03deg); */
 }
 
 #footer {

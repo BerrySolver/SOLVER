@@ -1,5 +1,5 @@
 <template>
-  <div class="pay-solver-modal solver-font">
+  <div class="pay-solver-modal solver-font font-break">
     <h3 class="pay-solver-title">홍보하기</h3>
     <hr>
     <div v-if="!checkNotifi && !checkResult">
@@ -10,7 +10,7 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" @click="checkOneBox" :disabled="checkOne" id="oneCheckBox">
           <label class="form-check-label" for="oneCheckBox">
-            결제하고 나면 취소가 불가능한 것을 숙지했습니다.
+            결제 후 취소가 불가능합니다.
           </label>
         </div>
         <div class="form-check">
@@ -22,7 +22,7 @@
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" @click="checkThreeBox" :disabled="checkThree" id="threeCheckBox">
           <label class="form-check-label" for="threeCheckBox">
-            지정한 날짜의 범위만큼, 메인화면에 정보가 노출되는 것을 동의합니다.
+            지정한 날짜의 범위만큼 메인화면에 정보가 노출됩니다.
           </label>
         </div>
       </div>

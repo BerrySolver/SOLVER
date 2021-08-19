@@ -1,6 +1,6 @@
 <template>
   <div class="solver-bg">
-    <div class="solver-header">
+    <div class="solver-header font-break">
       <div class="solver-banner">
         <img src="@/assets/logo-white-2.png" alt="white-logo" />
         <div class="solver-banner-ment">
@@ -9,7 +9,7 @@
         </div>
       </div>
     </div>
-    <div class="solver-body">
+    <div class="solver-body font-break">
       <!-- 검색창 -->
       <div class="solver-body-contents">
         <div class="solver-form-group search-col">
@@ -53,7 +53,7 @@
     </div>
     <div style="min-height:500px; padding-bottom: 100px;">
       <!-- 실제 리스트 -->
-      <div class="solver-body" v-for="(solvers, idx1) in solverList" :key="idx1">
+      <div class="solver-body font-break" v-for="(solvers, idx1) in solverList" :key="idx1">
         <div class="solver-body-contents">
           <div class="solver-list">
             <div

@@ -20,7 +20,7 @@
           <div class="question-detail-title">
             {{ question.title }}
           </div>
-          <div class="question-detail-user">
+          <div class="question-detail-user font-break">
             <img
               @click="goUserProfile(question.nickname)"
               class="question-detail-profileImg"
@@ -34,13 +34,13 @@
           <div class="question-detail-content" v-html="modifyUrl(question.content)">
             <!-- {{question.content}} -->
           </div>
-          <div class="question-detail-info">
+          <div class="question-detail-info font-break">
             {{ humanize(now, question.regDt) + "\u00A0\u00A0\u00A0" }}조회수{{
               "\u00A0" + question.readCount
             }}
           </div>
         </div>
-        <div class="question-detail-counts">
+        <div class="question-detail-counts font-break">
           <div class="question-detail-count">
             <img
               style="width:20px; margin: 13px 0 3px 0;"
