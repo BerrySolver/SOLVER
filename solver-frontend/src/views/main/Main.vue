@@ -414,6 +414,8 @@ export default {
                 e.content.slice(0, e.content.indexOf("<figure")) +
                 e.content.slice(e.content.indexOf("</figure>") + 9);
             }
+
+            e.content = e.content.replaceAll(`<img `, `<img style="display:none;" `);
             // e.isImge = isImage;
             // e.isVideao = isVideo;
           });

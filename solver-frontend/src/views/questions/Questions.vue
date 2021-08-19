@@ -342,6 +342,8 @@ export default {
       this.request.query = null;
       this.request.difficulty = null;
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setSubCategory: function(mainCategoryName, subCategoryName, code) {
@@ -351,15 +353,21 @@ export default {
       this.request.query = null;
       this.request.difficulty = null;
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setQuery: function() {
       this.request.difficulty = null;
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setDifficulty: function() {
       (this.request.type = null), (this.request.mode = "releaseDesc");
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setType: function(typeNum) {
@@ -371,6 +379,8 @@ export default {
         this.request.type = null;
       }
       this.request.mode = "releaseDesc";
+      this.request.offset = 0;
+      this.currentPageIndex = 1;
       this.getQuestionList();
     },
     setMode: function(modeNum) {
@@ -410,6 +420,8 @@ export default {
                 e.content.slice(0, e.content.indexOf("<figure")) +
                 e.content.slice(e.content.indexOf("</figure>") + 9);
             }
+            
+            e.content = e.content.replaceAll(`<img `, `<img style="display:none;" `);
             e.isImage = isImage;
             e.isVideo = isVideo;
           });

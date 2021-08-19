@@ -123,6 +123,7 @@ export default {
     float: left; 
     margin-left: 10px;
     text-align: left;
+    width: 100px;
   }
 
   .comment-item {

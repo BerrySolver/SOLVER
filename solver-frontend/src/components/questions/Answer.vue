@@ -21,7 +21,7 @@
               <div
                 @click="goUserProfile(answer.nickname)"
                 class="answer-user-nickname"
-                style="font-size: 18px;"
+                style="font-size: 18px;width: 300px;"
               >
                 {{ answer.nickname }}
               </div>
