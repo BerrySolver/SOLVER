@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="question-header">
+    <div class="question-header font-break">
       <div class="question-banner">
         <img src="@/assets/logo-white-2.png" alt="white-logo" />
         <div class="question-banner-ment">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <div class="question-body">
+    <div class="question-body font-break">
       <div class="question-body-contents">
         <div class="question-main container">
           <div class="question-query">

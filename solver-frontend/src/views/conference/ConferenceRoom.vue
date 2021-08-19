@@ -2,8 +2,15 @@
   <div id="container">
     <div id="wrapper">
       <div id="room">
+<<<<<<< HEAD
         <div style="dislay: flex;">
           <div id="room-header" style="font-size: 28px;"></div>
+=======
+        <div style="dislay: flex; align-items: flex-start;">
+          <div id="room-header" style="font-size: 28px;">
+            {{questionUserNickname}}님의 질문방
+          </div>
+>>>>>>> e6163f9b1a18f5f6e9e75b18affe343578feff13
         </div>
         <div id="videoList">
           <div id="participants"></div>
@@ -85,8 +92,8 @@ function stopSharing() {
   name = myName;
 }
 
-var ws = new WebSocket("wss://localhost:8443/groupcall");
-// var ws = new WebSocket("wss://i5a507.p.ssafy.io:8443/groupcall");
+// var ws = new WebSocket("wss://localhost:8443/groupcall");
+var ws = new WebSocket("wss://i5a507.p.ssafy.io:8443/groupcall");
 var participants = {};
 var name;
 var room;
@@ -139,8 +146,6 @@ ws.onmessage = function(message) {
 
 function register() {
   myName = name;
-
-  document.getElementById("room-header").innerText = name + "님의 질문방";
 
   var message = {
     id: "joinRoom",
@@ -746,11 +751,17 @@ input[type="submit"] {
 }
 
 #room-header {
+<<<<<<< HEAD
   display: flex;
   justify-content: center;
   text-align: center;
   width: 100%;
   max-width: 1280px;
+=======
+  padding-left: 331px;
+  margin-right: 50px;
+  max-width: 1611px;
+>>>>>>> e6163f9b1a18f5f6e9e75b18affe343578feff13
 }
 
 .screen-buttons {
@@ -758,10 +769,16 @@ input[type="submit"] {
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 20px;
+<<<<<<< HEAD
   margin-left: 331px;
   margin-right: 50px;
   width: 100%;
   max-width: 1280px;
+=======
+  padding-left: 331px;
+  margin-right: 50px;
+  max-width: 1611px;
+>>>>>>> e6163f9b1a18f5f6e9e75b18affe343578feff13
   align-items: center;
 }
 

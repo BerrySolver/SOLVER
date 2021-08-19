@@ -1,6 +1,6 @@
 <template>
   <div class="comment-create">
-    <div class="comment-form-group">
+    <div class="comment-form-group font-break">
       <textarea
         class="comment-form-field"
         cols="30"
