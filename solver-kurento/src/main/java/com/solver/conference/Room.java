@@ -92,9 +92,18 @@ public class Room implements Closeable {
 
 	public void leave(UserSession user) throws IOException {
 		log.debug("PARTICIPANT {}: Leaving room {}", user.getName(), this.name);
+		System.out.println("-----leave-------");
 		System.out.println(user.getName());
+//		user = null;
+//		System.out.println(user.getName());
 		System.out.println(participants.size());
+		String name =user.getName();
+		if(name.startsWith("scree&")) {
+			stopShare(user);
+			name = name.substring(6);
+		}
 		this.removeParticipant(user.getName());
+		
 		user.close();
 	}
 	

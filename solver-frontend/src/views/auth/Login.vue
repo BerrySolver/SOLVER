@@ -40,7 +40,6 @@ export default {
     }),
   },
   mounted() {
-    // var too = document.location.href.
     var search = location.search;
     var params = new URLSearchParams(search);
     var token = params.get("accessToken");
