@@ -215,12 +215,6 @@ export default {
     .catch((err) => {
       console.log(err)
     })
-
-    if (this.isLoggedIn) {
-      this.$router.push({
-        name: "Main",
-      })
-    }
   },
 };
 </script>

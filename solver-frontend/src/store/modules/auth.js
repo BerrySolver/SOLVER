@@ -52,21 +52,21 @@ const actions = {
   triggerMainReload({ commit }) {
     commit("SET_MAIN_CHANGE_TRIGGER");
   },
-  signup(context, credentials) {
+  signup({ commit }, credentials) {
     axios({
       url: API.URL + API.ROUTES.signup,
       method: "post",
       data: credentials,
-      headers: { Authorization: "Bearer " + this.getters.isLoggedIn },
+      headers: { Authorization: "Bearer " + this.getters.getAccessToken },
     })
-      .then((res) => {
-        console.log(res);
-        commit("SET_USER_NICKNAME", credentials.nickname);
-        router.push({ path: "/" });
-      })
-      .catch(() => {
-        console.log(credentials);
-      });
+    .then((res) => {
+      console.log(res);
+      commit("SET_USER_NICKNAME", credentials.nickname);
+      router.push({ path: "/" });
+    })
+    .catch(() => {
+      console.log(credentials);
+    });
   },
   tokenLogin({ commit }, token) {
     commit("SET_ACCESS_TOKEN", token);

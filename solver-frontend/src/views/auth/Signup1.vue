@@ -129,14 +129,7 @@ export default {
   },
   computed: {
     ...mapGetters(['isLoggedIn']),
-  },
-  created() {
-    if (this.isLoggedIn) {
-      this.$router.push({
-        name: "Main",
-      })
-    }
-  },
+  }
 };
 </script>
 
