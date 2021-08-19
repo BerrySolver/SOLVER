@@ -744,7 +744,7 @@ export default {
 }
 
 .help-button {
-  background-color: white;
+  background-color: #ffffff77;
   border: 1px solid #e0e0e0;
   border-radius: 70%;
   float: left;
@@ -831,7 +831,7 @@ export default {
 
 <style scoped>
 #participants {
-  display: flex;
+  /* display: flex; */
   min-width: 320px;
   min-height: 225px;
   justify-content: center;
@@ -840,7 +840,7 @@ export default {
 }
 
 #wrapper {
-  min-height: 1000px;
+  min-height: 900px;
 }
 
 #router {
