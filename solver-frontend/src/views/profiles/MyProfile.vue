@@ -692,6 +692,11 @@ export default {
     },
   },
   created() {
+    if (this.$route.params.nickname != this.userNickname) {
+      this.$router.push({
+        path: `/profiles/${this.$route.params.nickname}`,
+      })
+    }
     this.profileSetting();
     const solveTabInfo = {
       userNickname: this.$route.params.nickname,
