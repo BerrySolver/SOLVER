@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div v-if="needHide" class="footer">
     <div class="footer-list">
       <!-- 왼쪽 여백 col -->
       <!-- <div class="col-3"></div> -->
@@ -67,6 +67,13 @@
 <script>
 export default {
   name: "Footer",
+  computed: {
+    needHide() {
+      return !(
+        this.$route.name === "Conference"
+      );
+    },
+  }
 };
 </script>
 

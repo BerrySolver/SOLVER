@@ -675,13 +675,18 @@ export default {
   position: absolute;
 }
 
+#router {
+  padding-top: 56px;
+  min-width: 1640px;
+}
+
 .container {
   margin: 50px auto;
   width: 640px;
 }
 
 #room {
-  width: 100%;
+  /* width: 100%; */
   text-align: center;
 }
 
