@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,6 +23,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Comment extends BaseEntity{
+
+	@Column(columnDefinition = "LONGTEXT")
 	private String content;
 	private Date regDt;
 	

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -24,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Answer extends BaseEntity{
+	@Column(columnDefinition = "LONGTEXT")
 	private String content;
 	private Date regDt;
 	
