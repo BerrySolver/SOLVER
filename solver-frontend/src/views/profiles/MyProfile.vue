@@ -432,7 +432,7 @@ export default {
           this.userProfileInfo = res.data;
           this.userProfileInfo.favoriteFieldNameList.sort();
         })
-        .catch((err) => console.log(err));
+        .catch(() => this.$router.push({name: 'ErrorPage'}));
     },
     // 프로필 수정 요청 CLICK
     editRequest() {
@@ -603,15 +603,6 @@ export default {
         this.isLogin = true;
       } else {
         this.isLogin = false;
-      }
-    },
-
-    // NULL 값 허용 X
-    isItNaN(x) {
-      if (isNaN(x)) {
-        this.isNaN = true;
-      } else {
-        this.isNaN = false;
       }
     },
 

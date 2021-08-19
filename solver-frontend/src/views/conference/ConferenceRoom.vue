@@ -2,6 +2,15 @@
   <div id="container">
     <div id="wrapper">
       <div id="room">
+        <div style="dislay: flex;">
+          <div id="room-header" style="font-size: 28px;"></div>
+        </div>
+        <div id="videoList">
+          <div id="participants"></div>
+          <div id="mainVideo">
+
+          </div>
+        </div>
         <div class="screen-buttons">
           <div id="start" v-if="checkScreen()" class="screen-start-button" @click="clickSt()">
             <img
@@ -37,11 +46,6 @@
               src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTEyLjAwMSA1MTIuMDAxIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIuMDAxIDUxMi4wMDE7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxnPg0KCQk8cGF0aCBkPSJNMjg0LjI4NiwyNTYuMDAyTDUwNi4xNDMsMzQuMTQ0YzcuODExLTcuODExLDcuODExLTIwLjQ3NSwwLTI4LjI4NWMtNy44MTEtNy44MS0yMC40NzUtNy44MTEtMjguMjg1LDBMMjU2LDIyNy43MTcNCgkJCUwzNC4xNDMsNS44NTljLTcuODExLTcuODExLTIwLjQ3NS03LjgxMS0yOC4yODUsMGMtNy44MSw3LjgxMS03LjgxMSwyMC40NzUsMCwyOC4yODVsMjIxLjg1NywyMjEuODU3TDUuODU4LDQ3Ny44NTkNCgkJCWMtNy44MTEsNy44MTEtNy44MTEsMjAuNDc1LDAsMjguMjg1YzMuOTA1LDMuOTA1LDkuMDI0LDUuODU3LDE0LjE0Myw1Ljg1N2M1LjExOSwwLDEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdMMjU2LDI4NC4yODcNCgkJCWwyMjEuODU3LDIyMS44NTdjMy45MDUsMy45MDUsOS4wMjQsNS44NTcsMTQuMTQzLDUuODU3czEwLjIzNy0xLjk1MiwxNC4xNDMtNS44NTdjNy44MTEtNy44MTEsNy44MTEtMjAuNDc1LDAtMjguMjg1DQoJCQlMMjg0LjI4NiwyNTYuMDAyeiIvPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
             />
           </div>
-        </div>
-        <h2 id="room-header"></h2>
-        <div id="videoList">
-          <div id="participants"></div>
-          <div id="mainVideo"></div>
         </div>
       </div>
     </div>
@@ -136,7 +140,7 @@ ws.onmessage = function(message) {
 function register() {
   myName = name;
 
-  document.getElementById("room-header").innerText = "ROOM " + room;
+  document.getElementById("room-header").innerText = name + "님의 질문방";
 
   var message = {
     id: "joinRoom",
@@ -721,11 +725,32 @@ input[type="submit"] {
   margin-top: 20px;
 }
 
+#mainVideo {
+  border: 1px solid black;
+  margin-left: 55px;
+  width: 100%;
+  height: 38vw;
+  margin-right: 50px;
+  max-width: 1280px;
+  max-height: 720px;
+  min-height: 455px;
+}
+
 #participants {
-  min-width: 300px;
-  margin-top: 50px;
+  border: 1px solid black;
+  min-width: 256px;
+  min-height: 144px;
+  margin-left: 20px;
   /* display: flex; */
   justify-content: space-between;
+}
+
+#room-header {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  max-width: 1280px;
 }
 
 .screen-buttons {
@@ -733,6 +758,10 @@ input[type="submit"] {
   justify-content: center;
   margin-top: 20px;
   padding-bottom: 20px;
+  margin-left: 331px;
+  margin-right: 50px;
+  width: 100%;
+  max-width: 1280px;
   align-items: center;
 }
 
@@ -838,7 +867,7 @@ input[type="submit"] {
 }
 
 #wrapper {
-  min-height: 1400px;
+  min-height: 1000px;
 }
 
 #router {

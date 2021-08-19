@@ -273,7 +273,7 @@ export default {
         this.userProfileInfo = res.data
         this.userProfileInfo.favoriteFieldNameList.sort()
       })
-      .catch((err) => console.log(err))
+      .catch(() => this.$router.push({name: 'ErrorPage'}))
     },
     // 탭 클릭
     onClickTab(tabIndex) {

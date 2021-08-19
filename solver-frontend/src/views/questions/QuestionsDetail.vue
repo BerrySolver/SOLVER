@@ -131,8 +131,8 @@ export default {
           this.isLiked = res.data.liked;
           this.isBookmarked = res.data.bookmarked;
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          this.$router.push({name: 'ErrorPage'})
         });
     },
     changeLike: function() {
