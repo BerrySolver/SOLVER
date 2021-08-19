@@ -3,7 +3,7 @@
     <div id="wrapper">
       <div id="room">
         <div style="dislay: flex; align-items: flex-start;">
-          <div id="room-header" style="font-size: 28px;">{{ questionUserNickname }}님의 질문방</div>
+          <div id="room-header" style="font-size: 28px;">{{ questionUserNickname }}님의 문제를 함께 해결해보세요!</div>
         </div>
         <div class="screen-buttons">
           <div id="help" class="help-button" @click="clickHelp()">
@@ -14,21 +14,24 @@
           </div>
           <div id="start" v-if="checkScreen()" class="screen-start-button" @click="clickSt()">
             <img
-              style="width:23px; margin: 10px 0 3px 0;"
+              style="width:23px; margin: 5px 0 3px 0;"
               src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
             />
+            <div>&nbsp;공유</div>
           </div>
           <div id="stop" v-if="isMyScreen" class="screen-stop-button" @click="clickSp()">
             <img
-              style="width:23px; margin: 10px 0 3px 0;"
+              style="width:23px; margin: 5px 0 3px 0;"
               src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGc+DQoJCTxwYXRoIGQ9Ik00ODAsMzY4VjY0SDB2MzA0aDE4NHYzMmgtNTZ2MTZoMjQwdi0xNmgtNzJ2LTMySDQ4MHogTTI4MCw0MDBoLTgwdi0zMmg4MFY0MDB6IE0xNiwzNTJWODBoNDQ4djI3MkgxNnoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg=="
             />
+            <div>&nbsp;중지</div>
           </div>
           <div v-if="isRecording" @click="stopAnswerRecord()" class="conference-record-stop-btn">
             <img
               style="width:23px; "
               src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
             />
+            <div>&nbsp;저장</div>
           </div>
           <div
             v-else-if="isAnswerUser"
@@ -39,6 +42,7 @@
               style="width:23px; "
               src="data:image/svg+xml;base64,PHN2ZyBpZD0iQ2FwYV8xIiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCA1MTIgNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHdpZHRoPSI1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGc+PHBhdGggZD0ibTI2My41IDI0My4wMS05MC01MS45NjFjLTkuOTc3LTUuNzYxLTIyLjUgMS40NDctMjIuNSAxMi45OXYxMDMuOTIzYzAgMTEuNTAzIDEyLjQ4MyAxOC43NzQgMjIuNSAxMi45OWw5MC01MS45NjFjOS45NjQtNS43NTIgMTAuMDE0LTIwLjIgMC0yNS45ODF6bS04Mi41IDM4Ljk3di01MS45Nmw0NSAyNS45OHoiLz48cGF0aCBkPSJtNDkwLjMzOCAxMzcuNTYxLTk5LjMzOCA0OS4yMzh2LTY1Ljc5OWMwLTguMjg0LTYuNzE2LTE1LTE1LTE1aC0zNjFjLTguMjg0IDAtMTUgNi43MTYtMTUgMTV2MjcwYzAgOC4yODQgNi43MTYgMTUgMTUgMTVoMzYxYzguMjg0IDAgMTUtNi43MTYgMTUtMTV2LTY0Ljk3OGw5OS40MjggNDguNDYyYzkuOTQ5IDQuODQ4IDIxLjU3Mi0yLjQwMyAyMS41NzItMTMuNDg0di0yMTBjMC0xMS4wOTMtMTEuNjc5LTE4LjM4Ny0yMS42NjItMTMuNDM5em0tNDYwLjMzOCAyMzguNDM5di0yNDBoMzMxdjI0MHptNDUyLTM4Ljk5OC05MS00NC4zNTR2LTcyLjM2N2w5MS00NS4xMDV6Ii8+PC9nPjwvc3ZnPg=="
             />
+            <div>&nbsp;녹화</div>
           </div>
           <div class="conference-finish-btn" @click="clickLeaveRoom()">
             <img
@@ -47,11 +51,13 @@
             />
           </div>
         </div>
-        <div id="videoList">
-          <div id="participants"></div>
-        </div>
-        <div id="main-video-wrapper">
-          <div id="mainVideo"></div>
+        <div style="display: flex; margin-left: 20px;">
+          <div id="videoList">
+            <div id="participants"></div>
+          </div>
+          <div id="main-video-wrapper">
+            <div id="mainVideo"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -320,7 +326,8 @@ function Participant(name) {
     var video = document.createElement("video");
     video.id = "video-" + name;
     video.style.width = "300px";
-    video.style.borderRadius = "5%";
+    video.style.backgroundColor = "#2f30313f";
+    video.style.marginRight = "20px";
     video.style.height = "225px";
 
     container.appendChild(video);
@@ -340,7 +347,8 @@ function Participant(name) {
     var video = document.createElement("video");
     video.id = "video-" + name;
     video.style.width = "300px";
-    video.style.borderRadius = "5%";
+    // video.style.backgroundColor = "#89848C";
+    video.style.marginRight = "20px";
     video.style.height = "225px";
 
     container.appendChild(video);
@@ -368,21 +376,18 @@ function Participant(name) {
         childDiv.className = PARTICIPANT_CLASS;
         const childVideo = childDiv.firstChild;
         childVideo.style.width = "300px";
-        childVideo.style.borderRadius = "5%";
         childVideo.style.height = "225px";
         participantsDiv.appendChild(childDiv);
       }
       container.className = PARTICIPANT_MAIN_CLASS;
       mainDiv.appendChild(container);
-      video.style.width = "1800px";
-      video.style.borderRadius = "5%";
-      video.style.height = "1350px";
+      video.style.width = "1280px";
+      video.style.height = "720px";
     } else {
       const participantsDiv = document.getElementById("participants");
       container.className = PARTICIPANT_CLASS;
       participantsDiv.appendChild(container);
       video.style.width = "300px";
-      video.style.borderRadius = "5%";
       video.style.height = "225px";
     }
   }
@@ -693,9 +698,9 @@ export default {
 }
 
 #room-header {
-  display: inline-flex;
+  display: flex;
   justify-content: center;
-  max-width: 1611px;
+  /* max-width: 1611px; */
 }
 
 .screen-buttons {
@@ -709,12 +714,11 @@ export default {
 
 .conference-finish-btn {
   background-color: #ff6e6e;
-  border: 1px solid #e0e0e0;
   border-radius: 70%;
   float: left;
-  height: 45px;
+  height: 40px;
   margin-right: 7px;
-  width: 45px;
+  width: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -727,17 +731,20 @@ export default {
 }
 
 .screen-start-button {
-  background-color: white;
+  align-items: center;
+  background-color: #ffffff77;
   border: 1px solid #e0e0e0;
-  border-radius: 70%;
+  border-radius: 20px;
+  display: flex;
   float: left;
-  height: 45px;
+  justify-content: center;
+  height: 40px;
   margin-right: 7px;
-  width: 45px;
+  width: 90px;
 }
 
 .help-button {
-  background-color: white;
+  background-color: #ffffff77;
   border: 1px solid #e0e0e0;
   border-radius: 70%;
   float: left;
@@ -753,27 +760,29 @@ export default {
 }
 
 .screen-stop-button {
-  background-color: #658dc6;
-  filter: brightness(105%);
+  align-items: center;
+  background-color: #ffffff77;
   border: 1px solid #e0e0e0;
-  border-radius: 70%;
+  border-radius: 20px;
+  display: flex;
   float: left;
-  height: 45px;
+  justify-content: center;
+  height: 40px;
   margin-right: 7px;
-  width: 45px;
+  width: 90px;
 }
 
 .conference-record-start-btn {
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 70%;
-  float: left;
-  height: 45px;
-  margin-right: 7px;
-  width: 45px;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  background-color: #ffffff77;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  display: flex;
+  float: left;
+  justify-content: center;
+  height: 40px;
+  margin-right: 7px;
+  width: 90px;
 }
 
 .conference-record-start-btn:hover {
@@ -783,17 +792,16 @@ export default {
 }
 
 .conference-record-stop-btn {
-  background-color: #658dc6;
-  filter: brightness(105%);
-  border: 1px solid #e0e0e0;
-  border-radius: 70%;
-  float: left;
-  height: 45px;
-  margin-right: 7px;
-  width: 45px;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  background-color: #ffffff77;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  display: flex;
+  float: left;
+  justify-content: center;
+  height: 40px;
+  margin-right: 7px;
+  width: 90px;
 }
 
 .conference-record-stop-btn:hover {
@@ -817,14 +825,13 @@ export default {
   height: 245px;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
   margin-bottom: 15px;
 }
 </style>
 
 <style scoped>
 #participants {
-  display: flex;
+  /* display: flex; */
   min-width: 320px;
   min-height: 225px;
   justify-content: center;
@@ -833,7 +840,7 @@ export default {
 }
 
 #wrapper {
-  min-height: 1000px;
+  min-height: 900px;
 }
 
 #router {
