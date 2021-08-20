@@ -1,23 +1,12 @@
 <template>
   <div class="background">
-
     <!-- 상단 bar -->
-    <div class="nav-for-signup">
-      <div>
-        <RouterLink :to="{ name: 'Main' }" style="text-decoration:none; color:#fff">← 돌아가기</RouterLink>
-      </div>
-      <div>
-        이미 솔버이신가요?
-        <button class="ghost-button">
-          <RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff">LOGIN</RouterLink>
-        </button>
-      </div>
-    </div>
+    <div class="nav-for-signup"></div>
 
     <!-- 로고 -->
     <div class="logo"><img src="@/assets/logo.png" alt="logo" height="100px" /></div>
     <div class="content">SOLVER</div>
-    
+
     <div>
       <div class="content">
         <div>
@@ -50,9 +39,8 @@
             },
           }"
           style="text-decoration:none; color:#fff"
-          >
+        >
           <button class="ghost-round" v-bind:disabled="isPossible == false">NEXT</button>
-        
         </RouterLink>
       </div>
     </div>
@@ -60,7 +48,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import API from "@/API.js";
 import { mapGetters } from "vuex";
 
@@ -79,61 +67,59 @@ export default {
     };
   },
   methods: {
-    checkSameNickname(){
+    checkSameNickname() {
       axios({
         url: API.URL + API.ROUTES.checkNickname,
         method: "get",
-        params:{
-          "nickname": this.signup1Data.nickname
-        }
+        params: {
+          nickname: this.signup1Data.nickname,
+        },
       })
-      .then((res) => {
-        if(res.data.statusCode == 200){
-          this.msg = res.data.message;
-          this.isPossible = true;
-        }
-        else{
-          this.msg = res.data.message;
-          this.isPossible = false;
-        }
+        .then((res) => {
+          if (res.data.statusCode == 200) {
+            this.msg = res.data.message;
+            this.isPossible = true;
+          } else {
+            this.msg = res.data.message;
+            this.isPossible = false;
+          }
 
-        this.chekcValidation();
-      })
-      .catch((e) => {
-        this.msg = "이미 사용중인 닉네임입니다.";
-        this.isPossible = false;
-        console.log(e);
-      });
+          this.chekcValidation();
+        })
+        .catch((e) => {
+          this.msg = "이미 사용중인 닉네임입니다.";
+          this.isPossible = false;
+          console.log(e);
+        });
     },
-    chekcValidation(){
+    chekcValidation() {
       const validNickname = this.signup1Data.nickname;
       const regExp1 = /[`~!@#$%^&*|\\\'\";:=+,.\/?]/gi;
       const regExp2 = /[ㄱ-ㅎㅏ-ㅣ]/g;
 
-      if(regExp1.test(validNickname)){
+      if (regExp1.test(validNickname)) {
         this.msg = "특수문자를 사용할 수 없습니다.";
         this.isPossible = false;
-      }
-      else if(regExp2.test(validNickname)){
+      } else if (regExp2.test(validNickname)) {
         this.msg = "자음/모음만 사용할 수 없습니다.";
         this.isPossible = false;
       }
-      if(validNickname == ""){
+      if (validNickname == "") {
         this.msg = "닉네임을 입력해주세요.";
         this.isPossible = false;
       }
-      if(validNickname.length > 12){
+      if (validNickname.length > 12) {
         this.msg = "12자 이하만 가능합니다";
         this.isPossible = false;
       }
     },
-    isPossibleNickname(){
+    isPossibleNickname() {
       return this.isPossible;
-    }
+    },
   },
   computed: {
-    ...mapGetters(['isLoggedIn']),
-  }
+    ...mapGetters(["isLoggedIn"]),
+  },
 };
 </script>
 
@@ -153,11 +139,11 @@ input {
   border: none;
 }
 
-.nickname-msg{
+.nickname-msg {
   font-size: 15px;
 }
 
-.nickname-button{
+.nickname-button {
   cursor: pointer;
   font-size: 13px;
   background: none;

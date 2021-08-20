@@ -1,23 +1,17 @@
 <template>
   <div class="background">
-
     <!-- 상단 bar -->
     <div class="nav-for-signup">
       <div>
-        <RouterLink :to="{ name: 'Signup1' }" style="text-decoration:none; color:#fff">← 돌아가기</RouterLink>
-      </div>
-      <div>
-        이미 솔버이신가요?
-        <button class="ghost-button">
-          <RouterLink :to="{ name: 'Login' }" style="text-decoration:none; color:#fff">LOGIN</RouterLink>
-        </button>
+        <RouterLink :to="{ name: 'Signup1' }" style="text-decoration:none; color:#fff"
+          >← 돌아가기</RouterLink
+        >
       </div>
     </div>
 
     <!-- 로고 -->
     <div class="logo"><img src="@/assets/logo.png" alt="logo" height="100px" /></div>
     <div class="content">SOLVER</div>
-    
 
     <div class="signup-main">
       <!-- 왼쪽 -->
@@ -28,14 +22,27 @@
 
         <div class="left-sub">
           <div class="sub-1">
-            <li v-for="(main, index) in mainCategory" v-bind:key="main.code" @click="changeIndex(index)">
+            <li
+              v-for="(main, index) in mainCategory"
+              v-bind:key="main.code"
+              @click="changeIndex(index)"
+            >
               <button class=" mb-2 category-btn">{{ main.codeName }}</button>
             </li>
           </div>
-          
+
           <div class="sub-2">
-            <li v-for="(sub) in subCategory" v-bind:key="sub.subCategoryCode" @click="selectCategory(sub.subCategoryCode)">
-              <button v-bind:class="{selected:isSelectedCategory(sub.subCategoryCode)}" class="mb-2 category-btn">{{ sub.subCategoryName }}</button>
+            <li
+              v-for="sub in subCategory"
+              v-bind:key="sub.subCategoryCode"
+              @click="selectCategory(sub.subCategoryCode)"
+            >
+              <button
+                v-bind:class="{ selected: isSelectedCategory(sub.subCategoryCode) }"
+                class="mb-2 category-btn"
+              >
+                {{ sub.subCategoryName }}
+              </button>
             </li>
           </div>
         </div>
@@ -46,22 +53,29 @@
         <!-- 오른쪽 질문 -->
         <div class="signup-question">2. 화상 응답이 가능한 요일과 시간을 골라주세요.</div>
         <div class="m-4">
-          <button v-bind:class="{selected: !isWeekend}" class="time-btn" @click="selectWeekday()">평일</button>
-          <button v-bind:class="{selected: isWeekend}" class="time-btn" @click="selectWeekend()">주말</button>
+          <button v-bind:class="{ selected: !isWeekend }" class="time-btn" @click="selectWeekday()">
+            평일
+          </button>
+          <button v-bind:class="{ selected: isWeekend }" class="time-btn" @click="selectWeekend()">
+            주말
+          </button>
         </div>
         <div>
           <span v-for="(time, index) in timeList" v-bind:key="time">
-            <button v-bind:class="{selected:isSelectedTime(time)}" class="mb-2 time-btn" @click="selectTime(time)">{{time}}</button>
-            <div v-if="(index+1)%8 == 0"></div>
+            <button
+              v-bind:class="{ selected: isSelectedTime(time) }"
+              class="mb-2 time-btn"
+              @click="selectTime(time)"
+            >
+              {{ time }}
+            </button>
+            <div v-if="(index + 1) % 8 == 0"></div>
           </span>
         </div>
       </div>
     </div>
     <div>
-      <button
-        class="ghost-round"
-        @click="clickSignupBtn($route.params.nickname)"
-      >
+      <button class="ghost-round" @click="clickSignupBtn($route.params.nickname)">
         SOLVER 이용하기
       </button>
     </div>
@@ -78,108 +92,144 @@ export default {
   data() {
     return {
       isWeekend: false,
-      timeTable:[
-        "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30",
-        "04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30",
-        "08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30",
-        "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
-        "16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30",
-        "20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"
+      timeTable: [
+        "00:00",
+        "00:30",
+        "01:00",
+        "01:30",
+        "02:00",
+        "02:30",
+        "03:00",
+        "03:30",
+        "04:00",
+        "04:30",
+        "05:00",
+        "05:30",
+        "06:00",
+        "06:30",
+        "07:00",
+        "07:30",
+        "08:00",
+        "08:30",
+        "09:00",
+        "09:30",
+        "10:00",
+        "10:30",
+        "11:00",
+        "11:30",
+        "12:00",
+        "12:30",
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00",
+        "17:30",
+        "18:00",
+        "18:30",
+        "19:00",
+        "19:30",
+        "20:00",
+        "20:30",
+        "21:00",
+        "21:30",
+        "22:00",
+        "22:30",
+        "23:00",
+        "23:30",
       ],
       categoryIndex: -1,
       selectedCode: [],
       Category: [],
-      weekday:[],
-      weekend:[]
+      weekday: [],
+      weekend: [],
     };
   },
   methods: {
     ...mapActions(["signup"]),
     ...mapGetters(["isFirst"]),
-    changeIndex(index){
+    changeIndex(index) {
       this.categoryIndex = index;
     },
-    selectCategory(code){
-      if(this.selectedCode.includes(code)){
+    selectCategory(code) {
+      if (this.selectedCode.includes(code)) {
         const idx = this.selectedCode.indexOf(code);
         this.selectedCode.splice(idx, 1);
         return;
       }
 
-      if(this.selectedCode.length == 3){
+      if (this.selectedCode.length == 3) {
         return;
       }
 
       this.selectedCode.push(code);
     },
-    selectWeekday(){
+    selectWeekday() {
       this.isWeekend = false;
     },
-    selectWeekend(){
+    selectWeekend() {
       this.isWeekend = true;
     },
-    selectTime(time){
+    selectTime(time) {
       //주말 시간 선택
-      if(this.isWeekend){
-        if(this.weekend.includes(time)){
+      if (this.isWeekend) {
+        if (this.weekend.includes(time)) {
           const idx = this.weekend.indexOf(time);
           this.weekend.splice(idx, 1);
-        }
-        else{
+        } else {
           this.weekend.push(time);
         }
       }
       //평일 시간 선택
-      else{
-        if(this.weekday.includes(time)){
+      else {
+        if (this.weekday.includes(time)) {
           const idx = this.weekday.indexOf(time);
           this.weekday.splice(idx, 1);
-        }
-        else{
+        } else {
           this.weekday.push(time);
         }
       }
     },
-    clickSignupBtn(nickname){
+    clickSignupBtn(nickname) {
       var weekdayTime = "";
       var weekendTime = "";
 
-      this.weekday.forEach(element => {
-        weekdayTime += element+"|";
+      this.weekday.forEach((element) => {
+        weekdayTime += element + "|";
       });
 
-      this.weekend.forEach(element => {
-        weekendTime += element+"|";
+      this.weekend.forEach((element) => {
+        weekendTime += element + "|";
       });
 
       this.signup({
-        "nickname": nickname,
-        "selectedCode": this.selectedCode,
-        "weekdayTime": weekdayTime,
-        "weekendTime": weekendTime,
+        nickname: nickname,
+        selectedCode: this.selectedCode,
+        weekdayTime: weekdayTime,
+        weekendTime: weekendTime,
       });
     },
-    isSelectedTime(time){
-      if(this.isWeekend){
-        if(this.weekend.includes(time)){
+    isSelectedTime(time) {
+      if (this.isWeekend) {
+        if (this.weekend.includes(time)) {
           return true;
+        } else {
+          return false;
         }
-        else{
+      } else {
+        if (this.weekday.includes(time)) {
+          return true;
+        } else {
           return false;
         }
       }
-      else{
-        if(this.weekday.includes(time)){
-          return true;
-        }
-        else{
-          return false;
-        }
-      }
-
     },
-    isSelectedCategory(code){
-      if(this.selectedCode.includes(code)){
+    isSelectedCategory(code) {
+      if (this.selectedCode.includes(code)) {
         return true;
       }
 
@@ -190,31 +240,30 @@ export default {
     ...mapState({
       categoryList: (state) => state.auth.CategoryList,
     }),
-    ...mapGetters(['isLoggedIn']),
-    mainCategory(){
+    ...mapGetters(["isLoggedIn"]),
+    mainCategory() {
       return this.Category;
     },
-    subCategory(){
-      if(this.categoryIndex == -1)
-        return null;
+    subCategory() {
+      if (this.categoryIndex == -1) return null;
 
       return this.Category[this.categoryIndex].category;
     },
-    timeList(){
+    timeList() {
       return this.timeTable;
-    }
+    },
   },
   created() {
     axios({
       url: API.URL + API.ROUTES.getCategory,
       method: "get",
     })
-    .then((res) => {
-      this.Category = res.data;
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+      .then((res) => {
+        this.Category = res.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
 };
 </script>
@@ -232,7 +281,7 @@ export default {
   color: #fff;
 }
 
-.category-btn{
+.category-btn {
   cursor: pointer;
   width: 200px;
   background: none;
@@ -248,7 +297,7 @@ export default {
   transition: all 0.2s ease;
 }
 
-.time-btn{
+.time-btn {
   cursor: pointer;
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.65);
@@ -262,7 +311,6 @@ export default {
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
-
 
 .nav-for-signup {
   color: #fff;
@@ -287,7 +335,7 @@ export default {
   transition: all 0.2s ease;
 }
 
-.selected{
+.selected {
   background: rgba(255, 255, 255, 0.5);
   color: #fff;
   -webkit-transition: all 0.2s ease;
@@ -332,9 +380,9 @@ button:focus {
 }
 
 .left {
-  color:#fff;
-  list-style:none;
-  padding-left:0px;
+  color: #fff;
+  list-style: none;
+  padding-left: 0px;
 }
 
 .left-sub {
