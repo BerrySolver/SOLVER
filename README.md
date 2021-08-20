@@ -22,6 +22,7 @@
 	- [4️⃣ 프로젝트 산출물](#4️⃣-프로젝트-산출물)
 	- [5️⃣ 프로젝트 결과물](#5️⃣-프로젝트-결과물)
 
+- [📺 프로젝트 UCC](https://drive.google.com/file/d/12Mfx3sRjNwTiT2undbCMqLwqhOcUjI2W/view?usp=sharing)
 <br><br>
 
 ## 1️⃣ 프로젝트 소개
@@ -44,26 +45,26 @@
 2. 형상관리 : Gitlab
 3. 커뮤니케이션 : Mattetmost, Notion
 4. 개발 환경
-	1) OS : Windows 10
-	2) IDE
-		가) Spring Tool Suite 3.9.14 
-		나) Visual Studio Code 1.58
-		다) UI/UX : Adobe Photoshop, Figma
-	3) Database : MySQL Workbench 8.0.22
-	4) Server : AWS EC2 (MobaXterm)
-		가) Ubuntu 20.04.2 LTS
-		나) Docker 20.10.7
+	- OS : Windows 10
+	- IDE
+		- Spring Tool Suite 3.9.14 
+		- Visual Studio Code 1.58
+		- UI/UX : Adobe Photoshop, Figma
+	- Database : MySQL Workbench 8.0.22
+	- Server : AWS EC2 (MobaXterm)
+		- Ubuntu 20.04.2 LTS
+		- Docker 20.10.7
 5. 상세 사용
-	1) Backend
-		가) Java (Open-JDK aulu 8.33.0.1)
-		나) Spring Boot Gradle 7.2
-		다) lombok 1.18.20, Kurento 2.0, swagger2 3.0.0, Querydsl-Jpa
-	2) Frontend
-		가) HTML5, CSS3, JavaScript(ES6)
-		나) Vue 2.6.11, Vuex 3.4.0
-		다) Node.js 14.17.3
-		라) ckeditor5 1.0.5, chart.js 3.5.1, kurento 6.16.0, js-modal 2.0.1, randomcolor 1.0.4
-	3) AWS S3 1.12.39
+	- Backend
+		- Java (Open-JDK aulu 8.33.0.1)
+		- Spring Boot Gradle 7.2
+		- lombok 1.18.20, Kurento 2.0, swagger2 3.0.0, Querydsl-Jpa
+	- Frontend
+		- HTML5, CSS3, JavaScript(ES6)
+		- Vue 2.6.11, Vuex 3.4.0
+		- Node.js 14.17.3
+		- ckeditor5 1.0.5, chart.js 3.5.1, kurento 6.16.0, js-modal 2.0.1, randomcolor 1.0.4
+	- AWS S3 1.12.39
 
 <br>
 
